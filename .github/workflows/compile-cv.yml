@@ -1,8 +1,8 @@
 name: Compile CV
 
 on:
-  pull_request:
-    branches:
+  push:
+    branches-ignore:
       - main
     paths:
       - "cv/cv-talvin-ackbaraly.tex"
@@ -18,8 +18,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          ref: ${{ github.head_ref || github.ref }}
 
       - name: Compile LaTeX
         uses: xu-cheng/latex-action@v3
@@ -34,7 +32,6 @@ jobs:
           mv cv-talvin-ackbaraly.pdf assets/cv-talvin-ackbaraly.pdf
 
       - name: Commit and push PDF
-        if: github.event_name == 'pull_request'
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "ci: update compiled CV"
