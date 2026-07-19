@@ -5,6 +5,10 @@ on:
     paths:
       - "cv/cv-talvin-ackbaraly.tex"
       - ".github/workflows/compile-cv.yml"
+  pull_request:
+    paths:
+      - "cv/cv-talvin-ackbaraly.tex"
+      - ".github/workflows/compile-cv.yml"
   workflow_dispatch:
 
 jobs:
@@ -30,7 +34,7 @@ jobs:
           mv cv-talvin-ackbaraly.pdf assets/cv-talvin-ackbaraly.pdf
 
       - name: Commit and push PDF
-        if: github.ref != 'refs/heads/main'
+        if: github.event_name == 'push' && github.ref != 'refs/heads/main'
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "ci: update compiled CV"
