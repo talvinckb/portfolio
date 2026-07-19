@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - "cv/cv-talvin-ackbaraly.tex"
+      - ".github/workflows/compile-cv.yml"
   workflow_dispatch:
 
 jobs:
@@ -22,6 +23,9 @@ jobs:
           root_file: cv/cv-talvin-ackbaraly.tex
           latexmk_use_lualatex: false
           args: -pdf -interaction=nonstopmode -halt-on-error
+
+      - name: Debug - find PDF
+        run: find . -name "*.pdf"
 
       - name: Move PDF to assets/
         run: |
