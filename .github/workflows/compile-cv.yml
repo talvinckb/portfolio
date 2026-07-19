@@ -2,8 +2,6 @@ name: Compile CV
 
 on:
   push:
-    branches-ignore:
-      - main
     paths:
       - "cv/cv-talvin-ackbaraly.tex"
       - ".github/workflows/compile-cv.yml"
@@ -26,12 +24,21 @@ jobs:
           latexmk_use_lualatex: false
           args: -pdf -interaction=nonstopmode -halt-on-error
 
+      - name: Upload PDF Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: cv-talvin-ackbaraly-pdf
+          path: cv-talvin-ackbaraly.pdf
+          retention-days: 7
+
       - name: Move PDF to assets/
+        if: github.ref == 'refs/heads/main'
         run: |
           mkdir -p assets
           mv cv-talvin-ackbaraly.pdf assets/cv-talvin-ackbaraly.pdf
 
       - name: Commit and push PDF
+        if: github.ref == 'refs/heads/main'
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "ci: update compiled CV"
