@@ -22,24 +22,24 @@ jobs:
       - name: Compile LaTeX
         uses: xu-cheng/latex-action@v3
         with:
-          root_file: cv/cv-talvin-ackbaraly.tex
+          root_file: cv/*.tex
           latexmk_use_lualatex: false
           args: -pdf -interaction=nonstopmode -halt-on-error
 
       - name: Upload PDF Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: cv-talvin-ackbaraly-pdf
-          path: cv-talvin-ackbaraly.pdf
+          name: cv-talvin-ackbaraly-pdfs
+          path: "*.pdf"
           retention-days: 7
 
       - name: Move PDF to assets/
         run: |
           mkdir -p assets
-          mv cv-talvin-ackbaraly.pdf assets/cv-talvin-ackbaraly.pdf
+          mv *.pdf assets/
 
       - name: Commit and push PDF
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "ci: update compiled CV"
-          file_pattern: "assets/cv-talvin-ackbaraly.pdf"
+          commit_message: "ci: update compiled CVs"
+          file_pattern: "assets/*.pdf"
