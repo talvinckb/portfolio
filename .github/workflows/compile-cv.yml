@@ -43,3 +43,5 @@ jobs:
         with:
           commit_message: "ci: update compiled CV"
           file_pattern: "assets/cv-talvin-ackbaraly.pdf"
+          commit_options: "--amend --no-edit"
+          push_options: "--force-with-lease"
