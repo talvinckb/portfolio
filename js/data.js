@@ -23,6 +23,7 @@ export const content = {
       linkedinBtn: "LinkedIn",
       githubBtn: "GitHub",
       cvBtn: "CV",
+      cvUrl: "/assets/cv-talvin-ackbaraly.pdf",
     },
     about: {
       title: "À propos",
@@ -281,6 +282,7 @@ export const content = {
       linkedinBtn: "LinkedIn",
       githubBtn: "GitHub",
       cvBtn: "CV",
+      cvUrl: "/assets/cv-talvin-ackbaraly.pdf",
     },
     about: {
       title: "About Me",

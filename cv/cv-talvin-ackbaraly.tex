@@ -1,0 +1,175 @@
+%% ─────────────────────────────────────────────────────────────────────────────
+%% CV — Talvin Ackbaraly
+%% Stack : LaTeX (pdflatex) — 1 Page Strict Architecture
+%% ─────────────────────────────────────────────────────────────────────────────
+\documentclass[10pt, a4paper]{article}
+
+%% ── Packages ─────────────────────────────────────────────────────────────────
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[french]{babel}
+\usepackage[
+  top=1.4cm, bottom=1.4cm,
+  left=1.6cm, right=1.6cm
+]{geometry}
+\usepackage{microtype}
+
+% Police moderne Sans-Serif (Helvetica / TeX Gyre Heros)
+\usepackage{tgheros}
+\renewcommand{\familydefault}{\sfdefault}
+
+\usepackage{parskip}
+\usepackage[explicit]{titlesec}
+\usepackage{enumitem}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{fontawesome5}
+\usepackage{tikz}
+
+%% ── Palette de Couleurs ──────────────────────────────────────────────────────
+\definecolor{accent}{HTML}{0284c7}      % Saphir Blue
+\definecolor{dark}{HTML}{0f172a}        % Slate 900
+\definecolor{textmain}{HTML}{334155}    % Slate 700
+\definecolor{muted}{HTML}{64748b}       % Slate 500
+\definecolor{subtle}{HTML}{94a3b8}      % Slate 400
+\definecolor{rule}{HTML}{e2e8f0}        % Slate 200
+\definecolor{tagbg}{HTML}{f1f5f9}       % Slate 100
+
+%% ── Hyperliens ───────────────────────────────────────────────────────────────
+\hypersetup{
+  colorlinks = true,
+  urlcolor   = accent,
+  linkcolor  = accent,
+  pdftitle   = {CV — Talvin Ackbaraly},
+  pdfauthor  = {Talvin Ackbaraly},
+}
+
+\color{textmain}
+
+%% ── Typographie des sections ─────────────────────────────────────────────────
+\titleformat{\section}[block]
+  {\Large\bfseries\color{dark}}
+  {}
+  {0em}
+  {#1\\[-0.2\baselineskip]{\color{accent}\titlerule[1.5pt]}\vspace{4pt}}
+
+\titlespacing*{\section}{0pt}{14pt}{0pt}
+
+%% ── Helpers & Micro-Components ───────────────────────────────────────────────
+\newcommand{\cvtag}[1]{%
+  \tikz[baseline]\node[anchor=base, draw=none, fill=tagbg, rounded corners=3pt, inner xsep=5pt, inner ysep=3pt, text height=1.4ex, text depth=0.2ex, text=muted, font=\scriptsize\bfseries] {#1};%
+}
+
+\newcommand{\period}[1]{\textcolor{subtle}{\small #1}}
+\newcommand{\company}[1]{\textbf{\textcolor{accent}{#1}}}
+
+\newcommand{\projectItem}[3]{%
+  \noindent
+  \begin{tabularx}{\textwidth}{@{}p{1.5cm} X >{\raggedleft\arraybackslash}p{3.5cm}@{}}
+    \textbf{#1} & #2 & #3
+  \end{tabularx}%
+  % \vspace{2pt}
+}
+
+%% ── En-tête de ligne ─────────────────────────────────────────────────────────
+\newcommand{\expline}[3]{%
+  \textbf{#1} \hfill \period{#3}\\
+  \company{#2}%
+}
+
+%% ── Config ───────────────────────────────────────────────────────────────────
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+
+\begin{document}
+
+%% ══ EN-TÊTE ══════════════════════════════════════════════════════════════════
+\begin{tabularx}{\textwidth}{@{}X r@{}}
+  \begin{minipage}[t]{\linewidth}
+    \vspace{0pt}
+    {\Huge\bfseries\color{dark}Talvin Ackbaraly}
+
+    \vspace{4pt}
+    {\large\color{muted}Étudiant en 5e année à EPITA — Ingénierie informatique}
+
+    \vspace{6pt}
+    \tikz\node[draw=accent!30, fill=accent!8, rounded corners=4pt, inner xsep=8pt, inner ysep=4pt, text=accent, font=\footnotesize\bfseries] {\faIcon{circle}~En recherche de stage de fin d'études de 6 mois — à partir de début fév. 2027};
+  \end{minipage}
+  &
+  \begin{tabular}[t]{@{}r@{}}
+    \faIcon{globe}~\href{https://talvin-ackbaraly.com}{talvin-ackbaraly.com} \\[3.5pt]
+    \faIcon{linkedin}~\href{https://www.linkedin.com/in/talvin-ackbaraly}{linkedin.com/in/talvin-ackbaraly} \\[3.5pt]
+    \faIcon{envelope}~\href{mailto:talvin.ackbaraly@icloud.com}{talvin.ackbaraly@icloud.com} \\[3.5pt]
+    \faIcon{phone}~\href{tel:+33769389008}{07 69 38 90 08} \\[3.5pt]
+    \faIcon{github}~\href{https://github.com/talvinckb}{github.com/talvinckb}
+  \end{tabular}
+\end{tabularx}
+
+\vspace{6pt}
+
+%% ══ FORMATION ════════════════════════════════════════════════════════════════
+\section{Formation}
+
+\expline{Diplôme d'ingénieur — Spécialisation Image}{EPITA — Paris}{Sept. 2022 - 2027}\\[2pt]
+Traitement \& synthèse d'images, intelligence artificielle et calcul haute performance sur GPU.
+
+\vspace{6pt}
+
+\expline{Échange académique}{Université du Québec à Chicoutimi (UQAC) — Canada}{Janv. - Mai 2024}
+
+\vspace{6pt}
+
+\textcolor{muted}{\faIcon{certificate}~\textbf{Anglais} : certifié TOEIC}
+
+%% ══ EXPÉRIENCES PROFESSIONNELLES ═════════════════════════════════════════════
+\section{Expériences professionnelles}
+
+\textbf{Développeur Full-Stack \& DevOps (Stage)} \hfill \cvtag{Full-Stack} \cvtag{DevOps} \cvtag{CI/CD} \cvtag{AWS} \cvtag{Agile} \\[2pt]
+\company{Studiocanal} \hfill \period{Sept. 2025 - Janv. 2026}\\[3pt]
+Développement de modules full-stack pour la gestion des droits, contrats et distribution du catalogue de films. Mise en place et maintenance d'infrastructures cloud (CI/CD, AWS) au sein d'une équipe Agile.
+
+\vspace{6pt}
+
+\textbf{Consultant en informatique (Stage)} \hfill \cvtag{Django} \cvtag{Python} \cvtag{Agile SAFe}\\[2pt]
+\company{Hitachi Solutions France} \hfill \period{Juin - Juil. 2022}\\[3pt]
+Prototype d'application de gestion (fournisseurs, produits, contrats) pour le client Sonepar (Django, Agile SAFe).
+
+%% ══ PROJETS ACADÉMIQUES ══════════════════════════════════════════════════════
+\section{Projets académiques}
+
+\projectItem{PFEE}{Projet de fin d'études en partenariat avec la BNF : segmentation et classification d'illustrations extraites de documents patrimoniaux numérisés. Benchmarks de modèles (YOLO, Florence-2), définition des métriques, suivi client hebdomadaire avec la BNF. \textit{(équipe de 4)}}{\cvtag{Deep Learning} \cvtag{YOLO} \cvtag{Gestion de projet}}
+
+\projectItem{ALPR}{Reconnaissance automatique de plaques d'immatriculation. Détection classique (filtres, morphologie) et ML (86\% de précision). Benchmarks Python vs C++. Workflow GitLab complet (issues, MRs, CI). \textit{(équipe de 2)}}{\cvtag{OpenCV} \cvtag{C++} \cvtag{ML} \cvtag{GitLab CI}}
+
+\projectItem{IRGPU}{Détection de mouvement vidéo temps réel. Portage CPU $\rightarrow$ GPU avec un gain de performance de 24$\times$ (analyse des goulots via Nsight). \textit{(équipe de 4)}}{\cvtag{CUDA} \cvtag{C++} \cvtag{Nsight}}
+
+\projectItem{FluidSim}{Moteur de simulation de fluides temps réel basé sur SPH. Calcul physique géré via Compute Shaders et rendu via Framebuffers. \textit{(équipe de 2)}}{\cvtag{C++} \cvtag{OpenGL} \cvtag{GLSL}}
+
+\projectItem{MedViz}{Prédiction de la Capacité Vitale Forcée à partir de scanners CT. Segmentation pulmonaire et ML (XGBoost). Conteneurisation Docker, pipeline GitLab CI. \textit{(équipe de 4)}}{\cvtag{Computer Vision} \cvtag{React} \cvtag{Docker} \cvtag{GitLab CI}}
+
+%% ══ COMPÉTENCES ══════════════════════════════════════════════════════════════
+\section{Compétences}
+
+\begin{tabularx}{\textwidth}{@{}p{5.2cm} X@{}}
+
+  \textbf{Vision par ordinateur \& IA}
+  &
+  \cvtag{Traitement d'image} \cvtag{Deep Learning} \cvtag{Machine Learning} \cvtag{OpenCV} \cvtag{PyTorch}
+  \\[6pt]
+
+  \textbf{Calcul haute performance}
+  &
+  \cvtag{CUDA} \cvtag{GPU Computing} \cvtag{OpenGL} \cvtag{GLSL} \cvtag{Nsight}
+  \\[6pt]
+
+  \textbf{Développement \& DevOps}
+  &
+  \cvtag{C++} \cvtag{Python} \cvtag{Docker} \cvtag{GitLab CI} \cvtag{AWS} \cvtag{React/Next.js} \cvtag{Django}
+
+  \\
+
+\end{tabularx}
+
+\end{document}
