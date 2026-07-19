@@ -24,16 +24,12 @@ jobs:
           latexmk_use_lualatex: false
           args: -pdf -interaction=nonstopmode -halt-on-error
 
-      - name: Debug - find PDF
-        run: find . -name "*.pdf"
-
       - name: Move PDF to assets/
         run: |
           mkdir -p assets
-          mv cv/cv-talvin-ackbaraly.pdf assets/cv-talvin-ackbaraly.pdf
+          mv cv-talvin-ackbaraly.pdf assets/cv-talvin-ackbaraly.pdf
 
       - name: Commit and push PDF
-        if: github.ref == 'refs/heads/main'
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "ci: update compiled CV"
