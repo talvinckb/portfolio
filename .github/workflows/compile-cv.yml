@@ -26,13 +26,6 @@ jobs:
           latexmk_use_lualatex: false
           args: -pdf -interaction=nonstopmode -halt-on-error
 
-      - name: Upload PDF Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: cv-talvin-ackbaraly-pdfs
-          path: "*.pdf"
-          retention-days: 7
-
       - name: Move PDF to assets/
         run: |
           mkdir -p assets
