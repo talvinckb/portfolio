@@ -42,6 +42,14 @@
       Chicoutimi (UQAC)" } ], "sameAs": [ "{{ site.linkedin }}", "{{ site.github }}" ], "knowsAbout": [ "Computer Vision", "Artificial Intelligence", "Deep Learning", "GPU Computing", "CUDA", "C++",
       "Python", "OpenCV", "PyTorch" ] }
     </script>
+    <!-- Embedded i18n Data for Progressive Enhancement -->
+    <script id="i18n-data" type="application/json">
+      {
+        "fr": {{ fr | dump | safe }},
+        "en": {{ en | dump | safe }},
+        "site": {{ site | dump | safe }}
+      }
+    </script>
   </head>
   <body>
     <!-- ─── Navigation ─── -->
@@ -70,8 +78,7 @@
             class="nav__lang-toggle"
             id="lang-toggle"
             aria-label="Changer de langue"
-            type="button"
-            onclick="window.location.href='{{ '/en/' if lang == 'fr' else '/' }}'">
+            type="button">
             <span class="lang-text">{{ 'EN' if lang == 'fr' else 'FR' }}</span>
           </button>
           <button class="nav__theme-toggle" id="theme-toggle" aria-label="Basculer le thème clair/sombre" type="button">
