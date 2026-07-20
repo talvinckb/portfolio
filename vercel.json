@@ -1,4 +1,10 @@
 {
   "buildCommand": "npx @11ty/eleventy",
-  "outputDirectory": "_site"
+  "outputDirectory": "_site",
+  "headers": [
+    {
+      "source": "/sitemap.xml",
+      "headers": [{ "key": "Content-Type", "value": "application/xml" }]
+    }
+  ]
 }
