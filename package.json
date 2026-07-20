@@ -1,0 +1,23 @@
+{
+  "name": "portfoliov4",
+  "version": "1.0.0",
+  "description": "Portfolio personnel minimaliste dédié à la présentation des projets et compétences en vision par ordinateur, IA et calcul GPU.",
+  "main": "index.js",
+  "scripts": {
+    "build": "eleventy",
+    "serve": "eleventy --serve"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/talvinckb/portfolio.git"
+  },
+  "keywords": [],
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/talvinckb/portfolio/issues"
+  },
+  "homepage": "https://github.com/talvinckb/portfolio#readme",
+  "devDependencies": {
+    "@11ty/eleventy": "^3.1.6"
+  }
+}

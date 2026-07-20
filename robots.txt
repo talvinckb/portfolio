@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://www.talvin-ackbaraly.com/sitemap.xml

@@ -1,0 +1,247 @@
+{
+  "lang": "en",
+  "locale": "en_US",
+  "urlPrefix": "/en/",
+  "nav": {
+    "about": "About",
+    "experience": "Experience",
+    "projects": "Projects",
+    "skills": "Skills",
+    "contact": "Contact"
+  },
+  "hero": {
+    "greeting": "Hello, I am",
+    "name": "Talvin Ackbaraly",
+    "headline": "Engineering student specialized in Computer Vision, AI & GPU Computing",
+    "status": "Looking for a 6-month internship — Starting early Feb. 2027",
+    "linkedinBtn": "LinkedIn",
+    "githubBtn": "GitHub",
+    "cvBtn": "CV",
+    "cvUrl": "/assets/cv-talvin-ackbaraly-en.pdf"
+  },
+  "about": {
+    "title": "About Me",
+    "intro": "As an engineering student at EPITA, I specialize in computer vision, artificial intelligence, and GPU computing. Following a first internship in full-stack & DevOps development completed during my core curriculum, I am now looking to apply my specialized skills during a 6-month final-year internship starting in early February 2027.",
+    "education": [
+      {
+        "institution": "EPITA",
+        "location": "Paris, France",
+        "degree": "Master of Engineering — Image Specialization",
+        "period": "September 2022 - 2027",
+        "description": "Image processing & synthesis, artificial intelligence, and GPU computing."
+      },
+      {
+        "institution": "Université du Québec à Chicoutimi (UQAC)",
+        "location": "Canada",
+        "degree": "Academic Exchange — Semester 4",
+        "period": "January - May 2024",
+        "description": null
+      },
+      {
+        "institution": "Lycée Notre Dame La Riche",
+        "location": "Tours, France",
+        "degree": "High School Diploma — Majors in Mathematics & CS",
+        "period": "2019 - 2022",
+        "description": null
+      }
+    ],
+    "certifications": ["English: TOEIC Certified"]
+  },
+  "experiences": {
+    "title": "Work Experience",
+    "items": [
+      {
+        "title": "Full-Stack & DevOps Developer",
+        "type": "Internship",
+        "company": "Studiocanal",
+        "period": "Sept. 2025 - Jan. 2026",
+        "description": "Development of an internal web platform for managing movie catalog rights, contracts, and distribution modules. Built full-stack features and set up CI/CD cloud infrastructure on AWS within an Agile team.",
+        "tags": ["Full-Stack", "DevOps", "CI/CD", "AWS", "Agile"]
+      },
+      {
+        "title": "IT Consultant",
+        "type": "Internship",
+        "company": "Hitachi Solutions France",
+        "period": "June - July 2022",
+        "description": "Design and development of a management application prototype (suppliers, products, contracts) for enterprise client Sonepar using the Django framework and applying the Agile SAFe methodology.",
+        "tags": ["Django", "Agile SAFe", "Prototype"]
+      }
+    ]
+  },
+  "projects": {
+    "title": "Projects",
+    "items": [
+      {
+        "id": "pfee-bnf",
+        "name": "PFEE — BNF",
+        "title": "Segmentation & Classification of Heritage Illustrations",
+        "description": "Final-year research project in partnership with the Bibliothèque nationale de France (BNF). The goal is to automatically detect and classify illustrations (engravings, figures, ornaments) extracted from digitized heritage documents.",
+        "highlights": [
+          "Benchmarked object detection models: YOLO, Florence-2",
+          "Defined and tracked evaluation metrics (mAP, IoU)",
+          "Dataset management: annotation, cleaning, augmentation",
+          "Weekly client meetings with BNF teams"
+        ],
+        "stack": [
+          "Deep Learning",
+          "Computer Vision",
+          "Object Detection",
+          "Python",
+          "YOLO"
+        ],
+        "period": "8 months (ongoing)",
+        "team": 4,
+        "github": null
+      },
+      {
+        "id": "alpr",
+        "name": "ALPR",
+        "title": "Automatic License Plate Recognition",
+        "description": "A complete license plate reading system (ALPR) developed in a team of two. Two approaches were compared: classic image processing and Machine Learning, with rigorous benchmarks.",
+        "highlights": [
+          "Classic approach: filters, morphology, segmentation",
+          "ML approach: classification achieving 86% accuracy",
+          "Comparative benchmarks Python vs C++ on Train/Val/Test datasets",
+          "Full GitLab workflow: issues, merge requests, CI"
+        ],
+        "stack": ["Python", "C++", "OpenCV", "Machine Learning"],
+        "period": "5 weeks",
+        "team": 2,
+        "github": null
+      },
+      {
+        "id": "irgpu",
+        "name": "IRGPU",
+        "title": "Real-Time Video Motion Detection — GPU Port",
+        "description": "Porting of a real-time video motion detection algorithm from CPU to GPU. The goal was to identify performance bottlenecks and maximize throughput using CUDA.",
+        "highlights": [
+          "CPU → GPU port achieving a ×24 performance gain",
+          "Bottleneck analysis with Nsight",
+          "Optimization of memory transfers and CUDA kernels"
+        ],
+        "stack": ["C++", "CUDA", "Nsight", "GPU Computing"],
+        "period": "4 weeks",
+        "team": 4,
+        "github": null
+      },
+      {
+        "id": "medviz",
+        "name": "MedViz",
+        "title": "Medical Prediction & 3D Visualization",
+        "description": "Prediction of Forced Vital Capacity (FVC) from pulmonary CT scans. The project covers the full pipeline: lung segmentation, feature extraction, ML prediction, and 3D visualization in a web interface.",
+        "highlights": [
+          "Lung segmentation and 3D reconstruction from CT scans",
+          "FVC prediction using XGBoost",
+          "Web interface with Next.js for results visualization",
+          "Docker containerization and GitLab CI pipeline"
+        ],
+        "stack": [
+          "Computer Vision",
+          "Machine Learning",
+          "XGBoost",
+          "React/Next.js",
+          "Docker"
+        ],
+        "period": "1 month",
+        "team": 4,
+        "github": null
+      },
+      {
+        "id": "pogl",
+        "name": "POGL",
+        "title": "Real-Time Fluid Simulation",
+        "description": "A fluid simulation engine based on the SPH (Smoothed Particle Hydrodynamics) algorithm, rendered in real time with OpenGL. All physics computations are offloaded to the GPU via Compute Shaders.",
+        "highlights": [
+          "Real-time SPH simulation of thousands of particles",
+          "GPU physics via Compute Shaders (SSBO)",
+          "Rendering via Frame Buffer Objects (FBO)"
+        ],
+        "stack": ["C++", "OpenGL", "Compute Shaders", "GLSL"],
+        "period": "1 month",
+        "team": 2,
+        "github": null
+      },
+      {
+        "id": "tinyx",
+        "name": "TinyX",
+        "title": "Social Network Clone",
+        "description": "Development of a full Twitter-like social platform in a team of 14, simulating real-world engineering conditions with rigorous DevOps practices.",
+        "highlights": [
+          "Microservices architecture: Java/Quarkus backend, React/Next.js frontend, MongoDB",
+          "Features: authentication, timeline, likes, follows, real-time interactions",
+          "Coordination across 14 developers with code reviews and project management"
+        ],
+        "stack": ["Java/Quarkus", "React/Next.js", "MongoDB"],
+        "period": "2 months",
+        "team": 14,
+        "github": null
+      },
+      {
+        "id": "tiger",
+        "name": "Tiger",
+        "title": "Full Compiler Construction",
+        "description": "Implementation of a complete compiler for the Tiger language, covering all classical compilation passes from lexical analysis to type checking.",
+        "highlights": [
+          "Lexical and syntax analysis (Flex / Bison)",
+          "Variable binding resolution",
+          "Type inference and type checking"
+        ],
+        "stack": ["C++", "Bison", "Flex"],
+        "period": "2 months",
+        "team": 4,
+        "github": null
+      },
+      {
+        "id": "ocr-sudoku",
+        "name": "OCR Sudoku",
+        "title": "Digit Recognition & Sudoku Solver",
+        "description": "A complete image processing pipeline: detecting a Sudoku grid in a photo, recognizing digits with a custom-trained neural network, and automatically solving the puzzle.",
+        "highlights": [
+          "Grid detection using classical image processing",
+          "Custom CNN trained from scratch for digit recognition",
+          "Integrated automatic Sudoku solver"
+        ],
+        "stack": ["Image Processing", "Neural Networks", "CNN"],
+        "period": "3 months",
+        "team": 3,
+        "github": null
+      }
+    ]
+  },
+  "skills": {
+    "title": "Skills",
+    "groups": [
+      {
+        "category": "Computer Vision & AI",
+        "items": [
+          "Image Processing",
+          "Deep Learning",
+          "Machine Learning",
+          "OpenCV",
+          "PyTorch"
+        ]
+      },
+      {
+        "category": "High Performance Computing",
+        "items": ["CUDA", "GPU Computing", "OpenGL", "GLSL", "Nsight"]
+      },
+      {
+        "category": "Software Development",
+        "items": [
+          "C++",
+          "Python",
+          "Java",
+          "React/Next.js",
+          "DevOps (CI/CD, AWS)",
+          "Docker"
+        ]
+      }
+    ]
+  },
+  "contact": {
+    "title": "Get in Touch",
+    "text": "I am actively looking for a 6-month final-year internship starting in early February 2027. Feel free to reach out to discuss opportunities.",
+    "linkedinBtn": "LinkedIn",
+    "githubBtn": "GitHub"
+  }
+}

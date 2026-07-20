@@ -5,7 +5,7 @@ on:
     branches-ignore:
       - main
     paths:
-      - "cv/cv-talvin-ackbaraly.tex"
+      - "cv/*.tex"
       - ".github/workflows/compile-cv.yml"
   workflow_dispatch:
 
