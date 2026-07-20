@@ -8,8 +8,8 @@
     <meta name="description" content="{{ t.about.intro | truncate(150) }}"/>
     <link rel="canonical" href="{{ site.baseUrl }}{{ t.urlPrefix }}"/>
     <link rel="alternate" hreflang="fr" href="{{ site.baseUrl }}/"/>
-    <link
-    rel="alternate" hreflang="en" href="{{ site.baseUrl }}/en/"/> <!-- Open Graph -->
+    <link rel="alternate" hreflang="en" href="{{ site.baseUrl }}/en/"/>
+    <link rel="alternate" hreflang="x-default" href="{{ site.baseUrl }}/"/>
     <meta property="og:type" content="website"/>
     <meta property="og:url" content="{{ site.baseUrl }}{{ t.urlPrefix }}"/>
     <meta property="og:title" content="Talvin Ackbaraly — Ingénieur Vision & IA"/>
@@ -23,8 +23,8 @@
     property="og:site_name" content="Talvin Ackbaraly"/> <!-- Twitter Card -->
     <meta name="twitter:card" content="summary"/>
     <meta name="twitter:title" content="Talvin Ackbaraly — Ingénieur Vision & IA"/>
-    <meta name="twitter:description" content="{{ t.about.intro | truncate(150) }}"/>
-    <!-- Favicon -->
+    <meta
+    name="twitter:description" content="{{ t.about.intro | truncate(150) }}"/> <!-- Favicon -->
     <link
     rel="icon" href="/assets/favicon.svg" type="image/svg+xml"/> <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com"/>
@@ -36,19 +36,19 @@
     rel="stylesheet" href="/css/style.css"/>
     <!-- Schema.org Structured Data (JSON-LD) -->
     <script type="application/ld+json">
-      { "@context": "https://schema.org", "@type": "Person", "name": "{{ site.name }}", "url": "{{ site.baseUrl }}{{ t.urlPrefix }}", "jobTitle": "Ingénieur Vision par Ordinateur & IA", "description": "Étudiant ingénieur à l'EPITA
-      spécialisé en vision par ordinateur, IA, Deep Learning et calcul GPU.", "alumniOf": [ { "@type":
-      "EducationalOrganization", "name": "EPITA" }, { "@type": "EducationalOrganization", "name": "Université du Québec à
-      Chicoutimi (UQAC)" } ], "sameAs": [ "{{ site.linkedin }}", "{{ site.github }}" ], "knowsAbout": [ "Computer Vision", "Artificial Intelligence", "Deep Learning", "GPU Computing", "CUDA", "C++",
+      { "@context": "https://schema.org", "@type": "Person", "name": "{{ site.name }}", "url": "{{ site.baseUrl }}{{ t.urlPrefix }}
+      ", "jobTitle": "Ingénieur Vision par Ordinateur & IA", "description": "Étudiant ingénieur à l'EPITA spécialisé en vision
+      par ordinateur, IA, Deep Learning et calcul GPU.", "alumniOf": [ { "@type": "EducationalOrganization", "name": "EPITA"
+      }, { "@type": "EducationalOrganization", "name": "Université du Québec à Chicoutimi (UQAC)" } ], "sameAs": [ "{{ site.linkedin }}", "{{ site.github }}
+      " ], "knowsAbout": [ "Computer Vision", "Artificial Intelligence", "Deep Learning", "GPU Computing", "CUDA", "C++",
       "Python", "OpenCV", "PyTorch" ] }
     </script>
     <!-- Embedded i18n Data for Progressive Enhancement -->
     <script id="i18n-data" type="application/json">
       {
-        "fr": {{ fr | dump | safe }},
-        "en": {{ en | dump | safe }},
-        "site": {{ site | dump | safe }}
-      }
+                          "fr": {{ fr | dump | safe }}, "en":
+      {{ en | dump | safe }},
+                          "site": {{ site | dump | safe }} }
     </script>
   </head>
   <body>
@@ -74,11 +74,7 @@
           </li>
         </ul>
         <div class="nav__controls">
-          <button
-            class="nav__lang-toggle"
-            id="lang-toggle"
-            aria-label="Changer de langue"
-            type="button">
+          <button class="nav__lang-toggle" id="lang-toggle" aria-label="Changer de langue" type="button">
             <span class="lang-text">{{ 'EN' if lang == 'fr' else 'FR' }}</span>
           </button>
           <button class="nav__theme-toggle" id="theme-toggle" aria-label="Basculer le thème clair/sombre" type="button">
