@@ -7,6 +7,8 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy("robots.txt");
   eleventyConfig.addPassthroughCopy("sitemap.xml");
 
+  eleventyConfig.ignores.add("README.md");
+
   return {
     dir: {
       input: ".",

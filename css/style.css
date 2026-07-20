@@ -363,6 +363,7 @@ a:hover {
   display: flex;
   align-items: center;
   padding-top: var(--nav-height);
+  padding-bottom: var(--space-4xl);
   position: relative;
 }
 
