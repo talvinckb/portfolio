@@ -86,7 +86,7 @@ function updateDOMText(lang) {
         <p class="edu-item__period">${edu.period}</p>
         ${edu.description ? `<p class="edu-item__description">${edu.description}</p>` : ""}
       </div>
-    `
+    `,
       )
       .join("");
   }
@@ -130,7 +130,7 @@ function updateDOMText(lang) {
           </div>
         </div>
       </article>
-    `
+    `,
       )
       .join("");
   }
@@ -144,37 +144,32 @@ function updateDOMText(lang) {
     projGrid.innerHTML = t.projects.items
       .map(
         (p) => `
-      <article class="project-card fade-in is-visible" id="project-${p.id}">
-        <div class="project-card__header">
-          <span class="project-card__name">${p.name}</span>
-          ${p.period ? `<span class="project-card__period">${p.period}</span>` : ""}
+      <a href="/projects/${p.id}/" class="project-card fade-in is-visible" id="project-${p.id}">
+        <div class="project-card__thumbnail">
+          <img
+            src="${p.thumbnail || "/assets/projects/placeholder.png"}"
+            alt="Aperçu ${p.name}"
+            loading="lazy"
+            onerror="this.src='/assets/projects/placeholder.png'"
+          />
         </div>
-        <p class="project-card__title">${p.title}</p>
-        <p class="project-card__description">${p.description}</p>
-        ${
-          p.highlights && p.highlights.length > 0
-            ? `<ul class="project-card__highlights">
-            ${p.highlights.map((h) => `<li>${h}</li>`).join("")}
-          </ul>`
-            : ""
-        }
-        <div class="project-card__footer">
-          ${p.stack.map((s) => `<span class="tag">${s}</span>`).join("")}
-          ${
-            p.team
-              ? `<span class="project-card__team">${icons.users} ${p.team} ${lang === "fr" ? "pers." : "people"}</span>`
-              : ""
-          }
-          ${
-            p.github
-              ? `<a href="${p.github}" target="_blank" rel="noopener noreferrer" class="project-card__link">
-                GitHub ${icons.externalLink}
-              </a>`
-              : ""
-          }
+        <div class="project-card__body">
+          <div class="project-card__header">
+            <span class="project-card__name">${p.name}</span>
+            ${p.period ? `<span class="project-card__period">${p.period}</span>` : ""}
+          </div>
+          <p class="project-card__title">${p.title}</p>
+          <p class="project-card__tagline">${p.tagline}</p>
+          <div class="project-card__footer">
+            ${p.stack.map((s) => `<span class="tag">${s}</span>`).join("")}
+            <span class="project-card__cta">
+              ${t.projects.viewProject}
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </span>
+          </div>
         </div>
-      </article>
-    `
+      </a>
+    `,
       )
       .join("");
   }
@@ -194,7 +189,7 @@ function updateDOMText(lang) {
           ${group.items.map((item) => `<span class="tag">${item}</span>`).join("")}
         </div>
       </div>
-    `
+    `,
       )
       .join("");
   }
@@ -253,7 +248,9 @@ function initLangSwitcher() {
   });
 
   window.addEventListener("popstate", (e) => {
-    const lang = (e.state && e.state.lang) || (location.pathname.startsWith("/en") ? "en" : "fr");
+    const lang =
+      (e.state && e.state.lang) ||
+      (location.pathname.startsWith("/en") ? "en" : "fr");
     updateDOMText(lang);
   });
 }
@@ -332,7 +329,7 @@ function initScrollFadeIn() {
     {
       threshold: 0.1,
       rootMargin: "0px 0px -40px 0px",
-    }
+    },
   );
 
   document.querySelectorAll(".fade-in").forEach((el) => observer.observe(el));

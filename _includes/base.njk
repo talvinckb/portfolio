@@ -45,10 +45,10 @@
     </script>
     <!-- Embedded i18n Data for Progressive Enhancement -->
     <script id="i18n-data" type="application/json">
-      {
-                          "fr": {{ fr | dump | safe }}, "en":
-      {{ en | dump | safe }},
-                          "site": {{ site | dump | safe }} }
+      { "fr":
+      {{ fr | dump | safe }}, "en": {{ en | dump | safe }},
+                                            "site":
+      {{ site | dump | safe }} }
     </script>
   </head>
   <body>
@@ -315,46 +315,25 @@
           <div class="section__divider"></div>
           <div class="projects__grid">
             {% for p in t.projects.items %}
-              <article class="project-card fade-in" id="project-{{ p.id }}">
-                <div class="project-card__header">
-                  <span class="project-card__name">{{ p.name }}</span>
-                  {% if p.period %}
-                    <span class="project-card__period">{{ p.period }}</span>
-                  {% endif %}
+              <a href="/projects/{{ p.id }}/" class="project-card fade-in" id="project-{{ p.id }}">
+                <div class="project-card__thumbnail">
+                  <img src="{{ p.thumbnail if p.thumbnail else '/assets/projects/placeholder.png' }}" alt="Aperçu {{ p.name }}" loading="lazy" onerror="this.src='/assets/projects/placeholder.png'"/>
                 </div>
-                <p class="project-card__title">{{ p.title }}</p>
-                <p class="project-card__description">{{ p.description }}</p>
-                {% if p.highlights and p.highlights | length > 0 %}
-                  <ul class="project-card__highlights">
-                    {% for h in p.highlights %}
-                      <li>{{ h }}</li>
+                <div class="project-card__body">
+                  <div class="project-card__header">
+                    <span class="project-card__name">{{ p.name }}</span>
+                    {% if p.period %}
+                      <span class="project-card__period">{{ p.period }}</span>
+                    {% endif %}
+                  </div>
+                  <p class="project-card__title">{{ p.title }}</p>
+                  <p class="project-card__tagline">{{ p.tagline }}</p>
+                  <div class="project-card__footer">
+                    {% for s in p.stack %}
+                      <span class="tag">{{ s }}</span>
                     {% endfor %}
-                  </ul>
-                {% endif %}
-                <div class="project-card__footer">
-                  {% for s in p.stack %}
-                    <span class="tag">{{ s }}</span>
-                  {% endfor %}
-                  {% if p.team %}
-                    <span class="project-card__team">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="12"
-                        height="12"
-                        viewbox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-                      </svg>
-                      {{ p.team }}
-                      {{ 'pers.' if lang == 'fr' else 'people' }}
-                    </span>
-                  {% endif %}
-                  {% if p.github %}
-                    <a href="{{ p.github }}" target="_blank" rel="noopener noreferrer" class="project-card__link">
-                      GitHub
+                    <span class="project-card__cta">
+                      {{ t.projects.viewProject }}
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="14"
@@ -364,12 +343,12 @@
                         stroke="currentColor"
                         stroke-width="2"
                         stroke-linecap="round"
-                        stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/>
+                        stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
                       </svg>
-                    </a>
-                  {% endif %}
+                    </span>
+                  </div>
                 </div>
-              </article>
+              </a>
             {% endfor %}
           </div>
         </div>
