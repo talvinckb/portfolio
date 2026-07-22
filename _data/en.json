@@ -86,7 +86,7 @@
         "name": "ALPR",
         "title": "Automatic License Plate Recognition",
         "tagline": "Complete ALPR system comparing classical and ML approaches, with rigorous Python vs C++ benchmarks.",
-        "thumbnail": "/assets/projects/alpr.jpg",
+        "thumbnail": "/assets/projects/alpr/04_result.png",
         "stack": ["Python", "C++", "OpenCV", "Machine Learning"],
         "period": "5 weeks"
       },
