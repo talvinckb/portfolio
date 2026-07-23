@@ -95,7 +95,7 @@
         "name": "IRGPU",
         "title": "Détection de mouvement vidéo — Portage GPU",
         "tagline": "Portage CPU → GPU d'un algorithme temps réel avec un gain de performance de ×24 via CUDA.",
-        "thumbnail": "/assets/projects/irgpu.jpg",
+        "thumbnail": "/assets/projects/irgpu/algo-video03.png",
         "stack": ["C++", "CUDA", "Nsight", "GPU Computing"],
         "period": "4 semaines"
       },

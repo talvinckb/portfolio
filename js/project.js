@@ -171,6 +171,21 @@ function initScrollRestoration() {
 }
 
 /* ═══════════════════════════════════════════════════════════════
+   Responsive Table Wrapper
+   ═══════════════════════════════════════════════════════════════ */
+
+function initTableWrappers() {
+  document.querySelectorAll(".project-content table").forEach((table) => {
+    if (!table.parentElement.classList.contains("table-wrapper")) {
+      const wrapper = document.createElement("div");
+      wrapper.className = "table-wrapper";
+      table.parentNode.insertBefore(wrapper, table);
+      wrapper.appendChild(table);
+    }
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════════
    Init
    ═══════════════════════════════════════════════════════════════ */
 
@@ -178,5 +193,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initTheme();
   initMobileMenu();
   initLightbox();
+  initTableWrappers();
   initScrollRestoration();
 });
+

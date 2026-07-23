@@ -95,7 +95,7 @@
         "name": "IRGPU",
         "title": "Real-Time Video Motion Detection — GPU Port",
         "tagline": "CPU → GPU port of a real-time algorithm achieving a ×24 performance gain via CUDA.",
-        "thumbnail": "/assets/projects/irgpu.jpg",
+        "thumbnail": "/assets/projects/irgpu/algo-video03.png",
         "stack": ["C++", "CUDA", "Nsight", "GPU Computing"],
         "period": "4 weeks"
       },
