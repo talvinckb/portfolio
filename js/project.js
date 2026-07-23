@@ -1,7 +1,8 @@
 /**
  * Portfolio — Project Page Script
  * ─────────────────────────────────
- * Handles theme toggle, mobile menu, and interactive lightbox for project detail pages.
+ * Handles theme toggle, mobile menu, interactive lightbox,
+ * and exact scroll position restoration on refresh for project detail pages.
  */
 
 /* ═══════════════════════════════════════════════════════════════
@@ -104,7 +105,7 @@ function initLightbox() {
 
   // Attach click to images & pipeline workflows
   const clickableItems = document.querySelectorAll(
-    ".project-content img, .project-thumbnail__img, .pipeline-workflow",
+    ".project-content img, .project-thumbnail__img, .pipeline-workflow"
   );
 
   clickableItems.forEach((item) => {
@@ -127,6 +128,49 @@ function initLightbox() {
 }
 
 /* ═══════════════════════════════════════════════════════════════
+   Scroll Restoration on Refresh
+   ═══════════════════════════════════════════════════════════════ */
+
+function initScrollRestoration() {
+  const key = "scrollPos:" + window.location.pathname;
+
+  const savedPos = sessionStorage.getItem(key);
+  if (savedPos !== null) {
+    const y = parseInt(savedPos, 10);
+    if (!isNaN(y) && y > 0) {
+      const origScrollBehavior = document.documentElement.style.scrollBehavior;
+      document.documentElement.style.scrollBehavior = "auto";
+
+      window.scrollTo(0, y);
+
+      window.addEventListener("load", () => {
+        window.scrollTo(0, y);
+        setTimeout(() => {
+          window.scrollTo(0, y);
+          document.documentElement.style.scrollBehavior = origScrollBehavior;
+        }, 150);
+      });
+    }
+  }
+
+  let scrollTimeout;
+  window.addEventListener(
+    "scroll",
+    () => {
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(() => {
+        sessionStorage.setItem(key, window.scrollY);
+      }, 100);
+    },
+    { passive: true }
+  );
+
+  window.addEventListener("beforeunload", () => {
+    sessionStorage.setItem(key, window.scrollY);
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════════
    Init
    ═══════════════════════════════════════════════════════════════ */
 
@@ -134,4 +178,5 @@ document.addEventListener("DOMContentLoaded", () => {
   initTheme();
   initMobileMenu();
   initLightbox();
+  initScrollRestoration();
 });

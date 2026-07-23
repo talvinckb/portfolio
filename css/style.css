@@ -1048,6 +1048,7 @@ a:hover {
   border-radius: var(--radius-md);
   border: 1px solid var(--color-border);
   margin-block: var(--space-lg);
+  margin-inline: auto;
   display: block;
   cursor: zoom-in;
   transition: opacity var(--duration-fast) var(--ease-out);

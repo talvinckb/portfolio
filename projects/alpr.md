@@ -21,7 +21,6 @@ La reconnaissance automatique de plaques d'immatriculation (**ALPR**) est une br
 - **Approche Sans Deep Learning** : Une contrainte majeure du projet était de réaliser l'intégralité du pipeline sans réseaux de neurones profonds (sans YOLO ou CNN lourds), en s'appuyant sur la vision par ordinateur classique et le Machine Learning léger pour garantir une parfaite explicabilité et une faible empreinte mémoire.
 - **Haute résolution & Variabilité** : Traiter des images Full HD ($1920 \times 1080$) avec d'importantes variations de luminosité (plein soleil, pluie, ombres), des angles inclinés et des occultations partielles.
 - **Formats de plaques complexes** : Prendre en charge aussi bien les anciennes plaques brésiliennes que les nouveaux formats Mercosul.
-- **Contrainte Temps Réel** : Concevoir un pipeline algorithmique capable de s'exécuter avec une latence minimale pour un déploiement embarqué.
 
 ---
 
@@ -80,7 +79,7 @@ Pour résoudre ce problème de manière robuste, nous avons structuré le traite
 1. **Prétraitement** : Normalisation d'échelle et réduction des canaux de couleur.
 2. **Génération de candidats (ROI)** : Extraction multi-échelles des zones rectangulaires à forte probabilité de contenir une plaque.
 3. **Extraction de caractéristiques** : Représentation numérique de chaque candidat par un vecteur de descripteurs géométriques et HOG.
-4. **Classification & Validation** : Évaluation des candidats par un modèle Machine Learning (Random Forest) et sélection du meilleur candidat.
+4. **Classification & Validation** : Évaluation des candidats par un modèle Machine Learning et sélection du meilleur candidat.
 
 ---
 
@@ -90,7 +89,7 @@ Pour résoudre ce problème de manière robuste, nous avons structuré le traite
 
 La première étape consiste à préparer l'image pour stabiliser les dimensions des objets et accélérer les calculs ultérieurs :
 
-- **Redimensionnement à 800 pixels de large** (en conservant le ratio d'aspect), assurant une taille relative constante des lettres de plaque.
+- **Redimensionnement à 800 pixels de large** en conservant le ratio d'aspect, afin de réduire le temps de calcul.
 - **Conversion en niveaux de gris** afin d'éliminer la couleur et d'analyser uniquement les variations de luminance.
 
 |                 1. Image Originale                  |                   2. Image Prétraitée                    |
@@ -101,24 +100,34 @@ La première étape consiste à préparer l'image pour stabiliser les dimensions
 
 ### 2. Détection & Extraction des Candidats (ROI)
 
-Rechercher une plaque en balayant naïvement toute l'image serait extrêmement lent. À la place, nous générons un ensemble restreint de **Régions d'Intérêt (ROI)** candidates en combinant 3 filtres complémentaires :
+Pour éviter de balayer naïvement toute l'image, qui serait extrêmement lent, nous générons un ensemble restreint de **Régions d'Intérêt (ROI)** candidates en combinant **3 branches complémentaires** :
 
-1. **Branche Principale (Morphologie + Sobel)** : Amplification du contraste local des caractères (filtre MMLPF), suivie d'un filtre de Sobel vertical pour faire ressortir les transitions d'intensité des lettres, d'un binarisation d'Otsu et d'une fermeture morphologique ($17 \times 3$).
-2. **Branche Suréchantillonnée ($\times 2$)** : Application du même filtre à une échelle agrandie afin de capturer les plaques éloignées ou très petites.
-3. **Branche Canny** : Détection adaptative des contours basée sur la médiane de l'image.
+1. **Branche Principale (Morphologie + Sobel)** : Amplification du contraste local des caractères (filtre MMLPF), suivie d'un filtre de Sobel vertical, d'un seuillage d'Otsu et d'une fermeture morphologique ($17 \times 3$).
+2. **Branche Suréchantillonnée ($\times 2$)** : Application du même pipeline sur l'image agrandie à $2\times$ sa taille afin de capturer les plaques très petites ou éloignées.
+3. **Branche Canny** : Détection adaptative des contours basée sur la médiane des intensités de l'image.
 
-|                             Step 1 : Filtre MMLPF                             |                             Step 2 : Sobel Vertical                              |
-| :---------------------------------------------------------------------------: | :------------------------------------------------------------------------------: |
+> **Filtrage géométrique indépendant** : Chaque branche filtre immédiatement ses propres régions candidates selon leur surface ($50 \text{ px} \le \text{aire} \le 40\,000 \text{ px}$) et leur ratio d'aspect ($1.0 \le w/h \le 8.0$) afin d'éliminer d'emblée les faux candidats évidents.
+
+#### Étapes de la Branche Principale :
+
+| Step 1 : Filtre MMLPF | Step 2 : Sobel Vertical |
+| :---: | :---: |
 | ![MMLPF Base](/assets/projects/alpr/intermediate_steps/base/step_1_mmlpf.png) | ![Sobel Base](/assets/projects/alpr/intermediate_steps/base/step_2_sobel_dx.png) |
 
-|                          Step 3 : Seuillage d'Otsu                          |                           Step 4 : Fermeture Morphologique                            |
-| :-------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------: |
+| Step 3 : Seuillage d'Otsu | Step 4 : Fermeture Morphologique |
+| :---: | :---: |
 | ![Otsu Base](/assets/projects/alpr/intermediate_steps/base/step_3_otsu.png) | ![Fermeture Base](/assets/projects/alpr/intermediate_steps/base/step_4_fermeture.png) |
 
-Les régions candidates extraites sont ensuite filtrées selon leur ratio d'aspect ($1.0 \le w/h \le 8.0$) et leur surface, puis dédoublonnées via une suppression non-maximale (**NMS**).
+| Step 5 : Extraction et filtrage des candidats (Branche Principale) |
+| :---: |
+| ![CCA Base](/assets/projects/alpr/intermediate_steps/base/step_5_cca.png) |
 
-|            3. Régions Candidates Extraites            |
-| :---------------------------------------------------: |
+#### Fusion des 3 branches & Dédoublonnage NMS
+
+De la même manière, la **Branche Suréchantillonnée ($\times 2$)** et la **Branche Canny** extraient et filtrent leurs propres candidats. L'ensemble des régions retenues par les 3 branches est ensuite regroupé puis dédoublonné via une suppression non-maximale (**NMS** basée sur l'IoU) pour éliminer les chevauchements.
+
+| Candidats retenus après fusion des 3 branches & NMS |
+| :---: |
 | ![Candidats](/assets/projects/alpr/03_candidates.png) |
 
 ---

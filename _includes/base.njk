@@ -2,6 +2,13 @@
 <!DOCTYPE html>
 <html lang="{{ lang }}">
   <head>
+    <script>
+      (function () {
+        var stored = localStorage.getItem("theme");
+        var theme = stored || "dark";
+        document.documentElement.setAttribute("data-theme", theme);
+      })();
+    </script>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Talvin Ackbaraly — Ingénieur Vision & IA</title>
@@ -45,9 +52,7 @@
     </script>
     <!-- Embedded i18n Data for Progressive Enhancement -->
     <script id="i18n-data" type="application/json">
-      { "fr":
-      {{ fr | dump | safe }}, "en": {{ en | dump | safe }},
-                                            "site":
+      { "fr": {{ fr | dump | safe }}, "en": {{ en | dump | safe }}, "site":
       {{ site | dump | safe }} }
     </script>
   </head>
@@ -332,20 +337,6 @@
                     {% for s in p.stack %}
                       <span class="tag">{{ s }}</span>
                     {% endfor %}
-                    <span class="project-card__cta">
-                      {{ t.projects.viewProject }}
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="14"
-                        height="14"
-                        viewbox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/>
-                      </svg>
-                    </span>
                   </div>
                 </div>
               </a>
