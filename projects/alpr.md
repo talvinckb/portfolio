@@ -110,24 +110,24 @@ Pour éviter de balayer naïvement toute l'image, qui serait extrêmement lent, 
 
 #### Étapes de la Branche Principale :
 
-| Step 1 : Filtre MMLPF | Step 2 : Sobel Vertical |
-| :---: | :---: |
+|                               1 : Filtre MMLPF                                |                                2 : Sobel Vertical                                |
+| :---------------------------------------------------------------------------: | :------------------------------------------------------------------------------: |
 | ![MMLPF Base](/assets/projects/alpr/intermediate_steps/base/step_1_mmlpf.png) | ![Sobel Base](/assets/projects/alpr/intermediate_steps/base/step_2_sobel_dx.png) |
 
-| Step 3 : Seuillage d'Otsu | Step 4 : Fermeture Morphologique |
-| :---: | :---: |
+|                              3 : Seuil d'Otsu                               |                                     4 : Fermeture                                     |
+| :-------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------: |
 | ![Otsu Base](/assets/projects/alpr/intermediate_steps/base/step_3_otsu.png) | ![Fermeture Base](/assets/projects/alpr/intermediate_steps/base/step_4_fermeture.png) |
 
-| Step 5 : Extraction et filtrage des candidats (Branche Principale) |
-| :---: |
+|                          5 : Candidats extraits                           |
+| :-----------------------------------------------------------------------: |
 | ![CCA Base](/assets/projects/alpr/intermediate_steps/base/step_5_cca.png) |
 
 #### Fusion des 3 branches & Dédoublonnage NMS
 
 De la même manière, la **Branche Suréchantillonnée ($\times 2$)** et la **Branche Canny** extraient et filtrent leurs propres candidats. L'ensemble des régions retenues par les 3 branches est ensuite regroupé puis dédoublonné via une suppression non-maximale (**NMS** basée sur l'IoU) pour éliminer les chevauchements.
 
-| Candidats retenus après fusion des 3 branches & NMS |
-| :---: |
+|       Candidats fusionnés des 3 branches & NMS        |
+| :---------------------------------------------------: |
 | ![Candidats](/assets/projects/alpr/03_candidates.png) |
 
 ---

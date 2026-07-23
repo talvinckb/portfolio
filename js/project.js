@@ -128,49 +128,6 @@ function initLightbox() {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   Scroll Restoration on Refresh
-   ═══════════════════════════════════════════════════════════════ */
-
-function initScrollRestoration() {
-  const key = "scrollPos:" + window.location.pathname;
-
-  const savedPos = sessionStorage.getItem(key);
-  if (savedPos !== null) {
-    const y = parseInt(savedPos, 10);
-    if (!isNaN(y) && y > 0) {
-      const origScrollBehavior = document.documentElement.style.scrollBehavior;
-      document.documentElement.style.scrollBehavior = "auto";
-
-      window.scrollTo(0, y);
-
-      window.addEventListener("load", () => {
-        window.scrollTo(0, y);
-        setTimeout(() => {
-          window.scrollTo(0, y);
-          document.documentElement.style.scrollBehavior = origScrollBehavior;
-        }, 150);
-      });
-    }
-  }
-
-  let scrollTimeout;
-  window.addEventListener(
-    "scroll",
-    () => {
-      clearTimeout(scrollTimeout);
-      scrollTimeout = setTimeout(() => {
-        sessionStorage.setItem(key, window.scrollY);
-      }, 100);
-    },
-    { passive: true }
-  );
-
-  window.addEventListener("beforeunload", () => {
-    sessionStorage.setItem(key, window.scrollY);
-  });
-}
-
-/* ═══════════════════════════════════════════════════════════════
    Responsive Table Wrapper
    ═══════════════════════════════════════════════════════════════ */
 
@@ -194,6 +151,6 @@ document.addEventListener("DOMContentLoaded", () => {
   initMobileMenu();
   initLightbox();
   initTableWrappers();
-  initScrollRestoration();
 });
+
 
