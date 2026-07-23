@@ -2,7 +2,7 @@
 id: alpr
 name: "ALPR"
 title: "Reconnaissance automatique de plaques d'immatriculation"
-tagline: "Système ALPR complet comparant une approche classique et Machine Learning, avec benchmarks rigoureux Python vs C++."
+tagline: "Système ALPR complet sans Deep Learning (Vision Classique + Machine Learning), avec benchmarks rigoureux Python vs C++."
 thumbnail: "/assets/projects/alpr/04_result.png"
 stack: ["Python", "C++17", "OpenCV", "Random Forest", "CMake", "Google Test"]
 period: "5 semaines"
@@ -18,8 +18,9 @@ La reconnaissance automatique de plaques d'immatriculation (**ALPR**) est une br
 
 ### Les Défis Techniques
 
+- **Approche Sans Deep Learning** : Une contrainte majeure du projet était de réaliser l'intégralité du pipeline sans réseaux de neurones profonds (sans YOLO ou CNN lourds), en s'appuyant sur la vision par ordinateur classique et le Machine Learning léger pour garantir une parfaite explicabilité et une faible empreinte mémoire.
 - **Haute résolution & Variabilité** : Traiter des images Full HD ($1920 \times 1080$) avec d'importantes variations de luminosité (plein soleil, pluie, ombres), des angles inclinés et des occultations partielles.
-- **Formats de plaques complexes** : Prendre en charge aussi bien les anciennes plaques brésiliennes que les nouveaux formats **Mercosul**.
+- **Formats de plaques complexes** : Prendre en charge aussi bien les anciennes plaques brésiliennes que les nouveaux formats Mercosul.
 - **Contrainte Temps Réel** : Concevoir un pipeline algorithmique capable de s'exécuter avec une latence minimale pour un déploiement embarqué.
 
 ---
