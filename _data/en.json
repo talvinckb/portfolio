@@ -78,7 +78,7 @@
         "name": "PFEE — BNF",
         "title": "Segmentation & Classification of Heritage Illustrations",
         "tagline": "Automatic detection of illustrations in digitized heritage documents, in partnership with the BNF.",
-        "thumbnail": "/assets/projects/pfee-bnf.jpg",
+        "thumbnail": "/assets/projects/pfee-bnf/bpt6k98138081_f271_page.jpg",
         "stack": ["Deep Learning", "Computer Vision", "Python", "YOLO"],
         "period": "8 months (ongoing)",
         "featured": true
