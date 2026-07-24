@@ -118,9 +118,19 @@
         "name": "POGL",
         "title": "Real-Time Fluid Simulation",
         "tagline": "Real-time 3D SPH fluid simulation engine with 75,000+ particles at 60 FPS — full GPU physics via Compute Shaders and SSFR surface rendering.",
-        "thumbnail": "/assets/projects/pogl/demo.gif",
+        "thumbnail": "/assets/projects/pogl/thumbnail.png",
         "stack": ["C++", "OpenGL", "Compute Shaders", "GLSL"],
         "period": "1 month",
+        "featured": true
+      },
+      {
+        "id": "vtk-itk",
+        "name": "VTK-ITK",
+        "title": "Brain Tumor Registration & Longitudinal Tracking",
+        "tagline": "Complete 3D MRI alignment pipeline (ITK) with tumor segmentation and interactive multi-view visualization (VTK + PyQt6) — volumetric evolution quantification of a glioma.",
+        "thumbnail": "/assets/projects/vtk-itk/render-3d.jpg",
+        "stack": ["Python", "ITK", "VTK", "PyQt6", "Matplotlib"],
+        "period": "3 weeks",
         "featured": true
       },
       {

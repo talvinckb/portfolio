@@ -21,10 +21,6 @@
     <meta property="og:url" content="{{ site.baseUrl }}{{ t.urlPrefix }}"/>
     <meta property="og:title" content="Talvin Ackbaraly — Ingénieur Vision & IA"/>
     <meta property="og:description" content="{{ t.about.intro | truncate(150) }}"/>
-    <meta property="og:type" content="website"/>
-    <meta property="og:url" content="{{ site.baseUrl }}{{ t.urlPrefix }}"/>
-    <meta property="og:title" content="Talvin Ackbaraly — Ingénieur Vision & IA"/>
-    <meta property="og:description" content="{{ t.about.intro | truncate(150) }}"/>
     <meta property="og:locale" content="{{ t.locale }}"/>
     <meta
     property="og:site_name" content="Talvin Ackbaraly"/> <!-- Twitter Card -->
@@ -321,7 +317,7 @@
           <div class="projects__grid">
             {% for p in t.projects.items %}
               {% if p.featured %}
-                <a href="{{ t.urlPrefix }}projects/{{ p.id }}/" class="project-card fade-in" id="project-{{ p.id }}">
+                <a href="/projects/{{ p.id }}/" class="project-card fade-in" id="project-{{ p.id }}">
                   <div class="project-card__thumbnail">
                     <img src="{{ p.thumbnail if p.thumbnail else '/assets/projects/placeholder.png' }}" alt="Aperçu {{ p.name }}" loading="lazy" onerror="this.src='/assets/projects/placeholder.png'"/>
                   </div>

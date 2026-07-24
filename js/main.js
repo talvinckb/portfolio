@@ -137,11 +137,17 @@ function updateDOMText(lang) {
 
   // Projects
   const projTitle = document.querySelector("#projects .section__title");
-  const projGrid = document.querySelector(".projects__grid");
+  const featuredGrid = document.querySelector(
+    ".projects__grid:not(.projects__grid--academic)",
+  );
+  const academicSubTitle = document.querySelector(".projects__sub-title");
+  const academicGrid = document.querySelector(".projects__grid--academic");
 
   if (projTitle) projTitle.textContent = t.projects.title;
-  if (projGrid && t.projects.items) {
-    projGrid.innerHTML = t.projects.items
+
+  if (featuredGrid && t.projects.items) {
+    const featuredItems = t.projects.items.filter((p) => p.featured);
+    featuredGrid.innerHTML = featuredItems
       .map(
         (p) => `
       <a href="/projects/${p.id}/" class="project-card fade-in is-visible" id="project-${p.id}">
@@ -165,6 +171,33 @@ function updateDOMText(lang) {
           </div>
         </div>
       </a>
+    `,
+      )
+      .join("");
+  }
+
+  if (academicSubTitle && t.projects.academicTitle) {
+    academicSubTitle.textContent = t.projects.academicTitle;
+  }
+
+  if (academicGrid && t.projects.items) {
+    const academicItems = t.projects.items.filter((p) => !p.featured);
+    academicGrid.innerHTML = academicItems
+      .map(
+        (p) => `
+      <div class="project-card project-card--academic fade-in is-visible" id="project-${p.id}">
+        <div class="project-card__body">
+          <div class="project-card__header">
+            <span class="project-card__name">${p.name}</span>
+            ${p.period ? `<span class="project-card__period">${p.period}</span>` : ""}
+          </div>
+          <p class="project-card__title">${p.title}</p>
+          <p class="project-card__tagline">${p.tagline}</p>
+          <div class="project-card__footer">
+            ${p.stack.map((s) => `<span class="tag">${s}</span>`).join("")}
+          </div>
+        </div>
+      </div>
     `,
       )
       .join("");

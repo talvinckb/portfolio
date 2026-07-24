@@ -124,6 +124,16 @@
         "featured": true
       },
       {
+        "id": "vtk-itk",
+        "name": "VTK-ITK",
+        "title": "Recalage & Suivi Longitudinal de Tumeur Cérébrale",
+        "tagline": "Pipeline complet d'alignement 3D d'IRMs cérébraux (ITK) et de segmentation tumorale avec visualisation interactive multi-vues (VTK + PyQt6) — quantification de l'évolution d'un gliome.",
+        "thumbnail": "/assets/projects/vtk-itk/render-3d.jpg",
+        "stack": ["Python", "ITK", "VTK", "PyQt6", "Matplotlib"],
+        "period": "3 semaines",
+        "featured": true
+      },
+      {
         "id": "tinyx",
         "name": "TinyX",
         "title": "Clone de réseau social",
