@@ -69,7 +69,8 @@
     ]
   },
   "projects": {
-    "title": "Projets",
+    "title": "Projets Phares",
+    "academicTitle": "Autres réalisations académiques",
     "viewProject": "Voir le projet",
     "items": [
       {
@@ -79,7 +80,8 @@
         "tagline": "Détection automatique d'illustrations dans des documents patrimoniaux numérisés, en partenariat avec la BNF.",
         "thumbnail": "/assets/projects/pfee-bnf.jpg",
         "stack": ["Deep Learning", "Computer Vision", "Python", "YOLO"],
-        "period": "8 mois (en cours)"
+        "period": "8 mois (en cours)",
+        "featured": true
       },
       {
         "id": "alpr",
@@ -88,7 +90,8 @@
         "tagline": "Système ALPR complet sans Deep Learning (Vision Classique + Machine Learning), avec benchmarks rigoureux Python vs C++.",
         "thumbnail": "/assets/projects/alpr/04_result.png",
         "stack": ["Python", "C++", "OpenCV", "Machine Learning"],
-        "period": "5 semaines"
+        "period": "5 semaines",
+        "featured": true
       },
       {
         "id": "irgpu",
@@ -97,7 +100,8 @@
         "tagline": "Portage CPU → GPU d'un algorithme temps réel avec un gain de performance de ×24 via CUDA.",
         "thumbnail": "/assets/projects/irgpu/algo-video03.png",
         "stack": ["C++", "CUDA", "Nsight", "GPU Computing"],
-        "period": "4 semaines"
+        "period": "4 semaines",
+        "featured": true
       },
       {
         "id": "medviz",
@@ -106,7 +110,8 @@
         "tagline": "Pipeline complet de prédiction de la FVC à partir de scanners CT pulmonaires, avec visualisation 3D en web.",
         "thumbnail": "/assets/projects/medviz/interface-utilisateur.png",
         "stack": ["Computer Vision", "XGBoost", "React/Next.js", "Docker"],
-        "period": "1 mois"
+        "period": "1 mois",
+        "featured": true
       },
       {
         "id": "pogl",
@@ -115,34 +120,38 @@
         "tagline": "Moteur de simulation SPH 3D temps réel avec 75 000+ particules à 60 FPS — physique GPU complète via Compute Shaders et rendu de surface SSFR.",
         "thumbnail": "/assets/projects/pogl/thumbnail.png",
         "stack": ["C++", "OpenGL", "Compute Shaders", "GLSL"],
-        "period": "1 mois"
+        "period": "1 mois",
+        "featured": true
       },
       {
         "id": "tinyx",
         "name": "TinyX",
         "title": "Clone de réseau social",
         "tagline": "Plateforme sociale type Twitter développée en équipe de 14, avec architecture microservices et DevOps rigoureux.",
-        "thumbnail": "/assets/projects/tinyx.jpg",
+        "thumbnail": null,
         "stack": ["Java/Quarkus", "React/Next.js", "MongoDB"],
-        "period": "2 mois"
+        "period": "2 mois",
+        "featured": false
       },
       {
         "id": "tiger",
         "name": "Tiger",
         "title": "Création d'un compilateur complet",
         "tagline": "Implémentation d'un compilateur pour le langage Tiger, de l'analyse lexicale à la vérification de types.",
-        "thumbnail": "/assets/projects/tiger.jpg",
+        "thumbnail": null,
         "stack": ["C++", "Bison", "Flex"],
-        "period": "2 mois"
+        "period": "2 mois",
+        "featured": false
       },
       {
         "id": "ocr-sudoku",
         "name": "OCR Sudoku",
         "title": "Reconnaissance de chiffres & résolution de Sudoku",
         "tagline": "Pipeline complet : détection de grille, OCR par CNN entraîné from scratch, et résolution automatique.",
-        "thumbnail": "/assets/projects/ocr-sudoku.jpg",
+        "thumbnail": null,
         "stack": ["Traitement d'image", "Neural Networks", "CNN"],
-        "period": "3 mois"
+        "period": "3 mois",
+        "featured": false
       }
     ]
   },

@@ -320,28 +320,58 @@
           <div class="section__divider"></div>
           <div class="projects__grid">
             {% for p in t.projects.items %}
-              <a href="/projects/{{ p.id }}/" class="project-card fade-in" id="project-{{ p.id }}">
-                <div class="project-card__thumbnail">
-                  <img src="{{ p.thumbnail if p.thumbnail else '/assets/projects/placeholder.png' }}" alt="Aperçu {{ p.name }}" loading="lazy" onerror="this.src='/assets/projects/placeholder.png'"/>
-                </div>
-                <div class="project-card__body">
-                  <div class="project-card__header">
-                    <span class="project-card__name">{{ p.name }}</span>
-                    {% if p.period %}
-                      <span class="project-card__period">{{ p.period }}</span>
-                    {% endif %}
+              {% if p.featured %}
+                <a href="{{ t.urlPrefix }}projects/{{ p.id }}/" class="project-card fade-in" id="project-{{ p.id }}">
+                  <div class="project-card__thumbnail">
+                    <img src="{{ p.thumbnail if p.thumbnail else '/assets/projects/placeholder.png' }}" alt="Aperçu {{ p.name }}" loading="lazy" onerror="this.src='/assets/projects/placeholder.png'"/>
                   </div>
-                  <p class="project-card__title">{{ p.title }}</p>
-                  <p class="project-card__tagline">{{ p.tagline }}</p>
-                  <div class="project-card__footer">
-                    {% for s in p.stack %}
-                      <span class="tag">{{ s }}</span>
-                    {% endfor %}
+                  <div class="project-card__body">
+                    <div class="project-card__header">
+                      <span class="project-card__name">{{ p.name }}</span>
+                      {% if p.period %}
+                        <span class="project-card__period">{{ p.period }}</span>
+                      {% endif %}
+                    </div>
+                    <p class="project-card__title">{{ p.title }}</p>
+                    <p class="project-card__tagline">{{ p.tagline }}</p>
+                    <div class="project-card__footer">
+                      {% for s in p.stack %}
+                        <span class="tag">{{ s }}</span>
+                      {% endfor %}
+                    </div>
                   </div>
-                </div>
-              </a>
+                </a>
+              {% endif %}
             {% endfor %}
           </div>
+
+          <!-- Academic / Secondary projects -->
+          {% if t.projects.academicTitle %}
+            <h3 class="projects__sub-title">{{ t.projects.academicTitle }}</h3>
+            <div class="projects__grid projects__grid--academic">
+              {% for p in t.projects.items %}
+                {% if not p.featured %}
+                  <div class="project-card project-card--academic fade-in" id="project-{{ p.id }}">
+                    <div class="project-card__body">
+                      <div class="project-card__header">
+                        <span class="project-card__name">{{ p.name }}</span>
+                        {% if p.period %}
+                          <span class="project-card__period">{{ p.period }}</span>
+                        {% endif %}
+                      </div>
+                      <p class="project-card__title">{{ p.title }}</p>
+                      <p class="project-card__tagline">{{ p.tagline }}</p>
+                      <div class="project-card__footer">
+                        {% for s in p.stack %}
+                          <span class="tag">{{ s }}</span>
+                        {% endfor %}
+                      </div>
+                    </div>
+                  </div>
+                {% endif %}
+              {% endfor %}
+            </div>
+          {% endif %}
         </div>
       </section>
       <!-- ─── Skills ─── -->

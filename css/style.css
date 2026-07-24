@@ -814,6 +814,29 @@ a:hover {
   gap: 0.5rem;
 }
 
+/* Academic Sub-section Cards */
+.projects__sub-title {
+  font-family: var(--font-heading);
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  margin-top: var(--space-3xl);
+  margin-bottom: var(--space-xl);
+}
+
+.project-card--academic {
+  cursor: default;
+  background-color: var(--color-bg-alt);
+  border-color: var(--color-border);
+  opacity: 0.95;
+}
+
+.project-card--academic:hover {
+  transform: none;
+  box-shadow: none;
+  border-color: var(--color-border);
+}
+
 /* ═══════════════════════════════════════════════════════════════
    Project Detail Page
    ═══════════════════════════════════════════════════════════════ */
