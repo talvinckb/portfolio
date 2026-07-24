@@ -85,10 +85,27 @@ function initLightbox() {
   function openLightbox(element) {
     contentContainer.innerHTML = "";
     if (element.tagName === "IMG") {
+      const figure = document.createElement("figure");
+      figure.className = "lightbox-figure";
+
       const img = document.createElement("img");
       img.src = element.src;
       img.alt = element.alt || "Aperçu agrandi";
-      contentContainer.appendChild(img);
+      figure.appendChild(img);
+
+      // Retrieve caption from figcaption sibling/parent or alt text
+      const figcaptionText =
+        element.closest("figure")?.querySelector("figcaption")?.textContent ||
+        element.alt;
+
+      if (figcaptionText && figcaptionText.trim().length > 0) {
+        const caption = document.createElement("figcaption");
+        caption.className = "lightbox-caption";
+        caption.textContent = figcaptionText.trim();
+        figure.appendChild(caption);
+      }
+
+      contentContainer.appendChild(figure);
     } else if (element.classList.contains("pipeline-workflow")) {
       const clone = element.cloneNode(true);
       clone.classList.add("pipeline-workflow--enlarged");

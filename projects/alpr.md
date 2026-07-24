@@ -126,9 +126,7 @@ Pour éviter de balayer naïvement toute l'image, qui serait extrêmement lent, 
 
 De la même manière, la **Branche Suréchantillonnée ($\times 2$)** et la **Branche Canny** extraient et filtrent leurs propres candidats. L'ensemble des régions retenues par les 3 branches est ensuite regroupé puis dédoublonné via une suppression non-maximale (**NMS** basée sur l'IoU) pour éliminer les chevauchements.
 
-|       Candidats fusionnés des 3 branches & NMS        |
-| :---------------------------------------------------: |
-| ![Candidats](/assets/projects/alpr/03_candidates.png) |
+![Candidats fusionnés (3 branches) et dédoublonnés via NMS](/assets/projects/alpr/03_candidates.png)
 
 ---
 
@@ -145,9 +143,7 @@ Chaque patch candidat retenu est découpé et redimensionné à une taille fixe 
 
 Chaque vecteur de caractéristiques est soumis à un classifieur **Random Forest** (`cv::ml::RTrees`). Le modèle attribue un score de confiance à chaque candidat et la région avec le score positif le plus élevé est retenue comme plaque finale.
 
-|        4. Résultat de la Détection Finale        |
-| :----------------------------------------------: |
-| ![Résultat](/assets/projects/alpr/04_result.png) |
+![Résultat final de la détection de plaque](/assets/projects/alpr/04_result.png)
 
 ---
 

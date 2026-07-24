@@ -104,7 +104,7 @@
         "name": "MedViz",
         "title": "Medical Prediction & 3D Visualization",
         "tagline": "Full FVC prediction pipeline from pulmonary CT scans, with 3D web visualization.",
-        "thumbnail": "/assets/projects/medviz.jpg",
+        "thumbnail": "/assets/projects/medviz/interface-utilisateur.png",
         "stack": ["Computer Vision", "XGBoost", "React/Next.js", "Docker"],
         "period": "1 month"
       },

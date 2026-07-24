@@ -1,5 +1,6 @@
 const markdownIt = require("markdown-it");
 const markdownItAnchor = require("markdown-it-anchor");
+const implicitFigures = require("markdown-it-implicit-figures");
 
 module.exports = function (eleventyConfig) {
   // ─── Passthrough copies ───
@@ -17,6 +18,12 @@ module.exports = function (eleventyConfig) {
     html: true,
     linkify: true,
     typographer: true,
+  });
+
+  md.use(implicitFigures, {
+    figcaption: true,
+    keepAlt: true,
+    copyAttrs: "class",
   });
 
   eleventyConfig.setLibrary("md", md);

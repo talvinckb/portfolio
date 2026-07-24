@@ -147,7 +147,7 @@ Des goulots d'étranglement majeurs subsistent, que le profiling va révéler.
 
 **Opti 2 :** Nsight Compute a émis un avertissement explicite sur l'utilisation de `double` sur GPU grand public. Le passage à `float` avec `lroundf()` accélère significativement les calculs flottants.
 
-![Avertissement Nsight Compute sur le type double](/assets/projects/irgpu/nsight-warning-float-bis.png)
+![Nsight Compute : impact de l'overhead FP64 (`double`) sur GPU](/assets/projects/irgpu/nsight-warning-float-bis.png)
 
 | Implémentation            |    FPS    |  Speedup   |
 | :------------------------ | :-------: | :--------: |
@@ -158,7 +158,7 @@ Des goulots d'étranglement majeurs subsistent, que le profiling va révéler.
 
 Nsight Systems révèle que `cuRAND` alloue une structure de **48 octets par pixel** en VRAM pour son état interne : sur une vidéo HD 1080p, cela représente ~95 Mo uniquement pour le générateur aléatoire !
 
-![Overhead cuRAND dans Nsight Systems](/assets/projects/irgpu/nsight-curand.png)
+![Nsight Systems : overhead VRAM provoqué par `cuRANDState`](/assets/projects/irgpu/nsight-curand.png)
 
 | Résolution | Taille `curandState` |
 | :--------- | :------------------: |
@@ -179,7 +179,7 @@ Nsight Systems révèle que `cuRAND` alloue une structure de **48 octets par pix
 
 La propagation par hystérésis nécessite plusieurs passes jusqu'à convergence. Sans optimisation, chaque itération déclenche des synchronisations CPU/GPU et une saturation de la bande passante VRAM.
 
-![Saturation des transferts mémoire sans Shared Memory](/assets/projects/irgpu/nsync-no-shared-memory-wrapped.png)
+![Saturation des accès mémoire VRAM sans Shared Memory](/assets/projects/irgpu/nsync-no-shared-memory-wrapped.png)
 
 **Solution :** Tuilage 16×16 en **Shared Memory** avec un halo de +1 pixel. La propagation des pixels forts aux pixels faibles voisins s'effectue localement, sans accès VRAM.
 
@@ -197,7 +197,7 @@ L'érosion et la dilatation lisaient 29 pixels voisins par thread directement en
 
 Nsight Compute révèle qu'un bloc **32×8** (256 threads) s'aligne parfaitement avec la taille d'un warp CUDA (32 threads) dans la direction horizontale, maximisant la **coalescence mémoire** lors des accès aux lignes d'image.
 
-![Analyse de la géométrie des blocs Nsight Compute](/assets/projects/irgpu/analyse-blocks-32x8.png)
+![Nsight Compute : coalescence mémoire et alignement warps (blocs 32×8)](/assets/projects/irgpu/analyse-blocks-32x8.png)
 
 ---
 
@@ -227,6 +227,6 @@ Dans le cadre de l'architecture CUDA du projet, nous avons analysé la pertinenc
 
 ### Comparaison Globale des Performances
 
-![Comparaison du débit FPS sur l'ensemble des vidéos du dataset](/assets/projects/irgpu/all_videos_fps_comparison.png)
+![Comparaison du débit FPS et speedup global sur le dataset](/assets/projects/irgpu/all_videos_fps_comparison.png)
 
 De **5.29 FPS** à **129.51 FPS** : un gain de **×24.47** avec une précision visuelle quasi-parfaite (SSIM = 0.9949), prouvant que chaque étape d'optimisation — de la mémoire au générateur aléatoire — contribue au résultat final.
