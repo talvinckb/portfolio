@@ -1542,3 +1542,34 @@ a:hover {
     justify-content: center;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   KaTeX Math Responsive & Mobile Overflow Handling
+   ═══════════════════════════════════════════════════════════════ */
+
+.katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  max-width: 100%;
+  padding-block: var(--space-xs);
+  margin-block: 1rem;
+  -webkit-overflow-scrolling: touch;
+}
+
+.katex {
+  font-size: 1.05em;
+  max-width: 100%;
+}
+
+.katex-display::-webkit-scrollbar {
+  height: 4px;
+}
+
+.katex-display::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.katex-display::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: var(--radius-sm);
+}
