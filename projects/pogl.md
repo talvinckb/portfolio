@@ -3,7 +3,7 @@ id: pogl
 name: "POGL"
 title: "Simulation de fluide temps réel"
 tagline: "Moteur de simulation SPH 3D temps réel avec 75 000+ particules à 60 FPS — physique GPU complète via Compute Shaders et rendu de surface par Screen-Space Fluid Rendering."
-thumbnail: "/assets/projects/pogl/thumbnail.png"
+thumbnail: "/assets/projects/pogl/demo.gif"
 stack: ["C++20", "OpenGL 4.6", "GLSL", "Compute Shaders", "CMake", "Dear ImGui"]
 period: "1 mois"
 team: 2
@@ -20,8 +20,6 @@ L'objectif était de concevoir un système capable d'exécuter en parallèle deu
 
 - **Simulation physique particulaire GPU** via la méthode *Smoothed Particle Hydrodynamics* (SPH), entièrement calculée par des **Compute Shaders**, accélérée par un **Hachage Spatial 3D** et un **Tri Bitonic GPU** en $O(N \log^2 N)$.
 - **Rendu de surface fluide en espace écran** (SSFR — *Screen-Space Fluid Rendering*), un pipeline multi-passes transformant un nuage de particules discrètes en une surface continue d'eau réaliste, incorporant filtrage bilatéral, réfraction (Loi de Beer-Lambert) et réflexions de Fresnel.
-
-![Simulation SPH 3D temps réel avec 75 000 particules à 60 FPS](/assets/projects/pogl/demo.gif)
 
 ---
 
