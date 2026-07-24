@@ -112,8 +112,8 @@
         "id": "pogl",
         "name": "POGL",
         "title": "Simulation de fluide temps réel",
-        "tagline": "Moteur de simulation SPH rendu en temps réel avec OpenGL, tous les calculs physiques déportés sur le GPU.",
-        "thumbnail": "/assets/projects/pogl.jpg",
+        "tagline": "Moteur de simulation SPH 3D temps réel avec 75 000+ particules à 60 FPS — physique GPU complète via Compute Shaders et rendu de surface SSFR.",
+        "thumbnail": "/assets/projects/pogl/thumbnail.png",
         "stack": ["C++", "OpenGL", "Compute Shaders", "GLSL"],
         "period": "1 mois"
       },

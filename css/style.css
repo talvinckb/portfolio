@@ -845,7 +845,8 @@ a:hover {
 
 /* Hero */
 .project-hero {
-  padding-block: var(--space-3xl);
+  padding-top: var(--space-2xl);
+  padding-bottom: var(--space-md);
 }
 
 .project-hero__meta {
@@ -892,31 +893,33 @@ a:hover {
   color: var(--color-text-secondary);
   line-height: 1.7;
   max-width: 44rem;
-  margin-bottom: var(--space-xl);
+  margin-bottom: var(--space-lg);
 }
 
 .project-hero__stack {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-sm);
-  margin-bottom: var(--space-xl);
 }
 
 .project-hero__links {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-md);
+  margin-top: var(--space-lg);
 }
 
 /* Thumbnail */
 .project-thumbnail {
-  margin-bottom: var(--space-3xl);
+  margin-block: var(--space-lg) var(--space-2xl);
 }
 
 .project-thumbnail__img {
   width: 100%;
-  max-height: 28rem;
-  object-fit: cover;
+  height: auto;
+  max-height: 36rem;
+  object-fit: contain;
+  background-color: var(--color-bg-alt);
   border-radius: var(--radius-lg);
   border: 1px solid var(--color-border);
   display: block;
@@ -1317,7 +1320,7 @@ a:hover {
     padding-block: var(--space-2xl);
   }
   .project-thumbnail__img {
-    max-height: 16rem;
+    max-height: 22rem;
   }
 }
 
