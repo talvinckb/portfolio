@@ -2,6 +2,13 @@
 <!DOCTYPE html>
 <html lang="{{ lang }}">
   <head>
+    <script>
+      (function () {
+        var stored = localStorage.getItem("theme");
+        var theme = stored || "dark";
+        document.documentElement.setAttribute("data-theme", theme);
+      })();
+    </script>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Talvin Ackbaraly — Ingénieur Vision & IA</title>
@@ -10,10 +17,6 @@
     <link rel="alternate" hreflang="fr" href="{{ site.baseUrl }}/"/>
     <link rel="alternate" hreflang="en" href="{{ site.baseUrl }}/en/"/>
     <link rel="alternate" hreflang="x-default" href="{{ site.baseUrl }}/"/>
-    <meta property="og:type" content="website"/>
-    <meta property="og:url" content="{{ site.baseUrl }}{{ t.urlPrefix }}"/>
-    <meta property="og:title" content="Talvin Ackbaraly — Ingénieur Vision & IA"/>
-    <meta property="og:description" content="{{ t.about.intro | truncate(150) }}"/>
     <meta property="og:type" content="website"/>
     <meta property="og:url" content="{{ site.baseUrl }}{{ t.urlPrefix }}"/>
     <meta property="og:title" content="Talvin Ackbaraly — Ingénieur Vision & IA"/>
@@ -45,10 +48,8 @@
     </script>
     <!-- Embedded i18n Data for Progressive Enhancement -->
     <script id="i18n-data" type="application/json">
-      {
-                          "fr": {{ fr | dump | safe }}, "en":
-      {{ en | dump | safe }},
-                          "site": {{ site | dump | safe }} }
+      { "fr": {{ fr | dump | safe }}, "en": {{ en | dump | safe }}, "site":
+      {{ site | dump | safe }} }
     </script>
   </head>
   <body>
@@ -315,63 +316,58 @@
           <div class="section__divider"></div>
           <div class="projects__grid">
             {% for p in t.projects.items %}
-              <article class="project-card fade-in" id="project-{{ p.id }}">
-                <div class="project-card__header">
-                  <span class="project-card__name">{{ p.name }}</span>
-                  {% if p.period %}
-                    <span class="project-card__period">{{ p.period }}</span>
-                  {% endif %}
-                </div>
-                <p class="project-card__title">{{ p.title }}</p>
-                <p class="project-card__description">{{ p.description }}</p>
-                {% if p.highlights and p.highlights | length > 0 %}
-                  <ul class="project-card__highlights">
-                    {% for h in p.highlights %}
-                      <li>{{ h }}</li>
-                    {% endfor %}
-                  </ul>
-                {% endif %}
-                <div class="project-card__footer">
-                  {% for s in p.stack %}
-                    <span class="tag">{{ s }}</span>
-                  {% endfor %}
-                  {% if p.team %}
-                    <span class="project-card__team">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="12"
-                        height="12"
-                        viewbox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-                      </svg>
-                      {{ p.team }}
-                      {{ 'pers.' if lang == 'fr' else 'people' }}
-                    </span>
-                  {% endif %}
-                  {% if p.github %}
-                    <a href="{{ p.github }}" target="_blank" rel="noopener noreferrer" class="project-card__link">
-                      GitHub
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="14"
-                        height="14"
-                        viewbox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/>
-                      </svg>
-                    </a>
-                  {% endif %}
-                </div>
-              </article>
+              {% if p.featured %}
+                <a href="/projects/{{ p.id }}/" class="project-card fade-in" id="project-{{ p.id }}">
+                  <div class="project-card__thumbnail">
+                    <img src="{{ p.thumbnail if p.thumbnail else '/assets/projects/placeholder.png' }}" alt="Aperçu {{ p.name }}" loading="lazy" onerror="this.src='/assets/projects/placeholder.png'"/>
+                  </div>
+                  <div class="project-card__body">
+                    <div class="project-card__header">
+                      <span class="project-card__name">{{ p.name }}</span>
+                      {% if p.period %}
+                        <span class="project-card__period">{{ p.period }}</span>
+                      {% endif %}
+                    </div>
+                    <p class="project-card__title">{{ p.title }}</p>
+                    <p class="project-card__tagline">{{ p.tagline }}</p>
+                    <div class="project-card__footer">
+                      {% for s in p.stack %}
+                        <span class="tag">{{ s }}</span>
+                      {% endfor %}
+                    </div>
+                  </div>
+                </a>
+              {% endif %}
             {% endfor %}
           </div>
+
+          <!-- Academic / Secondary projects -->
+          {% if t.projects.academicTitle %}
+            <h3 class="projects__sub-title">{{ t.projects.academicTitle }}</h3>
+            <div class="projects__grid projects__grid--academic">
+              {% for p in t.projects.items %}
+                {% if not p.featured %}
+                  <div class="project-card project-card--academic fade-in" id="project-{{ p.id }}">
+                    <div class="project-card__body">
+                      <div class="project-card__header">
+                        <span class="project-card__name">{{ p.name }}</span>
+                        {% if p.period %}
+                          <span class="project-card__period">{{ p.period }}</span>
+                        {% endif %}
+                      </div>
+                      <p class="project-card__title">{{ p.title }}</p>
+                      <p class="project-card__tagline">{{ p.tagline }}</p>
+                      <div class="project-card__footer">
+                        {% for s in p.stack %}
+                          <span class="tag">{{ s }}</span>
+                        {% endfor %}
+                      </div>
+                    </div>
+                  </div>
+                {% endif %}
+              {% endfor %}
+            </div>
+          {% endif %}
         </div>
       </section>
       <!-- ─── Skills ─── -->
