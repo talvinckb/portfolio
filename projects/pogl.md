@@ -3,7 +3,8 @@ id: pogl
 name: "POGL"
 title: "Simulation de fluide temps réel"
 tagline: "Moteur de simulation SPH 3D temps réel avec 75 000+ particules à 60 FPS — physique GPU complète via Compute Shaders et rendu de surface par Screen-Space Fluid Rendering."
-thumbnail: "/assets/projects/pogl/demo.gif"
+thumbnail: "/assets/projects/pogl/thumbnail-16x9.jpg"
+thumbnailLight: "/assets/projects/pogl/thumbnail-16x9-light.jpg"
 stack: ["C++20", "OpenGL 4.6", "GLSL", "Compute Shaders", "CMake", "Dear ImGui"]
 period: "1 mois"
 team: 2
@@ -181,3 +182,9 @@ La caméra est **orbitale** (clic gauche + glisser) avec zoom à la molette.
 - **Barrières mémoire explicites** (`GL_SHADER_STORAGE_BARRIER_BIT`) garantissant la cohérence des données entre les passes de physique et les passes de rendu.
 - **FBOs redimensionnables** s'adaptant dynamiquement aux redimensionnements fenêtre sans réallocation inutile.
 - Zéro transfert CPU ↔ GPU pendant la boucle de simulation : toute la physique est calculée et consommée entièrement en VRAM.
+
+---
+
+### Démonstration de la Simulation en Temps Réel
+
+![Démonstration de la simulation de fluide SPH 3D temps réel](/assets/projects/pogl/demo.gif)

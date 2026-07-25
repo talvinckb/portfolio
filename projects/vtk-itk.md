@@ -3,7 +3,8 @@ id: vtk-itk
 name: "VTK-ITK"
 title: "Recalage & Suivi Longitudinal de Tumeur Cérébrale"
 tagline: "Pipeline complet d'alignement 3D d'IRMs cérébraux (ITK) et de segmentation tumorale avec visualisation interactive multi-vues (VTK + PyQt6) — quantification de l'évolution volumétrique d'un gliome."
-thumbnail: "/assets/projects/vtk-itk/render-3d.jpg"
+thumbnail: "/assets/projects/vtk-itk/thumbnail-16x9.jpg"
+thumbnailLight: "/assets/projects/vtk-itk/thumbnail-16x9-light.jpg"
 stack: ["Python", "ITK", "VTK", "PyQt6", "Matplotlib"]
 period: "3 semaines"
 team: 4
@@ -120,6 +121,8 @@ La couche de visualisation s'appuie sur le binding Python de **VTK** et `QVTKRen
 - **Rendu surfacique 3D** (`vtkDiscreteMarchingCubes`) — extrait les isosurfaces 3D des masques binaires. Tumeur 1 en **rouge** `#EF4444`, Tumeur 2 en **bleu** `#3B82F6`, avec opacité 0.95.
 - **Rendu volumique anatomique de fond** (`vtkSmartVolumeMapper`) — boîte crânienne et tissu cérébral affichés en arrière-plan semi-transparent (opacité max 0.08) via `vtkColorTransferFunction`.
 - **Fusion d'images 2D multi-calques** (`vtkImageBlend`) — blend en temps réel de l'IRM en niveaux de gris avec les masques colorés semi-transparents via `vtkImageMapToColors`.
+
+![Rendu surfacique 3D et superposition volumétrique de la tumeur cérébrale](/assets/projects/vtk-itk/render-3d.jpg)
 
 ---
 

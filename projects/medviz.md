@@ -3,7 +3,8 @@ id: medviz
 name: "MedViz"
 title: "Prédiction médicale & Visualisation 3D"
 tagline: "Application médicale complète combinant traitement de scanners CT 3D, Machine Learning quantile et visualisation WebGL pour prédire le déclin de la fibrose pulmonaire."
-thumbnail: "/assets/projects/medviz/interface-utilisateur.png"
+thumbnail: "/assets/projects/medviz/thumbnail-16x9.jpg"
+thumbnailLight: "/assets/projects/medviz/thumbnail-16x9-light.jpg"
 stack:
   ["Python", "FastAPI", "XGBoost", "Next.js", "Three.js", "Docker", "DICOM"]
 period: "1 mois"
@@ -209,3 +210,9 @@ Le projet atteint un **taux de couverture de tests de 91%** sur le backend Pytho
 | **TOTAL**                |      **91%**      |
 
 ![Pipeline d'intégration continue (GitLab CI)](/assets/projects/medviz/pipeline-cicd.png)
+
+---
+
+### Interface Utilisateur & Application Web Complexe
+
+![Vue d'ensemble de l'interface utilisateur de MedViz](/assets/projects/medviz/interface-utilisateur.png)

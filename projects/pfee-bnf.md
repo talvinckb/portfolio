@@ -3,7 +3,8 @@ id: pfee-bnf
 name: "PFEE — BnF"
 title: "Segmentation & Classification d'Illustrations Patrimoniales"
 tagline: "Pipeline de vision par ordinateur pour détecter, réorienter et classifier automatiquement les illustrations dans les documents numérisés de la Bibliothèque nationale de France — en partenariat avec la BnF."
-thumbnail: "/assets/projects/pfee-bnf/bpt6k98138081_f271_page.jpg"
+thumbnail: "/assets/projects/pfee-bnf/thumbnail-16x9.jpg"
+thumbnailLight: "/assets/projects/pfee-bnf/thumbnail-16x9-light.jpg"
 stack: ["Python", "Deep Learning", "YOLO", "Florence-2", "ConvNeXt", "PyTorch", "IIIF"]
 period: "8 mois (en cours)"
 team: 4

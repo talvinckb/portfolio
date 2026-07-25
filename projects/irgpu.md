@@ -3,7 +3,8 @@ id: irgpu
 name: "IRGPU"
 title: "Détection de mouvement vidéo — Portage GPU"
 tagline: "Portage CPU → GPU d'un algorithme de détection de mouvement temps réel, accéléré de ×24 grâce à CUDA et 6 optimisations guidées par Nsight."
-thumbnail: "/assets/projects/irgpu/example_output.gif"
+thumbnail: "/assets/projects/irgpu/thumbnail-16x9.jpg"
+thumbnailLight: "/assets/projects/irgpu/thumbnail-16x9-light.jpg"
 stack: ["C++", "CUDA", "GStreamer", "Nsight Systems", "Nsight Compute"]
 period: "4 semaines"
 team: 4
@@ -230,3 +231,9 @@ Dans le cadre de l'architecture CUDA du projet, nous avons analysé la pertinenc
 ![Comparaison du débit FPS et speedup global sur le dataset](/assets/projects/irgpu/all_videos_fps_comparison.png)
 
 De **5.29 FPS** à **129.51 FPS** : un gain de **×24.47** avec une précision visuelle quasi-parfaite (SSIM = 0.9949), prouvant que chaque étape d'optimisation — de la mémoire au générateur aléatoire — contribue au résultat final.
+
+---
+
+### Démonstration du Résultat Visuel en Temps Réel
+
+![Démonstration du filtre de détection de mouvement CUDA temps réel](/assets/projects/irgpu/example_output.gif)

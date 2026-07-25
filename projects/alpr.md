@@ -3,7 +3,8 @@ id: alpr
 name: "ALPR"
 title: "Reconnaissance automatique de plaques d'immatriculation"
 tagline: "Système ALPR complet sans Deep Learning (Vision Classique + Machine Learning), avec benchmarks rigoureux Python vs C++."
-thumbnail: "/assets/projects/alpr/04_result.png"
+thumbnail: "/assets/projects/alpr/thumbnail-16x9.jpg"
+thumbnailLight: "/assets/projects/alpr/thumbnail-16x9-light.jpg"
 stack: ["Python", "C++17", "OpenCV", "Random Forest", "CMake", "Google Test"]
 period: "5 semaines"
 team: 2
