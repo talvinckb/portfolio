@@ -45,7 +45,9 @@
         "description": null
       }
     ],
-    "certifications": ["English: TOEIC Certified"]
+    "certifications": [
+      "English: TOEIC Certified"
+    ]
   },
   "experiences": {
     "title": "Work Experience",
@@ -56,7 +58,13 @@
         "company": "Studiocanal",
         "period": "Sept. 2025 - Jan. 2026",
         "description": "Development of an internal web platform for managing movie catalog rights, contracts, and distribution modules. Built full-stack features and set up CI/CD cloud infrastructure on AWS within an Agile team.",
-        "tags": ["Full-Stack", "DevOps", "CI/CD", "AWS", "Agile"]
+        "tags": [
+          "Full-Stack",
+          "DevOps",
+          "CI/CD",
+          "AWS",
+          "Agile"
+        ]
       },
       {
         "title": "IT Consultant",
@@ -64,7 +72,11 @@
         "company": "Hitachi Solutions France",
         "period": "June - July 2022",
         "description": "Design and development of a management application prototype (suppliers, products, contracts) for enterprise client Sonepar using the Django framework and applying the Agile SAFe methodology.",
-        "tags": ["Django", "Agile SAFe", "Prototype"]
+        "tags": [
+          "Django",
+          "Agile SAFe",
+          "Prototype"
+        ]
       }
     ]
   },
@@ -78,60 +90,97 @@
         "name": "PFEE — BNF",
         "title": "Segmentation & Classification of Heritage Illustrations",
         "tagline": "Automatic detection of illustrations in digitized heritage documents, in partnership with the BNF.",
-        "thumbnail": "/assets/projects/pfee-bnf/bpt6k98138081_f271_page.jpg",
-        "stack": ["Deep Learning", "Computer Vision", "Python", "YOLO"],
+        "thumbnail": "/assets/projects/pfee-bnf/thumbnail-16x9.jpg",
+        "stack": [
+          "Deep Learning",
+          "Computer Vision",
+          "Python",
+          "YOLO"
+        ],
         "period": "8 months (ongoing)",
-        "featured": true
+        "featured": true,
+        "thumbnailLight": "/assets/projects/pfee-bnf/thumbnail-16x9-light.jpg"
       },
       {
         "id": "alpr",
         "name": "ALPR",
         "title": "Automatic License Plate Recognition",
         "tagline": "Complete ALPR system without Deep Learning (Classical Vision + Machine Learning), with rigorous Python vs C++ benchmarks.",
-        "thumbnail": "/assets/projects/alpr/04_result.png",
-        "stack": ["Python", "C++", "OpenCV", "Machine Learning"],
+        "thumbnail": "/assets/projects/alpr/thumbnail-16x9.jpg",
+        "stack": [
+          "Python",
+          "C++",
+          "OpenCV",
+          "Machine Learning"
+        ],
         "period": "5 weeks",
-        "featured": true
+        "featured": true,
+        "thumbnailLight": "/assets/projects/alpr/thumbnail-16x9-light.jpg"
       },
       {
         "id": "irgpu",
         "name": "IRGPU",
         "title": "Real-Time Video Motion Detection — GPU Port",
         "tagline": "CPU → GPU port of a real-time algorithm achieving a ×24 performance gain via CUDA.",
-        "thumbnail": "/assets/projects/irgpu/algo-video03.png",
-        "stack": ["C++", "CUDA", "Nsight", "GPU Computing"],
+        "thumbnail": "/assets/projects/irgpu/thumbnail-16x9.jpg",
+        "stack": [
+          "C++",
+          "CUDA",
+          "Nsight",
+          "GPU Computing"
+        ],
         "period": "4 weeks",
-        "featured": true
+        "featured": true,
+        "thumbnailLight": "/assets/projects/irgpu/thumbnail-16x9-light.jpg"
       },
       {
         "id": "medviz",
         "name": "MedViz",
         "title": "Medical Prediction & 3D Visualization",
         "tagline": "Full FVC prediction pipeline from pulmonary CT scans, with 3D web visualization.",
-        "thumbnail": "/assets/projects/medviz/interface-utilisateur.png",
-        "stack": ["Computer Vision", "XGBoost", "React/Next.js", "Docker"],
+        "thumbnail": "/assets/projects/medviz/thumbnail-16x9.jpg",
+        "stack": [
+          "Computer Vision",
+          "XGBoost",
+          "React/Next.js",
+          "Docker"
+        ],
         "period": "1 month",
-        "featured": true
+        "featured": true,
+        "thumbnailLight": "/assets/projects/medviz/thumbnail-16x9-light.jpg"
       },
       {
         "id": "pogl",
         "name": "POGL",
         "title": "Real-Time Fluid Simulation",
         "tagline": "Real-time 3D SPH fluid simulation engine with 75,000+ particles at 60 FPS — full GPU physics via Compute Shaders and SSFR surface rendering.",
-        "thumbnail": "/assets/projects/pogl/thumbnail.png",
-        "stack": ["C++", "OpenGL", "Compute Shaders", "GLSL"],
+        "thumbnail": "/assets/projects/pogl/thumbnail-16x9.jpg",
+        "stack": [
+          "C++",
+          "OpenGL",
+          "Compute Shaders",
+          "GLSL"
+        ],
         "period": "1 month",
-        "featured": true
+        "featured": true,
+        "thumbnailLight": "/assets/projects/pogl/thumbnail-16x9-light.jpg"
       },
       {
         "id": "vtk-itk",
         "name": "VTK-ITK",
         "title": "Brain Tumor Registration & Longitudinal Tracking",
         "tagline": "Complete 3D MRI alignment pipeline (ITK) with tumor segmentation and interactive multi-view visualization (VTK + PyQt6) — volumetric evolution quantification of a glioma.",
-        "thumbnail": "/assets/projects/vtk-itk/render-3d.jpg",
-        "stack": ["Python", "ITK", "VTK", "PyQt6", "Matplotlib"],
+        "thumbnail": "/assets/projects/vtk-itk/thumbnail-16x9.jpg",
+        "stack": [
+          "Python",
+          "ITK",
+          "VTK",
+          "PyQt6",
+          "Matplotlib"
+        ],
         "period": "3 weeks",
-        "featured": true
+        "featured": true,
+        "thumbnailLight": "/assets/projects/vtk-itk/thumbnail-16x9-light.jpg"
       },
       {
         "id": "tinyx",
@@ -139,7 +188,11 @@
         "title": "Social Network Clone",
         "tagline": "Twitter-like social platform built by a team of 14 with microservices architecture and rigorous DevOps.",
         "thumbnail": null,
-        "stack": ["Java/Quarkus", "React/Next.js", "MongoDB"],
+        "stack": [
+          "Java/Quarkus",
+          "React/Next.js",
+          "MongoDB"
+        ],
         "period": "2 months",
         "featured": false
       },
@@ -149,7 +202,11 @@
         "title": "Full Compiler Construction",
         "tagline": "Implementation of a compiler for the Tiger language, from lexical analysis to type checking.",
         "thumbnail": null,
-        "stack": ["C++", "Bison", "Flex"],
+        "stack": [
+          "C++",
+          "Bison",
+          "Flex"
+        ],
         "period": "2 months",
         "featured": false
       },
@@ -159,7 +216,11 @@
         "title": "Digit Recognition & Sudoku Solver",
         "tagline": "Complete pipeline: grid detection, OCR via CNN trained from scratch, and automatic solving.",
         "thumbnail": null,
-        "stack": ["Image Processing", "Neural Networks", "CNN"],
+        "stack": [
+          "Image Processing",
+          "Neural Networks",
+          "CNN"
+        ],
         "period": "3 months",
         "featured": false
       }
@@ -180,7 +241,13 @@
       },
       {
         "category": "High Performance Computing",
-        "items": ["CUDA", "GPU Computing", "OpenGL", "GLSL", "Nsight"]
+        "items": [
+          "CUDA",
+          "GPU Computing",
+          "OpenGL",
+          "GLSL",
+          "Nsight"
+        ]
       },
       {
         "category": "Software Development",

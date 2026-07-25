@@ -230,8 +230,9 @@
       </header>
       <!-- ─── Thumbnail ─── -->
       {% set thumb = thumbnail if thumbnail else "/assets/projects/placeholder.png" %}
+      {% set thumbLight = thumbnailLight if thumbnailLight else thumb %}
       <div class="project-thumbnail container">
-        <img src="{{ thumb }}" alt="Aperçu du projet {{ name }}" class="project-thumbnail__img" loading="lazy" onerror="this.onerror=null;this.src='/assets/projects/placeholder.png';"/>
+        <img src="{{ thumb }}" data-src-dark="{{ thumb }}" data-src-light="{{ thumbLight }}" alt="Aperçu du projet {{ name }}" class="project-thumbnail__img" loading="lazy" onerror="this.onerror=null;this.src='/assets/projects/placeholder.png';"/>
       </div>
       <!-- ─── Content (Markdown rendered) ─── -->
       <article class="project-content container">

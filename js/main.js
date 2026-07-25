@@ -288,19 +288,33 @@ function initLangSwitcher() {
    Theme Toggle
    ═══════════════════════════════════════════════════════════════ */
 
+function updateThemeThumbnails(theme) {
+  document.querySelectorAll('img[data-src-light]').forEach(img => {
+    const darkSrc = img.getAttribute('data-src-dark');
+    const lightSrc = img.getAttribute('data-src-light');
+    if (theme === 'light' && lightSrc) {
+      img.src = lightSrc;
+    } else if (darkSrc) {
+      img.src = darkSrc;
+    }
+  });
+}
+
 function initTheme() {
   const toggle = document.getElementById("theme-toggle");
-  if (!toggle) return;
-
   const stored = localStorage.getItem("theme");
   const theme = stored || "dark";
   document.documentElement.setAttribute("data-theme", theme);
+  updateThemeThumbnails(theme);
+
+  if (!toggle) return;
 
   toggle.addEventListener("click", () => {
     const current = document.documentElement.getAttribute("data-theme");
     const next = current === "dark" ? "light" : "dark";
     document.documentElement.setAttribute("data-theme", next);
     localStorage.setItem("theme", next);
+    updateThemeThumbnails(next);
   });
 }
 

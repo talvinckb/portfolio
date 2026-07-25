@@ -319,7 +319,7 @@
               {% if p.featured %}
                 <a href="/projects/{{ p.id }}/" class="project-card fade-in" id="project-{{ p.id }}">
                   <div class="project-card__thumbnail">
-                    <img src="{{ p.thumbnail if p.thumbnail else '/assets/projects/placeholder.png' }}" alt="Aperçu {{ p.name }}" loading="lazy" onerror="this.src='/assets/projects/placeholder.png'"/>
+                    <img src="{{ p.thumbnail if p.thumbnail else '/assets/projects/placeholder.png' }}" data-src-dark="{{ p.thumbnail if p.thumbnail else '/assets/projects/placeholder.png' }}" data-src-light="{{ p.thumbnailLight if p.thumbnailLight else p.thumbnail }}" alt="Aperçu {{ p.name }}" loading="lazy" onerror="this.src='/assets/projects/placeholder.png'"/>
                   </div>
                   <div class="project-card__body">
                     <div class="project-card__header">
