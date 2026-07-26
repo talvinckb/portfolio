@@ -102,7 +102,7 @@ Les valeurs de gris brutes d'un scanner DICOM sont propres à chaque constructeu
 
 Une fois en HU, un seuillage permet d'isoler les zones d'intérêt clinique et de normaliser les données entre patients.
 
-![Standardisation HU : (1) Coupe DICOM brute, (2) Seuillage Hounsfield](/assets/projects/medviz/HU-bis-bis.png)
+![Standardisation HU : (1) Coupe DICOM brute, (2) Seuillage Hounsfield](/assets/projects/medviz/hounsfield_normalization.png)
 
 ### 2. Rééchantillonnage Isotrope 3D
 
@@ -119,22 +119,28 @@ La segmentation isole le parenchyme pulmonaire des tissus environnants (os, musc
 5. **Masque final** : Opérations morphologiques 3D (fermetures, dilatations) et nettoyage du bruit (< 5% du volume max).
 6. **Poumons segmentés** : Résultat final appliqué à l'image d'origine.
 
-![Étapes de la segmentation pulmonaire 3D](/assets/projects/medviz/segmantation-steps-bis-bis.png)
+![Étapes de la segmentation pulmonaire 3D](/assets/projects/medviz/segmentation_steps_3d.png)
 
-### 4. Extraction de Biomarqueurs Radiométriques
+### 4. Reconstruction 3D Volumique des Poumons
 
-À partir du masque 3D validé, trois biomarqueurs quantitatifs sont extraits par patient :
+Une fois la pile de coupes axiales 2D segmentée, l'ensemble des masques est empilé dans l'espace volumétrique pour reconstruire la structure globale du système respiratoire. L'algorithme des **Marching Cubes** (`skimage.measure.marching_cubes`) est appliqué sur ce volume pour extraire l'isosurface du parenchyme pulmonaire, générant ainsi une représentation 3D tridimensionnelle haute fidélité des deux poumons.
+
+![Reconstruction 3D du parenchyme pulmonaire à partir des coupes segmentées](/assets/projects/medviz/lungs_3d_reconstruction.jpg)
+
+### 5. Extraction de Biomarqueurs Radiométriques
+
+À partir du volume 3D reconstruit et du masque validé, trois biomarqueurs quantitatifs sont extraits par patient :
 
 - **Volume Pulmonaire Total** : Somme des voxels du masque multipliée par l'espacement isotrope (en cm³).
 - **Statistiques HU** : Moyenne et écart-type des densités Hounsfield au sein du parenchyme.
 - **Ratio de Fibrose** : Proportion de voxels pulmonaires dont la densité > −250 HU (tissu fibrosé dense).
 
-### 5. Génération du Maillage 3D (GLB)
+### 6. Génération du Maillage 3D & Export WebGL (GLB)
 
-Le masque booléen 3D est transformé en maillage polygonal interactif en deux étapes :
+Le maillage 3D extrait est optimisé pour l'affichage interactif en deux étapes :
 
-1. Algorithme des **Marching Cubes** (`skimage.measure.marching_cubes`) : reconstruction de la surface isosurface avec sommets, faces et normales.
-2. Export au format **GLB / glTF 2.0** via `trimesh` pour un rendu WebGL direct dans le navigateur via Three.js.
+1. **Lissage & Simplification de surface** : Normalisation des sommets et calcul des normales de surface.
+2. **Export au format GLB / glTF 2.0** via `trimesh` pour un rendu WebGL temps réel directement dans le navigateur via Three.js.
 
 ---
 
@@ -164,7 +170,7 @@ Pour offrir une référence médicale normée, le **Score de Sévérité** est c
 $$ \text{Score} = \frac{\text{FVC}_{\text{Baseline}}}{\text{FVC}_{\text{Optimale}}} $$
 </div>
 
-![Score de sévérité GLI et statut de risque du patient](/assets/projects/medviz/score-maladie.png)
+![Score de sévérité GLI et statut de risque du patient](/assets/projects/medviz/disease_score_severity.png)
 
 ---
 
@@ -180,7 +186,7 @@ Une étude comparative rigoureuse évalue l'**apport direct des biomarqueurs rad
 
 **XGBoost avec radiomics atteint une MAE de 87.1 mL**, soit le meilleur résultat, confirmant que les données d'imagerie 3D enrichissent significativement la capacité prédictive du modèle.
 
-![Score LLL avec et sans biomarqueurs radiomiques](/assets/projects/medviz/metrics-lll-clinicals-bis.png)
+![Score LLL avec et sans biomarqueurs radiomiques](/assets/projects/medviz/metrics_radiomics_comparison.png)
 
 ![Erreurs MAE et RMSE par architecture vs baseline](/assets/projects/medviz/metrics-mae-rmse.png)
 
@@ -215,4 +221,4 @@ Le projet atteint un **taux de couverture de tests de 91%** sur le backend Pytho
 
 ### Interface Utilisateur & Application Web Complexe
 
-![Vue d'ensemble de l'interface utilisateur de MedViz](/assets/projects/medviz/interface-utilisateur.png)
+![Vue d'ensemble de l'interface utilisateur de MedViz](/assets/projects/medviz/user_interface_overview.png)

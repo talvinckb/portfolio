@@ -32,7 +32,7 @@ Le jeu de données de référence est constitué de pages de documents historiqu
 
 Les illustrations sont annotées selon quatre axes de classification définis par la BnF :
 
-![Grille d'annotation complète — Forme/Fonction, Genre, Rotation, Technique](/assets/projects/pfee-bnf/labels.png)
+![Grille d'annotation complète — Forme/Fonction, Genre, Rotation, Technique](/assets/projects/pfee-bnf/annotation_grid_labels.png)
 
 La richesse et la complexité de cette taxonomie (plus de 40 labels de *Forme/Fonction* seuls, 4 classes de rotation, 5 techniques d'impression) rendent la tâche de classification particulièrement ambitieuse.
 
@@ -79,7 +79,7 @@ Voici des exemples de résultats de localisation et de segmentation d'illustrati
 
 | Florence-2 — Traité de géométrie | Florence-2 — Document illustré | Florence-2 — Traité historique |
 | :---: | :---: | :---: |
-| ![Résultat Florence-2 — Traité de géométrie](/assets/projects/pfee-bnf/bd6t59319400_f367_page.jpg) | ![Résultat Florence-2 — Document illustré](/assets/projects/pfee-bnf/bpt6k98138081_f271_page.jpg) | ![Résultat Florence-2 — Traité historique](/assets/projects/pfee-bnf/bpt6k87288463_f625_page.jpg) |
+| ![Résultat Florence-2 — Traité de géométrie](/assets/projects/pfee-bnf/coins_yolo_detection_page.jpg) | ![Résultat Florence-2 — Document illustré](/assets/projects/pfee-bnf/geometry_space_treatise_page.jpg) | ![Résultat Florence-2 — Traité historique](/assets/projects/pfee-bnf/manuscript_illuminated_page.jpg) |
 
 ---
 

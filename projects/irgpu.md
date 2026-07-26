@@ -148,7 +148,7 @@ Des goulots d'étranglement majeurs subsistent, que le profiling va révéler.
 
 **Opti 2 :** Nsight Compute a émis un avertissement explicite sur l'utilisation de `double` sur GPU grand public. Le passage à `float` avec `lroundf()` accélère significativement les calculs flottants.
 
-![Nsight Compute : impact de l'overhead FP64 (`double`) sur GPU](/assets/projects/irgpu/nsight-warning-float-bis.png)
+![Nsight Compute : impact de l'overhead FP64 (`double`) sur GPU](/assets/projects/irgpu/nsight_fp64_precision_warning.png)
 
 | Implémentation            |    FPS    |  Speedup   |
 | :------------------------ | :-------: | :--------: |
@@ -168,7 +168,7 @@ Nsight Systems révèle que `cuRAND` alloue une structure de **48 octets par pix
 
 |                   Allocation cuRAND (320×240)                    |                          Allocation cuRAND (1080p)                          |
 | :--------------------------------------------------------------: | :-------------------------------------------------------------------------: |
-| ![cuRAND 320x240](/assets/projects/irgpu/cudamalloc-video03.png) | ![cuRAND 1080p](/assets/projects/irgpu/cudamalloc-3630-172488409_large.png) |
+| ![cuRAND 320x240](/assets/projects/irgpu/cudamalloc_vram_profiling_small.png) | ![cuRAND 1080p](/assets/projects/irgpu/cudamalloc_vram_profiling_large.png) |
 
 **Solution :** Un **Linear Congruential Generator (LCG)** calculé à la volée à partir de l'index du pixel et du numéro de frame — zéro octet de VRAM supplémentaire.
 
@@ -180,13 +180,13 @@ Nsight Systems révèle que `cuRAND` alloue une structure de **48 octets par pix
 
 La propagation par hystérésis nécessite plusieurs passes jusqu'à convergence. Sans optimisation, chaque itération déclenche des synchronisations CPU/GPU et une saturation de la bande passante VRAM.
 
-![Saturation des accès mémoire VRAM sans Shared Memory](/assets/projects/irgpu/nsync-no-shared-memory-wrapped.png)
+![Saturation des accès mémoire VRAM sans Shared Memory](/assets/projects/irgpu/vram_saturation_no_shared_memory.png)
 
 **Solution :** Tuilage 16×16 en **Shared Memory** avec un halo de +1 pixel. La propagation des pixels forts aux pixels faibles voisins s'effectue localement, sans accès VRAM.
 
 |                                Analyse VRAM avant                                 |                                Analyse VRAM après                                |
 | :-------------------------------------------------------------------------------: | :------------------------------------------------------------------------------: |
-| ![Avant Shared Memory](/assets/projects/irgpu/hysteresis-mem-analysis-before.png) | ![Après Shared Memory](/assets/projects/irgpu/hysteresis-mem-analysis-after.png) |
+| ![Avant Shared Memory](/assets/projects/irgpu/hysteresis_memory_before.png) | ![Après Shared Memory](/assets/projects/irgpu/hysteresis_memory_after.png) |
 
 Résultat : les requêtes VRAM sont divisées par 8 (de 139 K à 17.7 K par itération), soit **+26% de vitesse pure** sur ce seul noyau.
 
@@ -228,7 +228,7 @@ Dans le cadre de l'architecture CUDA du projet, nous avons analysé la pertinenc
 
 ### Comparaison Globale des Performances
 
-![Comparaison du débit FPS et speedup global sur le dataset](/assets/projects/irgpu/all_videos_fps_comparison.png)
+![Comparaison du débit FPS et speedup global sur le dataset](/assets/projects/irgpu/benchmark_fps_comparison.png)
 
 De **5.29 FPS** à **129.51 FPS** : un gain de **×24.47** avec une précision visuelle quasi-parfaite (SSIM = 0.9949), prouvant que chaque étape d'optimisation — de la mémoire au générateur aléatoire — contribue au résultat final.
 
@@ -236,4 +236,4 @@ De **5.29 FPS** à **129.51 FPS** : un gain de **×24.47** avec une précision v
 
 ### Démonstration du Résultat Visuel en Temps Réel
 
-![Démonstration du filtre de détection de mouvement CUDA temps réel](/assets/projects/irgpu/example_output.gif)
+![Démonstration du filtre de détection de mouvement CUDA temps réel](/assets/projects/irgpu/motion_detection_demo.gif)

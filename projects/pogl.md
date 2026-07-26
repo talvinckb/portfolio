@@ -76,7 +76,7 @@ Sans optimisation, la recherche de voisins est en $O(N^2)$, rédhibitoire pour 7
 2. **Tri Bitonic GPU** : Les paires `(particuleIndex, cellKey)` sont triées en parallèle sur GPU en $O(\log^2 N)$ étapes — aucun transfert CPU requis.
 3. **Table des Indices de Début** : Une passe rapide identifie le premier indice de chaque cellule dans le tableau trié. Chaque particule n'explore alors que ses **27 cellules 3D adjacentes**.
 
-![Évolution et transition du solveur SPH du domaine 2D au volume 3D](/assets/projects/pogl/2D-to-3D.gif)
+![Évolution et transition du solveur SPH du domaine 2D au volume 3D](/assets/projects/pogl/fluid_2d_to_3d_transformation.gif)
 
 ---
 
@@ -164,7 +164,7 @@ La passe finale combine tous les buffers :
 
 | Passe 5 : Réflexion & Réfraction Globales | Passe 5 : Réflexions Spéculaires du Soleil |
 | :---------------------------------------: | :----------------------------------------: |
-| ![Passe 5 : Réflexion et réfraction de Fresnel](/assets/projects/pogl/reflection.png) | ![Passe 5 : Réflexions spéculaires du soleil](/assets/projects/pogl/sun-reflection.png) |
+| ![Passe 5 : Réflexion et réfraction de Fresnel](/assets/projects/pogl/reflection.png) | ![Passe 5 : Réflexions spéculaires du soleil](/assets/projects/pogl/sun_reflection.png) |
 
 ---
 
@@ -187,4 +187,4 @@ La caméra est **orbitale** (clic gauche + glisser) avec zoom à la molette.
 
 ### Démonstration de la Simulation en Temps Réel
 
-![Démonstration de la simulation de fluide SPH 3D temps réel](/assets/projects/pogl/demo.gif)
+![Démonstration de la simulation de fluide SPH 3D temps réel](/assets/projects/pogl/fluid_simulation_demo.gif)
