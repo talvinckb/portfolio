@@ -3,8 +3,8 @@ id: medviz
 name: "MedViz"
 title: "Prédiction médicale & Visualisation 3D"
 tagline: "Application médicale complète combinant traitement de scanners CT 3D, Machine Learning quantile et visualisation WebGL pour prédire le déclin de la fibrose pulmonaire."
-thumbnail: "/assets/projects/medviz/thumbnail-16x9.jpg"
-thumbnailLight: "/assets/projects/medviz/thumbnail-16x9-light.jpg"
+thumbnail: "/assets/projects/medviz/thumbnail-16x9.webp"
+thumbnailLight: "/assets/projects/medviz/thumbnail-16x9-light.webp"
 stack:
   ["Python", "FastAPI", "XGBoost", "Next.js", "Three.js", "Docker", "DICOM"]
 period: "1 mois"
@@ -31,7 +31,7 @@ Le projet s'appuie sur le challenge **OSIC (Open Source Imaging Consortium)**, d
 | Scanners CT 3D    | DICOM (`.dcm`) | Séries de coupes axiales volumétriques |
 | Données Cliniques | CSV (`.csv`)   | Métadonnées patients & historique FVC  |
 
-![Coupes axiales CT volumétriques (patient OSIC)](/assets/projects/medviz/slices.png)
+![Coupes axiales CT volumétriques (patient OSIC)](/assets/projects/medviz/slices.webp)
 
 ---
 
@@ -102,7 +102,7 @@ Les valeurs de gris brutes d'un scanner DICOM sont propres à chaque constructeu
 
 Une fois en HU, un seuillage permet d'isoler les zones d'intérêt clinique et de normaliser les données entre patients.
 
-![Standardisation HU : (1) Coupe DICOM brute, (2) Seuillage Hounsfield](/assets/projects/medviz/hounsfield_normalization.png)
+![Standardisation HU : (1) Coupe DICOM brute, (2) Seuillage Hounsfield](/assets/projects/medviz/hounsfield_normalization.webp)
 
 ### 2. Rééchantillonnage Isotrope 3D
 
@@ -119,13 +119,13 @@ La segmentation isole le parenchyme pulmonaire des tissus environnants (os, musc
 5. **Masque final** : Opérations morphologiques 3D (fermetures, dilatations) et nettoyage du bruit (< 5% du volume max).
 6. **Poumons segmentés** : Résultat final appliqué à l'image d'origine.
 
-![Étapes de la segmentation pulmonaire 3D](/assets/projects/medviz/segmentation_steps_3d.png)
+![Étapes de la segmentation pulmonaire 3D](/assets/projects/medviz/segmentation_steps_3d.webp)
 
 ### 4. Reconstruction 3D Volumique des Poumons
 
 Une fois la pile de coupes axiales 2D segmentée, l'ensemble des masques est empilé dans l'espace volumétrique pour reconstruire la structure globale du système respiratoire. L'algorithme des **Marching Cubes** (`skimage.measure.marching_cubes`) est appliqué sur ce volume pour extraire l'isosurface du parenchyme pulmonaire, générant ainsi une représentation 3D tridimensionnelle haute fidélité des deux poumons.
 
-![Reconstruction 3D du parenchyme pulmonaire à partir des coupes segmentées](/assets/projects/medviz/lungs_3d_reconstruction.jpg)
+![Reconstruction 3D du parenchyme pulmonaire à partir des coupes segmentées](/assets/projects/medviz/lungs_3d_reconstruction.webp)
 
 ### 5. Extraction de Biomarqueurs Radiométriques
 
@@ -162,7 +162,7 @@ Chaque modèle prend en entrée : semaine cible, âge, volume pulmonaire, moyenn
 
 Un **indice de confiance continu** $C \in [0.01, 0.99]$ est dérivé de la largeur de l'intervalle IC 95% — plus le modèle est certain, plus cet indice est élevé.
 
-![Prédictions temporelles FVC et intervalles quantiles](/assets/projects/medviz/predictions.png)
+![Prédictions temporelles FVC et intervalles quantiles](/assets/projects/medviz/predictions.webp)
 
 Pour offrir une référence médicale normée, le **Score de Sévérité** est calculé à partir des équations GLI-2012 (Global Lung Function Initiative) en fonction de l'âge, taille et sexe du patient :
 
@@ -170,7 +170,7 @@ Pour offrir une référence médicale normée, le **Score de Sévérité** est c
 $$ \text{Score} = \frac{\text{FVC}_{\text{Baseline}}}{\text{FVC}_{\text{Optimale}}} $$
 </div>
 
-![Score de sévérité GLI et statut de risque du patient](/assets/projects/medviz/disease_score_severity.png)
+![Score de sévérité GLI et statut de risque du patient](/assets/projects/medviz/disease_score_severity.webp)
 
 ---
 
@@ -186,9 +186,9 @@ Une étude comparative rigoureuse évalue l'**apport direct des biomarqueurs rad
 
 **XGBoost avec radiomics atteint une MAE de 87.1 mL**, soit le meilleur résultat, confirmant que les données d'imagerie 3D enrichissent significativement la capacité prédictive du modèle.
 
-![Score LLL avec et sans biomarqueurs radiomiques](/assets/projects/medviz/metrics_radiomics_comparison.png)
+![Score LLL avec et sans biomarqueurs radiomiques](/assets/projects/medviz/metrics_radiomics_comparison.webp)
 
-![Erreurs MAE et RMSE par architecture vs baseline](/assets/projects/medviz/metrics-mae-rmse.png)
+![Erreurs MAE et RMSE par architecture vs baseline](/assets/projects/medviz/metrics-mae-rmse.webp)
 
 ---
 
@@ -199,7 +199,7 @@ MedViz adopte une architecture **microservices découplée** en 2 conteneurs Doc
 - **Backend FastAPI** : Routes REST documentées (Swagger OpenAPI), traitement DICOM en tâche d'arrière-plan (`BackgroundTasks`), base SQLite thread-safe pour les résultats ML et maillages 3D.
 - **Frontend Next.js / PulmoSight** : Rendu 3D temps réel du maillage pulmonaire `.glb` via `@react-three/fiber`, graphiques FVC interactifs, jauge de score de sévérité et interface d'upload DICOM.
 
-![Architecture conteneurisée Backend & Frontend (Docker)](/assets/projects/medviz/docker.png)
+![Architecture conteneurisée Backend & Frontend (Docker)](/assets/projects/medviz/docker.webp)
 
 ### Qualité de Code & Intégration Continue (CI/CD)
 
@@ -215,10 +215,10 @@ Le projet atteint un **taux de couverture de tests de 91%** sur le backend Pytho
 | `processing/pipeline.py` |        80%        |
 | **TOTAL**                |      **91%**      |
 
-![Pipeline d'intégration continue (GitLab CI)](/assets/projects/medviz/pipeline-cicd.png)
+![Pipeline d'intégration continue (GitLab CI)](/assets/projects/medviz/pipeline-cicd.webp)
 
 ---
 
 ### Interface Utilisateur & Application Web Complexe
 
-![Vue d'ensemble de l'interface utilisateur de MedViz](/assets/projects/medviz/user_interface_overview.png)
+![Vue d'ensemble de l'interface utilisateur de MedViz](/assets/projects/medviz/user_interface_overview.webp)

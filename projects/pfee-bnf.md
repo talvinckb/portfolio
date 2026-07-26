@@ -3,8 +3,8 @@ id: pfee-bnf
 name: "PFEE — BnF"
 title: "Segmentation & Classification d'Illustrations Patrimoniales"
 tagline: "Pipeline de vision par ordinateur pour détecter, réorienter et classifier automatiquement les illustrations dans les documents numérisés de la Bibliothèque nationale de France — en partenariat avec la BnF."
-thumbnail: "/assets/projects/pfee-bnf/thumbnail-16x9.jpg"
-thumbnailLight: "/assets/projects/pfee-bnf/thumbnail-16x9-light.jpg"
+thumbnail: "/assets/projects/pfee-bnf/thumbnail-16x9.webp"
+thumbnailLight: "/assets/projects/pfee-bnf/thumbnail-16x9-light.webp"
 stack: ["Python", "Deep Learning", "YOLO", "Florence-2", "ConvNeXt", "PyTorch", "IIIF"]
 period: "8 mois (en cours)"
 team: 4
@@ -32,7 +32,7 @@ Le jeu de données de référence est constitué de pages de documents historiqu
 
 Les illustrations sont annotées selon quatre axes de classification définis par la BnF :
 
-![Grille d'annotation complète — Forme/Fonction, Genre, Rotation, Technique](/assets/projects/pfee-bnf/annotation_grid_labels.png)
+![Grille d'annotation complète — Forme/Fonction, Genre, Rotation, Technique](/assets/projects/pfee-bnf/annotation_grid_labels.webp)
 
 La richesse et la complexité de cette taxonomie (plus de 40 labels de *Forme/Fonction* seuls, 4 classes de rotation, 5 techniques d'impression) rendent la tâche de classification particulièrement ambitieuse.
 
@@ -79,7 +79,7 @@ Voici des exemples de résultats de localisation et de segmentation d'illustrati
 
 | Florence-2 — Traité de géométrie | Florence-2 — Document illustré | Florence-2 — Traité historique |
 | :---: | :---: | :---: |
-| ![Résultat Florence-2 — Traité de géométrie](/assets/projects/pfee-bnf/coins_yolo_detection_page.jpg) | ![Résultat Florence-2 — Document illustré](/assets/projects/pfee-bnf/geometry_space_treatise_page.jpg) | ![Résultat Florence-2 — Traité historique](/assets/projects/pfee-bnf/manuscript_illuminated_page.jpg) |
+| ![Résultat Florence-2 — Traité de géométrie](/assets/projects/pfee-bnf/coins_yolo_detection_page.webp) | ![Résultat Florence-2 — Document illustré](/assets/projects/pfee-bnf/geometry_space_treatise_page.webp) | ![Résultat Florence-2 — Traité historique](/assets/projects/pfee-bnf/manuscript_illuminated_page.webp) |
 
 ---
 

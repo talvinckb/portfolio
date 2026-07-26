@@ -90,7 +90,7 @@
         "name": "PFEE — BNF",
         "title": "Segmentation & Classification of Heritage Illustrations",
         "tagline": "Automatic detection of illustrations in digitized heritage documents, in partnership with the BNF.",
-        "thumbnail": "/assets/projects/pfee-bnf/thumbnail-16x9.jpg",
+        "thumbnail": "/assets/projects/pfee-bnf/thumbnail-16x9.webp",
         "stack": [
           "Deep Learning",
           "Computer Vision",
@@ -99,14 +99,14 @@
         ],
         "period": "8 months (ongoing)",
         "featured": true,
-        "thumbnailLight": "/assets/projects/pfee-bnf/thumbnail-16x9-light.jpg"
+        "thumbnailLight": "/assets/projects/pfee-bnf/thumbnail-16x9-light.webp"
       },
       {
         "id": "alpr",
         "name": "ALPR",
         "title": "Automatic License Plate Recognition",
         "tagline": "Complete ALPR system without Deep Learning (Classical Vision + Machine Learning), with rigorous Python vs C++ benchmarks.",
-        "thumbnail": "/assets/projects/alpr/thumbnail-16x9.jpg",
+        "thumbnail": "/assets/projects/alpr/thumbnail-16x9.webp",
         "stack": [
           "Python",
           "C++",
@@ -115,14 +115,14 @@
         ],
         "period": "5 weeks",
         "featured": true,
-        "thumbnailLight": "/assets/projects/alpr/thumbnail-16x9-light.jpg"
+        "thumbnailLight": "/assets/projects/alpr/thumbnail-16x9-light.webp"
       },
       {
         "id": "irgpu",
         "name": "IRGPU",
         "title": "Real-Time Video Motion Detection — GPU Port",
         "tagline": "CPU → GPU port of a real-time algorithm achieving a ×24 performance gain via CUDA.",
-        "thumbnail": "/assets/projects/irgpu/thumbnail-16x9.jpg",
+        "thumbnail": "/assets/projects/irgpu/thumbnail-16x9.webp",
         "stack": [
           "C++",
           "CUDA",
@@ -131,14 +131,14 @@
         ],
         "period": "4 weeks",
         "featured": true,
-        "thumbnailLight": "/assets/projects/irgpu/thumbnail-16x9-light.jpg"
+        "thumbnailLight": "/assets/projects/irgpu/thumbnail-16x9-light.webp"
       },
       {
         "id": "medviz",
         "name": "MedViz",
         "title": "Medical Prediction & 3D Visualization",
         "tagline": "Full FVC prediction pipeline from pulmonary CT scans, with 3D web visualization.",
-        "thumbnail": "/assets/projects/medviz/thumbnail-16x9.jpg",
+        "thumbnail": "/assets/projects/medviz/thumbnail-16x9.webp",
         "stack": [
           "Computer Vision",
           "XGBoost",
@@ -147,14 +147,14 @@
         ],
         "period": "1 month",
         "featured": true,
-        "thumbnailLight": "/assets/projects/medviz/thumbnail-16x9-light.jpg"
+        "thumbnailLight": "/assets/projects/medviz/thumbnail-16x9-light.webp"
       },
       {
         "id": "pogl",
         "name": "POGL",
         "title": "Real-Time Fluid Simulation",
         "tagline": "Real-time 3D SPH fluid simulation engine with 75,000+ particles at 60 FPS — full GPU physics via Compute Shaders and SSFR surface rendering.",
-        "thumbnail": "/assets/projects/pogl/thumbnail-16x9.jpg",
+        "thumbnail": "/assets/projects/pogl/thumbnail-16x9.webp",
         "stack": [
           "C++",
           "OpenGL",
@@ -163,14 +163,14 @@
         ],
         "period": "1 month",
         "featured": true,
-        "thumbnailLight": "/assets/projects/pogl/thumbnail-16x9-light.jpg"
+        "thumbnailLight": "/assets/projects/pogl/thumbnail-16x9-light.webp"
       },
       {
         "id": "vtk-itk",
         "name": "VTK-ITK",
         "title": "Brain Tumor Registration & Longitudinal Tracking",
         "tagline": "Complete 3D MRI alignment pipeline (ITK) with tumor segmentation and interactive multi-view visualization (VTK + PyQt6) — volumetric evolution quantification of a glioma.",
-        "thumbnail": "/assets/projects/vtk-itk/thumbnail-16x9.jpg",
+        "thumbnail": "/assets/projects/vtk-itk/thumbnail-16x9.webp",
         "stack": [
           "Python",
           "ITK",
@@ -180,7 +180,7 @@
         ],
         "period": "3 weeks",
         "featured": true,
-        "thumbnailLight": "/assets/projects/vtk-itk/thumbnail-16x9-light.jpg"
+        "thumbnailLight": "/assets/projects/vtk-itk/thumbnail-16x9-light.webp"
       },
       {
         "id": "tinyx",

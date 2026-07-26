@@ -3,8 +3,8 @@ id: pogl
 name: "POGL"
 title: "Simulation de fluide temps réel"
 tagline: "Moteur de simulation SPH 3D temps réel avec 75 000+ particules à 60 FPS — physique GPU complète via Compute Shaders et rendu de surface par Screen-Space Fluid Rendering."
-thumbnail: "/assets/projects/pogl/thumbnail-16x9.jpg"
-thumbnailLight: "/assets/projects/pogl/thumbnail-16x9-light.jpg"
+thumbnail: "/assets/projects/pogl/thumbnail-16x9.webp"
+thumbnailLight: "/assets/projects/pogl/thumbnail-16x9-light.webp"
 stack: ["C++20", "OpenGL 4.6", "GLSL", "Compute Shaders", "CMake", "Dear ImGui"]
 period: "1 mois"
 team: 2
@@ -62,7 +62,7 @@ $$\mathbf{F}_{\text{pression}, i} = -\sum_{j} \frac{P_i + P_j}{2 \rho_j} \nabla 
 
 $$\mathbf{F}_{\text{viscosité}, i} = \mu \sum_{j} (\mathbf{v}_j - \mathbf{v}_i) \cdot W_{\text{poly6}}(\|\mathbf{r}_{ij}\|, h)$$
 
-![Cartes de densité SPH et comportement des noyaux de lissage](/assets/projects/pogl/density.png)
+![Cartes de densité SPH et comportement des noyaux de lissage](/assets/projects/pogl/density.webp)
 
 ---
 
@@ -76,7 +76,7 @@ Sans optimisation, la recherche de voisins est en $O(N^2)$, rédhibitoire pour 7
 2. **Tri Bitonic GPU** : Les paires `(particuleIndex, cellKey)` sont triées en parallèle sur GPU en $O(\log^2 N)$ étapes — aucun transfert CPU requis.
 3. **Table des Indices de Début** : Une passe rapide identifie le premier indice de chaque cellule dans le tableau trié. Chaque particule n'explore alors que ses **27 cellules 3D adjacentes**.
 
-![Évolution et transition du solveur SPH du domaine 2D au volume 3D](/assets/projects/pogl/fluid_2d_to_3d_transformation.gif)
+<video src="/assets/projects/pogl/fluid_2d_to_3d_transformation.mp4" autoplay loop muted playsinline class="project-video-demo" title="Évolution et transition du solveur SPH du domaine 2D au volume 3D"></video>
 
 ---
 
@@ -128,7 +128,7 @@ Rendre les particules comme de simples sphères donne un rendu discontinu. Le **
 
 Chaque particule est émise comme un *Point Sprite*, projetée en sphère 3D dans `fluid_depth.frag`. Les fragments hors du rayon sont rejetés et la profondeur exacte $z_{\text{eye}}$ est stockée dans une texture `GL_R32F`.
 
-![Passe 1 : carte de profondeur brute des sphères individuelles](/assets/projects/pogl/base_depth.png)
+![Passe 1 : carte de profondeur brute des sphères individuelles](/assets/projects/pogl/base_depth.webp)
 
 ### Passe 2 — Filtrage Bilatéral Adaptatif
 
@@ -136,7 +136,7 @@ Un **filtre bilatéral séparable** (deux passes H/V) lisse la carte de profonde
 
 $$W(i, j) = \exp\!\left(-\frac{\|\mathbf{x}_i - \mathbf{x}_j\|^2}{2 \sigma_s^2}\right) \cdot \exp\!\left(-\frac{|z_i - z_j|^2}{2 \sigma_r^2}\right)$$
 
-![Passe 2 : carte de profondeur lissée, surface continue](/assets/projects/pogl/smoothed_depth.png)
+![Passe 2 : carte de profondeur lissée, surface continue](/assets/projects/pogl/smoothed_depth.webp)
 
 ### Passe 3 — Reconstruction des Normales en Espace Écran
 
@@ -144,7 +144,7 @@ $$W(i, j) = \exp\!\left(-\frac{\|\mathbf{x}_i - \mathbf{x}_j\|^2}{2 \sigma_s^2}\
 
 $$\mathbf{N} = \text{normalize}\!\left( \frac{\partial \mathbf{P}}{\partial x} \times \frac{\partial \mathbf{P}}{\partial y} \right)$$
 
-![Passe 3 : champ de normales 3D reconstruit en espace écran](/assets/projects/pogl/smoothed_normal.png)
+![Passe 3 : champ de normales 3D reconstruit en espace écran](/assets/projects/pogl/smoothed_normal.webp)
 
 ### Passe 4 — Épaisseur & Absorption Optique (Beer-Lambert)
 
@@ -152,7 +152,7 @@ L'épaisseur du volume d'eau traversé est accumulée par **blending additif** (
 
 $$I_{\text{réfracté}} = I_{\text{scène}} \cdot \exp\!\left(-\text{épaisseur} \cdot \alpha \cdot (1 - \mathbf{C}_{\text{eau}})\right)$$
 
-![Passe 4 : carte d'épaisseur de la masse d'eau](/assets/projects/pogl/thickness_map.png)
+![Passe 4 : carte d'épaisseur de la masse d'eau](/assets/projects/pogl/thickness_map.webp)
 
 ### Passe 5 — Composition Finale : Réfraction & Réflexions de Fresnel
 
@@ -164,7 +164,7 @@ La passe finale combine tous les buffers :
 
 | Passe 5 : Réflexion & Réfraction Globales | Passe 5 : Réflexions Spéculaires du Soleil |
 | :---------------------------------------: | :----------------------------------------: |
-| ![Passe 5 : Réflexion et réfraction de Fresnel](/assets/projects/pogl/reflection.png) | ![Passe 5 : Réflexions spéculaires du soleil](/assets/projects/pogl/sun_reflection.png) |
+| ![Passe 5 : Réflexion et réfraction de Fresnel](/assets/projects/pogl/reflection.webp) | ![Passe 5 : Réflexions spéculaires du soleil](/assets/projects/pogl/sun_reflection.webp) |
 
 ---
 
@@ -187,4 +187,4 @@ La caméra est **orbitale** (clic gauche + glisser) avec zoom à la molette.
 
 ### Démonstration de la Simulation en Temps Réel
 
-![Démonstration de la simulation de fluide SPH 3D temps réel](/assets/projects/pogl/fluid_simulation_demo.gif)
+<video src="/assets/projects/pogl/fluid_simulation_demo.mp4" autoplay loop muted playsinline class="project-video-demo" title="Démonstration de la simulation de fluide SPH 3D temps réel"></video>

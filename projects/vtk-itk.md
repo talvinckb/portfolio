@@ -3,8 +3,8 @@ id: vtk-itk
 name: "VTK-ITK"
 title: "Recalage & Suivi Longitudinal de Tumeur Cérébrale"
 tagline: "Pipeline complet d'alignement 3D d'IRMs cérébraux (ITK) et de segmentation tumorale avec visualisation interactive multi-vues (VTK + PyQt6) — quantification de l'évolution volumétrique d'un gliome."
-thumbnail: "/assets/projects/vtk-itk/thumbnail-16x9.jpg"
-thumbnailLight: "/assets/projects/vtk-itk/thumbnail-16x9-light.jpg"
+thumbnail: "/assets/projects/vtk-itk/thumbnail-16x9.webp"
+thumbnailLight: "/assets/projects/vtk-itk/thumbnail-16x9-light.webp"
 stack: ["Python", "ITK", "VTK", "PyQt6", "Matplotlib"]
 period: "3 semaines"
 team: 4
@@ -35,7 +35,7 @@ L'application est construite sous **PyQt6** avec un thème sombre médical *Deep
 
 Une fois les algorithmes exécutés en arrière-plan via des `QThread`, le tableau de bord principal s'affiche :
 
-![Tableau de bord — Visualisation 3D et coupes 2D synchronisées](/assets/projects/vtk-itk/dashboard.jpg)
+![Tableau de bord — Visualisation 3D et coupes 2D synchronisées](/assets/projects/vtk-itk/dashboard.webp)
 
 Ce tableau de bord combine :
 - **Un viewport VTK 3D** (gauche) : rendu surfacique des deux tumeurs superposées avec la boîte crânienne volumique en semi-transparent.
@@ -79,7 +79,7 @@ $$\text{MI}(F, M) = \sum_{f} \sum_{m} p(f,m) \log \left( \frac{p(f,m)}{p(f)\,p(m
 
 L'évolution de la métrique au fil des itérations illustre la minimisation progressive lors du recalage :
 
-![Historique de convergence de l'optimiseur ITK](/assets/projects/vtk-itk/convergence.png)
+![Historique de convergence de l'optimiseur ITK](/assets/projects/vtk-itk/convergence.webp)
 
 ---
 
@@ -122,7 +122,7 @@ La couche de visualisation s'appuie sur le binding Python de **VTK** et `QVTKRen
 - **Rendu volumique anatomique de fond** (`vtkSmartVolumeMapper`) — boîte crânienne et tissu cérébral affichés en arrière-plan semi-transparent (opacité max 0.08) via `vtkColorTransferFunction`.
 - **Fusion d'images 2D multi-calques** (`vtkImageBlend`) — blend en temps réel de l'IRM en niveaux de gris avec les masques colorés semi-transparents via `vtkImageMapToColors`.
 
-![Rendu surfacique 3D et superposition volumétrique de la tumeur cérébrale](/assets/projects/vtk-itk/render-3d.jpg)
+![Rendu surfacique 3D et superposition volumétrique de la tumeur cérébrale](/assets/projects/vtk-itk/render-3d.webp)
 
 ---
 

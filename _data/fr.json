@@ -90,7 +90,7 @@
         "name": "PFEE — BNF",
         "title": "Segmentation et classification d'illustrations patrimoniales",
         "tagline": "Détection automatique d'illustrations dans des documents patrimoniaux numérisés, en partenariat avec la BNF.",
-        "thumbnail": "/assets/projects/pfee-bnf/thumbnail-16x9.jpg",
+        "thumbnail": "/assets/projects/pfee-bnf/thumbnail-16x9.webp",
         "stack": [
           "Deep Learning",
           "Computer Vision",
@@ -99,14 +99,14 @@
         ],
         "period": "8 mois (en cours)",
         "featured": true,
-        "thumbnailLight": "/assets/projects/pfee-bnf/thumbnail-16x9-light.jpg"
+        "thumbnailLight": "/assets/projects/pfee-bnf/thumbnail-16x9-light.webp"
       },
       {
         "id": "alpr",
         "name": "ALPR",
         "title": "Reconnaissance automatique de plaques d'immatriculation",
         "tagline": "Système ALPR complet sans Deep Learning (Vision Classique + Machine Learning), avec benchmarks rigoureux Python vs C++.",
-        "thumbnail": "/assets/projects/alpr/thumbnail-16x9.jpg",
+        "thumbnail": "/assets/projects/alpr/thumbnail-16x9.webp",
         "stack": [
           "Python",
           "C++",
@@ -115,14 +115,14 @@
         ],
         "period": "5 semaines",
         "featured": true,
-        "thumbnailLight": "/assets/projects/alpr/thumbnail-16x9-light.jpg"
+        "thumbnailLight": "/assets/projects/alpr/thumbnail-16x9-light.webp"
       },
       {
         "id": "irgpu",
         "name": "IRGPU",
         "title": "Détection de mouvement vidéo — Portage GPU",
         "tagline": "Portage CPU → GPU d'un algorithme temps réel avec un gain de performance de ×24 via CUDA.",
-        "thumbnail": "/assets/projects/irgpu/thumbnail-16x9.jpg",
+        "thumbnail": "/assets/projects/irgpu/thumbnail-16x9.webp",
         "stack": [
           "C++",
           "CUDA",
@@ -131,14 +131,14 @@
         ],
         "period": "4 semaines",
         "featured": true,
-        "thumbnailLight": "/assets/projects/irgpu/thumbnail-16x9-light.jpg"
+        "thumbnailLight": "/assets/projects/irgpu/thumbnail-16x9-light.webp"
       },
       {
         "id": "medviz",
         "name": "MedViz",
         "title": "Prédiction médicale & Visualisation 3D",
         "tagline": "Pipeline complet de prédiction de la FVC à partir de scanners CT pulmonaires, avec visualisation 3D en web.",
-        "thumbnail": "/assets/projects/medviz/thumbnail-16x9.jpg",
+        "thumbnail": "/assets/projects/medviz/thumbnail-16x9.webp",
         "stack": [
           "Computer Vision",
           "XGBoost",
@@ -147,14 +147,14 @@
         ],
         "period": "1 mois",
         "featured": true,
-        "thumbnailLight": "/assets/projects/medviz/thumbnail-16x9-light.jpg"
+        "thumbnailLight": "/assets/projects/medviz/thumbnail-16x9-light.webp"
       },
       {
         "id": "pogl",
         "name": "POGL",
         "title": "Simulation de fluide temps réel",
         "tagline": "Moteur de simulation SPH 3D temps réel avec 75 000+ particules à 60 FPS — physique GPU complète via Compute Shaders et rendu de surface SSFR.",
-        "thumbnail": "/assets/projects/pogl/thumbnail-16x9.jpg",
+        "thumbnail": "/assets/projects/pogl/thumbnail-16x9.webp",
         "stack": [
           "C++",
           "OpenGL",
@@ -163,14 +163,14 @@
         ],
         "period": "1 mois",
         "featured": true,
-        "thumbnailLight": "/assets/projects/pogl/thumbnail-16x9-light.jpg"
+        "thumbnailLight": "/assets/projects/pogl/thumbnail-16x9-light.webp"
       },
       {
         "id": "vtk-itk",
         "name": "VTK-ITK",
         "title": "Recalage & Suivi Longitudinal de Tumeur Cérébrale",
         "tagline": "Pipeline complet d'alignement 3D d'IRMs cérébraux (ITK) et de segmentation tumorale avec visualisation interactive multi-vues (VTK + PyQt6) — quantification de l'évolution d'un gliome.",
-        "thumbnail": "/assets/projects/vtk-itk/thumbnail-16x9.jpg",
+        "thumbnail": "/assets/projects/vtk-itk/thumbnail-16x9.webp",
         "stack": [
           "Python",
           "ITK",
@@ -180,7 +180,7 @@
         ],
         "period": "3 semaines",
         "featured": true,
-        "thumbnailLight": "/assets/projects/vtk-itk/thumbnail-16x9-light.jpg"
+        "thumbnailLight": "/assets/projects/vtk-itk/thumbnail-16x9-light.webp"
       },
       {
         "id": "tinyx",

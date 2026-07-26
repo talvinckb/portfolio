@@ -3,8 +3,8 @@ id: alpr
 name: "ALPR"
 title: "Reconnaissance automatique de plaques d'immatriculation"
 tagline: "Système ALPR complet sans Deep Learning (Vision Classique + Machine Learning), avec benchmarks rigoureux Python vs C++."
-thumbnail: "/assets/projects/alpr/thumbnail-16x9.jpg"
-thumbnailLight: "/assets/projects/alpr/thumbnail-16x9-light.jpg"
+thumbnail: "/assets/projects/alpr/thumbnail-16x9.webp"
+thumbnailLight: "/assets/projects/alpr/thumbnail-16x9-light.webp"
 stack: ["Python", "C++17", "OpenCV", "Random Forest", "CMake", "Google Test"]
 period: "5 semaines"
 team: 2
@@ -95,7 +95,7 @@ La première étape consiste à préparer l'image pour stabiliser les dimensions
 
 |                 1. Image Originale                  |                   2. Image Prétraitée                    |
 | :-------------------------------------------------: | :------------------------------------------------------: |
-| ![Originale](/assets/projects/alpr/01_original.png) | ![Prétraitée](/assets/projects/alpr/02_preprocessed.png) |
+| ![Originale](/assets/projects/alpr/01_original.webp) | ![Prétraitée](/assets/projects/alpr/02_preprocessed.webp) |
 
 ---
 
@@ -113,21 +113,21 @@ Pour éviter de balayer naïvement toute l'image, qui serait extrêmement lent, 
 
 |                               1 : Filtre MMLPF                                |                                2 : Sobel Vertical                                |
 | :---------------------------------------------------------------------------: | :------------------------------------------------------------------------------: |
-| ![MMLPF Base](/assets/projects/alpr/intermediate_steps/base/step_1_mmlpf.png) | ![Sobel Base](/assets/projects/alpr/intermediate_steps/base/step_2_sobel_dx.png) |
+| ![MMLPF Base](/assets/projects/alpr/intermediate_steps/base/step_1_mmlpf.webp) | ![Sobel Base](/assets/projects/alpr/intermediate_steps/base/step_2_sobel_dx.webp) |
 
 |                              3 : Seuil d'Otsu                               |                                     4 : Fermeture                                     |
 | :-------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------: |
-| ![Otsu Base](/assets/projects/alpr/intermediate_steps/base/step_3_otsu.png) | ![Fermeture Base](/assets/projects/alpr/intermediate_steps/base/step_4_fermeture.png) |
+| ![Otsu Base](/assets/projects/alpr/intermediate_steps/base/step_3_otsu.webp) | ![Fermeture Base](/assets/projects/alpr/intermediate_steps/base/step_4_fermeture.webp) |
 
 |                          5 : Candidats extraits                           |
 | :-----------------------------------------------------------------------: |
-| ![CCA Base](/assets/projects/alpr/intermediate_steps/base/step_5_cca.png) |
+| ![CCA Base](/assets/projects/alpr/intermediate_steps/base/step_5_cca.webp) |
 
 #### Fusion des 3 branches & Dédoublonnage NMS
 
 De la même manière, la **Branche Suréchantillonnée ($\times 2$)** et la **Branche Canny** extraient et filtrent leurs propres candidats. L'ensemble des régions retenues par les 3 branches est ensuite regroupé puis dédoublonné via une suppression non-maximale (**NMS** basée sur l'IoU) pour éliminer les chevauchements.
 
-![Candidats fusionnés (3 branches) et dédoublonnés via NMS](/assets/projects/alpr/03_candidates.png)
+![Candidats fusionnés (3 branches) et dédoublonnés via NMS](/assets/projects/alpr/03_candidates.webp)
 
 ---
 
@@ -144,7 +144,7 @@ Chaque patch candidat retenu est découpé et redimensionné à une taille fixe 
 
 Chaque vecteur de caractéristiques est soumis à un classifieur **Random Forest** (`cv::ml::RTrees`). Le modèle attribue un score de confiance à chaque candidat et la région avec le score positif le plus élevé est retenue comme plaque finale.
 
-![Résultat final de la détection de plaque](/assets/projects/alpr/04_result.png)
+![Résultat final de la détection de plaque](/assets/projects/alpr/04_result.webp)
 
 ---
 

@@ -1101,15 +1101,20 @@ a:hover {
 }
 
 .project-content img,
-.project-thumbnail__img {
+.project-thumbnail__img,
+.project-video-demo {
   max-width: 100%;
   border-radius: var(--radius-md);
   border: 1px solid var(--color-border);
   margin-block: var(--space-lg);
   margin-inline: auto;
   display: block;
-  cursor: zoom-in;
   transition: opacity var(--duration-fast) var(--ease-out);
+}
+
+.project-content img,
+.project-thumbnail__img {
+  cursor: zoom-in;
 }
 
 .project-content figure {
