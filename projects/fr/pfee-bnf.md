@@ -5,7 +5,16 @@ title: "Segmentation & Classification d'Illustrations Patrimoniales"
 tagline: "Pipeline de vision par ordinateur pour détecter, réorienter et classifier automatiquement les illustrations dans les documents numérisés de la Bibliothèque nationale de France — en partenariat avec la BnF."
 thumbnail: "/assets/projects/pfee-bnf/thumbnail-16x9.webp"
 thumbnailLight: "/assets/projects/pfee-bnf/thumbnail-16x9-light.webp"
-stack: ["Python", "Deep Learning", "YOLO", "Florence-2", "ConvNeXt", "PyTorch", "IIIF"]
+stack:
+  [
+    "Python",
+    "Deep Learning",
+    "YOLO",
+    "Florence-2",
+    "ConvNeXt",
+    "PyTorch",
+    "IIIF",
+  ]
 period: "8 mois (en cours)"
 team: 4
 github: null
@@ -28,13 +37,13 @@ Ce projet de fin d'études (PFEE), mené en partenariat direct avec la BnF sur *
 
 ## Les Données : Corpus Patrimonial BnF
 
-Le jeu de données de référence est constitué de pages de documents historiques numérisés de la BnF, annotées manuellement dans **Label Studio** par des experts du patrimoine (*Golden Dataset* au format JSON). Chaque zone d'intérêt y est définie par des coordonnées relatives de bounding box et associée aux 4 axes de métadonnées.
+Le jeu de données de référence est constitué de pages de documents historiques numérisés de la BnF, annotées manuellement dans **Label Studio** par des experts du patrimoine (_Golden Dataset_ au format JSON). Chaque zone d'intérêt y est définie par des coordonnées relatives de bounding box et associée aux 4 axes de métadonnées.
 
 Les illustrations sont annotées selon quatre axes de classification définis par la BnF :
 
 ![Grille d'annotation complète — Forme/Fonction, Genre, Rotation, Technique](/assets/projects/pfee-bnf/annotation_grid_labels.webp)
 
-La richesse et la complexité de cette taxonomie (plus de 40 labels de *Forme/Fonction* seuls, 4 classes de rotation, 5 techniques d'impression) rendent la tâche de classification particulièrement ambitieuse.
+La richesse et la complexité de cette taxonomie (plus de 40 labels de _Forme/Fonction_ seuls, 4 classes de rotation, 5 techniques d'impression) rendent la tâche de classification particulièrement ambitieuse.
 
 ---
 
@@ -50,9 +59,9 @@ Le téléchargement est **multithreadé** avec gestion du rate-limiting Gallica 
 
 Les données brutes sont converties en deux formats distincts selon le modèle ciblé :
 
-| Format | Modèle cible | Structure |
-| :--- | :--- | :--- |
-| **YOLO** | YOLO / Ultralytics | Coordonnées centrées normalisées |
+| Format         | Modèle cible         | Structure                                 |
+| :------------- | :------------------- | :---------------------------------------- |
+| **YOLO**       | YOLO / Ultralytics   | Coordonnées centrées normalisées          |
 | **Florence-2** | Microsoft Florence-2 | Tokens `<loc_x1><loc_y1><loc_x2><loc_y2>` |
 
 Le split Train/Validation est effectué de façon déterministe (**70% / 30%**) pour assurer la reproductibilité des benchmarks.
@@ -63,12 +72,13 @@ Le split Train/Validation est effectué de façon déterministe (**70% / 30%**) 
 
 La première tâche — localiser l'illustration et détecter son orientation dans la page — est abordée par deux approches en compétition :
 
-| Approche | Modèle | Caractéristiques |
-| :--- | :--- | :--- |
-| **Détection classique** | YOLO (Ultralytics, pré-entraîné `yolo26n.pt`) | Rapide, éprouvé, fine-tuned sur bboxes + rotation |
-| **Vision-Langage (VLM)** | Florence-2 (`microsoft/Florence-2-base`) | Fine-tuning avec gel du backbone vision, patch SDPA |
+| Approche                 | Modèle                                        | Caractéristiques                                    |
+| :----------------------- | :-------------------------------------------- | :-------------------------------------------------- |
+| **Détection classique**  | YOLO (Ultralytics, pré-entraîné `yolo26n.pt`) | Rapide, éprouvé, fine-tuned sur bboxes + rotation   |
+| **Vision-Langage (VLM)** | Florence-2 (`microsoft/Florence-2-base`)      | Fine-tuning avec gel du backbone vision, patch SDPA |
 
 Les métriques de comparaison retenues sont :
+
 - **IoU** (Intersection over Union) — qualité du chevauchement de la bounding box prédite vs. vérité terrain
 - **mAP@50 / mAP@50-95** — performance globale de détection
 - **Précision d'orientation** — taux d'exactitude sur les 4 classes de rotation (0°/90°/180°/270°)
@@ -77,8 +87,8 @@ Les métriques de comparaison retenues sont :
 
 Voici des exemples de résultats de localisation et de segmentation d'illustrations obtenus par le modèle Vision-Langage **Florence-2** fine-tuné sur le dataset BnF :
 
-| Florence-2 — Traité de géométrie | Florence-2 — Document illustré | Florence-2 — Traité historique |
-| :---: | :---: | :---: |
+|                                    Florence-2 — Traité de géométrie                                    |                                     Florence-2 — Document illustré                                      |                                     Florence-2 — Traité historique                                     |
+| :----------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------------------: |
 | ![Résultat Florence-2 — Traité de géométrie](/assets/projects/pfee-bnf/coins_yolo_detection_page.webp) | ![Résultat Florence-2 — Document illustré](/assets/projects/pfee-bnf/geometry_space_treatise_page.webp) | ![Résultat Florence-2 — Traité historique](/assets/projects/pfee-bnf/manuscript_illuminated_page.webp) |
 
 ---

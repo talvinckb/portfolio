@@ -5,7 +5,16 @@ title: "Segmentation & Classification of Heritage Illustrations"
 tagline: "Computer vision pipeline to automatically detect, reorient, and classify illustrations in digitized documents of the National Library of France — in partnership with BnF."
 thumbnail: "/assets/projects/pfee-bnf/thumbnail-16x9.webp"
 thumbnailLight: "/assets/projects/pfee-bnf/thumbnail-16x9-light.webp"
-stack: ["Python", "Deep Learning", "YOLO", "Florence-2", "ConvNeXt", "PyTorch", "IIIF"]
+stack:
+  [
+    "Python",
+    "Deep Learning",
+    "YOLO",
+    "Florence-2",
+    "ConvNeXt",
+    "PyTorch",
+    "IIIF",
+  ]
 period: "8 months (ongoing)"
 team: 4
 github: null
@@ -28,13 +37,13 @@ This 8-month Capstone Project (PFEE), conducted in direct partnership with the B
 
 ## The Dataset: BnF Heritage Corpus
 
-The benchmark dataset consists of historical BnF document pages manually annotated in **Label Studio** by heritage domain experts (*Golden Dataset* in JSON format). Each region of interest is defined by relative bounding box coordinates and tagged across 4 metadata axes.
+The benchmark dataset consists of historical BnF document pages manually annotated in **Label Studio** by heritage domain experts (_Golden Dataset_ in JSON format). Each region of interest is defined by relative bounding box coordinates and tagged across 4 metadata axes.
 
 Illustrations are annotated according to four classification axes defined by BnF:
 
 ![Full Annotation Grid — Form/Function, Genre, Rotation, Technique](/assets/projects/pfee-bnf/annotation_grid_labels.webp)
 
-The richness and complexity of this taxonomy (over 40 *Form/Function* labels alone, 4 rotation classes, 5 printing techniques) make the classification task particularly ambitious.
+The richness and complexity of this taxonomy (over 40 _Form/Function_ labels alone, 4 rotation classes, 5 printing techniques) make the classification task particularly ambitious.
 
 ---
 
@@ -50,9 +59,9 @@ Downloading is **multithreaded** with Gallica rate-limiting management via expon
 
 Raw data is converted into two distinct formats depending on the target model:
 
-| Format | Target Model | Structure |
-| :--- | :--- | :--- |
-| **YOLO** | YOLO / Ultralytics | Normalized centered coordinates |
+| Format         | Target Model         | Structure                                 |
+| :------------- | :------------------- | :---------------------------------------- |
+| **YOLO**       | YOLO / Ultralytics   | Normalized centered coordinates           |
 | **Florence-2** | Microsoft Florence-2 | Tokens `<loc_x1><loc_y1><loc_x2><loc_y2>` |
 
 The Train/Validation split is performed deterministically (**70% / 30%**) to ensure benchmark reproducibility.
@@ -63,12 +72,13 @@ The Train/Validation split is performed deterministically (**70% / 30%**) to ens
 
 The first task — locating the illustration and detecting its orientation within the page — is tackled by two competing approaches:
 
-| Approach | Model | Key Features |
-| :--- | :--- | :--- |
-| **Classical Detection** | YOLO (Ultralytics, pre-trained `yolo26n.pt`) | Fast, proven, fine-tuned on bboxes + rotation |
-| **Vision-Language (VLM)** | Florence-2 (`microsoft/Florence-2-base`) | Fine-tuning with vision backbone frozen, SDPA patch |
+| Approach                  | Model                                        | Key Features                                        |
+| :------------------------ | :------------------------------------------- | :-------------------------------------------------- |
+| **Classical Detection**   | YOLO (Ultralytics, pre-trained `yolo26n.pt`) | Fast, proven, fine-tuned on bboxes + rotation       |
+| **Vision-Language (VLM)** | Florence-2 (`microsoft/Florence-2-base`)     | Fine-tuning with vision backbone frozen, SDPA patch |
 
 The comparison metrics selected are:
+
 - **IoU** (Intersection over Union) — overlap quality between predicted bounding box vs. ground truth
 - **mAP@50 / mAP@50-95** — overall detection performance
 - **Orientation Accuracy** — accuracy rate across the 4 rotation classes (0°/90°/180°/270°)
@@ -77,8 +87,8 @@ The comparison metrics selected are:
 
 Here are example illustration localization and segmentation results obtained by the **Florence-2** Vision-Language model fine-tuned on the BnF dataset:
 
-| Florence-2 — Geometry Treatise | Florence-2 — Illustrated Document | Florence-2 — Historical Treatise |
-| :---: | :---: | :---: |
+|                              Florence-2 — Geometry Treatise                               |                                    Florence-2 — Illustrated Document                                     |                              Florence-2 — Historical Treatise                              |
+| :---------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------: | :----------------------------------------------------------------------------------------: |
 | ![Florence-2 Result — Geometry](/assets/projects/pfee-bnf/coins_yolo_detection_page.webp) | ![Florence-2 Result — Illustrated Document](/assets/projects/pfee-bnf/geometry_space_treatise_page.webp) | ![Florence-2 Result — History](/assets/projects/pfee-bnf/manuscript_illuminated_page.webp) |
 
 ---

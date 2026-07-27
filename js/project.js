@@ -10,10 +10,10 @@
    ═══════════════════════════════════════════════════════════════ */
 
 function updateThemeThumbnails(theme) {
-  document.querySelectorAll('img[data-src-light]').forEach(img => {
-    const darkSrc = img.getAttribute('data-src-dark');
-    const lightSrc = img.getAttribute('data-src-light');
-    if (theme === 'light' && lightSrc) {
+  document.querySelectorAll("img[data-src-light]").forEach((img) => {
+    const darkSrc = img.getAttribute("data-src-dark");
+    const lightSrc = img.getAttribute("data-src-light");
+    if (theme === "light" && lightSrc) {
       img.src = lightSrc;
     } else if (darkSrc) {
       img.src = darkSrc;
@@ -136,7 +136,7 @@ function initLightbox() {
 
   // Attach click to images & pipeline workflows
   const clickableItems = document.querySelectorAll(
-    ".project-content img, .project-thumbnail__img, .pipeline-workflow"
+    ".project-content img, .project-thumbnail__img, .pipeline-workflow",
   );
 
   clickableItems.forEach((item) => {
@@ -230,7 +230,8 @@ async function switchProjectLanguage(targetUrl) {
     document.title = doc.title;
 
     // 7. Sync current theme thumbnails on new images
-    const currentTheme = document.documentElement.getAttribute("data-theme") || "dark";
+    const currentTheme =
+      document.documentElement.getAttribute("data-theme") || "dark";
     updateThemeThumbnails(currentTheme);
 
     // 8. Re-initialize interactive components
@@ -261,7 +262,8 @@ function initLangSwitcher() {
 
   btn.addEventListener("click", (e) => {
     e.preventDefault();
-    const altLangUrl = btn.getAttribute("data-lang-url") || btn.getAttribute("href");
+    const altLangUrl =
+      btn.getAttribute("data-lang-url") || btn.getAttribute("href");
     if (altLangUrl) {
       switchProjectLanguage(altLangUrl);
     }
@@ -284,5 +286,3 @@ document.addEventListener("DOMContentLoaded", () => {
   initLangSwitcher();
   document.body.classList.add("is-ready");
 });
-
-

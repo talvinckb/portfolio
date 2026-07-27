@@ -19,22 +19,22 @@ Ce projet est un moteur de **simulation de fluide 3D en temps réel** développ�
 
 L'objectif était de concevoir un système capable d'exécuter en parallèle deux piliers techniques de l'informatique graphique moderne :
 
-- **Simulation physique particulaire GPU** via la méthode *Smoothed Particle Hydrodynamics* (SPH), entièrement calculée par des **Compute Shaders**, accélérée par un **Hachage Spatial 3D** et un **Tri Bitonic GPU** en $O(N \log^2 N)$.
-- **Rendu de surface fluide en espace écran** (SSFR — *Screen-Space Fluid Rendering*), un pipeline multi-passes transformant un nuage de particules discrètes en une surface continue d'eau réaliste, incorporant filtrage bilatéral, réfraction (Loi de Beer-Lambert) et réflexions de Fresnel.
+- **Simulation physique particulaire GPU** via la méthode _Smoothed Particle Hydrodynamics_ (SPH), entièrement calculée par des **Compute Shaders**, accélérée par un **Hachage Spatial 3D** et un **Tri Bitonic GPU** en $O(N \log^2 N)$.
+- **Rendu de surface fluide en espace écran** (SSFR — _Screen-Space Fluid Rendering_), un pipeline multi-passes transformant un nuage de particules discrètes en une surface continue d'eau réaliste, incorporant filtrage bilatéral, réfraction (Loi de Beer-Lambert) et réflexions de Fresnel.
 
 ---
 
 ## Architecture : Data-Oriented Design GPU
 
-La conception du moteur repose sur le paradigme **Data-Oriented Design (DOD)** : toutes les données des particules résident en **VRAM** sous forme de *Shader Storage Buffer Objects* (SSBOs) en `std430`, annulant tout transfert PCIe superflu entre le CPU et le GPU à chaque frame.
+La conception du moteur repose sur le paradigme **Data-Oriented Design (DOD)** : toutes les données des particules résident en **VRAM** sous forme de _Shader Storage Buffer Objects_ (SSBOs) en `std430`, annulant tout transfert PCIe superflu entre le CPU et le GPU à chaque frame.
 
 Le pipeline suit deux boucles distinctes qui s'enchaînent chaque frame :
 
-| Phase | Responsabilité | Outil |
-| :---- | :------------- | :---- |
-| **CPU** | Gestion des entrées, paramètres (SimSettings) | C++20, Dear ImGui |
-| **GPU — Physique** | 7 passes Compute Shaders | GLSL 4.60 |
-| **GPU — Rendu** | 5 passes Graphics Shaders (SSFR) | GLSL 4.60 |
+| Phase              | Responsabilité                                | Outil             |
+| :----------------- | :-------------------------------------------- | :---------------- |
+| **CPU**            | Gestion des entrées, paramètres (SimSettings) | C++20, Dear ImGui |
+| **GPU — Physique** | 7 passes Compute Shaders                      | GLSL 4.60         |
+| **GPU — Rendu**    | 5 passes Graphics Shaders (SSFR)              | GLSL 4.60         |
 
 Les 8 SSBOs alloués en VRAM maintiennent positions, vitesses, densités, hachage spatial et buffers de rendu — sans jamais repasser par le CPU durant la simulation.
 
@@ -42,7 +42,7 @@ Les 8 SSBOs alloués en VRAM maintiennent positions, vitesses, densités, hachag
 
 ## Simulation Physique SPH sur GPU
 
-La méthode **SPH** est une formulation *lagrangienne* des équations de Navier-Stokes : le fluide est représenté par des particules discrètes dont les propriétés (densité, pression, viscosité) sont estimées par interpolation pondérée sur leurs voisines via des **noyaux de lissage**.
+La méthode **SPH** est une formulation _lagrangienne_ des équations de Navier-Stokes : le fluide est représenté par des particules discrètes dont les propriétés (densité, pression, viscosité) sont estimées par interpolation pondérée sur leurs voisines via des **noyaux de lissage**.
 
 ### Densité & Pression
 
@@ -50,7 +50,7 @@ La densité locale $\rho_i$ d'une particule est la somme des contributions de se
 
 $$\rho_i = \sum_{j} W_{\text{spiky2}}(\|\mathbf{r}_i - \mathbf{r}_j\|, h)$$
 
-Une densité secondaire à très courte portée $\rho_{\text{near}, i}$ (noyau *Spiky Power 3*) repousse fortement les particules trop proches, évitant leur regroupement excessif. La pression découle directement de l'écart à la densité cible $\rho_0$ :
+Une densité secondaire à très courte portée $\rho_{\text{near}, i}$ (noyau _Spiky Power 3_) repousse fortement les particules trop proches, évitant leur regroupement excessif. La pression découle directement de l'écart à la densité cible $\rho_0$ :
 
 $$P_i = k \cdot (\rho_i - \rho_0), \qquad P_{\text{near}, i} = k_{\text{near}} \cdot \rho_{\text{near}, i}$$
 
@@ -126,7 +126,7 @@ Rendre les particules comme de simples sphères donne un rendu discontinu. Le **
 
 ### Passe 1 — Carte de Profondeur Initiale
 
-Chaque particule est émise comme un *Point Sprite*, projetée en sphère 3D dans `fluid_depth.frag`. Les fragments hors du rayon sont rejetés et la profondeur exacte $z_{\text{eye}}$ est stockée dans une texture `GL_R32F`.
+Chaque particule est émise comme un _Point Sprite_, projetée en sphère 3D dans `fluid_depth.frag`. Les fragments hors du rayon sont rejetés et la profondeur exacte $z_{\text{eye}}$ est stockée dans une texture `GL_R32F`.
 
 ![Passe 1 : carte de profondeur brute des sphères individuelles](/assets/projects/pogl/base_depth.webp)
 
@@ -162,8 +162,8 @@ La passe finale combine tous les buffers :
 - **Réflexions de Fresnel (Schlick)** : $F(\theta) = R_0 + (1 - R_0)(1 - \cos\theta)^p$ — l'eau devient miroir à angle rasant.
 - **Ciel procédural & brillance spéculaire** : Mélange selon le coefficient de Fresnel entre réfraction absorbée et réflexion du ciel/soleil.
 
-| Passe 5 : Réflexion & Réfraction Globales | Passe 5 : Réflexions Spéculaires du Soleil |
-| :---------------------------------------: | :----------------------------------------: |
+|                       Passe 5 : Réflexion & Réfraction Globales                        |                        Passe 5 : Réflexions Spéculaires du Soleil                        |
+| :------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------: |
 | ![Passe 5 : Réflexion et réfraction de Fresnel](/assets/projects/pogl/reflection.webp) | ![Passe 5 : Réflexions spéculaires du soleil](/assets/projects/pogl/sun_reflection.webp) |
 
 ---

@@ -121,9 +121,9 @@ Optimization was not performed blindly — every architectural decision was just
 
 The reference sequential implementation processes pixels one by one in two nested loops. It serves as the **ground truth** to validate the accuracy of each GPU version (SSIM = 1.0000).
 
-| Implementation | Time (s) | Throughput (FPS) | Speedup |
-| :------------- | :------: | :--------------: | :-----: |
-| **C++ Reference** | 616.78 s | 5.29 FPS | 1.00× |
+| Implementation    | Time (s) | Throughput (FPS) | Speedup |
+| :---------------- | :------: | :--------------: | :-----: |
+| **C++ Reference** | 616.78 s |     5.29 FPS     |  1.00×  |
 
 5.29 FPS — live video processing is impossible.
 
@@ -131,10 +131,10 @@ The reference sequential implementation processes pixels one by one in two neste
 
 The initial CUDA version consists of a **direct transposition**: each pixel is mapped to a GPU thread (2D grid, 16×16 blocks). Without any additional optimizations, moving to GPU immediately crosses the 30 FPS milestone.
 
-| Implementation | Time (s) | Throughput (FPS) | Speedup | SSIM |
-| :------------- | :------: | :--------------: | :-----: | :--: |
-| C++ Reference | 616.78 s | 5.29 FPS | 1.00× | 1.0000 |
-| **Naive CUDA** | 52.72 s | 48.92 FPS | **9.24×** | 0.9951 |
+| Implementation | Time (s) | Throughput (FPS) |  Speedup  |  SSIM  |
+| :------------- | :------: | :--------------: | :-------: | :----: |
+| C++ Reference  | 616.78 s |     5.29 FPS     |   1.00×   | 1.0000 |
+| **Naive CUDA** | 52.72 s  |    48.92 FPS     | **9.24×** | 0.9951 |
 
 Major memory bottlenecks remained, revealed by profiling.
 
@@ -150,10 +150,10 @@ Major memory bottlenecks remained, revealed by profiling.
 
 ![Nsight Compute: FP64 (`double`) overhead impact warning on consumer GPU](/assets/projects/irgpu/nsight_fp64_precision_warning.webp)
 
-| Implementation | Throughput (FPS) | Speedup |
-| :------------- | :--------------: | :-----: |
-| Naive CUDA | 48.92 FPS | 9.24× |
-| **CUDA Lazy Mem + Float** | 95.43 FPS | **18.03×** |
+| Implementation            | Throughput (FPS) |  Speedup   |
+| :------------------------ | :--------------: | :--------: |
+| Naive CUDA                |    48.92 FPS     |   9.24×    |
+| **CUDA Lazy Mem + Float** |    95.43 FPS     | **18.03×** |
 
 #### Opti 3 — Replacing `cuRAND` with a Lightweight LCG (×18.7)
 
@@ -163,17 +163,17 @@ Nsight Systems reveals that `cuRAND` allocates a **48-byte structure per pixel**
 
 | Resolution | `curandState` Allocation Size |
 | :--------- | :---------------------------: |
-| 320×240 | ~3.5 MB |
-| 1920×1080 | ~94.9 MB |
+| 320×240    |            ~3.5 MB            |
+| 1920×1080  |           ~94.9 MB            |
 
-| cuRAND Allocation (320×240) | cuRAND Allocation (1080p) |
-| :-------------------------: | :-----------------------: |
+|                          cuRAND Allocation (320×240)                           |                          cuRAND Allocation (1080p)                           |
+| :----------------------------------------------------------------------------: | :--------------------------------------------------------------------------: |
 | ![cuRAND 320x240](/assets/projects/irgpu/cudamalloc_vram_profiling_small.webp) | ![cuRAND 1080p](/assets/projects/irgpu/cudamalloc_vram_profiling_large.webp) |
 
 **Solution:** A **Linear Congruential Generator (LCG)** computed on the fly from the pixel index and frame number — zero additional VRAM bytes required.
 
-| Throughput `cuRAND` | Throughput `fast_rand` |
-| :-----------------: | :--------------------: |
+|                         Throughput `cuRAND`                         |                          Throughput `fast_rand`                           |
+| :-----------------------------------------------------------------: | :-----------------------------------------------------------------------: |
 | ![Throughput cuRAND](/assets/projects/irgpu/throughput-curand.webp) | ![Throughput fast_rand](/assets/projects/irgpu/throughput-fast-rand.webp) |
 
 #### Opti 4 — Hysteresis Thresholding in Shared Memory (×23.5)
@@ -184,8 +184,8 @@ Hysteresis propagation requires multiple passes until convergence. Without optim
 
 **Solution:** 16×16 tiling in **Shared Memory** with a +1 pixel halo. Propagation from strong pixels to neighboring weak pixels occurs locally, without global VRAM accesses.
 
-| VRAM Analysis Before | VRAM Analysis After |
-| :------------------: | :-----------------: |
+|                             VRAM Analysis Before                              |                             VRAM Analysis After                             |
+| :---------------------------------------------------------------------------: | :-------------------------------------------------------------------------: |
 | ![Before Shared Memory](/assets/projects/irgpu/hysteresis_memory_before.webp) | ![After Shared Memory](/assets/projects/irgpu/hysteresis_memory_after.webp) |
 
 Result: VRAM requests were reduced 8-fold (from 139 K to 17.7 K per iteration), adding **+26% pure execution speedup** on this kernel alone.
@@ -216,15 +216,15 @@ Within the GPU architecture of the project, we evaluated key parallel design pat
 
 ### Summary Table
 
-| Implementation | Time (s) | Throughput (FPS) | Speedup | SSIM Accuracy |
-| :------------- | :------: | :--------------: | :-----: | :-----------: |
-| C++ Reference | 616.78 s | 5.29 FPS | 1.00× | 1.0000 |
-| Naive CUDA | 52.72 s | 48.92 FPS | 9.24× | 0.9951 |
-| CUDA Lazy Mem + Float | 18.18 s | 95.43 FPS | 18.03× | 0.9950 |
-| CUDA Fast Random | 17.01 s | 98.96 FPS | 18.70× | 0.9950 |
-| CUDA Shared Mem Hysteresis | 10.80 s | 124.34 FPS | 23.49× | 0.9949 |
-| CUDA Tiling Opening | 10.65 s | 127.57 FPS | 24.10× | 0.9949 |
-| **CUDA Final (32×8 Blocks)** | **10.56 s** | **129.51 FPS** | **24.47×** | **0.9949** |
+| Implementation               |  Time (s)   | Throughput (FPS) |  Speedup   | SSIM Accuracy |
+| :--------------------------- | :---------: | :--------------: | :--------: | :-----------: |
+| C++ Reference                |  616.78 s   |     5.29 FPS     |   1.00×    |    1.0000     |
+| Naive CUDA                   |   52.72 s   |    48.92 FPS     |   9.24×    |    0.9951     |
+| CUDA Lazy Mem + Float        |   18.18 s   |    95.43 FPS     |   18.03×   |    0.9950     |
+| CUDA Fast Random             |   17.01 s   |    98.96 FPS     |   18.70×   |    0.9950     |
+| CUDA Shared Mem Hysteresis   |   10.80 s   |    124.34 FPS    |   23.49×   |    0.9949     |
+| CUDA Tiling Opening          |   10.65 s   |    127.57 FPS    |   24.10×   |    0.9949     |
+| **CUDA Final (32×8 Blocks)** | **10.56 s** |  **129.51 FPS**  | **24.47×** |  **0.9949**   |
 
 ### Global Performance Comparison
 

@@ -19,7 +19,7 @@ Longitudinal monitoring of **brain gliomas and glioblastomas** relies on tempora
 
 - **Geometrically align (3D Registration)** two MRI volumes of the same patient to compensate for head orientation variations between scanning sessions.
 - **Isolate and segment the tumor mass** before and after registration across both acquisitions.
-- **Compute precise volumetric evolution** of the tumor (in $\text{mm}^3$ and $	ext{cm}^3$) to quantify growth or regression.
+- **Compute precise volumetric evolution** of the tumor (in $\text{mm}^3$ and $ ext{cm}^3$) to quantify growth or regression.
 - **Visualize in 2D and 3D** exact alignment of anatomical structures and tumor boundaries.
 
 The project processes two 3D MRI acquisitions in **NRRD** format:
@@ -29,7 +29,7 @@ The project processes two 3D MRI acquisitions in **NRRD** format:
 
 ## Graphical User Interface (PyQt6 + VTK)
 
-The application is built with **PyQt6** using a medical *Deep Slate* dark theme, structured around two main views.
+The application is built with **PyQt6** using a medical _Deep Slate_ dark theme, structured around two main views.
 
 ### Results Dashboard
 
@@ -38,15 +38,16 @@ Once algorithms complete in background `QThread` workers, the main dashboard is 
 ![Dashboard — Synchronized 3D visualization and 2D slices](/assets/projects/vtk-itk/dashboard.webp)
 
 This dashboard combines:
+
 - **A 3D VTK Viewport** (left): Surface rendering of superimposed baseline and follow-up tumors with a semi-transparent volumetric skull.
 - **Three 2D Orthogonal Viewports** (right): Sagittal (X), Coronal (Y), and Axial (Z) views with synchronized interactive sliders to navigate MRI slices.
 - **An Analytics Sidebar**: Metric convergence scores pre/post registration, Matplotlib optimization plot, and calculated tumor volumetrics.
 
-| Metric | Value |
-| :--- | :--- |
-| Tumor 1 Volume (Baseline) | **4.72 cm³** |
+| Metric                     | Value        |
+| :------------------------- | :----------- |
+| Tumor 1 Volume (Baseline)  | **4.72 cm³** |
 | Tumor 2 Volume (Follow-up) | **7.64 cm³** |
-| Volumetric Evolution | **+61.8%** |
+| Volumetric Evolution       | **+61.8%**   |
 
 ---
 
@@ -58,11 +59,11 @@ Image registration searches for a spatial transformation $\mathcal{T}: \mathbf{x
 
 Three transformation types were developed:
 
-| Transformation | Degrees of Freedom | Use Case |
-| :--- | :---: | :--- |
-| **Rigid** (`VersorRigid3DTransform`) | 6 DOF | Head pose displacements between sessions |
-| **Affine** (`AffineTransform`) | 12 DOF | Global acquisition scaling & shear |
-| **B-Spline** (Control Grid) | N DOF | Local tissue deformations |
+| Transformation                       | Degrees of Freedom | Use Case                                 |
+| :----------------------------------- | :----------------: | :--------------------------------------- |
+| **Rigid** (`VersorRigid3DTransform`) |       6 DOF        | Head pose displacements between sessions |
+| **Affine** (`AffineTransform`)       |       12 DOF       | Global acquisition scaling & shear       |
+| **B-Spline** (Control Grid)          |       N DOF        | Local tissue deformations                |
 
 ### Advanced Optimization Strategies
 
@@ -70,7 +71,7 @@ The ITK pipeline incorporates several mechanisms to guarantee registration robus
 
 - **Geometric Moments Initialization** (`CenteredTransformInitializer`): Aligns centers of mass prior to optimization.
 - **Mattes Mutual Information Metric** (`MattesMutualInformationImageToImageMetricv4`) with 50 bins:
-$$\text{MI}(F, M) = \sum_{f} \sum_{m} p(f,m) \log \left( \frac{p(f,m)}{p(f)\,p(m)} \right)$$
+  $$\text{MI}(F, M) = \sum_{f} \sum_{m} p(f,m) \log \left( \frac{p(f,m)}{p(f)\,p(m)} \right)$$
 - **3-Level Multi-Resolution Pyramid** (`[4, 2, 1]` shrink factors, `[2, 1, 0]` Gaussian sigmas) to prevent local minima traps.
 - **10% Random Sampling** of voxels per iteration — yielding a 5× speedup without precision loss.
 - **Automatic Parameter Scale Estimation** (`RegistrationParameterScalesFromPhysicalShift`) balancing rotations (radians) and translations (millimeters).

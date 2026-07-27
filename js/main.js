@@ -146,16 +146,16 @@ function updateDOMText(lang) {
   if (projTitle) projTitle.textContent = t.projects.title;
 
   if (featuredGrid && t.projects.items) {
-    const activeTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+    const activeTheme =
+      document.documentElement.getAttribute("data-theme") || "dark";
     const featuredItems = t.projects.items.filter((p) => p.featured);
-    const projectBaseUrl = lang === 'en' ? '/en/projects/' : '/projects/';
+    const projectBaseUrl = lang === "en" ? "/en/projects/" : "/projects/";
     featuredGrid.innerHTML = featuredItems
-      .map(
-        (p) => {
-          const darkSrc = p.thumbnail || '/assets/projects/placeholder.webp';
-          const lightSrc = p.thumbnailLight || darkSrc;
-          const activeSrc = activeTheme === 'light' ? lightSrc : darkSrc;
-          return `
+      .map((p) => {
+        const darkSrc = p.thumbnail || "/assets/projects/placeholder.webp";
+        const lightSrc = p.thumbnailLight || darkSrc;
+        const activeSrc = activeTheme === "light" ? lightSrc : darkSrc;
+        return `
       <a href="${projectBaseUrl}${p.id}/" class="project-card fade-in is-visible" id="project-${p.id}">
         <div class="project-card__thumbnail">
           <img
@@ -170,18 +170,18 @@ function updateDOMText(lang) {
         <div class="project-card__body">
           <div class="project-card__header">
             <span class="project-card__name">${p.name}</span>
-            ${p.period ? `<span class="project-card__period">${p.period}</span>` : ''}
+            ${p.period ? `<span class="project-card__period">${p.period}</span>` : ""}
           </div>
           <p class="project-card__title">${p.title}</p>
           <p class="project-card__tagline">${p.tagline}</p>
           <div class="project-card__footer">
-            ${p.stack.map((s) => `<span class="tag">${s}</span>`).join('')}
+            ${p.stack.map((s) => `<span class="tag">${s}</span>`).join("")}
           </div>
         </div>
       </a>
     `;
-        })
-      .join('');
+      })
+      .join("");
   }
 
   if (academicSubTitle && t.projects.academicTitle) {
@@ -297,10 +297,10 @@ function initLangSwitcher() {
    ═══════════════════════════════════════════════════════════════ */
 
 function updateThemeThumbnails(theme) {
-  document.querySelectorAll('img[data-src-light]').forEach(img => {
-    const darkSrc = img.getAttribute('data-src-dark');
-    const lightSrc = img.getAttribute('data-src-light');
-    if (theme === 'light' && lightSrc) {
+  document.querySelectorAll("img[data-src-light]").forEach((img) => {
+    const darkSrc = img.getAttribute("data-src-dark");
+    const lightSrc = img.getAttribute("data-src-light");
+    if (theme === "light" && lightSrc) {
       img.src = lightSrc;
     } else if (darkSrc) {
       img.src = darkSrc;
@@ -396,4 +396,3 @@ document.addEventListener("DOMContentLoaded", () => {
   initScrollFadeIn();
   initLangSwitcher();
 });
-

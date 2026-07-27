@@ -93,8 +93,8 @@ The first step prepares the image to stabilize object dimensions and accelerate 
 - **Resizing to 800 pixels width** while preserving aspect ratio to reduce computation time.
 - **Grayscale conversion** to eliminate color and analyze luminance variations only.
 
-| 1. Original Image | 2. Preprocessed Image |
-| :----------------: | :-------------------: |
+|                  1. Original Image                  |                    2. Preprocessed Image                    |
+| :-------------------------------------------------: | :---------------------------------------------------------: |
 | ![Original](/assets/projects/alpr/01_original.webp) | ![Preprocessed](/assets/projects/alpr/02_preprocessed.webp) |
 
 ---
@@ -111,16 +111,16 @@ To avoid naively scanning the entire image, which would be extremely slow, we ge
 
 #### Steps of the Main Branch:
 
-| 1: MMLPF Filter | 2: Vertical Sobel |
-| :-------------: | :---------------: |
+|                                1: MMLPF Filter                                 |                                 2: Vertical Sobel                                 |
+| :----------------------------------------------------------------------------: | :-------------------------------------------------------------------------------: |
 | ![MMLPF Base](/assets/projects/alpr/intermediate_steps/base/step_1_mmlpf.webp) | ![Sobel Base](/assets/projects/alpr/intermediate_steps/base/step_2_sobel_dx.webp) |
 
-| 3: Otsu Thresholding | 4: Morphological Closing |
-| :------------------: | :----------------------: |
+|                             3: Otsu Thresholding                             |                                4: Morphological Closing                                |
+| :--------------------------------------------------------------------------: | :------------------------------------------------------------------------------------: |
 | ![Otsu Base](/assets/projects/alpr/intermediate_steps/base/step_3_otsu.webp) | ![Fermeture Base](/assets/projects/alpr/intermediate_steps/base/step_4_fermeture.webp) |
 
-| 5: Extracted Candidates |
-| :---------------------: |
+|                          5: Extracted Candidates                           |
+| :------------------------------------------------------------------------: |
 | ![CCA Base](/assets/projects/alpr/intermediate_steps/base/step_5_cca.webp) |
 
 #### 3-Branch Fusion & NMS Deduplication
@@ -172,11 +172,11 @@ Rigorous evaluation performed on the **UFPR-ALPR** test dataset (1,440 test imag
 
 ### Inference Performance
 
-| Implementation | True Positives (TP) | Precision | Recall | F1-Score | Average Time |
-| :------------- | :-----------------: | :-------: | :----: | :------: | :----------: |
-| **Python** | 955 | 0.8580 | 0.6632 | 0.7481 | 468.50 ms |
-| **C++17 (Optimized)** | **963** | **0.8629** | **0.6687** | **0.7535** | **402.28 ms** |
-| **C++17 (`MyCV`)** | 955 | 0.8504 | 0.6632 | 0.7452 | 583.67 ms |
+| Implementation        | True Positives (TP) | Precision  |   Recall   |  F1-Score  | Average Time  |
+| :-------------------- | :-----------------: | :--------: | :--------: | :--------: | :-----------: |
+| **Python**            |         955         |   0.8580   |   0.6632   |   0.7481   |   468.50 ms   |
+| **C++17 (Optimized)** |       **963**       | **0.8629** | **0.6687** | **0.7535** | **402.28 ms** |
+| **C++17 (`MyCV`)**    |         955         |   0.8504   |   0.6632   |   0.7452   |   583.67 ms   |
 
 ### Key Benchmark Takeaways
 

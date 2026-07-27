@@ -93,8 +93,8 @@ La première étape consiste à préparer l'image pour stabiliser les dimensions
 - **Redimensionnement à 800 pixels de large** en conservant le ratio d'aspect, afin de réduire le temps de calcul.
 - **Conversion en niveaux de gris** afin d'éliminer la couleur et d'analyser uniquement les variations de luminance.
 
-|                 1. Image Originale                  |                   2. Image Prétraitée                    |
-| :-------------------------------------------------: | :------------------------------------------------------: |
+|                  1. Image Originale                  |                    2. Image Prétraitée                    |
+| :--------------------------------------------------: | :-------------------------------------------------------: |
 | ![Originale](/assets/projects/alpr/01_original.webp) | ![Prétraitée](/assets/projects/alpr/02_preprocessed.webp) |
 
 ---
@@ -111,16 +111,16 @@ Pour éviter de balayer naïvement toute l'image, qui serait extrêmement lent, 
 
 #### Étapes de la Branche Principale :
 
-|                               1 : Filtre MMLPF                                |                                2 : Sobel Vertical                                |
-| :---------------------------------------------------------------------------: | :------------------------------------------------------------------------------: |
+|                                1 : Filtre MMLPF                                |                                2 : Sobel Vertical                                 |
+| :----------------------------------------------------------------------------: | :-------------------------------------------------------------------------------: |
 | ![MMLPF Base](/assets/projects/alpr/intermediate_steps/base/step_1_mmlpf.webp) | ![Sobel Base](/assets/projects/alpr/intermediate_steps/base/step_2_sobel_dx.webp) |
 
-|                              3 : Seuil d'Otsu                               |                                     4 : Fermeture                                     |
-| :-------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------: |
+|                               3 : Seuil d'Otsu                               |                                     4 : Fermeture                                      |
+| :--------------------------------------------------------------------------: | :------------------------------------------------------------------------------------: |
 | ![Otsu Base](/assets/projects/alpr/intermediate_steps/base/step_3_otsu.webp) | ![Fermeture Base](/assets/projects/alpr/intermediate_steps/base/step_4_fermeture.webp) |
 
-|                          5 : Candidats extraits                           |
-| :-----------------------------------------------------------------------: |
+|                           5 : Candidats extraits                           |
+| :------------------------------------------------------------------------: |
 | ![CCA Base](/assets/projects/alpr/intermediate_steps/base/step_5_cca.webp) |
 
 #### Fusion des 3 branches & Dédoublonnage NMS

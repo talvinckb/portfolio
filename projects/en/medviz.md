@@ -5,7 +5,8 @@ title: "Medical Prediction & 3D Visualization"
 tagline: "Full-stack medical application combining 3D CT scan processing, Quantile Machine Learning, and WebGL visualization to predict Pulmonary Fibrosis decline."
 thumbnail: "/assets/projects/medviz/thumbnail-16x9.webp"
 thumbnailLight: "/assets/projects/medviz/thumbnail-16x9-light.webp"
-stack: ["Python", "FastAPI", "XGBoost", "Next.js", "Three.js", "Docker", "DICOM"]
+stack:
+  ["Python", "FastAPI", "XGBoost", "Next.js", "Three.js", "Docker", "DICOM"]
 period: "1 month"
 team: 4
 github: null
@@ -25,10 +26,10 @@ The goal of **MedViz** was to design a full-stack medical application capable of
 
 The project builds upon the **OSIC (Open Source Imaging Consortium)** challenge, whose dataset includes volumetric DICOM series and tabular clinical metadata (age, sex, smoking status, historical FVC).
 
-| Data Type | Format | Description |
-| :-------- | :----- | :---------- |
-| 3D CT Scanners | DICOM (`.dcm`) | Volumetric axial slice series |
-| Clinical Data | CSV (`.csv`) | Patient metadata & historical FVC |
+| Data Type      | Format         | Description                       |
+| :------------- | :------------- | :-------------------------------- |
+| 3D CT Scanners | DICOM (`.dcm`) | Volumetric axial slice series     |
+| Clinical Data  | CSV (`.csv`)   | Patient metadata & historical FVC |
 
 ![Volumetric axial CT scan slices (OSIC patient)](/assets/projects/medviz/slices.webp)
 
@@ -92,12 +93,12 @@ The project builds upon the **OSIC (Open Source Imaging Consortium)** challenge,
 
 Raw grayscale values in DICOM scanners are specific to each equipment manufacturer and lack direct physical meaning. They must be converted into **Hounsfield Units (HU)**, an absolute scale calibrated against biological tissue density:
 
-| Tissue | HU Range |
-| :----- | :------: |
-| Outer Air | ≈ −1000 HU |
-| Lung Parenchyma | −900 to −400 HU |
-| Soft Tissue / Water | ≈ 0 HU |
-| Dense Fibrotic Tissue | > −250 HU |
+| Tissue                |    HU Range     |
+| :-------------------- | :-------------: |
+| Outer Air             |   ≈ −1000 HU    |
+| Lung Parenchyma       | −900 to −400 HU |
+| Soft Tissue / Water   |     ≈ 0 HU      |
+| Dense Fibrotic Tissue |    > −250 HU    |
 
 Once converted to HU, thresholding isolates clinically relevant regions and normalizes data across patients.
 
@@ -147,13 +148,13 @@ The extracted 3D mesh is optimized for interactive web rendering in two steps:
 
 Rather than a simple point estimate, MedViz trains **5 distinct XGBoost models** corresponding to quantiles of the FVC distribution:
 
-| Quantile | Clinical Interpretation |
-| :------: | :---------------------- |
-| q = 0.025 | Lower bound 95% CI (worst case) |
-| q = 0.10 | Lower bound 80% CI |
+|   Quantile   | Clinical Interpretation         |
+| :----------: | :------------------------------ |
+|  q = 0.025   | Lower bound 95% CI (worst case) |
+|   q = 0.10   | Lower bound 80% CI              |
 | **q = 0.50** | **Median — central prediction** |
-| q = 0.90 | Upper bound 80% CI |
-| q = 0.975 | Upper bound 95% CI (best case) |
+|   q = 0.90   | Upper bound 80% CI              |
+|  q = 0.975   | Upper bound 95% CI (best case)  |
 
 Each model takes as input: target week, age, lung volume, mean HU, std HU, fibrosis ratio, sex, smoking status, baseline FVC, baseline week, and time delta.
 
@@ -177,11 +178,11 @@ $$ \text{Score} = \frac{\text{FVC}_{\text{Baseline}}}{\text{FVC}_{\text{Optimal}
 
 A rigorous comparative study evaluates the **direct contribution of 3D radiomic biomarkers** (CT Scans) compared to tabular clinical data alone:
 
-| Model | MAE with Radiomics | MAE without Radiomics | MAE Gain | Radiomic Benefit |
-| :---- | :----------------: | :-------------------: | :------: | :--------------: |
-| SVR (RBF) | 119.4 mL | 116.7 mL | −2.7 mL | ❌ Not useful |
-| **XGBoost** | **87.1 mL** | 94.7 mL | **+7.6 mL** | **✅ Useful** |
-| Random Forest | 98.6 mL | 109.4 mL | +10.8 mL | **✅ Useful** |
+| Model         | MAE with Radiomics | MAE without Radiomics |  MAE Gain   | Radiomic Benefit |
+| :------------ | :----------------: | :-------------------: | :---------: | :--------------: |
+| SVR (RBF)     |      119.4 mL      |       116.7 mL        |   −2.7 mL   |  ❌ Not useful   |
+| **XGBoost**   |    **87.1 mL**     |        94.7 mL        | **+7.6 mL** |  **✅ Useful**   |
+| Random Forest |      98.6 mL       |       109.4 mL        |  +10.8 mL   |  **✅ Useful**   |
 
 **XGBoost with radiomics achieves 87.1 mL MAE**, the top result, confirming that 3D imaging features significantly enhance the model's predictive capability.
 
@@ -204,15 +205,15 @@ MedViz adopts a **decoupled microservices architecture** in 2 independent Docker
 
 The project achieves a **91% test coverage rate** on the Python backend, with a complete CI/CD pipeline (GitLab CI) structured across 3 automated phases: style checking (`ruff`, `prettier`), unit testing (`pytest`), and static type analysis (`ty check`, `tsc`).
 
-| Backend Module | Pytest Coverage |
-| :------------- | :-------------: |
-| `database.py` | 100% |
-| `schemas.py` | 100% |
-| `logger.py` | 94% |
-| `services.py` | 94% |
-| `routes.py` | 89% |
-| `processing/pipeline.py` | 80% |
-| **TOTAL** | **91%** |
+| Backend Module           | Pytest Coverage |
+| :----------------------- | :-------------: |
+| `database.py`            |      100%       |
+| `schemas.py`             |      100%       |
+| `logger.py`              |       94%       |
+| `services.py`            |       94%       |
+| `routes.py`              |       89%       |
+| `processing/pipeline.py` |       80%       |
+| **TOTAL**                |     **91%**     |
 
 ![Continuous Integration Pipeline (GitLab CI)](/assets/projects/medviz/pipeline-cicd.webp)
 

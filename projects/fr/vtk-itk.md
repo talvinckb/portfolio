@@ -29,7 +29,7 @@ Le projet exploite deux acquisitions IRM 3D au format **NRRD** :
 
 ## Interface Graphique (PyQt6 + VTK)
 
-L'application est construite sous **PyQt6** avec un thème sombre médical *Deep Slate*. Elle est structurée en deux écrans principaux.
+L'application est construite sous **PyQt6** avec un thème sombre médical _Deep Slate_. Elle est structurée en deux écrans principaux.
 
 ### Tableau de Bord de Résultats
 
@@ -38,15 +38,16 @@ Une fois les algorithmes exécutés en arrière-plan via des `QThread`, le table
 ![Tableau de bord — Visualisation 3D et coupes 2D synchronisées](/assets/projects/vtk-itk/dashboard.webp)
 
 Ce tableau de bord combine :
+
 - **Un viewport VTK 3D** (gauche) : rendu surfacique des deux tumeurs superposées avec la boîte crânienne volumique en semi-transparent.
 - **Trois vues de coupes 2D** (droite) : vues Sagittale (X), Coronale (Y) et Axiale (Z) avec sliders interactifs synchronisés, permettant de naviguer dans les tranches de l'IRM.
 - **Un panneau analytique** (sidebar) : scores de convergence de la métrique pre/post-recalage, graphique Matplotlib d'optimisation, et volumétries tumorales calculées.
 
-| Donnée | Valeur |
-| :--- | :--- |
+| Donnée                     | Valeur       |
+| :------------------------- | :----------- |
 | Volume Tumeur 1 (initiale) | **4,72 cm³** |
-| Volume Tumeur 2 (suivi) | **7,64 cm³** |
-| Évolution volumétrique | **+61.8%** |
+| Volume Tumeur 2 (suivi)    | **7,64 cm³** |
+| Évolution volumétrique     | **+61.8%**   |
 
 ---
 
@@ -58,11 +59,11 @@ Le recalage cherche une transformation spatiale $\mathcal{T}: \mathbf{x} \mapsto
 
 Trois types de transformations ont été développées :
 
-| Transformation | Degrés de Liberté | Usage |
-| :--- | :---: | :--- |
-| **Rigide** (`VersorRigid3DTransform`) | 6 DOF | Déplacements de tête entre séances |
-| **Affine** (`AffineTransform`) | 12 DOF | Déformations globales d'acquisition |
-| **B-Spline** (grille de contrôle) | N DOF | Déformations locales tissulaires |
+| Transformation                        | Degrés de Liberté | Usage                               |
+| :------------------------------------ | :---------------: | :---------------------------------- |
+| **Rigide** (`VersorRigid3DTransform`) |       6 DOF       | Déplacements de tête entre séances  |
+| **Affine** (`AffineTransform`)        |      12 DOF       | Déformations globales d'acquisition |
+| **B-Spline** (grille de contrôle)     |       N DOF       | Déformations locales tissulaires    |
 
 ### Stratégies d'Optimisation Avancées
 
@@ -70,7 +71,7 @@ Le pipeline ITK embarque plusieurs mécanismes pour garantir la robustesse du re
 
 - **Initialisation par moments géométriques** (`CenteredTransformInitializer`) : aligne les centres de masse avant l'optimisation.
 - **Métrique d'Information Mutuelle de Mattes** (`MattesMutualInformationImageToImageMetricv4`) avec 50 bins :
-$$\text{MI}(F, M) = \sum_{f} \sum_{m} p(f,m) \log \left( \frac{p(f,m)}{p(f)\,p(m)} \right)$$
+  $$\text{MI}(F, M) = \sum_{f} \sum_{m} p(f,m) \log \left( \frac{p(f,m)}{p(f)\,p(m)} \right)$$
 - **Pyramide multi-résolution à 3 niveaux** (facteurs `[4, 2, 1]`, sigmas gaussiens `[2, 1, 0]`) pour éviter les minima locaux.
 - **Échantillonnage aléatoire à 10%** des voxels par itération — gain ×5 en vitesse sans perte de précision.
 - **Estimation automatique d'échelle** (`RegistrationParameterScalesFromPhysicalShift`) pour équilibrer rotations (radians) et translations (millimètres).

@@ -22,19 +22,21 @@
     <meta property="og:title" content="{{ site.name }} — {{ t.hero.headline }}"/>
     <meta property="og:description" content="{{ t.about.intro | truncate(150) }}"/>
     <meta property="og:locale" content="{{ t.locale }}"/>
-    <meta property="og:site_name" content="{{ site.name }}"/>
-    <!-- Twitter Card -->
+    <meta
+    property="og:site_name" content="{{ site.name }}"/> <!-- Twitter Card -->
     <meta name="twitter:card" content="summary"/>
     <meta name="twitter:title" content="{{ site.name }} — {{ t.hero.headline }}"/>
-    <meta name="twitter:description" content="{{ t.about.intro | truncate(150) }}"/>
-    <!-- Favicon -->
-    <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"/>
-    <!-- Fonts -->
+    <meta
+    name="twitter:description" content="{{ t.about.intro | truncate(150) }}"/> <!-- Favicon -->
+    <link
+    rel="icon" href="/assets/favicon.svg" type="image/svg+xml"/> <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com"/>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet"/>
-    <!-- Styles -->
-    <link rel="stylesheet" href="/css/style.css"/>
+    <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500&display=swap"
+      rel="stylesheet"/> <!-- Styles -->
+    <link
+    rel="stylesheet" href="/css/style.css"/>
     <!-- Schema.org Structured Data (JSON-LD) -->
     <script type="application/ld+json">
       { "@context": "https://schema.org", "@type": "Person", "name": "{{ site.name }}", "url": "{{ site.baseUrl }}{{ t.urlPrefix }}
@@ -317,7 +319,7 @@
               {% if p.featured %}
                 <a href="{% if lang == 'en' %}/en{% endif %}/projects/{{ p.id }}/" class="project-card fade-in" id="project-{{ p.id }}">
                   <div class="project-card__thumbnail">
-                  <img src="{{ p.thumbnail if p.thumbnail else '/assets/projects/placeholder.webp' }}" data-src-dark="{{ p.thumbnail if p.thumbnail else '/assets/projects/placeholder.webp' }}" data-src-light="{{ p.thumbnailLight if p.thumbnailLight else p.thumbnail }}" alt="Aperçu {{ p.name }}" loading="lazy" onerror="this.src='/assets/projects/placeholder.webp'"/>
+                    <img src="{{ p.thumbnail if p.thumbnail else '/assets/projects/placeholder.webp' }}" data-src-dark="{{ p.thumbnail if p.thumbnail else '/assets/projects/placeholder.webp' }}" data-src-light="{{ p.thumbnailLight if p.thumbnailLight else p.thumbnail }}" alt="Aperçu {{ p.name }}" loading="lazy" onerror="this.src='/assets/projects/placeholder.webp'"/>
                   </div>
                   <div class="project-card__body">
                     <div class="project-card__header">
@@ -338,7 +340,6 @@
               {% endif %}
             {% endfor %}
           </div>
-
           <!-- Academic / Secondary projects -->
           {% if t.projects.academicTitle %}
             <h3 class="projects__sub-title">{{ t.projects.academicTitle }}</h3>

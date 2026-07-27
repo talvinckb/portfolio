@@ -26,15 +26,15 @@ The goal was to design an engine executing two core graphics pillars in parallel
 
 ## Architecture: Data-Oriented Design GPU
 
-The engine architecture follows **Data-Oriented Design (DOD)**: all particle data resides in **VRAM** as *Shader Storage Buffer Objects* (SSBOs) in `std430`, eliminating PCIe transfer overhead between CPU and GPU during simulation frames.
+The engine architecture follows **Data-Oriented Design (DOD)**: all particle data resides in **VRAM** as _Shader Storage Buffer Objects_ (SSBOs) in `std430`, eliminating PCIe transfer overhead between CPU and GPU during simulation frames.
 
 The pipeline executes two distinct loops that chain together each frame:
 
-| Phase | Responsibility | Tool |
-| :---- | :------------- | :--- |
-| **CPU** | Inputs, SimSettings parameters | C++20, Dear ImGui |
-| **GPU — Physics** | 7 Compute Shader passes | GLSL 4.60 |
-| **GPU — Rendering** | 5 Graphics Shader passes (SSFR) | GLSL 4.60 |
+| Phase               | Responsibility                  | Tool              |
+| :------------------ | :------------------------------ | :---------------- |
+| **CPU**             | Inputs, SimSettings parameters  | C++20, Dear ImGui |
+| **GPU — Physics**   | 7 Compute Shader passes         | GLSL 4.60         |
+| **GPU — Rendering** | 5 Graphics Shader passes (SSFR) | GLSL 4.60         |
 
 The 8 SSBOs allocated in VRAM maintain positions, velocities, densities, spatial hashing, and rendering buffers — without ever transferring back to CPU during simulation.
 
@@ -42,7 +42,7 @@ The 8 SSBOs allocated in VRAM maintain positions, velocities, densities, spatial
 
 ## Physics Engine: GPU SPH Simulation
 
-The **SPH** method is a *Lagrangian* formulation of the Navier-Stokes equations: fluid is represented by discrete particles whose properties (density, pressure, viscosity) are estimated via weighted interpolation over neighboring particles using **smoothing kernels**.
+The **SPH** method is a _Lagrangian_ formulation of the Navier-Stokes equations: fluid is represented by discrete particles whose properties (density, pressure, viscosity) are estimated via weighted interpolation over neighboring particles using **smoothing kernels**.
 
 ### Density & Pressure
 
@@ -50,7 +50,7 @@ The local density $\rho_i$ of a particle is the sum of contributions from neighb
 
 $$\rho_i = \sum_{j} W_{\text{spiky2}}(\|\mathbf{r}_i - \mathbf{r}_j\|, h)$$
 
-A short-range secondary density $\rho_{\text{near}, i}$ (*Spiky Power 3* kernel) strongly repels overly close particles, preventing excessive clustering. Pressure follows directly from deviation against target density $\rho_0$:
+A short-range secondary density $\rho_{\text{near}, i}$ (_Spiky Power 3_ kernel) strongly repels overly close particles, preventing excessive clustering. Pressure follows directly from deviation against target density $\rho_0$:
 
 $$P_i = k \cdot (\rho_i - \rho_0), \qquad P_{\text{near}, i} = k_{\text{near}} \cdot \rho_{\text{near}, i}$$
 
@@ -126,7 +126,7 @@ Rendering particles as simple spheres results in a disjointed visual. **Screen-S
 
 ### Pass 1 — Initial Depth Map
 
-Each particle is rendered as a *Point Sprite*, projected into a 3D sphere in `fluid_depth.frag`. Fragments outside the sphere radius are discarded and exact depth $z_{\text{eye}}$ is saved into a `GL_R32F` texture.
+Each particle is rendered as a _Point Sprite_, projected into a 3D sphere in `fluid_depth.frag`. Fragments outside the sphere radius are discarded and exact depth $z_{\text{eye}}$ is saved into a `GL_R32F` texture.
 
 ![Pass 1: raw depth map of individual spheres](/assets/projects/pogl/base_depth.webp)
 
@@ -162,8 +162,8 @@ The final pass combines all buffers:
 - **Fresnel Reflections (Schlick)**: $F(\theta) = R_0 + (1 - R_0)(1 - \cos\theta)^p$ — water becomes reflective at grazing angles.
 - **Procedural Sky & Specular Highlights**: Blended according to Fresnel coefficient between absorbed refraction and sky/sun reflection.
 
-| Pass 5: Global Reflection & Refraction | Pass 5: Sun Specular Highlights |
-| :-------------------------------------: | :-----------------------------: |
+|                       Pass 5: Global Reflection & Refraction                        |                        Pass 5: Sun Specular Highlights                        |
+| :---------------------------------------------------------------------------------: | :---------------------------------------------------------------------------: |
 | ![Pass 5: Fresnel reflection and refraction](/assets/projects/pogl/reflection.webp) | ![Pass 5: Sun specular highlights](/assets/projects/pogl/sun_reflection.webp) |
 
 ---

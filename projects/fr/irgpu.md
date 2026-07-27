@@ -166,14 +166,14 @@ Nsight Systems révèle que `cuRAND` alloue une structure de **48 octets par pix
 | 320×240    |       ~3.5 Mo        |
 | 1920×1080  |       ~94.9 Mo       |
 
-|                   Allocation cuRAND (320×240)                    |                          Allocation cuRAND (1080p)                          |
-| :--------------------------------------------------------------: | :-------------------------------------------------------------------------: |
+|                          Allocation cuRAND (320×240)                           |                          Allocation cuRAND (1080p)                           |
+| :----------------------------------------------------------------------------: | :--------------------------------------------------------------------------: |
 | ![cuRAND 320x240](/assets/projects/irgpu/cudamalloc_vram_profiling_small.webp) | ![cuRAND 1080p](/assets/projects/irgpu/cudamalloc_vram_profiling_large.webp) |
 
 **Solution :** Un **Linear Congruential Generator (LCG)** calculé à la volée à partir de l'index du pixel et du numéro de frame — zéro octet de VRAM supplémentaire.
 
-|                        Throughput `cuRAND`                         |                          Throughput `fast_rand`                          |
-| :----------------------------------------------------------------: | :----------------------------------------------------------------------: |
+|                         Throughput `cuRAND`                         |                          Throughput `fast_rand`                           |
+| :-----------------------------------------------------------------: | :-----------------------------------------------------------------------: |
 | ![Throughput cuRAND](/assets/projects/irgpu/throughput-curand.webp) | ![Throughput fast_rand](/assets/projects/irgpu/throughput-fast-rand.webp) |
 
 #### Opti 4 — Hystérésis en Shared Memory (×23.5)
@@ -184,8 +184,8 @@ La propagation par hystérésis nécessite plusieurs passes jusqu'à convergence
 
 **Solution :** Tuilage 16×16 en **Shared Memory** avec un halo de +1 pixel. La propagation des pixels forts aux pixels faibles voisins s'effectue localement, sans accès VRAM.
 
-|                                Analyse VRAM avant                                 |                                Analyse VRAM après                                |
-| :-------------------------------------------------------------------------------: | :------------------------------------------------------------------------------: |
+|                              Analyse VRAM avant                              |                             Analyse VRAM après                              |
+| :--------------------------------------------------------------------------: | :-------------------------------------------------------------------------: |
 | ![Avant Shared Memory](/assets/projects/irgpu/hysteresis_memory_before.webp) | ![Après Shared Memory](/assets/projects/irgpu/hysteresis_memory_after.webp) |
 
 Résultat : les requêtes VRAM sont divisées par 8 (de 139 K à 17.7 K par itération), soit **+26% de vitesse pure** sur ce seul noyau.
