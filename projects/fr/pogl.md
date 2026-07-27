@@ -8,7 +8,7 @@ thumbnailLight: "/assets/projects/pogl/thumbnail-16x9-light.webp"
 stack: ["C++20", "OpenGL 4.6", "GLSL", "Compute Shaders", "CMake", "Dear ImGui"]
 period: "1 mois"
 team: 2
-github: null
+github: "https://github.com/talvinckb/OpenGL-Water-Simulation"
 demo: null
 report: null
 ---

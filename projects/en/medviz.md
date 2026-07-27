@@ -9,7 +9,7 @@ stack:
   ["Python", "FastAPI", "XGBoost", "Next.js", "Three.js", "Docker", "DICOM"]
 period: "1 month"
 team: 4
-github: null
+github: "https://github.com/talvinckb/Medviz"
 demo: null
 report: null
 ---
