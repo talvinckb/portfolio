@@ -5,7 +5,6 @@ module.exports = function (eleventyConfig) {
   // ─── Passthrough copies ───
   eleventyConfig.addPassthroughCopy("assets");
   eleventyConfig.addPassthroughCopy("css");
-  eleventyConfig.addPassthroughCopy("cv");
   eleventyConfig.addPassthroughCopy("js");
   eleventyConfig.addPassthroughCopy("robots.txt");
   eleventyConfig.addPassthroughCopy("sitemap.xml");
