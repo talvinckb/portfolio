@@ -174,6 +174,105 @@ function initTableWrappers() {
 }
 
 /* ═══════════════════════════════════════════════════════════════
+   Language Switcher (Project pages - In-Place SPA Swap)
+   ═══════════════════════════════════════════════════════════════ */
+
+async function switchProjectLanguage(targetUrl) {
+  if (!targetUrl) return;
+  try {
+    const res = await fetch(targetUrl);
+    if (!res.ok) {
+      window.location.href = targetUrl;
+      return;
+    }
+    const htmlText = await res.text();
+    const doc = new DOMParser().parseFromString(htmlText, "text/html");
+
+    // 1. Swap main project content
+    const newMain = doc.querySelector("main.project-page");
+    const currentMain = document.querySelector("main.project-page");
+    if (newMain && currentMain) {
+      currentMain.innerHTML = newMain.innerHTML;
+    }
+
+    // 2. Swap nav links
+    const newNavLinks = doc.querySelector(".nav__links");
+    const currentNavLinks = document.querySelector(".nav__links");
+    if (newNavLinks && currentNavLinks) {
+      currentNavLinks.innerHTML = newNavLinks.innerHTML;
+    }
+
+    // 3. Swap mobile menu links
+    const newMobileLinks = doc.querySelector(".mobile-menu__links");
+    const currentMobileLinks = document.querySelector(".mobile-menu__links");
+    if (newMobileLinks && currentMobileLinks) {
+      currentMobileLinks.innerHTML = newMobileLinks.innerHTML;
+    }
+
+    // 4. Update nav logo link
+    const newLogo = doc.querySelector(".nav__logo");
+    const currentLogo = document.querySelector(".nav__logo");
+    if (newLogo && currentLogo) {
+      currentLogo.href = newLogo.getAttribute("href");
+    }
+
+    // 5. Update language toggle button
+    const btn = document.getElementById("lang-toggle");
+    const newBtn = doc.querySelector("#lang-toggle");
+    if (btn && newBtn) {
+      btn.setAttribute("data-lang-url", newBtn.getAttribute("data-lang-url"));
+      btn.setAttribute("aria-label", newBtn.getAttribute("aria-label"));
+      btn.textContent = newBtn.textContent;
+    }
+
+    // 6. Update html lang & title
+    document.documentElement.lang = doc.documentElement.lang || "fr";
+    document.title = doc.title;
+
+    // 7. Sync current theme thumbnails on new images
+    const currentTheme = document.documentElement.getAttribute("data-theme") || "dark";
+    updateThemeThumbnails(currentTheme);
+
+    // 8. Re-initialize interactive components
+    initLightbox();
+    initTableWrappers();
+
+    // 9. Re-render KaTeX math
+    if (window.renderMathInElement) {
+      window.renderMathInElement(document.body, {
+        delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "$", right: "$", display: false },
+        ],
+      });
+    }
+
+    // 10. Update browser URL without page reload
+    history.pushState({ url: targetUrl }, "", targetUrl);
+  } catch (err) {
+    console.error("Language switch error:", err);
+    window.location.href = targetUrl;
+  }
+}
+
+function initLangSwitcher() {
+  const btn = document.getElementById("lang-toggle");
+  if (!btn) return;
+
+  btn.addEventListener("click", (e) => {
+    e.preventDefault();
+    const altLangUrl = btn.getAttribute("data-lang-url") || btn.getAttribute("href");
+    if (altLangUrl) {
+      switchProjectLanguage(altLangUrl);
+    }
+  });
+
+  window.addEventListener("popstate", () => {
+    switchProjectLanguage(location.pathname);
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════════
    Init
    ═══════════════════════════════════════════════════════════════ */
 
@@ -182,6 +281,8 @@ document.addEventListener("DOMContentLoaded", () => {
   initMobileMenu();
   initLightbox();
   initTableWrappers();
+  initLangSwitcher();
+  document.body.classList.add("is-ready");
 });
 
 

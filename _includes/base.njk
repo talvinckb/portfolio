@@ -317,7 +317,7 @@
           <div class="projects__grid">
             {% for p in t.projects.items %}
               {% if p.featured %}
-                <a href="/projects/{{ p.id }}/" class="project-card fade-in" id="project-{{ p.id }}">
+                <a href="{% if lang == 'en' %}/en{% endif %}/projects/{{ p.id }}/" class="project-card fade-in" id="project-{{ p.id }}">
                   <div class="project-card__thumbnail">
                     <img src="{{ p.thumbnail if p.thumbnail else '/assets/projects/placeholder.png' }}" data-src-dark="{{ p.thumbnail if p.thumbnail else '/assets/projects/placeholder.png' }}" data-src-light="{{ p.thumbnailLight if p.thumbnailLight else p.thumbnail }}" alt="Aperçu {{ p.name }}" loading="lazy" onerror="this.src='/assets/projects/placeholder.png'"/>
                   </div>

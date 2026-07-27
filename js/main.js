@@ -146,34 +146,42 @@ function updateDOMText(lang) {
   if (projTitle) projTitle.textContent = t.projects.title;
 
   if (featuredGrid && t.projects.items) {
+    const activeTheme = document.documentElement.getAttribute('data-theme') || 'dark';
     const featuredItems = t.projects.items.filter((p) => p.featured);
+    const projectBaseUrl = lang === 'en' ? '/en/projects/' : '/projects/';
     featuredGrid.innerHTML = featuredItems
       .map(
-        (p) => `
-      <a href="/projects/${p.id}/" class="project-card fade-in is-visible" id="project-${p.id}">
+        (p) => {
+          const darkSrc = p.thumbnail || '/assets/projects/placeholder.webp';
+          const lightSrc = p.thumbnailLight || darkSrc;
+          const activeSrc = activeTheme === 'light' ? lightSrc : darkSrc;
+          return `
+      <a href="${projectBaseUrl}${p.id}/" class="project-card fade-in is-visible" id="project-${p.id}">
         <div class="project-card__thumbnail">
           <img
-            src="${p.thumbnail || "/assets/projects/placeholder.png"}"
+            src="${activeSrc}"
+            data-src-dark="${darkSrc}"
+            data-src-light="${lightSrc}"
             alt="Aperçu ${p.name}"
             loading="lazy"
-            onerror="this.src='/assets/projects/placeholder.png'"
+            onerror="this.src='/assets/projects/placeholder.webp'"
           />
         </div>
         <div class="project-card__body">
           <div class="project-card__header">
             <span class="project-card__name">${p.name}</span>
-            ${p.period ? `<span class="project-card__period">${p.period}</span>` : ""}
+            ${p.period ? `<span class="project-card__period">${p.period}</span>` : ''}
           </div>
           <p class="project-card__title">${p.title}</p>
           <p class="project-card__tagline">${p.tagline}</p>
           <div class="project-card__footer">
-            ${p.stack.map((s) => `<span class="tag">${s}</span>`).join("")}
+            ${p.stack.map((s) => `<span class="tag">${s}</span>`).join('')}
           </div>
         </div>
       </a>
-    `,
-      )
-      .join("");
+    `;
+        })
+      .join('');
   }
 
   if (academicSubTitle && t.projects.academicTitle) {
