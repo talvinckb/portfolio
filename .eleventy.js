@@ -1,5 +1,4 @@
 const markdownIt = require("markdown-it");
-const markdownItAnchor = require("markdown-it-anchor");
 const implicitFigures = require("markdown-it-implicit-figures");
 
 module.exports = function (eleventyConfig) {
@@ -10,6 +9,7 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy("js");
   eleventyConfig.addPassthroughCopy("robots.txt");
   eleventyConfig.addPassthroughCopy("sitemap.xml");
+  eleventyConfig.addPassthroughCopy({ "assets/favicon.ico": "favicon.ico" });
 
   eleventyConfig.ignores.add("README.md");
 
