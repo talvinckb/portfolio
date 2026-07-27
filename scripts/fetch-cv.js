@@ -21,14 +21,15 @@ function downloadFile(file) {
 
     function get(url) {
       https.get(url, response => {
-        if (response.statusCode === 301 || response.statusCode === 302) {
+        if (response.statusCode >= 300 && response.statusCode < 400 && response.headers.location) {
           get(response.headers.location);
         } else if (response.statusCode === 200) {
           response.pipe(fileStream);
           fileStream.on('finish', () => {
-            fileStream.close();
-            console.log(`[CV Fetch] Successfully downloaded ${file}`);
-            resolve();
+            fileStream.close(() => {
+              console.log(`[CV Fetch] Successfully downloaded ${file}`);
+              resolve();
+            });
           });
         } else {
           const err = new Error(`HTTP Status ${response.statusCode} for ${file}`);
@@ -52,11 +53,16 @@ async function fetchAll() {
     console.log('[CV Fetch] Done!');
   } catch (err) {
     console.error('[CV Fetch] Download failed:', err.message);
-    // Don't crash build if local copies exist, but log error
-    if (!files.every(f => fs.existsSync(path.join(assetsDir, f)))) {
-      process.exit(1);
+    // Don't crash if local files already exist
+    const allExist = files.every(f => fs.existsSync(path.join(assetsDir, f)));
+    if (!allExist) {
+      throw err;
     }
   }
 }
 
-fetchAll();
+if (require.main === module) {
+  fetchAll().catch(() => process.exit(1));
+}
+
+module.exports = fetchAll;
