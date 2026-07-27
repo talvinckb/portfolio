@@ -284,5 +284,4 @@ document.addEventListener("DOMContentLoaded", () => {
   initLightbox();
   initTableWrappers();
   initLangSwitcher();
-  document.body.classList.add("is-ready");
 });
