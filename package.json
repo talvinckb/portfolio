@@ -2,9 +2,9 @@
   "name": "portfoliov4",
   "version": "1.0.0",
   "description": "Portfolio personnel minimaliste dédié à la présentation des projets et compétences en vision par ordinateur, IA et calcul GPU.",
-  "main": "index.js",
   "scripts": {
     "build": "eleventy",
+    "dev": "eleventy --serve",
     "serve": "eleventy --serve"
   },
   "repository": {
@@ -20,9 +20,7 @@
   "devDependencies": {
     "@11ty/eleventy": "^3.1.6",
     "markdown-it": "^14.3.0",
-    "markdown-it-anchor": "^9.2.1"
-  },
-  "dependencies": {
+    "markdown-it-anchor": "^9.2.1",
     "markdown-it-implicit-figures": "^0.12.0"
   }
 }

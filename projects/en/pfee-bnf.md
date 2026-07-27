@@ -1,6 +1,4 @@
 ---
-layout: project.njk
-lang: "en"
 id: pfee-bnf
 name: "PFEE — BnF"
 title: "Segmentation & Classification of Heritage Illustrations"
@@ -17,7 +15,7 @@ report: null
 
 ## Context & Objectives
 
-The **National Library of France (BnF)** continuously digitizes its historical document collections on Gallica, its digital library platform. Millions of pages contain valuable illustrations (engravings, maps, scientific diagrams, historical photos), but cataloging them remains largely manual — a massive and unscalable endeavor.
+The **National Library of France (BnF)** continuously digitizes its documentary heritage via Gallica, its digital library platform. Millions of pages contain illustrations (engravings, maps, scientific diagrams, historical photos…) whose cataloging remains largely manual — a massive and unscalable endeavor.
 
 This 8-month Capstone Project (PFEE), conducted in direct partnership with the BnF, aims to automate this end-to-end workflow:
 
@@ -30,41 +28,67 @@ This 8-month Capstone Project (PFEE), conducted in direct partnership with the B
 
 ## The Dataset: BnF Heritage Corpus
 
-The benchmark dataset consists of historical BnF document pages manually annotated in **Label Studio** by heritage domain experts (*Golden Dataset* in JSON format). Each region of interest is defined by bounding box coordinates and tagged across 4 metadata axes:
+The benchmark dataset consists of historical BnF document pages manually annotated in **Label Studio** by heritage domain experts (*Golden Dataset* in JSON format). Each region of interest is defined by relative bounding box coordinates and tagged across 4 metadata axes.
+
+Illustrations are annotated according to four classification axes defined by BnF:
 
 ![Full Annotation Grid — Form/Function, Genre, Rotation, Technique](/assets/projects/pfee-bnf/annotation_grid_labels.webp)
 
-The taxonomy includes over 40 *Form/Function* labels alone, 4 rotation classes, and 5 printing techniques, making multi-label classification exceptionally challenging.
+The richness and complexity of this taxonomy (over 40 *Form/Function* labels alone, 4 rotation classes, 5 printing techniques) make the classification task particularly ambitious.
 
 ---
 
-## Technical Pipeline Architecture
+## Technical Pipeline
 
-```
-[IIIF Ingestion] ──> [Detection & Cropping] ──> [Orientation Correction] ──> [Multi-Axis Classification]
-```
+### Step 1 — Large-Scale Data Ingestion
 
-1. **Illustration Detection**:
-   - **YOLOv8 / YOLOv11** fine-tuned on BnF pages to predict bounding boxes of illustrations ($x, y, w, h$).
-   - **Florence-2 VLM** evaluated in Zero-Shot and Few-Shot prompting modes for open-vocabulary detection.
+The first challenge is obtaining images from Gallica servers. The `ARK` and `folio` identifiers for each document are extracted from the annotated dataset, then used to query the **BnF IIIF v3 API** (`openapi.bnf.fr/iiif/image/v3`).
 
-2. **Rotation Correction**:
-   - Classification model detecting page/illustration orientation ($0^\circ, 90^\circ, 180^\circ, 270^\circ$) to reorient images automatically.
+Downloading is **multithreaded** with Gallica rate-limiting management via exponential backoff (HTTP 429), automatically generating an HTML inspection report to validate the quality of retrieved data.
 
-3. **Multi-Axis Classification**:
-   - **ConvNeXt** & **ResNet** backbone architectures trained with BCEWithLogitsLoss for multi-label prediction across Form, Function, Genre, and Technique.
+### Step 2 — Dataset Formatting & Preparation
+
+Raw data is converted into two distinct formats depending on the target model:
+
+| Format | Target Model | Structure |
+| :--- | :--- | :--- |
+| **YOLO** | YOLO / Ultralytics | Normalized centered coordinates |
+| **Florence-2** | Microsoft Florence-2 | Tokens `<loc_x1><loc_y1><loc_x2><loc_y2>` |
+
+The Train/Validation split is performed deterministically (**70% / 30%**) to ensure benchmark reproducibility.
 
 ---
 
-## Model Evaluation & Results
+## Segmentation & Orientation Detection: Comparative Benchmark
 
-| Model Architecture | Task | Precision | Recall | F1-Score | mAP@50 |
-| :----------------- | :--- | :-------: | :----: | :------: | :----: |
-| YOLOv8x | Detection | 0.912 | 0.885 | 0.898 | **0.934** |
-| YOLOv11x | Detection | **0.924** | **0.891** | **0.907** | **0.941** |
-| Florence-2 (Few-Shot) | Detection | 0.845 | 0.812 | 0.828 | 0.865 |
-| ConvNeXt-Base | Classification | **0.884** | **0.852** | **0.868** | — |
+The first task — locating the illustration and detecting its orientation within the page — is tackled by two competing approaches:
 
-| Florence-2 Detection: Geometry Treatise | Florence-2 Detection: Illuminated Document | Florence-2 Detection: Historical Page |
-| :-------------------------------------: | :----------------------------------------: | :-----------------------------------: |
-| ![Geometry](/assets/projects/pfee-bnf/geometry_space_treatise_page.webp) | ![Illuminated](/assets/projects/pfee-bnf/coins_yolo_detection_page.webp) | ![History](/assets/projects/pfee-bnf/manuscript_illuminated_page.webp) |
+| Approach | Model | Key Features |
+| :--- | :--- | :--- |
+| **Classical Detection** | YOLO (Ultralytics, pre-trained `yolo26n.pt`) | Fast, proven, fine-tuned on bboxes + rotation |
+| **Vision-Language (VLM)** | Florence-2 (`microsoft/Florence-2-base`) | Fine-tuning with vision backbone frozen, SDPA patch |
+
+The comparison metrics selected are:
+- **IoU** (Intersection over Union) — overlap quality between predicted bounding box vs. ground truth
+- **mAP@50 / mAP@50-95** — overall detection performance
+- **Orientation Accuracy** — accuracy rate across the 4 rotation classes (0°/90°/180°/270°)
+
+### Initial Segmentation Results (Florence-2)
+
+Here are example illustration localization and segmentation results obtained by the **Florence-2** Vision-Language model fine-tuned on the BnF dataset:
+
+| Florence-2 — Geometry Treatise | Florence-2 — Illustrated Document | Florence-2 — Historical Treatise |
+| :---: | :---: | :---: |
+| ![Florence-2 Result — Geometry](/assets/projects/pfee-bnf/coins_yolo_detection_page.webp) | ![Florence-2 Result — Illustrated Document](/assets/projects/pfee-bnf/geometry_space_treatise_page.webp) | ![Florence-2 Result — History](/assets/projects/pfee-bnf/manuscript_illuminated_page.webp) |
+
+---
+
+## Multi-Label Classification: Target Architecture
+
+The second task — classifying illustration content — is currently under exploration. Initial testing is conducted with **ConvNeXt**, evaluated for its ability to extract visual features across highly diverse graphic styles (engravings, photographs, maps...).
+
+---
+
+## Project Status
+
+The project is currently ongoing — final delivery is scheduled for **late January 2027**. At this stage, the data ingestion and dataset preparation pipeline is operational, and the detection benchmark phase is underway. Comparative results and final classification will be integrated as project work progresses.

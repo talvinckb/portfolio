@@ -1,15 +1,123 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
+  <!-- ─── Main pages ─── -->
   <url>
     <loc>https://www.talvin-ackbaraly.com/</loc>
-    <lastmod>2026-07-20</lastmod>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.talvin-ackbaraly.com/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.talvin-ackbaraly.com/en/"/>
+    <lastmod>2026-07-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://www.talvin-ackbaraly.com/en/</loc>
-    <lastmod>2026-07-20</lastmod>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.talvin-ackbaraly.com/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.talvin-ackbaraly.com/en/"/>
+    <lastmod>2026-07-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
+
+  <!-- ─── Project pages (FR) ─── -->
+  <url>
+    <loc>https://www.talvin-ackbaraly.com/projects/alpr/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.talvin-ackbaraly.com/projects/alpr/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.talvin-ackbaraly.com/en/projects/alpr/"/>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.talvin-ackbaraly.com/projects/irgpu/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.talvin-ackbaraly.com/projects/irgpu/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.talvin-ackbaraly.com/en/projects/irgpu/"/>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.talvin-ackbaraly.com/projects/medviz/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.talvin-ackbaraly.com/projects/medviz/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.talvin-ackbaraly.com/en/projects/medviz/"/>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.talvin-ackbaraly.com/projects/pfee-bnf/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.talvin-ackbaraly.com/projects/pfee-bnf/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.talvin-ackbaraly.com/en/projects/pfee-bnf/"/>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.talvin-ackbaraly.com/projects/pogl/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.talvin-ackbaraly.com/projects/pogl/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.talvin-ackbaraly.com/en/projects/pogl/"/>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.talvin-ackbaraly.com/projects/vtk-itk/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.talvin-ackbaraly.com/projects/vtk-itk/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.talvin-ackbaraly.com/en/projects/vtk-itk/"/>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <!-- ─── Project pages (EN) ─── -->
+  <url>
+    <loc>https://www.talvin-ackbaraly.com/en/projects/alpr/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.talvin-ackbaraly.com/projects/alpr/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.talvin-ackbaraly.com/en/projects/alpr/"/>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.talvin-ackbaraly.com/en/projects/irgpu/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.talvin-ackbaraly.com/projects/irgpu/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.talvin-ackbaraly.com/en/projects/irgpu/"/>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.talvin-ackbaraly.com/en/projects/medviz/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.talvin-ackbaraly.com/projects/medviz/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.talvin-ackbaraly.com/en/projects/medviz/"/>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.talvin-ackbaraly.com/en/projects/pfee-bnf/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.talvin-ackbaraly.com/projects/pfee-bnf/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.talvin-ackbaraly.com/en/projects/pfee-bnf/"/>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.talvin-ackbaraly.com/en/projects/pogl/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.talvin-ackbaraly.com/projects/pogl/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.talvin-ackbaraly.com/en/projects/pogl/"/>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://www.talvin-ackbaraly.com/en/projects/vtk-itk/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.talvin-ackbaraly.com/projects/vtk-itk/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.talvin-ackbaraly.com/en/projects/vtk-itk/"/>
+    <lastmod>2026-07-27</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
 </urlset>

@@ -11,7 +11,7 @@
     </script>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Talvin Ackbaraly — Ingénieur Vision & IA</title>
+    <title>{{ site.name }} — {{ t.hero.headline }}</title>
     <meta name="description" content="{{ t.about.intro | truncate(150) }}"/>
     <link rel="canonical" href="{{ site.baseUrl }}{{ t.urlPrefix }}"/>
     <link rel="alternate" hreflang="fr" href="{{ site.baseUrl }}/"/>
@@ -19,24 +19,22 @@
     <link rel="alternate" hreflang="x-default" href="{{ site.baseUrl }}/"/>
     <meta property="og:type" content="website"/>
     <meta property="og:url" content="{{ site.baseUrl }}{{ t.urlPrefix }}"/>
-    <meta property="og:title" content="Talvin Ackbaraly — Ingénieur Vision & IA"/>
+    <meta property="og:title" content="{{ site.name }} — {{ t.hero.headline }}"/>
     <meta property="og:description" content="{{ t.about.intro | truncate(150) }}"/>
     <meta property="og:locale" content="{{ t.locale }}"/>
-    <meta
-    property="og:site_name" content="Talvin Ackbaraly"/> <!-- Twitter Card -->
+    <meta property="og:site_name" content="{{ site.name }}"/>
+    <!-- Twitter Card -->
     <meta name="twitter:card" content="summary"/>
-    <meta name="twitter:title" content="Talvin Ackbaraly — Ingénieur Vision & IA"/>
-    <meta
-    name="twitter:description" content="{{ t.about.intro | truncate(150) }}"/> <!-- Favicon -->
-    <link
-    rel="icon" href="/assets/favicon.svg" type="image/svg+xml"/> <!-- Fonts -->
+    <meta name="twitter:title" content="{{ site.name }} — {{ t.hero.headline }}"/>
+    <meta name="twitter:description" content="{{ t.about.intro | truncate(150) }}"/>
+    <!-- Favicon -->
+    <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"/>
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com"/>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-    <link
-    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500&display=swap"
-      rel="stylesheet"/> <!-- Styles -->
-    <link
-    rel="stylesheet" href="/css/style.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet"/>
+    <!-- Styles -->
+    <link rel="stylesheet" href="/css/style.css"/>
     <!-- Schema.org Structured Data (JSON-LD) -->
     <script type="application/ld+json">
       { "@context": "https://schema.org", "@type": "Person", "name": "{{ site.name }}", "url": "{{ site.baseUrl }}{{ t.urlPrefix }}
@@ -319,7 +317,7 @@
               {% if p.featured %}
                 <a href="{% if lang == 'en' %}/en{% endif %}/projects/{{ p.id }}/" class="project-card fade-in" id="project-{{ p.id }}">
                   <div class="project-card__thumbnail">
-                    <img src="{{ p.thumbnail if p.thumbnail else '/assets/projects/placeholder.png' }}" data-src-dark="{{ p.thumbnail if p.thumbnail else '/assets/projects/placeholder.png' }}" data-src-light="{{ p.thumbnailLight if p.thumbnailLight else p.thumbnail }}" alt="Aperçu {{ p.name }}" loading="lazy" onerror="this.src='/assets/projects/placeholder.png'"/>
+                  <img src="{{ p.thumbnail if p.thumbnail else '/assets/projects/placeholder.webp' }}" data-src-dark="{{ p.thumbnail if p.thumbnail else '/assets/projects/placeholder.webp' }}" data-src-light="{{ p.thumbnailLight if p.thumbnailLight else p.thumbnail }}" alt="Aperçu {{ p.name }}" loading="lazy" onerror="this.src='/assets/projects/placeholder.webp'"/>
                   </div>
                   <div class="project-card__body">
                     <div class="project-card__header">
