@@ -1,11 +1,15 @@
 const markdownIt = require("markdown-it");
 const implicitFigures = require("markdown-it-implicit-figures");
+const fetchCv = require("./scripts/fetch-cv");
 
 module.exports = function (eleventyConfig) {
+  eleventyConfig.on("eleventy.before", async () => {
+    await fetchCv();
+  });
+
   // ─── Passthrough copies ───
   eleventyConfig.addPassthroughCopy("assets");
   eleventyConfig.addPassthroughCopy("css");
-  eleventyConfig.addPassthroughCopy("cv");
   eleventyConfig.addPassthroughCopy("js");
   eleventyConfig.addPassthroughCopy("robots.txt");
   eleventyConfig.addPassthroughCopy("sitemap.xml");

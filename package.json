@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Portfolio personnel minimaliste dédié à la présentation des projets et compétences en vision par ordinateur, IA et calcul GPU.",
   "scripts": {
+    "fetch-cv": "node scripts/fetch-cv.js",
     "build": "eleventy",
     "dev": "eleventy --serve",
     "serve": "eleventy --serve"
