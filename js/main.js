@@ -86,7 +86,7 @@ function updateDOMText(lang) {
         <p class="edu-item__period">${edu.period}</p>
         ${edu.description ? `<p class="edu-item__description">${edu.description}</p>` : ""}
       </div>
-    `
+    `,
       )
       .join("");
   }
@@ -130,51 +130,83 @@ function updateDOMText(lang) {
           </div>
         </div>
       </article>
-    `
+    `,
       )
       .join("");
   }
 
   // Projects
   const projTitle = document.querySelector("#projects .section__title");
-  const projGrid = document.querySelector(".projects__grid");
+  const featuredGrid = document.querySelector(
+    ".projects__grid:not(.projects__grid--academic)",
+  );
+  const academicSubTitle = document.querySelector(".projects__sub-title");
+  const academicGrid = document.querySelector(".projects__grid--academic");
 
   if (projTitle) projTitle.textContent = t.projects.title;
-  if (projGrid && t.projects.items) {
-    projGrid.innerHTML = t.projects.items
+
+  if (featuredGrid && t.projects.items) {
+    const activeTheme =
+      document.documentElement.getAttribute("data-theme") || "dark";
+    const featuredItems = t.projects.items.filter((p) => p.featured);
+    const projectBaseUrl = lang === "en" ? "/en/projects/" : "/projects/";
+    featuredGrid.innerHTML = featuredItems
+      .map((p) => {
+        const darkSrc = p.thumbnail || "/assets/projects/placeholder.webp";
+        const lightSrc = p.thumbnailLight || darkSrc;
+        const activeSrc = activeTheme === "light" ? lightSrc : darkSrc;
+        return `
+      <a href="${projectBaseUrl}${p.id}/" class="project-card fade-in is-visible" id="project-${p.id}">
+        <div class="project-card__thumbnail">
+          <img
+            src="${activeSrc}"
+            data-src-dark="${darkSrc}"
+            data-src-light="${lightSrc}"
+            alt="Aperçu ${p.name}"
+            loading="lazy"
+            onerror="this.src='/assets/projects/placeholder.webp'"
+          />
+        </div>
+        <div class="project-card__body">
+          <div class="project-card__header">
+            <span class="project-card__name">${p.name}</span>
+            ${p.period ? `<span class="project-card__period">${p.period}</span>` : ""}
+          </div>
+          <p class="project-card__title">${p.title}</p>
+          <p class="project-card__tagline">${p.tagline}</p>
+          <div class="project-card__footer">
+            ${p.stack.map((s) => `<span class="tag">${s}</span>`).join("")}
+          </div>
+        </div>
+      </a>
+    `;
+      })
+      .join("");
+  }
+
+  if (academicSubTitle && t.projects.academicTitle) {
+    academicSubTitle.textContent = t.projects.academicTitle;
+  }
+
+  if (academicGrid && t.projects.items) {
+    const academicItems = t.projects.items.filter((p) => !p.featured);
+    academicGrid.innerHTML = academicItems
       .map(
         (p) => `
-      <article class="project-card fade-in is-visible" id="project-${p.id}">
-        <div class="project-card__header">
-          <span class="project-card__name">${p.name}</span>
-          ${p.period ? `<span class="project-card__period">${p.period}</span>` : ""}
+      <div class="project-card project-card--academic fade-in is-visible" id="project-${p.id}">
+        <div class="project-card__body">
+          <div class="project-card__header">
+            <span class="project-card__name">${p.name}</span>
+            ${p.period ? `<span class="project-card__period">${p.period}</span>` : ""}
+          </div>
+          <p class="project-card__title">${p.title}</p>
+          <p class="project-card__tagline">${p.tagline}</p>
+          <div class="project-card__footer">
+            ${p.stack.map((s) => `<span class="tag">${s}</span>`).join("")}
+          </div>
         </div>
-        <p class="project-card__title">${p.title}</p>
-        <p class="project-card__description">${p.description}</p>
-        ${
-          p.highlights && p.highlights.length > 0
-            ? `<ul class="project-card__highlights">
-            ${p.highlights.map((h) => `<li>${h}</li>`).join("")}
-          </ul>`
-            : ""
-        }
-        <div class="project-card__footer">
-          ${p.stack.map((s) => `<span class="tag">${s}</span>`).join("")}
-          ${
-            p.team
-              ? `<span class="project-card__team">${icons.users} ${p.team} ${lang === "fr" ? "pers." : "people"}</span>`
-              : ""
-          }
-          ${
-            p.github
-              ? `<a href="${p.github}" target="_blank" rel="noopener noreferrer" class="project-card__link">
-                GitHub ${icons.externalLink}
-              </a>`
-              : ""
-          }
-        </div>
-      </article>
-    `
+      </div>
+    `,
       )
       .join("");
   }
@@ -194,7 +226,7 @@ function updateDOMText(lang) {
           ${group.items.map((item) => `<span class="tag">${item}</span>`).join("")}
         </div>
       </div>
-    `
+    `,
       )
       .join("");
   }
@@ -253,7 +285,9 @@ function initLangSwitcher() {
   });
 
   window.addEventListener("popstate", (e) => {
-    const lang = (e.state && e.state.lang) || (location.pathname.startsWith("/en") ? "en" : "fr");
+    const lang =
+      (e.state && e.state.lang) ||
+      (location.pathname.startsWith("/en") ? "en" : "fr");
     updateDOMText(lang);
   });
 }
@@ -262,19 +296,33 @@ function initLangSwitcher() {
    Theme Toggle
    ═══════════════════════════════════════════════════════════════ */
 
+function updateThemeThumbnails(theme) {
+  document.querySelectorAll("img[data-src-light]").forEach((img) => {
+    const darkSrc = img.getAttribute("data-src-dark");
+    const lightSrc = img.getAttribute("data-src-light");
+    if (theme === "light" && lightSrc) {
+      img.src = lightSrc;
+    } else if (darkSrc) {
+      img.src = darkSrc;
+    }
+  });
+}
+
 function initTheme() {
   const toggle = document.getElementById("theme-toggle");
-  if (!toggle) return;
-
   const stored = localStorage.getItem("theme");
   const theme = stored || "dark";
   document.documentElement.setAttribute("data-theme", theme);
+  updateThemeThumbnails(theme);
+
+  if (!toggle) return;
 
   toggle.addEventListener("click", () => {
     const current = document.documentElement.getAttribute("data-theme");
     const next = current === "dark" ? "light" : "dark";
     document.documentElement.setAttribute("data-theme", next);
     localStorage.setItem("theme", next);
+    updateThemeThumbnails(next);
   });
 }
 
@@ -332,7 +380,7 @@ function initScrollFadeIn() {
     {
       threshold: 0.1,
       rootMargin: "0px 0px -40px 0px",
-    }
+    },
   );
 
   document.querySelectorAll(".fade-in").forEach((el) => observer.observe(el));
