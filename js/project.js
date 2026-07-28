@@ -275,6 +275,60 @@ function initLangSwitcher() {
 }
 
 /* ═══════════════════════════════════════════════════════════════
+   Back to Top Button
+   ═══════════════════════════════════════════════════════════════ */
+
+function initBackToTop() {
+  const btn = document.getElementById("back-to-top");
+  if (!btn) return;
+
+  function onScroll() {
+    if (window.scrollY > 300) {
+      btn.classList.add("is-visible");
+    } else {
+      btn.classList.remove("is-visible");
+    }
+  }
+
+  window.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
+
+  btn.addEventListener("click", () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Scroll Reading Progress Bar
+   ═══════════════════════════════════════════════════════════════ */
+
+function initScrollProgress() {
+  const progressEl = document.getElementById("scroll-progress");
+  if (!progressEl) return;
+
+  function updateProgress() {
+    const totalHeight =
+      document.documentElement.scrollHeight - window.innerHeight;
+    if (totalHeight <= 0) {
+      progressEl.style.width = "0%";
+      return;
+    }
+    const percent = Math.min(
+      100,
+      Math.max(0, (window.scrollY / totalHeight) * 100),
+    );
+    progressEl.style.width = `${percent}%`;
+  }
+
+  window.addEventListener("scroll", updateProgress, { passive: true });
+  window.addEventListener("resize", updateProgress, { passive: true });
+  updateProgress();
+}
+
+/* ═══════════════════════════════════════════════════════════════
    Init
    ═══════════════════════════════════════════════════════════════ */
 
@@ -284,4 +338,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initLightbox();
   initTableWrappers();
   initLangSwitcher();
+  initBackToTop();
+  initScrollProgress();
 });
+

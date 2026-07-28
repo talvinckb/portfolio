@@ -15,6 +15,7 @@ const icons = {
   linkedin: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="btn__icon"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>`,
   github: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="btn__icon"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>`,
   download: `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="btn__icon"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>`,
+  copy: `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>`,
 };
 
 /* ═══════════════════════════════════════════════════════════════
@@ -53,9 +54,17 @@ function updateDOMText(lang) {
   if (heroStatus) heroStatus.textContent = t.hero.status;
 
   if (heroActions) {
+    const mailCopyTitle = lang === "fr" ? "Copier l'email" : "Copy email";
+    const phoneCopyTitle = lang === "fr" ? "Copier le numéro" : "Copy phone number";
     heroActions.innerHTML = `
-      <a href="mailto:${site.email}" class="btn btn--primary">${icons.mail} ${site.email}</a>
-      <a href="tel:${site.phone}" class="btn btn--outline">${icons.phone} ${site.phoneDisplay}</a>
+      <div class="btn-group">
+        <a href="mailto:${site.email}" class="btn btn--primary">${icons.mail} ${site.email}</a>
+        <button class="btn btn--primary btn--copy" data-copy="${site.email}" aria-label="${mailCopyTitle}" title="${mailCopyTitle}" type="button">${icons.copy}</button>
+      </div>
+      <div class="btn-group">
+        <a href="tel:${site.phone}" class="btn btn--outline">${icons.phone} ${site.phoneDisplay}</a>
+        <button class="btn btn--outline btn--copy" data-copy="${site.phone}" aria-label="${phoneCopyTitle}" title="${phoneCopyTitle}" type="button">${icons.copy}</button>
+      </div>
       <a href="${site.linkedin}" target="_blank" rel="noopener noreferrer" class="btn btn--outline">${icons.linkedin} ${t.hero.linkedinBtn}</a>
       <a href="${site.github}" target="_blank" rel="noopener noreferrer" class="btn btn--outline">${icons.github} ${t.hero.githubBtn}</a>
       ${t.hero.cvUrl ? `<a href="${t.hero.cvUrl}" target="_blank" rel="noopener noreferrer" class="btn btn--outline">${icons.download} ${t.hero.cvBtn}</a>` : ""}
@@ -237,9 +246,17 @@ function updateDOMText(lang) {
   if (contactTitle) contactTitle.textContent = t.contact.title;
   if (contactText) contactText.textContent = t.contact.text;
   if (contactLinks) {
+    const mailCopyTitle = lang === "fr" ? "Copier l'email" : "Copy email";
+    const phoneCopyTitle = lang === "fr" ? "Copier le numéro" : "Copy phone number";
     contactLinks.innerHTML = `
-      <a href="mailto:${site.email}" class="btn btn--primary">${icons.mail} ${site.email}</a>
-      <a href="tel:${site.phone}" class="btn btn--outline">${icons.phone} ${site.phoneDisplay}</a>
+      <div class="btn-group">
+        <a href="mailto:${site.email}" class="btn btn--primary">${icons.mail} ${site.email}</a>
+        <button class="btn btn--primary btn--copy" data-copy="${site.email}" aria-label="${mailCopyTitle}" title="${mailCopyTitle}" type="button">${icons.copy}</button>
+      </div>
+      <div class="btn-group">
+        <a href="tel:${site.phone}" class="btn btn--outline">${icons.phone} ${site.phoneDisplay}</a>
+        <button class="btn btn--outline btn--copy" data-copy="${site.phone}" aria-label="${phoneCopyTitle}" title="${phoneCopyTitle}" type="button">${icons.copy}</button>
+      </div>
       <a href="${site.linkedin}" target="_blank" rel="noopener noreferrer" class="btn btn--outline">${icons.linkedin} ${t.contact.linkedinBtn}</a>
       <a href="${site.github}" target="_blank" rel="noopener noreferrer" class="btn btn--outline">${icons.github} ${t.contact.githubBtn}</a>
     `;
@@ -362,6 +379,273 @@ function initMobileMenu() {
 }
 
 /* ═══════════════════════════════════════════════════════════════
+   Back to Top Button
+   ═══════════════════════════════════════════════════════════════ */
+
+function initBackToTop() {
+  const btn = document.getElementById("back-to-top");
+  if (!btn) return;
+
+  function onScroll() {
+    if (window.scrollY > 300) {
+      btn.classList.add("is-visible");
+    } else {
+      btn.classList.remove("is-visible");
+    }
+  }
+
+  window.addEventListener("scroll", onScroll, { passive: true });
+  onScroll();
+
+  btn.addEventListener("click", () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Scroll Reading Progress Bar
+   ═══════════════════════════════════════════════════════════════ */
+
+function initScrollProgress() {
+  const progressEl = document.getElementById("scroll-progress");
+  if (!progressEl) return;
+
+  function updateProgress() {
+    const totalHeight =
+      document.documentElement.scrollHeight - window.innerHeight;
+    if (totalHeight <= 0) {
+      progressEl.style.width = "0%";
+      return;
+    }
+    const percent = Math.min(
+      100,
+      Math.max(0, (window.scrollY / totalHeight) * 100),
+    );
+    progressEl.style.width = `${percent}%`;
+  }
+
+  window.addEventListener("scroll", updateProgress, { passive: true });
+  window.addEventListener("resize", updateProgress, { passive: true });
+  updateProgress();
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   ScrollSpy & Nav Elevation
+   ═══════════════════════════════════════════════════════════════ */
+
+function initNavScrollSpy() {
+  const nav = document.getElementById("nav");
+  const navLinks = document.querySelectorAll(
+    ".nav__links a, .mobile-menu__links a",
+  );
+  const sections = document.querySelectorAll("section[id]");
+
+  if (!sections.length) return;
+
+  function handleNavState() {
+    // Nav elevation shadow
+    if (nav) {
+      if (window.scrollY > 20) {
+        nav.classList.add("is-scrolled");
+      } else {
+        nav.classList.remove("is-scrolled");
+      }
+    }
+
+    // Active section detection
+    let currentSectionId = "";
+    const scrollPosition = window.scrollY + 120;
+
+    sections.forEach((section) => {
+      const sectionTop = section.offsetTop;
+      const sectionHeight = section.offsetHeight;
+
+      if (
+        scrollPosition >= sectionTop &&
+        scrollPosition < sectionTop + sectionHeight
+      ) {
+        currentSectionId = section.getAttribute("id");
+      }
+    });
+
+    // Fallback if at the very bottom
+    if (
+      window.innerHeight + window.scrollY >=
+      document.documentElement.scrollHeight - 50
+    ) {
+      const lastSection = sections[sections.length - 1];
+      if (lastSection) currentSectionId = lastSection.getAttribute("id");
+    }
+
+    navLinks.forEach((link) => {
+      const href = link.getAttribute("href");
+      if (href === `#${currentSectionId}`) {
+        link.classList.add("is-active");
+      } else {
+        link.classList.remove("is-active");
+      }
+    });
+  }
+
+  window.addEventListener("scroll", handleNavState, { passive: true });
+  handleNavState();
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Toast Notifications & Quick Contact Copy
+   ═══════════════════════════════════════════════════════════════ */
+
+function showToast(message) {
+  let container = document.getElementById("toast-container");
+  if (!container) {
+    container = document.createElement("div");
+    container.id = "toast-container";
+    container.className = "toast-container";
+    document.body.appendChild(container);
+  }
+
+  const toast = document.createElement("div");
+  toast.className = "toast";
+  toast.innerHTML = `
+    <svg class="toast__icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+      <polyline points="22 4 12 14.01 9 11.01"></polyline>
+    </svg>
+    <span>${message}</span>
+  `;
+
+  container.appendChild(toast);
+
+  requestAnimationFrame(() => {
+    toast.classList.add("is-visible");
+  });
+
+  setTimeout(() => {
+    toast.classList.remove("is-visible");
+    toast.addEventListener("transitionend", () => {
+      toast.remove();
+    });
+  }, 2800);
+}
+
+function initContactCopy() {
+  document.addEventListener("click", (e) => {
+    const copyBtn = e.target.closest("[data-copy]");
+    if (!copyBtn) return;
+
+    e.preventDefault();
+    e.stopPropagation();
+
+    const valToCopy = copyBtn.getAttribute("data-copy");
+    if (!valToCopy) return;
+
+    const isMail = valToCopy.includes("@");
+
+    if (navigator.clipboard) {
+      navigator.clipboard
+        .writeText(valToCopy)
+        .then(() => {
+          const lang = currentLang || "fr";
+          const msg = isMail
+            ? lang === "fr"
+              ? `Email copié : ${valToCopy}`
+              : `Email copied: ${valToCopy}`
+            : lang === "fr"
+              ? `Téléphone copié : ${valToCopy}`
+              : `Phone copied: ${valToCopy}`;
+          showToast(msg);
+        })
+        .catch(() => {});
+    }
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   Skill Tag Highlighting & Filtering
+   ═══════════════════════════════════════════════════════════════ */
+
+function initSkillTagHighlighting() {
+  let activeTag = null;
+
+  document.addEventListener("click", (e) => {
+    const tag = e.target.closest(".tag");
+    const isInsideNavOrHero = e.target.closest(
+      ".nav, .hero__actions, .project-back-link",
+    );
+
+    if (!tag || isInsideNavOrHero) {
+      if (activeTag && !e.target.closest(".tag")) {
+        resetSkillFilter();
+        activeTag = null;
+      }
+      return;
+    }
+
+    const tagText = tag.textContent.trim().toLowerCase();
+
+    if (activeTag === tagText) {
+      resetSkillFilter();
+      activeTag = null;
+    } else {
+      activeTag = tagText;
+      applySkillFilter(tagText);
+    }
+  });
+
+  function applySkillFilter(skillName) {
+    const allTags = document.querySelectorAll(".tag");
+    const projectCards = document.querySelectorAll(".project-card");
+    const expItems = document.querySelectorAll(".exp-item");
+
+    allTags.forEach((t) => {
+      if (t.textContent.trim().toLowerCase() === skillName) {
+        t.classList.add("is-active");
+      } else {
+        t.classList.remove("is-active");
+      }
+    });
+
+    projectCards.forEach((card) => {
+      const cardTags = Array.from(card.querySelectorAll(".tag")).map((t) =>
+        t.textContent.trim().toLowerCase(),
+      );
+      if (cardTags.includes(skillName)) {
+        card.classList.add("is-highlighted");
+        card.classList.remove("is-dimmed");
+      } else {
+        card.classList.remove("is-highlighted");
+        card.classList.add("is-dimmed");
+      }
+    });
+
+    expItems.forEach((exp) => {
+      const expTags = Array.from(exp.querySelectorAll(".tag")).map((t) =>
+        t.textContent.trim().toLowerCase(),
+      );
+      if (expTags.includes(skillName)) {
+        exp.classList.add("is-highlighted");
+        exp.classList.remove("is-dimmed");
+      } else {
+        exp.classList.remove("is-highlighted");
+        exp.classList.add("is-dimmed");
+      }
+    });
+  }
+
+  function resetSkillFilter() {
+    document.querySelectorAll(".tag").forEach((t) =>
+      t.classList.remove("is-active"),
+    );
+    document.querySelectorAll(".project-card, .exp-item").forEach((el) => {
+      el.classList.remove("is-dimmed", "is-highlighted");
+    });
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
    Init
    ═══════════════════════════════════════════════════════════════ */
 
@@ -369,4 +653,10 @@ document.addEventListener("DOMContentLoaded", () => {
   initTheme();
   initMobileMenu();
   initLangSwitcher();
+  initBackToTop();
+  initScrollProgress();
+  initNavScrollSpy();
+  initContactCopy();
+  initSkillTagHighlighting();
 });
+
