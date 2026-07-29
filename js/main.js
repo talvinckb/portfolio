@@ -413,24 +413,31 @@ function initScrollProgress() {
   const progressEl = document.getElementById("scroll-progress");
   if (!progressEl) return;
 
+  let ticking = false;
+
   function updateProgress() {
     const totalHeight =
       document.documentElement.scrollHeight - window.innerHeight;
-    if (totalHeight <= 0) {
-      progressEl.style.width = "0%";
-      return;
-    }
-    const percent = Math.min(
-      100,
-      Math.max(0, (window.scrollY / totalHeight) * 100),
-    );
-    progressEl.style.width = `${percent}%`;
+    const progress =
+      totalHeight > 0
+        ? Math.min(1, Math.max(0, window.scrollY / totalHeight))
+        : 0;
+    progressEl.style.transform = `scaleX(${progress})`;
+    ticking = false;
   }
 
-  window.addEventListener("scroll", updateProgress, { passive: true });
-  window.addEventListener("resize", updateProgress, { passive: true });
+  function onScroll() {
+    if (!ticking) {
+      requestAnimationFrame(updateProgress);
+      ticking = true;
+    }
+  }
+
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", onScroll, { passive: true });
   updateProgress();
 }
+
 
 /* ═══════════════════════════════════════════════════════════════
    ScrollSpy & Nav Elevation

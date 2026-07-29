@@ -1075,6 +1075,7 @@ a:hover {
   border-radius: var(--radius-md);
   padding: var(--space-lg);
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
   margin-bottom: var(--space-lg);
 }
 
@@ -1666,16 +1667,19 @@ a:hover {
   box-shadow: 0 4px 25px rgba(0, 0, 0, 0.4);
 }
 
-/* ─── Scroll Reading Progress Bar ─── */
+/* ─── Scroll Reading Progress Bar (GPU Accelerated) ─── */
 .scroll-progress {
   position: fixed;
   top: 0;
   left: 0;
   height: 2px;
-  width: 0%;
+  width: 100%;
+  transform: scaleX(0);
+  transform-origin: left center;
   background-color: var(--color-accent);
   z-index: 1001;
-  transition: width 0.08s linear;
+  will-change: transform;
+  pointer-events: none;
 }
 
 
