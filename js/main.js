@@ -416,13 +416,19 @@ function initScrollProgress() {
   let ticking = false;
 
   function updateProgress() {
-    const totalHeight =
-      document.documentElement.scrollHeight - window.innerHeight;
+    const el = document.scrollingElement || document.documentElement;
+    const scrollTop = el.scrollTop || window.pageYOffset || 0;
+    const scrollHeight = el.scrollHeight || 0;
+    const clientHeight = el.clientHeight || window.innerHeight || 0;
+
+    const totalHeight = scrollHeight - clientHeight;
     const progress =
       totalHeight > 0
-        ? Math.min(1, Math.max(0, window.scrollY / totalHeight))
+        ? Math.min(1, Math.max(0, scrollTop / totalHeight))
         : 0;
+
     progressEl.style.transform = `scaleX(${progress})`;
+    progressEl.style.webkitTransform = `scaleX(${progress})`;
     ticking = false;
   }
 
@@ -434,9 +440,11 @@ function initScrollProgress() {
   }
 
   window.addEventListener("scroll", onScroll, { passive: true });
+  document.addEventListener("scroll", onScroll, { passive: true });
   window.addEventListener("resize", onScroll, { passive: true });
   updateProgress();
 }
+
 
 
 /* ═══════════════════════════════════════════════════════════════
