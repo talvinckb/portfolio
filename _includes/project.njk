@@ -61,11 +61,12 @@
       crossorigin="anonymous"
       onload="renderMathInElement(document.body, { delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right:
         '$', display: false}] });"></script>
+    <!-- Vercel Analytics -->
+    <script defer src="/_vercel/insights/script.js"></script>
   </head>
   <body>
     <!-- ─── Scroll Progress Bar ─── -->
     <div id="scroll-progress" class="scroll-progress" aria-hidden="true"></div>
-
     <!-- ─── Navigation ─── -->
     <nav class="nav" id="nav" aria-label="Navigation principale">
       <div class="nav__inner container">
@@ -290,14 +291,21 @@
     </footer>
     <!-- ─── Back to top button ─── -->
     <button id="back-to-top" class="back-to-top" aria-label="{{ 'Back to top' if isEn else 'Retour en haut de page' }}" title="{{ 'Back to top' if isEn else 'Retour en haut' }}" type="button">
-      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="20"
+        height="20"
+        viewbox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.5"
+        stroke-linecap="round"
+        stroke-linejoin="round">
         <path d="M18 15l-6-6-6 6"/>
       </svg>
     </button>
-
     <!-- ─── Toast Notifications ─── -->
     <div id="toast-container" class="toast-container" aria-live="polite" aria-atomic="true"></div>
-
     <script type="module" src="/js/project.js"></script>
   </body>
 </html>
