@@ -21,7 +21,7 @@ const STRINGS = {
 
 function initLightbox() {
   const zoomables = document.querySelectorAll(
-    ".project-content img, .project-thumbnail__img, .pipeline-workflow",
+    ".prose img, .case__cover-img, .pipeline-workflow",
   );
   if (!zoomables.length) return;
 
@@ -107,7 +107,7 @@ function initLightbox() {
    ───────────────────────────────────────────────────────────── */
 
 function initTableWrappers() {
-  document.querySelectorAll(".project-content table").forEach((table) => {
+  document.querySelectorAll(".prose table").forEach((table) => {
     if (table.parentElement.classList.contains("table-wrapper")) return;
     const wrapper = document.createElement("div");
     wrapper.className = "table-wrapper";
@@ -128,7 +128,7 @@ function initTableWrappers() {
 
 function renderMath() {
   if (!window.renderMathInElement) return;
-  window.renderMathInElement(document.querySelector(".project-content"), {
+  window.renderMathInElement(document.querySelector(".prose"), {
     delimiters: [
       { left: "$$", right: "$$", display: true },
       { left: "$", right: "$", display: false },

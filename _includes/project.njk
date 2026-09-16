@@ -8,6 +8,7 @@
 {% set anchorBase = t.urlPrefix %}
 {% set homeUrl = t.urlPrefix %}
 {% set altUrl = enUrl if lang == 'fr' else frUrl %}
+{% set readingProgress = true %}
 
 {% set thumb = thumbnail | default("/assets/projects/placeholder.webp") %}
 {% set thumbLight = thumbnailLight | default(thumb) %}
@@ -33,18 +34,18 @@
 {% import "partials/icons.njk" as icon %}
 
 <!DOCTYPE html>
-<html lang="{{ lang }}" data-theme="dark">
+<html lang="{{ lang }}" data-theme="light">
   <head>
     <script>
       (function () {
         try {
           var stored = localStorage.getItem("theme");
           if (stored !== "light" && stored !== "dark") {
-            stored = window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+            stored = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
           }
           document.documentElement.setAttribute("data-theme", stored);
         } catch (e) {
-          document.documentElement.setAttribute("data-theme", "dark");
+          document.documentElement.setAttribute("data-theme", "light");
         }
       })();
     </script>
@@ -59,81 +60,79 @@
   <body>
     {% include "partials/nav.njk" %}
 
-    <main id="main" class="project-page">
-      <div class="project-page__back container">
-        <a href="{{ anchorBase }}#projects" class="project-back-link">
-          {{ icon.chevronLeft() }}{{ "Back to projects" if lang == 'en' else "Retour aux projets" }}
+    <main id="main" class="case">
+      <header class="case__head wrap">
+        <a href="{{ anchorBase }}#work" class="case__back">
+          {{ icon.chevronLeft(14) }}{{ t.project.back }}
         </a>
-      </div>
 
-      <header class="project-hero">
-        <div class="container project-hero__inner">
-          <div class="project-hero__meta">
-            <span class="project-badge">{{ name }}</span>
-            {% if period %}
-              <span class="project-hero__period">{{ icon.clock() }}{{ period }}</span>
-            {% endif %}
-            {% if team %}
-              <span class="project-hero__team">
-                {{ icon.users() }}{{ team }} {{ "people" if lang == 'en' else "pers." }}
-              </span>
-            {% endif %}
-          </div>
+        <p class="case__eyebrow">{{ name }}</p>
+        <h1 class="case__title">{{ title }}</h1>
+        <p class="case__tagline">{{ tagline }}</p>
 
-          <h1 class="project-hero__title">{{ title }}</h1>
-          <p class="project-hero__tagline">{{ tagline }}</p>
-
-          {% if stack %}
-            <ul class="project-hero__stack tag-list" role="list">
-              {% for s in stack %}
-                <li class="tag tag--static">{{ s }}</li>
-              {% endfor %}
-            </ul>
-          {% endif %}
-
-          {% if github or demo or report %}
-            <div class="project-hero__links">
-              {% if github %}
-                <a href="{{ github }}" target="_blank" rel="noopener noreferrer" class="btn btn--outline">
-                  {{ icon.github() }}<span>{{ "Source code" if lang == 'en' else "Code source" }}</span>
-                </a>
-              {% endif %}
-              {% if demo %}
-                <a href="{{ demo }}" target="_blank" rel="noopener noreferrer" class="btn btn--primary">
-                  {{ icon.externalLink() }}<span>{{ "Demo" if lang == 'en' else "Démo" }}</span>
-                </a>
-              {% endif %}
-              {% if report %}
-                <a href="{{ report }}" target="_blank" rel="noopener noreferrer" class="btn btn--outline">
-                  {{ icon.download() }}<span>{{ "PDF report" if lang == 'en' else "Rapport PDF" }}</span>
-                </a>
-              {% endif %}
+        <dl class="case__facts">
+          {% if period %}
+            <div class="case__fact">
+              <dt>{{ t.project.duration }}</dt>
+              <dd>{{ period }}</dd>
             </div>
           {% endif %}
-        </div>
+          {% if team %}
+            <div class="case__fact">
+              <dt>{{ t.project.teamLabel }}</dt>
+              <dd>{{ team }} {{ t.project.team }}</dd>
+            </div>
+          {% endif %}
+          {% if stack %}
+            <div class="case__fact case__fact--wide">
+              <dt>{{ t.project.stackLabel }}</dt>
+              <dd>{{ stack | join(" · ") }}</dd>
+            </div>
+          {% endif %}
+        </dl>
+
+        {% if github or demo or report %}
+          <div class="actions">
+            {% if demo %}
+              <a href="{{ demo }}" target="_blank" rel="noopener noreferrer" class="btn btn--solid">
+                {{ icon.externalLink(15) }}<span>{{ t.project.demo }}</span>
+              </a>
+            {% endif %}
+            {% if github %}
+              <a href="{{ github }}" target="_blank" rel="noopener noreferrer" class="btn btn--quiet">
+                {{ icon.github(15) }}<span>{{ t.project.sourceCode }}</span>
+              </a>
+            {% endif %}
+            {% if report %}
+              <a href="{{ report }}" target="_blank" rel="noopener noreferrer" class="btn btn--quiet">
+                {{ icon.download(15) }}<span>{{ t.project.report }}</span>
+              </a>
+            {% endif %}
+          </div>
+        {% endif %}
       </header>
 
-      <div class="project-thumbnail container">
+      <div class="case__cover wrap">
         <img
           src="{{ thumb }}"
           data-src-dark="{{ thumb }}"
           data-src-light="{{ thumbLight }}"
           alt="{{ t.a11y.projectPreview }} {{ name }}"
-          class="project-thumbnail__img"
+          class="case__cover-img"
           width="1280" height="720"
           fetchpriority="high" decoding="async"/>
       </div>
 
-      <article class="project-content container">
+      <article class="prose wrap">
         {{ content | safe }}
       </article>
 
-      <nav class="project-footer-nav container" aria-label="{{ t.nav.projects }}">
-        <a href="{{ anchorBase }}#projects" class="btn btn--outline">
-          {{ icon.chevronLeft() }}<span>{{ "All projects" if lang == 'en' else "Tous les projets" }}</span>
+      <nav class="case__nav wrap" aria-label="{{ t.nav.work }}">
+        <a href="{{ anchorBase }}#work" class="btn btn--quiet">
+          {{ icon.chevronLeft(15) }}<span>{{ t.project.back }}</span>
         </a>
-        <a href="{{ anchorBase }}#contact" class="btn btn--primary">
-          {{ icon.mail() }}<span>{{ t.contact.title }}</span>
+        <a href="mailto:{{ site.email }}" class="btn btn--solid">
+          {{ icon.mail(15) }}<span>{{ t.project.contactCta }}</span>
         </a>
       </nav>
     </main>

@@ -31,7 +31,7 @@ function syncThemedImages(theme) {
 export function initTheme() {
   const toggle = document.getElementById("theme-toggle");
   // The inline script in <head> already resolved the theme before paint.
-  const current = document.documentElement.getAttribute("data-theme") || "dark";
+  const current = document.documentElement.getAttribute("data-theme") || "light";
   syncThemedImages(current);
   if (toggle) toggle.setAttribute("aria-pressed", String(current === "light"));
 
@@ -88,7 +88,7 @@ export function initMobileMenu() {
   });
 
   // Leaving the mobile breakpoint with the menu open would trap scrolling.
-  window.matchMedia("(min-width: 769px)").addEventListener("change", (e) => {
+  window.matchMedia("(min-width: 900px)").addEventListener("change", (e) => {
     if (e.matches) setOpen(false);
   });
 }

@@ -1,25 +1,22 @@
-{# Shared footer + floating controls. Requires: t #}
+{# Shared footer + floating affordances. Requires: t #}
 {% import "partials/icons.njk" as icon %}
 
 <footer class="footer">
-  <div class="container footer__inner">
-    <div class="footer__brand">
-      <span class="footer__logo" aria-hidden="true">{{ site.initials }}</span>
-      <span class="footer__name">{{ site.name }}</span>
-    </div>
+  <div class="footer__inner">
+    <p class="footer__copy">&copy; {{ buildYear }} {{ site.name }}</p>
 
     <ul class="footer__links" role="list">
+      <li><a href="mailto:{{ site.email }}">{{ site.email }}</a></li>
       <li><a href="{{ site.linkedin }}" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
       <li><a href="{{ site.github }}" target="_blank" rel="noopener noreferrer">GitHub</a></li>
-      <li><a href="mailto:{{ site.email }}">Email</a></li>
     </ul>
 
-    <p class="footer__copy">&copy; {{ buildYear }} {{ site.name }}</p>
+    <p class="footer__built">{{ t.footer.built }}</p>
   </div>
 </footer>
 
 <button id="back-to-top" class="back-to-top" type="button" aria-label="{{ t.a11y.backToTop }}" title="{{ t.a11y.backToTop }}">
-  {{ icon.chevronUp() }}
+  {{ icon.arrowUp(14) }}
 </button>
 
 <div id="toast-container" class="toast-container" role="status" aria-live="polite" aria-atomic="true"></div>

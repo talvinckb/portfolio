@@ -1,36 +1,65 @@
-{# Contact button row — used by both the hero and the contact section. #}
+{# Contact affordances. Two shapes: a compact hero row, a full contact block. #}
 {% import "partials/icons.njk" as icon %}
 
-{% macro actions(t, site, withCv=false) %}
-  <div class="btn-group">
-    <a href="mailto:{{ site.email }}" class="btn btn--primary">
-      {{ icon.mail() }}<span>{{ site.email }}</span>
+{# ─── Hero: one solid action, the rest as quiet links ─── #}
+{% macro heroActions(t, site) %}
+  <div class="actions">
+    <a href="{{ t.hero.cvUrl }}" class="btn btn--solid" target="_blank" rel="noopener noreferrer">
+      {{ icon.download(15) }}<span>{{ t.hero.cvBtn }}</span>
     </a>
-    <button class="btn btn--primary btn--copy" type="button" data-copy="{{ site.email }}" data-copy-kind="email" aria-label="{{ t.a11y.copyEmail }}" title="{{ t.a11y.copyEmail }}">
-      {{ icon.copy() }}
-    </button>
+
+    <a href="mailto:{{ site.email }}" class="btn btn--quiet">
+      {{ icon.mail(15) }}<span>{{ t.hero.emailBtn }}</span>
+    </a>
+
+    <a href="{{ site.linkedin }}" class="btn btn--quiet" target="_blank" rel="noopener noreferrer">
+      {{ icon.linkedin(15) }}<span>{{ t.hero.linkedinBtn }}</span>
+    </a>
+
+    <a href="{{ site.github }}" class="btn btn--quiet" target="_blank" rel="noopener noreferrer">
+      {{ icon.github(15) }}<span>{{ t.hero.githubBtn }}</span>
+    </a>
   </div>
+{% endmacro %}
 
-  <div class="btn-group">
-    <a href="tel:{{ site.phone }}" class="btn btn--outline">
-      {{ icon.phone() }}<span>{{ site.phoneDisplay }}</span>
-    </a>
-    <button class="btn btn--outline btn--copy" type="button" data-copy="{{ site.phone }}" data-copy-kind="phone" aria-label="{{ t.a11y.copyPhone }}" title="{{ t.a11y.copyPhone }}">
-      {{ icon.copy() }}
-    </button>
-  </div>
+{# ─── Contact section: the address itself is the headline ─── #}
+{% macro contactBlock(t, site) %}
+  <ul class="contact-list" role="list">
+    <li class="contact-row">
+      <span class="contact-row__label">{{ t.contact.emailLabel }}</span>
+      <a class="contact-row__value" href="mailto:{{ site.email }}">{{ site.email }}</a>
+      <button class="contact-row__copy" type="button" data-copy="{{ site.email }}" data-copy-kind="email" aria-label="{{ t.a11y.copyEmail }}" title="{{ t.a11y.copyEmail }}">
+        {{ icon.copy(14) }}
+      </button>
+    </li>
 
-  <a href="{{ site.linkedin }}" target="_blank" rel="noopener noreferrer" class="btn btn--outline">
-    {{ icon.linkedin() }}<span>{{ t.hero.linkedinBtn }}</span>
-  </a>
+    <li class="contact-row">
+      <span class="contact-row__label">{{ t.contact.phoneLabel }}</span>
+      <a class="contact-row__value" href="tel:{{ site.phone }}">{{ site.phoneDisplay }}</a>
+      <button class="contact-row__copy" type="button" data-copy="{{ site.phone }}" data-copy-kind="phone" aria-label="{{ t.a11y.copyPhone }}" title="{{ t.a11y.copyPhone }}">
+        {{ icon.copy(14) }}
+      </button>
+    </li>
 
-  <a href="{{ site.github }}" target="_blank" rel="noopener noreferrer" class="btn btn--outline">
-    {{ icon.github() }}<span>{{ t.hero.githubBtn }}</span>
-  </a>
+    <li class="contact-row">
+      <span class="contact-row__label">LinkedIn</span>
+      <a class="contact-row__value" href="{{ site.linkedin }}" target="_blank" rel="noopener noreferrer">
+        in/talvin-ackbaraly{{ icon.arrowUpRight(14) }}
+      </a>
+    </li>
 
-  {% if withCv and t.hero.cvUrl %}
-    <a href="{{ t.hero.cvUrl }}" target="_blank" rel="noopener noreferrer" class="btn btn--outline">
-      {{ icon.download() }}<span>{{ t.hero.cvBtn }}</span>
-    </a>
-  {% endif %}
+    <li class="contact-row">
+      <span class="contact-row__label">GitHub</span>
+      <a class="contact-row__value" href="{{ site.github }}" target="_blank" rel="noopener noreferrer">
+        @talvinckb{{ icon.arrowUpRight(14) }}
+      </a>
+    </li>
+
+    <li class="contact-row">
+      <span class="contact-row__label">CV</span>
+      <a class="contact-row__value" href="{{ t.hero.cvUrl }}" target="_blank" rel="noopener noreferrer">
+        {{ t.hero.cvBtn }}{{ icon.download(14) }}
+      </a>
+    </li>
+  </ul>
 {% endmacro %}

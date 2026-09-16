@@ -15,7 +15,7 @@
 {% import "partials/contact-actions.njk" as contact %}
 
 <!DOCTYPE html>
-<html lang="{{ lang }}" data-theme="dark">
+<html lang="{{ lang }}" data-theme="light">
   <head>
     <script>
       // Applied before first paint to avoid a flash of the wrong theme.
@@ -23,11 +23,11 @@
         try {
           var stored = localStorage.getItem("theme");
           if (stored !== "light" && stored !== "dark") {
-            stored = window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+            stored = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
           }
           document.documentElement.setAttribute("data-theme", stored);
         } catch (e) {
-          document.documentElement.setAttribute("data-theme", "dark");
+          document.documentElement.setAttribute("data-theme", "light");
         }
       })();
     </script>
@@ -39,97 +39,56 @@
 
     <main id="main">
       <!-- ─── Hero ─── -->
-      <section id="hero" class="hero">
-        <div class="container hero__inner">
-          <p class="hero__greeting">{{ t.hero.greeting }}</p>
-          <h1 class="hero__name">{{ t.hero.name }}</h1>
-          <p class="hero__headline">{{ t.hero.headline }}</p>
-          <p class="hero__status"><span class="hero__status-dot" aria-hidden="true"></span>{{ t.hero.status }}</p>
+      <section class="hero">
+        <div class="wrap hero__inner">
+          <p class="hero__eyebrow">
+            <span class="hero__mark" aria-hidden="true"></span>
+            <span>{{ t.hero.name }}</span>
+            <span aria-hidden="true">—</span>
+            <span>{{ t.hero.location }}</span>
+          </p>
 
-          <div class="hero__actions">
-            {{ contact.actions(t, site, true) }}
+          <h1 class="hero__statement">{{ t.hero.statement }}</h1>
+
+          <div class="hero__cols">
+            <p class="hero__intro">{{ t.hero.intro }}</p>
+
+            <div class="hero__cta">
+              <p class="hero__status">
+                <span class="hero__status-mark" aria-hidden="true"></span>{{ t.hero.status }}
+              </p>
+
+              {{ contact.heroActions(t, site) }}
+            </div>
           </div>
         </div>
 
-        <a href="#about" class="hero__scroll-indicator" aria-label="{{ t.a11y.scrollDown }}">
-          {{ icon.chevronDown() }}
-        </a>
+        <ul class="facts wrap" role="list" aria-label="{{ t.a11y.keyFigures }}">
+          {% for fact in t.hero.facts %}
+            <li class="fact">
+              <p class="fact__value">{{ fact.value }}</p>
+              <p class="fact__label">{{ fact.label }}</p>
+            </li>
+          {% endfor %}
+        </ul>
       </section>
 
-      <!-- ─── About ─── -->
-      <section id="about" class="section">
-        <div class="container">
-          <h2 class="section__title">{{ t.about.title }}</h2>
-          <div class="section__divider" aria-hidden="true"></div>
+      <!-- ─── Work ─── -->
+      <section id="work" class="section">
+        <div class="wrap">
+          <header class="section__head">
+            <p class="section__index"><span aria-hidden="true">{{ t.projects.index }}</span>{{ t.projects.label }}</p>
+            <h2 class="section__title">{{ t.projects.title }}</h2>
+            <p class="section__lede">{{ t.projects.lede }}</p>
+          </header>
 
-          <p class="about__intro">{{ t.about.intro }}</p>
-
-          <ol class="about__education" role="list">
-            {% for edu in t.about.education %}
-              <li class="edu-item">
-                <div class="edu-item__header">
-                  <span class="edu-item__institution">{{ edu.institution }}</span>
-                  <span class="edu-item__location">{{ edu.location }}</span>
-                </div>
-                <p class="edu-item__degree">{{ edu.degree }}</p>
-                <p class="edu-item__period">{{ edu.period }}</p>
-                {% if edu.description %}
-                  <p class="edu-item__description">{{ edu.description }}</p>
-                {% endif %}
-              </li>
-            {% endfor %}
-          </ol>
-
-          <div class="about__certifications">
-            {% for cert in t.about.certifications %}
-              <p><span class="cert-label">{{ cert.label }}</span>{{ t.about.certSeparator }}{{ cert.value }}</p>
-            {% endfor %}
-          </div>
-        </div>
-      </section>
-
-      <!-- ─── Experience ─── -->
-      <section id="experience" class="section section--alt">
-        <div class="container">
-          <h2 class="section__title">{{ t.experiences.title }}</h2>
-          <div class="section__divider" aria-hidden="true"></div>
-
-          <ol class="experience__list" role="list">
-            {% for exp in t.experiences.items %}
-              <li class="exp-item">
-                <div class="exp-item__meta">
-                  <span class="exp-item__period">{{ exp.period }}</span>
-                  <span class="exp-item__type">{{ exp.type }}</span>
-                </div>
-                <div class="exp-item__content">
-                  <h3 class="exp-item__title">{{ exp.title }}</h3>
-                  <p class="exp-item__company">{{ exp.company }}</p>
-                  <p class="exp-item__description">{{ exp.description }}</p>
-                  <ul class="exp-item__tags tag-list" role="list">
-                    {% for tag in exp.tags %}
-                      <li class="tag">{{ tag }}</li>
-                    {% endfor %}
-                  </ul>
-                </div>
-              </li>
-            {% endfor %}
-          </ol>
-        </div>
-      </section>
-
-      <!-- ─── Projects ─── -->
-      <section id="projects" class="section">
-        <div class="container">
-          <h2 class="section__title">{{ t.projects.title }}</h2>
-          <div class="section__divider" aria-hidden="true"></div>
-
-          <ul class="projects__grid" role="list">
+          <ul class="work-grid" role="list">
             {% for p in t.projects.items %}
               {% if p.featured %}
                 {% set projectUrl = t.urlPrefix + "projects/" + p.id + "/" %}
                 <li>
-                  <article class="project-card" id="project-{{ p.id }}">
-                    <div class="project-card__thumbnail">
+                  <article class="work-card">
+                    <div class="work-card__media">
                       <img
                         src="{{ p.thumbnail }}"
                         data-src-dark="{{ p.thumbnail }}"
@@ -139,81 +98,59 @@
                         loading="lazy" decoding="async"/>
                     </div>
 
-                    <div class="project-card__body">
-                      <div class="project-card__header">
-                        <span class="project-card__name">{{ p.name }}</span>
-                        {% if p.period %}
-                          <span class="project-card__period">{{ p.period }}</span>
-                        {% endif %}
-                      </div>
+                    <p class="work-card__meta">
+                      <span class="work-card__name">{{ p.name }}</span>
+                      {% if p.period %}<span class="work-card__period">{{ p.period }}</span>{% endif %}
+                      {% if p.github %}
+                        <a class="work-card__code" href="{{ p.github }}" target="_blank" rel="noopener noreferrer" aria-label="{{ t.a11y.sourceCode }} {{ p.name }}">
+                          {{ icon.github(14) }}
+                        </a>
+                      {% endif %}
+                    </p>
 
-                      <h3 class="project-card__title">
-                        <a class="project-card__link" href="{{ projectUrl }}">{{ p.title }}</a>
-                      </h3>
+                    <h3 class="work-card__title">
+                      <a href="{{ projectUrl }}">{{ p.title }}</a>
+                    </h3>
 
-                      <p class="project-card__tagline">{{ p.tagline }}</p>
+                    <p class="work-card__tagline">{{ p.tagline }}</p>
 
-                      <ul class="project-card__stack tag-list" role="list">
-                        {% for s in p.stack %}
-                          <li class="tag tag--static">{{ s }}</li>
-                        {% endfor %}
-                      </ul>
+                    <p class="work-card__stack">{{ p.stack | join(" · ") }}</p>
 
-                      <div class="project-card__actions">
-                        <span class="project-card__cta">
-                          {{ t.projects.viewProject }}{{ icon.arrowRight(14) }}
-                        </span>
-                        {% if p.github %}
-                          <a class="project-card__code" href="{{ p.github }}" target="_blank" rel="noopener noreferrer" aria-label="{{ t.a11y.sourceCode }} {{ p.name }}">
-                            {{ icon.github(14) }}<span>{{ t.projects.codeLabel }}</span>
-                          </a>
-                        {% endif %}
-                      </div>
-                    </div>
+                    <p class="work-card__cta" aria-hidden="true">
+                      {{ t.projects.viewProject }}{{ icon.arrowRight(14) }}
+                    </p>
                   </article>
                 </li>
               {% endif %}
             {% endfor %}
           </ul>
 
-          <!-- Secondary projects -->
-          <h3 class="projects__sub-title">{{ t.projects.secondaryTitle }}</h3>
-          <ul class="projects__grid projects__grid--secondary" role="list">
+          <h3 class="subhead">{{ t.projects.secondaryTitle }}</h3>
+
+          <ul class="side-list" role="list">
             {% for p in t.projects.items %}
               {% if not p.featured %}
-                <li>
-                  <article class="project-card project-card--secondary{{ ' is-linked' if p.github }}" id="project-{{ p.id }}">
-                    <div class="project-card__body">
-                      <div class="project-card__header">
-                        <span class="project-card__name">{{ p.name }}</span>
-                        <span class="project-card__kind project-card__kind--{{ p.kind }}">{{ t.projects.labels[p.kind] }}</span>
-                      </div>
+                <li class="side-item{{ ' side-item--linked' if p.github }}">
+                  <p class="side-item__aside">
+                    <span class="side-item__name">{{ p.name }}</span>
+                    <span class="side-item__kind">{{ t.projects.labels[p.kind] }}</span>
+                  </p>
 
-                      <h4 class="project-card__title">
-                        {% if p.github %}
-                          <a class="project-card__link" href="{{ p.github }}" target="_blank" rel="noopener noreferrer">{{ p.title }}</a>
-                        {% else %}
-                          {{ p.title }}
-                        {% endif %}
-                      </h4>
-
-                      <p class="project-card__tagline">{{ p.tagline }}</p>
-
-                      <ul class="project-card__stack tag-list" role="list">
-                        {% for s in p.stack %}
-                          <li class="tag tag--static">{{ s }}</li>
-                        {% endfor %}
-                      </ul>
-
+                  <div class="side-item__body">
+                    <h4 class="side-item__title">
                       {% if p.github %}
-                        <div class="project-card__actions">
-                          <span class="project-card__cta project-card__cta--code">
-                            {{ icon.github(14) }}{{ t.projects.codeLabel }}
-                          </span>
-                        </div>
+                        <a href="{{ p.github }}" target="_blank" rel="noopener noreferrer">{{ p.title }}</a>
+                      {% else %}
+                        {{ p.title }}
                       {% endif %}
-                    </div>
-                  </article>
+                    </h4>
+                    <p class="side-item__tagline">{{ p.tagline }}</p>
+                    <p class="side-item__stack">{{ p.stack | join(" · ") }}</p>
+                  </div>
+
+                  {% if p.github %}
+                    <span class="side-item__arrow" aria-hidden="true">{{ icon.arrowUpRight(16) }}</span>
+                  {% endif %}
                 </li>
               {% endif %}
             {% endfor %}
@@ -221,25 +158,73 @@
         </div>
       </section>
 
-      <!-- ─── Skills ─── -->
-      <section id="skills" class="section section--alt">
-        <div class="container">
-          <h2 class="section__title">{{ t.skills.title }}</h2>
-          <div class="section__divider" aria-hidden="true"></div>
+      <!-- ─── Background ─── -->
+      <section id="background" class="section section--rule">
+        <div class="wrap">
+          <header class="section__head">
+            <p class="section__index"><span aria-hidden="true">{{ t.background.index }}</span>{{ t.background.label }}</p>
+            <h2 class="section__title">{{ t.background.title }}</h2>
+          </header>
 
-          <ul class="skills__grid" role="list">
+          <h3 class="subhead subhead--flush">{{ t.background.experienceTitle }}</h3>
+          <ol class="entries" role="list">
+            {% for exp in t.background.experiences %}
+              <li class="entry">
+                <p class="entry__period">{{ exp.period }}</p>
+                <div class="entry__body">
+                  <h4 class="entry__title">
+                    {{ exp.title }}<span class="entry__type">{{ exp.type }}</span>
+                  </h4>
+                  <p class="entry__org">{{ exp.company }}</p>
+                  <p class="entry__desc">{{ exp.description }}</p>
+                  <p class="entry__tags">{{ exp.tags | join(" · ") }}</p>
+                </div>
+              </li>
+            {% endfor %}
+          </ol>
+
+          <h3 class="subhead">{{ t.background.educationTitle }}</h3>
+          <ol class="entries" role="list">
+            {% for edu in t.background.education %}
+              <li class="entry">
+                <p class="entry__period">{{ edu.period }}</p>
+                <div class="entry__body">
+                  <h4 class="entry__title">
+                    {{ edu.institution }}<span class="entry__type">{{ edu.location }}</span>
+                  </h4>
+                  <p class="entry__org entry__org--plain">{{ edu.degree }}</p>
+                  {% if edu.description %}
+                    <p class="entry__desc">{{ edu.description }}</p>
+                  {% endif %}
+                </div>
+              </li>
+            {% endfor %}
+          </ol>
+
+          <h3 class="subhead">{{ t.background.extrasTitle }}</h3>
+          <ul class="extras" role="list">
+            {% for extra in t.background.extras %}
+              <li>{{ extra }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      </section>
+
+      <!-- ─── Skills ─── -->
+      <section id="skills" class="section section--rule">
+        <div class="wrap">
+          <header class="section__head">
+            <p class="section__index"><span aria-hidden="true">{{ t.skills.index }}</span>{{ t.skills.label }}</p>
+            <h2 class="section__title">{{ t.skills.title }}</h2>
+          </header>
+
+          <ul class="skills" role="list">
             {% for group in t.skills.groups %}
-              <li class="skill-group">
-                <h3 class="skill-group__title">{{ group.category }}</h3>
-                <ul class="skill-group__items tag-list" role="list">
+              <li class="skill-col">
+                <h3 class="skill-col__title">{{ group.category }}</h3>
+                <ul class="skill-col__items" role="list">
                   {% for item in group.items %}
-                    {% if item | isFilterable(t) %}
-                      <li>
-                        <button type="button" class="tag tag--filter" data-skill="{{ item | lower }}" aria-pressed="false">{{ item }}</button>
-                      </li>
-                    {% else %}
-                      <li class="tag">{{ item }}</li>
-                    {% endif %}
+                    <li>{{ item }}</li>
                   {% endfor %}
                 </ul>
               </li>
@@ -249,16 +234,15 @@
       </section>
 
       <!-- ─── Contact ─── -->
-      <section id="contact" class="section">
-        <div class="container contact__inner">
-          <h2 class="section__title">{{ t.contact.title }}</h2>
-          <div class="section__divider" aria-hidden="true"></div>
+      <section id="contact" class="section section--rule">
+        <div class="wrap">
+          <header class="section__head">
+            <p class="section__index"><span aria-hidden="true">{{ t.contact.index }}</span>{{ t.contact.label }}</p>
+            <h2 class="section__title section__title--display">{{ t.contact.title }}</h2>
+            <p class="section__lede">{{ t.contact.text }}</p>
+          </header>
 
-          <p class="contact__text">{{ t.contact.text }}</p>
-
-          <div class="contact__links">
-            {{ contact.actions(t, site, false) }}
-          </div>
+          {{ contact.contactBlock(t, site) }}
         </div>
       </section>
     </main>

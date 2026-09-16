@@ -6,7 +6,7 @@
   "altLabel": "FR",
   "meta": {
     "title": "Talvin Ackbaraly — Computer Vision, AI & GPU Computing",
-    "description": "EPITA engineering student specialized in computer vision, AI and GPU computing. ×24 CUDA port, real-time SPH fluid simulation, medical and heritage image segmentation. Seeking a final-year internship (February 2027).",
+    "description": "EPITA engineering student, Image major. Computer vision, deep learning and GPU computing: ×24 CUDA port, real-time SPH simulation, medical and heritage image segmentation. Seeking a final-year internship (February 2027).",
     "jobTitle": "Computer Vision & GPU Computing Engineer",
     "ogImage": "/assets/og-image-en.png"
   },
@@ -15,102 +15,59 @@
     "mainNav": "Main navigation",
     "home": "Back to home",
     "switchLang": "Lire cette page en français",
-    "toggleTheme": "Toggle between light and dark theme",
+    "toggleTheme": "Switch between light and dark theme",
     "openMenu": "Open menu",
     "closeMenu": "Close menu",
-    "scrollDown": "Scroll to the About section",
     "backToTop": "Back to top",
     "copyEmail": "Copy email address",
     "copyPhone": "Copy phone number",
-    "projectPreview": "Preview of project",
-    "sourceCode": "Source code for"
+    "projectPreview": "Project preview",
+    "sourceCode": "Source code for",
+    "keyFigures": "Key figures"
   },
   "nav": {
-    "about": "About",
-    "experience": "Experience",
-    "projects": "Projects",
+    "work": "Work",
+    "background": "Background",
     "skills": "Skills",
     "contact": "Contact"
   },
   "hero": {
-    "greeting": "Hello, I am",
     "name": "Talvin Ackbaraly",
-    "headline": "Engineering student specialized in Computer Vision, AI & GPU Computing",
-    "status": "Looking for a 6-month internship — Starting early Feb. 2027",
+    "location": "Paris, France",
+    "statement": "I build systems that see, and I make them fast enough to run in real time.",
+    "intro": "Engineering student at EPITA, Image major. I work on computer vision, deep learning and GPU computing — from CUDA ports of real-time algorithms to medical and heritage image segmentation. Five months at Studiocanal taught me what shipping actually means: CI/CD, code reviews, production.",
+    "status": "Available for a 6-month final-year internship starting February 2027",
+    "cvBtn": "Download CV",
+    "cvUrl": "/assets/cv-talvin-ackbaraly-en.pdf",
+    "emailBtn": "Send an email",
     "linkedinBtn": "LinkedIn",
     "githubBtn": "GitHub",
-    "cvBtn": "CV",
-    "cvUrl": "/assets/cv-talvin-ackbaraly-en.pdf"
-  },
-  "about": {
-    "title": "About Me",
-    "intro": "As an engineering student at EPITA, I specialize in image-related fields: computer vision, artificial intelligence and GPU computing. My projects range from CUDA ports of real-time algorithms to medical and heritage image segmentation, always with the same discipline: measure, profile, validate. In parallel, five months at Studiocanal gave me hands-on production experience — CI/CD on AWS, Agile teamwork, code shipped and maintained. I am now looking for a 6-month final-year internship starting in early February 2027.",
-    "education": [
+    "facts": [
       {
-        "institution": "EPITA",
-        "location": "Paris, France",
-        "degree": "Master of Engineering — Image Specialization",
-        "period": "September 2022 - 2027",
-        "description": "Image processing & synthesis, artificial intelligence, and GPU computing."
+        "value": "×24",
+        "label": "CPU → GPU speed-up on a motion-detection pipeline, written in CUDA"
       },
       {
-        "institution": "Université du Québec à Chicoutimi (UQAC)",
-        "location": "Canada",
-        "degree": "Academic Exchange — Semester 4",
-        "period": "January - May 2024",
-        "description": null
+        "value": "75,000",
+        "label": "particles simulated at 60 FPS, fluid physics running entirely on the GPU"
       },
       {
-        "institution": "Lycée Notre Dame La Riche",
-        "location": "Tours, France",
-        "degree": "High School Diploma — Majors in Mathematics & CS",
-        "period": "2019 - 2022",
-        "description": null
-      }
-    ],
-    "certifications": [
-      {
-        "label": "English",
-        "value": "TOEIC"
-      }
-    ],
-    "certSeparator": ": "
-  },
-  "experiences": {
-    "title": "Work Experience",
-    "items": [
-      {
-        "title": "Full-Stack & DevOps Developer",
-        "type": "Internship",
-        "company": "Studiocanal",
-        "period": "Sept. 2025 - Jan. 2026",
-        "description": "Development of an internal web platform for managing movie catalog rights, contracts, and distribution modules. Built full-stack features and set up CI/CD cloud infrastructure on AWS within an Agile team.",
-        "tags": [
-          "Full-Stack",
-          "DevOps",
-          "CI/CD",
-          "AWS",
-          "Agile"
-        ]
+        "value": "5 months",
+        "label": "shipping to production at Studiocanal — full-stack, CI/CD on AWS"
       },
       {
-        "title": "IT Consultant",
-        "type": "Internship",
-        "company": "Hitachi Solutions France",
-        "period": "June - July 2022",
-        "description": "Design and development of a management application prototype (suppliers, products, contracts) for enterprise client Sonepar using the Django framework and applying the Agile SAFe methodology.",
-        "tags": [
-          "Django",
-          "Agile SAFe",
-          "Prototype"
-        ]
+        "value": "2027",
+        "label": "MEng from EPITA, majoring in Image processing and artificial intelligence"
       }
     ]
   },
   "projects": {
-    "title": "Featured Projects",
-    "secondaryTitle": "Other Work",
-    "viewProject": "View project",
+    "index": "01",
+    "label": "Work",
+    "title": "Six projects, measured and written up",
+    "lede": "Every major project has its own case study: the problem, the technical choices, the numbers, and what did not work.",
+    "secondaryTitle": "Other work",
+    "viewProject": "Read the case study",
     "codeLabel": "Code",
     "labels": {
       "academic": "Academic",
@@ -120,7 +77,7 @@
       {
         "id": "pfee-bnf",
         "name": "PFEE — BNF",
-        "title": "Segmentation & Classification of Heritage Illustrations",
+        "title": "Segmentation & classification of heritage illustrations",
         "tagline": "Automatic detection of illustrations in digitized heritage documents, in partnership with the BNF.",
         "thumbnail": "/assets/projects/pfee-bnf/thumbnail-16x9.webp",
         "thumbnailLight": "/assets/projects/pfee-bnf/thumbnail-16x9-light.webp",
@@ -138,8 +95,8 @@
       {
         "id": "alpr",
         "name": "ALPR",
-        "title": "Automatic License Plate Recognition",
-        "tagline": "Complete ALPR system without Deep Learning (Classical Vision + Machine Learning), with rigorous Python vs C++ benchmarks.",
+        "title": "Automatic license plate recognition",
+        "tagline": "Complete ALPR system without deep learning (classical vision + machine learning), with rigorous Python vs C++ benchmarks.",
         "thumbnail": "/assets/projects/alpr/thumbnail-16x9.webp",
         "thumbnailLight": "/assets/projects/alpr/thumbnail-16x9-light.webp",
         "stack": [
@@ -156,7 +113,7 @@
       {
         "id": "irgpu",
         "name": "IRGPU",
-        "title": "Real-Time Video Motion Detection — GPU Port",
+        "title": "Real-time video motion detection — GPU port",
         "tagline": "CPU → GPU port of a real-time algorithm achieving a ×24 performance gain via CUDA.",
         "thumbnail": "/assets/projects/irgpu/thumbnail-16x9.webp",
         "thumbnailLight": "/assets/projects/irgpu/thumbnail-16x9-light.webp",
@@ -174,8 +131,8 @@
       {
         "id": "medviz",
         "name": "MedViz",
-        "title": "Medical Prediction & 3D Visualization",
-        "tagline": "Full FVC prediction pipeline from pulmonary CT scans, with 3D web visualization.",
+        "title": "Medical prediction & 3D visualization",
+        "tagline": "Full FVC prediction pipeline from pulmonary CT scans, with 3D visualization in the browser.",
         "thumbnail": "/assets/projects/medviz/thumbnail-16x9.webp",
         "thumbnailLight": "/assets/projects/medviz/thumbnail-16x9-light.webp",
         "stack": [
@@ -192,8 +149,8 @@
       {
         "id": "pogl",
         "name": "POGL",
-        "title": "Real-Time Fluid Simulation",
-        "tagline": "Real-time 3D SPH fluid simulation engine with 75,000+ particles at 60 FPS — full GPU physics via Compute Shaders and SSFR surface rendering.",
+        "title": "Real-time fluid simulation",
+        "tagline": "Real-time 3D SPH engine, 75,000 particles at 60 FPS — GPU physics via compute shaders and SSFR surface rendering.",
         "thumbnail": "/assets/projects/pogl/thumbnail-16x9.webp",
         "thumbnailLight": "/assets/projects/pogl/thumbnail-16x9-light.webp",
         "stack": [
@@ -210,8 +167,8 @@
       {
         "id": "vtk-itk",
         "name": "VTK-ITK",
-        "title": "Brain Tumor Registration & Longitudinal Tracking",
-        "tagline": "Complete 3D MRI alignment pipeline (ITK) with tumor segmentation and interactive multi-view visualization (VTK + PyQt6) — volumetric evolution quantification of a glioma.",
+        "title": "Brain tumor registration & longitudinal tracking",
+        "tagline": "3D MRI alignment (ITK) with tumor segmentation and interactive multi-view visualization (VTK + PyQt6) — quantifying the evolution of a glioma.",
         "thumbnail": "/assets/projects/vtk-itk/thumbnail-16x9.webp",
         "thumbnailLight": "/assets/projects/vtk-itk/thumbnail-16x9-light.webp",
         "stack": [
@@ -229,8 +186,8 @@
       {
         "id": "gitlab-to-github",
         "name": "gitlab-to-github",
-        "title": "Repository Migration CLI",
-        "tagline": "Command-line tool to migrate GitLab repositories to GitHub — including code, wikis, issues and merge requests.",
+        "title": "Repository migration CLI",
+        "tagline": "Migrates GitLab repositories to GitHub — including code, wikis, issues and merge requests.",
         "thumbnail": null,
         "stack": [
           "Python",
@@ -245,14 +202,13 @@
       {
         "id": "l-system",
         "name": "3D L-System",
-        "title": "Procedural 3D Plant Generator",
-        "tagline": "Interactive L-system plant generator with real-time editing of rewriting rules through Dear ImGui.",
+        "title": "Procedural 3D plant generator",
+        "tagline": "L-system plant generation with real-time editing of rewriting rules through Dear ImGui.",
         "thumbnail": null,
         "stack": [
           "C++",
           "OpenGL",
-          "Dear ImGui",
-          "Image Synthesis"
+          "Dear ImGui"
         ],
         "period": "Image synthesis",
         "featured": false,
@@ -262,8 +218,8 @@
       {
         "id": "tinyx",
         "name": "TinyX",
-        "title": "Social Network Clone",
-        "tagline": "Twitter-like social platform built by a team of 14 with microservices architecture and rigorous DevOps.",
+        "title": "Social network clone",
+        "tagline": "Twitter-like social platform built by a team of 14, microservices architecture and rigorous DevOps.",
         "thumbnail": null,
         "stack": [
           "Java/Quarkus",
@@ -278,8 +234,8 @@
       {
         "id": "tiger",
         "name": "Tiger",
-        "title": "Full Compiler Construction",
-        "tagline": "Implementation of a compiler for the Tiger language, from lexical analysis to type checking.",
+        "title": "Full compiler construction",
+        "tagline": "A compiler for the Tiger language, from lexical analysis to type checking.",
         "thumbnail": null,
         "stack": [
           "C++",
@@ -294,11 +250,11 @@
       {
         "id": "ocr-sudoku",
         "name": "OCR Sudoku",
-        "title": "Digit Recognition & Sudoku Solver",
-        "tagline": "Complete pipeline: grid detection, OCR via CNN trained from scratch, and automatic solving.",
+        "title": "Digit recognition & Sudoku solver",
+        "tagline": "Grid detection, OCR via a CNN trained from scratch, and automatic solving.",
         "thumbnail": null,
         "stack": [
-          "Image Processing",
+          "Image processing",
           "Neural Networks",
           "CNN"
         ],
@@ -309,13 +265,77 @@
       }
     ]
   },
+  "background": {
+    "index": "02",
+    "label": "Background",
+    "title": "Where I learned, and on what",
+    "experienceTitle": "Experience",
+    "educationTitle": "Education",
+    "extrasTitle": "Languages",
+    "extras": [
+      "English — TOEIC certified"
+    ],
+    "experiences": [
+      {
+        "title": "Full-stack & DevOps developer",
+        "type": "Internship",
+        "company": "Studiocanal",
+        "period": "Sept. 2025 — Jan. 2026",
+        "description": "Development of an internal web platform for managing movie catalog rights, contracts and distribution modules. Built full-stack features and set up CI/CD cloud infrastructure on AWS within an Agile team.",
+        "tags": [
+          "Full-Stack",
+          "DevOps",
+          "CI/CD",
+          "AWS",
+          "Agile"
+        ]
+      },
+      {
+        "title": "IT consultant",
+        "type": "Internship",
+        "company": "Hitachi Solutions France",
+        "period": "June — July 2022",
+        "description": "Design and development of a management application prototype (suppliers, products, contracts) for enterprise client Sonepar, using Django and the Agile SAFe methodology.",
+        "tags": [
+          "Django",
+          "Agile SAFe",
+          "Prototype"
+        ]
+      }
+    ],
+    "education": [
+      {
+        "institution": "EPITA",
+        "location": "Paris, France",
+        "degree": "Master of Engineering — preparatory cycle, engineering cycle and Image specialization",
+        "period": "2022 — 2027",
+        "description": "Image processing and synthesis, artificial intelligence, GPU computing."
+      },
+      {
+        "institution": "Université du Québec à Chicoutimi",
+        "location": "Canada",
+        "degree": "Academic exchange — semester 4",
+        "period": "Jan. — May 2024",
+        "description": null
+      },
+      {
+        "institution": "Lycée Notre Dame La Riche",
+        "location": "Tours, France",
+        "degree": "High school diploma — majors in mathematics & computer science",
+        "period": "2019 — 2022",
+        "description": null
+      }
+    ]
+  },
   "skills": {
-    "title": "Skills",
+    "index": "03",
+    "label": "Skills",
+    "title": "What I can do",
     "groups": [
       {
-        "category": "Computer Vision & AI",
+        "category": "Vision & AI",
         "items": [
-          "Image Processing",
+          "Image processing",
           "Deep Learning",
           "Machine Learning",
           "OpenCV",
@@ -324,7 +344,7 @@
         ]
       },
       {
-        "category": "High Performance Computing",
+        "category": "High-performance computing",
         "items": [
           "CUDA",
           "GPU Computing",
@@ -334,22 +354,42 @@
         ]
       },
       {
-        "category": "Software Development",
+        "category": "Development",
         "items": [
           "C++",
           "Python",
           "Java",
           "React/Next.js",
-          "DevOps (CI/CD, AWS)",
-          "Docker"
+          "Docker",
+          "CI/CD, AWS"
         ]
       }
     ]
   },
   "contact": {
-    "title": "Get in Touch",
-    "text": "I am actively looking for a 6-month final-year internship starting in early February 2027. Feel free to reach out to discuss opportunities.",
+    "index": "04",
+    "label": "Contact",
+    "title": "Let's talk.",
+    "text": "I am looking for a 6-month final-year internship starting February 2027, in computer vision, AI or GPU computing. Write to me — I answer everyone.",
+    "emailLabel": "Email",
+    "phoneLabel": "Phone",
     "linkedinBtn": "LinkedIn",
     "githubBtn": "GitHub"
+  },
+  "project": {
+    "back": "All work",
+    "backShort": "Work",
+    "team": "people",
+    "duration": "Duration",
+    "teamLabel": "Team",
+    "stackLabel": "Stack",
+    "sourceCode": "Source code",
+    "demo": "Demo",
+    "report": "PDF report",
+    "contactCta": "Discuss this project"
+  },
+  "footer": {
+    "built": "Eleventy, plain CSS, no framework",
+    "colophon": "Source code of this site"
   }
 }

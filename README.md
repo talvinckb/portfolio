@@ -31,8 +31,31 @@ compilation et servies en HTML statique.
   sont en Markdown. Les deux locales doivent rester structurellement
   identiques (mêmes clés, mêmes identifiants de projet).
 - **Le balisage n'existe qu'une fois.** Navigation, pied de page, icônes et
-  boutons de contact sont des partials Nunjucks partagés entre la page
+  actions de contact sont des partials Nunjucks partagés entre la page
   d'accueil et les pages projet.
+- **Rien ne bouge sans raison.** Pas de dégradé, pas de flou, pas
+  d'animation d'apparition : la hiérarchie est portée par la typographie,
+  les filets et le blanc.
+
+## Direction artistique
+
+Une mise en page éditoriale : papier chaud, encre chaude, filets d'un
+pixel, un seul accent.
+
+| Rôle | Police | Usage |
+|---|---|---|
+| Display | Instrument Serif | phrase d'accroche, titres de section, titres de projet, chiffres clés |
+| Texte | Inter | paragraphes, boutons, navigation |
+| Mono | JetBrains Mono | **toute** métadonnée : index de section, périodes, stack, libellés |
+
+La règle de lecture du design : ce qui est une donnée (une date, une stack,
+un numéro) est en mono ; ce qui est une affirmation est en serif ; ce qui
+se lit au kilomètre est en Inter.
+
+Les couleurs sont des tokens redéfinis sous `:root[data-theme="dark"]` —
+`--paper`, `--paper-2`, `--ink`, `--ink-2`, `--ink-3`, `--rule`,
+`--rule-strong`, `--accent`, `--on-accent`. **Aucune couleur en dur dans
+une règle**, sinon le thème sombre décroche.
 
 ## Arborescence
 
@@ -40,7 +63,7 @@ compilation et servies en HTML statique.
 .
 ├── _data/
 │   ├── site.json          # Coordonnées, URLs, image OG, couleurs de thème
-│   ├── fr.json            # Contenu FR (méta, a11y, parcours, projets…)
+│   ├── fr.json            # Contenu FR (méta, a11y, hero, projets, parcours…)
 │   ├── en.json            # Contenu EN — mêmes clés que fr.json
 │   ├── buildYear.js       # Année du pied de page, résolue au build
 │   └── buildDate.js       # <lastmod> du sitemap, résolu au build
@@ -50,20 +73,43 @@ compilation et servies en HTML statique.
 │   └── partials/
 │       ├── head.njk       # <head> commun : SEO, Open Graph, JSON-LD
 │       ├── nav.njk        # Navigation + menu mobile
-│       ├── footer.njk     # Pied de page + bouton retour en haut
+│       ├── footer.njk     # Pied de page + retour en haut + toasts
 │       ├── icons.njk      # Macros SVG — source unique des icônes
-│       └── contact-actions.njk
+│       └── contact-actions.njk  # heroActions() et contactBlock()
 ├── projects/
 │   ├── fr/*.md            # Études de cas FR  → /projects/<id>/
 │   └── en/*.md            # Études de cas EN  → /en/projects/<id>/
 ├── css/style.css          # Design system complet
 ├── js/
 │   ├── ui.js              # Comportements partagés (thème, menu, toasts…)
-│   ├── main.js            # Page d'accueil (filtre par compétence)
+│   ├── main.js            # Page d'accueil
 │   └── project.js         # Pages projet (lightbox, tableaux, KaTeX)
 ├── scripts/fetch-cv.js    # Récupère les CV PDF depuis les releases GitHub
 ├── sitemap.njk            # Sitemap généré à partir de la collection projets
 └── .eleventy.js
+```
+
+## Structure de la page d'accueil
+
+| Section | Ancre | Source |
+|---|---|---|
+| Hero — accroche, intro, disponibilité, chiffres clés | — | `hero` |
+| 01 Travaux — projets phares + autres réalisations | `#work` | `projects` |
+| 02 Parcours — expériences, formation, langues | `#background` | `background` |
+| 03 Compétences | `#skills` | `skills` |
+| 04 Contact | `#contact` | `contact` |
+
+Les ancres sont volontairement en anglais des deux côtés : les deux locales
+partagent le même gabarit, donc les mêmes `id`.
+
+### Chiffres clés
+
+`hero.facts` est la première chose qu'un recruteur lit. Quatre entrées
+maximum, chacune adossée à un projet ou une expérience réelle — jamais un
+chiffre qu'une étude de cas ne peut pas justifier.
+
+```jsonc
+{ "value": "×24", "label": "d'accélération CPU → GPU sur un pipeline…" }
 ```
 
 ## Développement
@@ -93,11 +139,14 @@ Ces fichiers sont ignorés par Git et régénérés à chaque build.
      "thumbnailLight": "/assets/projects/mon-projet/thumbnail-16x9-light.webp",
      "stack": ["C++", "CUDA"],
      "period": "4 semaines",
-     "featured": true,        // true = carte avec vignette + page dédiée
+     "featured": true,        // true = vignette + page dédiée
      "kind": "academic",      // "academic" | "personal"
      "github": null           // URL du dépôt, ou null
    }
    ```
+
+   `stack` est rendu en mono, joint par ` · ` — pas de pastilles : garder
+   quatre entrées au plus, sinon la ligne passe à deux lignes.
 
 2. Pour un projet `featured`, créer l'étude de cas dans `projects/fr/` et
    `projects/en/`. Le front-matter pilote l'en-tête et les métadonnées de
@@ -153,6 +202,8 @@ Points à ne pas régresser :
   valide quel que soit le formatage du gabarit autour ;
 - chaque page déclare `og:image`, `canonical` et ses trois `hreflang`
   (`fr`, `en`, `x-default`) ;
+- une carte projet n'a qu'un seul lien étendu (`::after` sur le titre) : le
+  lien GitHub qui le recouvre doit rester en `z-index: 2` ;
 - les animations sont neutralisées sous `prefers-reduced-motion`.
 
 ## Licence
