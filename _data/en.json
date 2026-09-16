@@ -2,6 +2,29 @@
   "lang": "en",
   "locale": "en_US",
   "urlPrefix": "/en/",
+  "altUrl": "/",
+  "altLabel": "FR",
+  "meta": {
+    "title": "Talvin Ackbaraly — Computer Vision, AI & GPU Computing",
+    "description": "EPITA engineering student specialized in computer vision, AI and GPU computing. ×24 CUDA port, real-time SPH fluid simulation, medical and heritage image segmentation. Seeking a final-year internship (February 2027).",
+    "jobTitle": "Computer Vision & GPU Computing Engineer",
+    "ogImage": "/assets/og-image-en.png"
+  },
+  "a11y": {
+    "skipToContent": "Skip to main content",
+    "mainNav": "Main navigation",
+    "home": "Back to home",
+    "switchLang": "Lire cette page en français",
+    "toggleTheme": "Toggle between light and dark theme",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "scrollDown": "Scroll to the About section",
+    "backToTop": "Back to top",
+    "copyEmail": "Copy email address",
+    "copyPhone": "Copy phone number",
+    "projectPreview": "Preview of project",
+    "sourceCode": "Source code for"
+  },
   "nav": {
     "about": "About",
     "experience": "Experience",
@@ -21,7 +44,7 @@
   },
   "about": {
     "title": "About Me",
-    "intro": "As an engineering student at EPITA, I specialize in computer vision, artificial intelligence, and GPU computing. Following a first internship in full-stack & DevOps development completed during my core curriculum, I am now looking to apply my specialized skills during a 6-month final-year internship starting in early February 2027.",
+    "intro": "As an engineering student at EPITA, I specialize in image-related fields: computer vision, artificial intelligence and GPU computing. My projects range from CUDA ports of real-time algorithms to medical and heritage image segmentation, always with the same discipline: measure, profile, validate. In parallel, five months at Studiocanal gave me hands-on production experience — CI/CD on AWS, Agile teamwork, code shipped and maintained. I am now looking for a 6-month final-year internship starting in early February 2027.",
     "education": [
       {
         "institution": "EPITA",
@@ -45,7 +68,13 @@
         "description": null
       }
     ],
-    "certifications": ["English: TOEIC Certified"]
+    "certifications": [
+      {
+        "label": "English",
+        "value": "TOEIC"
+      }
+    ],
+    "certSeparator": ": "
   },
   "experiences": {
     "title": "Work Experience",
@@ -56,7 +85,13 @@
         "company": "Studiocanal",
         "period": "Sept. 2025 - Jan. 2026",
         "description": "Development of an internal web platform for managing movie catalog rights, contracts, and distribution modules. Built full-stack features and set up CI/CD cloud infrastructure on AWS within an Agile team.",
-        "tags": ["Full-Stack", "DevOps", "CI/CD", "AWS", "Agile"]
+        "tags": [
+          "Full-Stack",
+          "DevOps",
+          "CI/CD",
+          "AWS",
+          "Agile"
+        ]
       },
       {
         "title": "IT Consultant",
@@ -64,14 +99,23 @@
         "company": "Hitachi Solutions France",
         "period": "June - July 2022",
         "description": "Design and development of a management application prototype (suppliers, products, contracts) for enterprise client Sonepar using the Django framework and applying the Agile SAFe methodology.",
-        "tags": ["Django", "Agile SAFe", "Prototype"]
+        "tags": [
+          "Django",
+          "Agile SAFe",
+          "Prototype"
+        ]
       }
     ]
   },
   "projects": {
     "title": "Featured Projects",
-    "academicTitle": "Other Academic Projects",
+    "secondaryTitle": "Other Work",
     "viewProject": "View project",
+    "codeLabel": "Code",
+    "labels": {
+      "academic": "Academic",
+      "personal": "Side project"
+    },
     "items": [
       {
         "id": "pfee-bnf",
@@ -79,10 +123,17 @@
         "title": "Segmentation & Classification of Heritage Illustrations",
         "tagline": "Automatic detection of illustrations in digitized heritage documents, in partnership with the BNF.",
         "thumbnail": "/assets/projects/pfee-bnf/thumbnail-16x9.webp",
-        "stack": ["Deep Learning", "Computer Vision", "Python", "YOLO"],
+        "thumbnailLight": "/assets/projects/pfee-bnf/thumbnail-16x9-light.webp",
+        "stack": [
+          "Deep Learning",
+          "Computer Vision",
+          "Python",
+          "YOLO"
+        ],
         "period": "8 months (ongoing)",
         "featured": true,
-        "thumbnailLight": "/assets/projects/pfee-bnf/thumbnail-16x9-light.webp"
+        "kind": "academic",
+        "github": null
       },
       {
         "id": "alpr",
@@ -90,10 +141,17 @@
         "title": "Automatic License Plate Recognition",
         "tagline": "Complete ALPR system without Deep Learning (Classical Vision + Machine Learning), with rigorous Python vs C++ benchmarks.",
         "thumbnail": "/assets/projects/alpr/thumbnail-16x9.webp",
-        "stack": ["Python", "C++", "OpenCV", "Machine Learning"],
+        "thumbnailLight": "/assets/projects/alpr/thumbnail-16x9-light.webp",
+        "stack": [
+          "Python",
+          "C++",
+          "OpenCV",
+          "Machine Learning"
+        ],
         "period": "5 weeks",
         "featured": true,
-        "thumbnailLight": "/assets/projects/alpr/thumbnail-16x9-light.webp"
+        "kind": "academic",
+        "github": null
       },
       {
         "id": "irgpu",
@@ -101,10 +159,17 @@
         "title": "Real-Time Video Motion Detection — GPU Port",
         "tagline": "CPU → GPU port of a real-time algorithm achieving a ×24 performance gain via CUDA.",
         "thumbnail": "/assets/projects/irgpu/thumbnail-16x9.webp",
-        "stack": ["C++", "CUDA", "Nsight", "GPU Computing"],
+        "thumbnailLight": "/assets/projects/irgpu/thumbnail-16x9-light.webp",
+        "stack": [
+          "C++",
+          "CUDA",
+          "Nsight",
+          "GPU Computing"
+        ],
         "period": "4 weeks",
         "featured": true,
-        "thumbnailLight": "/assets/projects/irgpu/thumbnail-16x9-light.webp"
+        "kind": "academic",
+        "github": null
       },
       {
         "id": "medviz",
@@ -112,10 +177,17 @@
         "title": "Medical Prediction & 3D Visualization",
         "tagline": "Full FVC prediction pipeline from pulmonary CT scans, with 3D web visualization.",
         "thumbnail": "/assets/projects/medviz/thumbnail-16x9.webp",
-        "stack": ["Computer Vision", "XGBoost", "React/Next.js", "Docker"],
+        "thumbnailLight": "/assets/projects/medviz/thumbnail-16x9-light.webp",
+        "stack": [
+          "Computer Vision",
+          "XGBoost",
+          "React/Next.js",
+          "Docker"
+        ],
         "period": "1 month",
         "featured": true,
-        "thumbnailLight": "/assets/projects/medviz/thumbnail-16x9-light.webp"
+        "kind": "academic",
+        "github": "https://github.com/talvinckb/Medviz"
       },
       {
         "id": "pogl",
@@ -123,10 +195,17 @@
         "title": "Real-Time Fluid Simulation",
         "tagline": "Real-time 3D SPH fluid simulation engine with 75,000+ particles at 60 FPS — full GPU physics via Compute Shaders and SSFR surface rendering.",
         "thumbnail": "/assets/projects/pogl/thumbnail-16x9.webp",
-        "stack": ["C++", "OpenGL", "Compute Shaders", "GLSL"],
+        "thumbnailLight": "/assets/projects/pogl/thumbnail-16x9-light.webp",
+        "stack": [
+          "C++",
+          "OpenGL",
+          "Compute Shaders",
+          "GLSL"
+        ],
         "period": "1 month",
         "featured": true,
-        "thumbnailLight": "/assets/projects/pogl/thumbnail-16x9-light.webp"
+        "kind": "academic",
+        "github": "https://github.com/talvinckb/OpenGL-Water-Simulation"
       },
       {
         "id": "vtk-itk",
@@ -134,10 +213,51 @@
         "title": "Brain Tumor Registration & Longitudinal Tracking",
         "tagline": "Complete 3D MRI alignment pipeline (ITK) with tumor segmentation and interactive multi-view visualization (VTK + PyQt6) — volumetric evolution quantification of a glioma.",
         "thumbnail": "/assets/projects/vtk-itk/thumbnail-16x9.webp",
-        "stack": ["Python", "ITK", "VTK", "PyQt6", "Matplotlib"],
+        "thumbnailLight": "/assets/projects/vtk-itk/thumbnail-16x9-light.webp",
+        "stack": [
+          "Python",
+          "ITK",
+          "VTK",
+          "PyQt6",
+          "Matplotlib"
+        ],
         "period": "3 weeks",
         "featured": true,
-        "thumbnailLight": "/assets/projects/vtk-itk/thumbnail-16x9-light.webp"
+        "kind": "academic",
+        "github": "https://github.com/Axthauvin/vtk-itk-project"
+      },
+      {
+        "id": "gitlab-to-github",
+        "name": "gitlab-to-github",
+        "title": "Repository Migration CLI",
+        "tagline": "Command-line tool to migrate GitLab repositories to GitHub — including code, wikis, issues and merge requests.",
+        "thumbnail": null,
+        "stack": [
+          "Python",
+          "CLI",
+          "REST API"
+        ],
+        "period": "Side project",
+        "featured": false,
+        "kind": "personal",
+        "github": "https://github.com/talvinckb/gitlab-to-github"
+      },
+      {
+        "id": "l-system",
+        "name": "3D L-System",
+        "title": "Procedural 3D Plant Generator",
+        "tagline": "Interactive L-system plant generator with real-time editing of rewriting rules through Dear ImGui.",
+        "thumbnail": null,
+        "stack": [
+          "C++",
+          "OpenGL",
+          "Dear ImGui",
+          "Image Synthesis"
+        ],
+        "period": "Image synthesis",
+        "featured": false,
+        "kind": "academic",
+        "github": "https://github.com/talvinckb/3D-L-System"
       },
       {
         "id": "tinyx",
@@ -145,9 +265,15 @@
         "title": "Social Network Clone",
         "tagline": "Twitter-like social platform built by a team of 14 with microservices architecture and rigorous DevOps.",
         "thumbnail": null,
-        "stack": ["Java/Quarkus", "React/Next.js", "MongoDB"],
+        "stack": [
+          "Java/Quarkus",
+          "React/Next.js",
+          "MongoDB"
+        ],
         "period": "2 months",
-        "featured": false
+        "featured": false,
+        "kind": "academic",
+        "github": "https://github.com/talvinckb/mytinyx-frontend"
       },
       {
         "id": "tiger",
@@ -155,9 +281,15 @@
         "title": "Full Compiler Construction",
         "tagline": "Implementation of a compiler for the Tiger language, from lexical analysis to type checking.",
         "thumbnail": null,
-        "stack": ["C++", "Bison", "Flex"],
+        "stack": [
+          "C++",
+          "Bison",
+          "Flex"
+        ],
         "period": "2 months",
-        "featured": false
+        "featured": false,
+        "kind": "academic",
+        "github": null
       },
       {
         "id": "ocr-sudoku",
@@ -165,9 +297,15 @@
         "title": "Digit Recognition & Sudoku Solver",
         "tagline": "Complete pipeline: grid detection, OCR via CNN trained from scratch, and automatic solving.",
         "thumbnail": null,
-        "stack": ["Image Processing", "Neural Networks", "CNN"],
+        "stack": [
+          "Image Processing",
+          "Neural Networks",
+          "CNN"
+        ],
         "period": "3 months",
-        "featured": false
+        "featured": false,
+        "kind": "academic",
+        "github": null
       }
     ]
   },
@@ -181,12 +319,19 @@
           "Deep Learning",
           "Machine Learning",
           "OpenCV",
-          "PyTorch"
+          "PyTorch",
+          "XGBoost"
         ]
       },
       {
         "category": "High Performance Computing",
-        "items": ["CUDA", "GPU Computing", "OpenGL", "GLSL", "Nsight"]
+        "items": [
+          "CUDA",
+          "GPU Computing",
+          "OpenGL",
+          "GLSL",
+          "Nsight"
+        ]
       },
       {
         "category": "Software Development",

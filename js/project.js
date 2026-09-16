@@ -1,359 +1,151 @@
 /**
- * Portfolio — Project Page Script
- * ─────────────────────────────────
- * Handles theme toggle, mobile menu, interactive lightbox,
- * and exact scroll position restoration on refresh for project detail pages.
+ * Portfolio — Project case-study pages
+ * ────────────────────────────────────
+ * FR and EN are separate static documents, so the language switch is a
+ * plain link. This file only adds page-local behaviour: image lightbox,
+ * scrollable tables and math rendering.
  */
 
-/* ═══════════════════════════════════════════════════════════════
-   Theme Toggle
-   ═══════════════════════════════════════════════════════════════ */
+import { initChrome, initNavScrollSpy } from "./ui.js";
 
-function updateThemeThumbnails(theme) {
-  document.querySelectorAll("img[data-src-light]").forEach((img) => {
-    const darkSrc = img.getAttribute("data-src-dark");
-    const lightSrc = img.getAttribute("data-src-light");
-    if (theme === "light" && lightSrc) {
-      img.src = lightSrc;
-    } else if (darkSrc) {
-      img.src = darkSrc;
-    }
-  });
-}
+const LANG = document.documentElement.lang === "en" ? "en" : "fr";
 
-function initTheme() {
-  const toggle = document.getElementById("theme-toggle");
-  const stored = localStorage.getItem("theme");
-  const theme = stored || "dark";
-  document.documentElement.setAttribute("data-theme", theme);
-  updateThemeThumbnails(theme);
+const STRINGS = {
+  fr: { close: "Fermer (Échap)", enlarged: "Vue agrandie" },
+  en: { close: "Close (Esc)", enlarged: "Enlarged view" },
+}[LANG];
 
-  if (!toggle) return;
-
-  toggle.addEventListener("click", () => {
-    const current = document.documentElement.getAttribute("data-theme");
-    const next = current === "dark" ? "light" : "dark";
-    document.documentElement.setAttribute("data-theme", next);
-    localStorage.setItem("theme", next);
-    updateThemeThumbnails(next);
-  });
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   Mobile Menu
-   ═══════════════════════════════════════════════════════════════ */
-
-function initMobileMenu() {
-  const burger = document.getElementById("nav-burger");
-  const menu = document.getElementById("mobile-menu");
-  if (!burger || !menu) return;
-
-  function closeMenu() {
-    burger.setAttribute("aria-expanded", "false");
-    menu.setAttribute("aria-hidden", "true");
-    document.body.style.overflow = "";
-  }
-
-  burger.addEventListener("click", () => {
-    const isOpen = burger.getAttribute("aria-expanded") === "true";
-    if (isOpen) {
-      closeMenu();
-    } else {
-      burger.setAttribute("aria-expanded", "true");
-      menu.setAttribute("aria-hidden", "false");
-      document.body.style.overflow = "hidden";
-    }
-  });
-
-  menu.addEventListener("click", (e) => {
-    if (e.target.tagName === "A") closeMenu();
-  });
-
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") closeMenu();
-  });
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   Lightbox (Image & Workflow Zoom)
-   ═══════════════════════════════════════════════════════════════ */
+/* ─────────────────────────────────────────────────────────────
+   Lightbox — native <dialog> for focus trapping and Escape
+   ───────────────────────────────────────────────────────────── */
 
 function initLightbox() {
-  // Create modal container if not present
-  let modal = document.getElementById("lightbox-modal");
-  if (!modal) {
-    modal = document.createElement("div");
-    modal.id = "lightbox-modal";
-    modal.className = "lightbox-modal";
-    modal.setAttribute("aria-hidden", "true");
-    modal.innerHTML = `
-      <button class="lightbox-modal__close" id="lightbox-close" aria-label="Fermer (Échap)">&times;</button>
-      <div class="lightbox-modal__content" id="lightbox-content"></div>
-    `;
-    document.body.appendChild(modal);
-  }
-
-  const contentContainer = document.getElementById("lightbox-content");
-  const closeBtn = document.getElementById("lightbox-close");
-
-  function openLightbox(element) {
-    contentContainer.innerHTML = "";
-    if (element.tagName === "IMG") {
-      const figure = document.createElement("figure");
-      figure.className = "lightbox-figure";
-
-      const img = document.createElement("img");
-      img.src = element.src;
-      img.alt = element.alt || "Aperçu agrandi";
-      figure.appendChild(img);
-
-      // Retrieve caption from figcaption sibling/parent or alt text
-      const figcaptionText =
-        element.closest("figure")?.querySelector("figcaption")?.textContent ||
-        element.alt;
-
-      if (figcaptionText && figcaptionText.trim().length > 0) {
-        const caption = document.createElement("figcaption");
-        caption.className = "lightbox-caption";
-        caption.textContent = figcaptionText.trim();
-        figure.appendChild(caption);
-      }
-
-      contentContainer.appendChild(figure);
-    } else if (element.classList.contains("pipeline-workflow")) {
-      const clone = element.cloneNode(true);
-      clone.classList.add("pipeline-workflow--enlarged");
-      contentContainer.appendChild(clone);
-    }
-    modal.setAttribute("aria-hidden", "false");
-    document.body.style.overflow = "hidden";
-  }
-
-  function closeLightbox() {
-    modal.setAttribute("aria-hidden", "true");
-    document.body.style.overflow = "";
-  }
-
-  // Attach click to images & pipeline workflows
-  const clickableItems = document.querySelectorAll(
+  const zoomables = document.querySelectorAll(
     ".project-content img, .project-thumbnail__img, .pipeline-workflow",
   );
+  if (!zoomables.length) return;
 
-  clickableItems.forEach((item) => {
-    item.addEventListener("click", (e) => {
-      e.preventDefault();
-      openLightbox(item);
+  const dialog = document.createElement("dialog");
+  dialog.className = "lightbox";
+  dialog.innerHTML = `
+    <button class="lightbox__close" type="button" aria-label="${STRINGS.close}" title="${STRINGS.close}">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <div class="lightbox__content"></div>
+  `;
+  document.body.appendChild(dialog);
+
+  const content = dialog.querySelector(".lightbox__content");
+  const closeBtn = dialog.querySelector(".lightbox__close");
+
+  function open(source) {
+    content.replaceChildren();
+
+    if (source.tagName === "IMG") {
+      const figure = document.createElement("figure");
+      figure.className = "lightbox__figure";
+
+      const img = document.createElement("img");
+      img.src = source.currentSrc || source.src;
+      img.alt = source.alt || STRINGS.enlarged;
+      figure.appendChild(img);
+
+      const captionText = (
+        source.closest("figure")?.querySelector("figcaption")?.textContent ||
+        source.alt ||
+        ""
+      ).trim();
+
+      if (captionText) {
+        const caption = document.createElement("figcaption");
+        caption.className = "lightbox__caption";
+        caption.textContent = captionText;
+        figure.appendChild(caption);
+      }
+      content.appendChild(figure);
+    } else {
+      const clone = source.cloneNode(true);
+      clone.classList.add("pipeline-workflow--enlarged");
+      clone.removeAttribute("title");
+      content.appendChild(clone);
+    }
+
+    dialog.showModal();
+    document.body.classList.add("has-menu-open");
+    closeBtn.focus();
+  }
+
+  zoomables.forEach((el) => {
+    el.classList.add("is-zoomable");
+    el.addEventListener("click", () => open(el));
+    // Keyboard parity: zoomable images are reachable and activatable.
+    el.tabIndex = 0;
+    el.setAttribute("role", "button");
+    el.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        open(el);
+      }
     });
   });
 
-  closeBtn.addEventListener("click", closeLightbox);
-  modal.addEventListener("click", (e) => {
-    if (e.target === modal || e.target === contentContainer) closeLightbox();
+  closeBtn.addEventListener("click", () => dialog.close());
+
+  // Backdrop click: the dialog element itself is the only hit area outside content.
+  dialog.addEventListener("click", (e) => {
+    if (e.target === dialog) dialog.close();
   });
 
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && modal.getAttribute("aria-hidden") === "false") {
-      closeLightbox();
-    }
+  dialog.addEventListener("close", () => {
+    document.body.classList.remove("has-menu-open");
+    content.replaceChildren();
   });
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   Responsive Table Wrapper
-   ═══════════════════════════════════════════════════════════════ */
+/* ─────────────────────────────────────────────────────────────
+   Wide tables get their own scroll container
+   ───────────────────────────────────────────────────────────── */
 
 function initTableWrappers() {
   document.querySelectorAll(".project-content table").forEach((table) => {
-    if (!table.parentElement.classList.contains("table-wrapper")) {
-      const wrapper = document.createElement("div");
-      wrapper.className = "table-wrapper";
-      table.parentNode.insertBefore(wrapper, table);
-      wrapper.appendChild(table);
-    }
+    if (table.parentElement.classList.contains("table-wrapper")) return;
+    const wrapper = document.createElement("div");
+    wrapper.className = "table-wrapper";
+    wrapper.tabIndex = 0;
+    wrapper.setAttribute("role", "region");
+    wrapper.setAttribute(
+      "aria-label",
+      LANG === "en" ? "Scrollable table" : "Tableau défilable",
+    );
+    table.parentNode.insertBefore(wrapper, table);
+    wrapper.appendChild(table);
   });
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   Language Switcher (Project pages - In-Place SPA Swap)
-   ═══════════════════════════════════════════════════════════════ */
+/* ─────────────────────────────────────────────────────────────
+   KaTeX
+   ───────────────────────────────────────────────────────────── */
 
-async function switchProjectLanguage(targetUrl) {
-  if (!targetUrl) return;
-  try {
-    const res = await fetch(targetUrl);
-    if (!res.ok) {
-      window.location.href = targetUrl;
-      return;
-    }
-    const htmlText = await res.text();
-    const doc = new DOMParser().parseFromString(htmlText, "text/html");
-
-    // 1. Swap main project content
-    const newMain = doc.querySelector("main.project-page");
-    const currentMain = document.querySelector("main.project-page");
-    if (newMain && currentMain) {
-      currentMain.innerHTML = newMain.innerHTML;
-    }
-
-    // 2. Swap nav links
-    const newNavLinks = doc.querySelector(".nav__links");
-    const currentNavLinks = document.querySelector(".nav__links");
-    if (newNavLinks && currentNavLinks) {
-      currentNavLinks.innerHTML = newNavLinks.innerHTML;
-    }
-
-    // 3. Swap mobile menu links
-    const newMobileLinks = doc.querySelector(".mobile-menu__links");
-    const currentMobileLinks = document.querySelector(".mobile-menu__links");
-    if (newMobileLinks && currentMobileLinks) {
-      currentMobileLinks.innerHTML = newMobileLinks.innerHTML;
-    }
-
-    // 4. Update nav logo link
-    const newLogo = doc.querySelector(".nav__logo");
-    const currentLogo = document.querySelector(".nav__logo");
-    if (newLogo && currentLogo) {
-      currentLogo.href = newLogo.getAttribute("href");
-    }
-
-    // 5. Update language toggle button
-    const btn = document.getElementById("lang-toggle");
-    const newBtn = doc.querySelector("#lang-toggle");
-    if (btn && newBtn) {
-      btn.setAttribute("data-lang-url", newBtn.getAttribute("data-lang-url"));
-      btn.setAttribute("aria-label", newBtn.getAttribute("aria-label"));
-      btn.textContent = newBtn.textContent;
-    }
-
-    // 6. Update html lang & title
-    document.documentElement.lang = doc.documentElement.lang || "fr";
-    document.title = doc.title;
-
-    // 7. Sync current theme thumbnails on new images
-    const currentTheme =
-      document.documentElement.getAttribute("data-theme") || "dark";
-    updateThemeThumbnails(currentTheme);
-
-    // 8. Re-initialize interactive components
-    initLightbox();
-    initTableWrappers();
-
-    // 9. Re-render KaTeX math
-    if (window.renderMathInElement) {
-      window.renderMathInElement(document.body, {
-        delimiters: [
-          { left: "$$", right: "$$", display: true },
-          { left: "$", right: "$", display: false },
-        ],
-      });
-    }
-
-    // 10. Update browser URL without page reload
-    history.pushState({ url: targetUrl }, "", targetUrl);
-  } catch (err) {
-    console.error("Language switch error:", err);
-    window.location.href = targetUrl;
-  }
-}
-
-function initLangSwitcher() {
-  const btn = document.getElementById("lang-toggle");
-  if (!btn) return;
-
-  btn.addEventListener("click", (e) => {
-    e.preventDefault();
-    const altLangUrl =
-      btn.getAttribute("data-lang-url") || btn.getAttribute("href");
-    if (altLangUrl) {
-      switchProjectLanguage(altLangUrl);
-    }
-  });
-
-  window.addEventListener("popstate", () => {
-    switchProjectLanguage(location.pathname);
+function renderMath() {
+  if (!window.renderMathInElement) return;
+  window.renderMathInElement(document.querySelector(".project-content"), {
+    delimiters: [
+      { left: "$$", right: "$$", display: true },
+      { left: "$", right: "$", display: false },
+    ],
+    throwOnError: false,
   });
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   Back to Top Button
-   ═══════════════════════════════════════════════════════════════ */
-
-function initBackToTop() {
-  const btn = document.getElementById("back-to-top");
-  if (!btn) return;
-
-  function onScroll() {
-    if (window.scrollY > 300) {
-      btn.classList.add("is-visible");
-    } else {
-      btn.classList.remove("is-visible");
-    }
-  }
-
-  window.addEventListener("scroll", onScroll, { passive: true });
-  onScroll();
-
-  btn.addEventListener("click", () => {
-    window.scrollTo({
-      top: 0,
-      behavior: "smooth",
-    });
-  });
-}
-
-/* ═══════════════════════════════════════════════════════════════
-   Scroll Reading Progress Bar
-   ═══════════════════════════════════════════════════════════════ */
-
-function initScrollProgress() {
-  const progressEl = document.getElementById("scroll-progress");
-  if (!progressEl) return;
-
-  let ticking = false;
-
-  function updateProgress() {
-    const el = document.scrollingElement || document.documentElement;
-    const scrollTop = el.scrollTop || window.pageYOffset || 0;
-    const scrollHeight = el.scrollHeight || 0;
-    const clientHeight = el.clientHeight || window.innerHeight || 0;
-
-    const totalHeight = scrollHeight - clientHeight;
-    const progress =
-      totalHeight > 0
-        ? Math.min(1, Math.max(0, scrollTop / totalHeight))
-        : 0;
-
-    progressEl.style.transform = `scaleX(${progress})`;
-    progressEl.style.webkitTransform = `scaleX(${progress})`;
-    ticking = false;
-  }
-
-  function onScroll() {
-    if (!ticking) {
-      requestAnimationFrame(updateProgress);
-      ticking = true;
-    }
-  }
-
-  window.addEventListener("scroll", onScroll, { passive: true });
-  document.addEventListener("scroll", onScroll, { passive: true });
-  window.addEventListener("resize", onScroll, { passive: true });
-  updateProgress();
-}
-
-
-
-/* ═══════════════════════════════════════════════════════════════
+/* ─────────────────────────────────────────────────────────────
    Init
-   ═══════════════════════════════════════════════════════════════ */
+   ───────────────────────────────────────────────────────────── */
 
-document.addEventListener("DOMContentLoaded", () => {
-  initTheme();
-  initMobileMenu();
-  initLightbox();
-  initTableWrappers();
-  initLangSwitcher();
-  initBackToTop();
-  initScrollProgress();
-});
+initChrome();
+initNavScrollSpy();
+initTableWrappers();
+initLightbox();
 
+// KaTeX ships as a deferred classic script, so it may land after this module.
+if (window.renderMathInElement) renderMath();
+else window.addEventListener("load", renderMath, { once: true });

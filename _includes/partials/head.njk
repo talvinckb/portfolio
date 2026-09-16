@@ -1,0 +1,87 @@
+{#
+  Shared <head>. The caller sets, before including:
+    pageTitle, pageDescription, pageUrl, pageType ("website" | "article"),
+    pageImage (absolute URL), t (locale bundle), lang, altUrl
+  Every structured-data block is serialised with `| dump` so it is always
+  valid JSON, whatever a code formatter does to the surrounding markup.
+#}
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<title>{{ pageTitle }}</title>
+<meta name="description" content="{{ pageDescription }}"/>
+<meta name="author" content="{{ site.name }}"/>
+<meta name="color-scheme" content="dark light"/>
+<meta name="theme-color" content="{{ site.themeColor.dark }}" media="(prefers-color-scheme: dark)"/>
+<meta name="theme-color" content="{{ site.themeColor.light }}" media="(prefers-color-scheme: light)"/>
+
+<link rel="canonical" href="{{ pageUrl }}"/>
+<link rel="alternate" hreflang="fr" href="{{ site.baseUrl }}{{ frUrl }}"/>
+<link rel="alternate" hreflang="en" href="{{ site.baseUrl }}{{ enUrl }}"/>
+<link rel="alternate" hreflang="x-default" href="{{ site.baseUrl }}{{ frUrl }}"/>
+
+{# ─── Open Graph ─── #}
+<meta property="og:type" content="{{ pageType | default('website') }}"/>
+<meta property="og:url" content="{{ pageUrl }}"/>
+<meta property="og:title" content="{{ pageTitle }}"/>
+<meta property="og:description" content="{{ pageDescription }}"/>
+<meta property="og:site_name" content="{{ site.name }}"/>
+<meta property="og:locale" content="{{ t.locale }}"/>
+<meta property="og:image" content="{{ pageImage }}"/>
+<meta property="og:image:width" content="{{ pageImageWidth | default(site.ogImageWidth) }}"/>
+<meta property="og:image:height" content="{{ pageImageHeight | default(site.ogImageHeight) }}"/>
+<meta property="og:image:alt" content="{{ pageImageAlt | default(pageTitle) }}"/>
+
+{# ─── Twitter / X ─── #}
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:title" content="{{ pageTitle }}"/>
+<meta name="twitter:description" content="{{ pageDescription }}"/>
+<meta name="twitter:image" content="{{ pageImage }}"/>
+<meta name="twitter:image:alt" content="{{ pageImageAlt | default(pageTitle) }}"/>
+
+{# ─── Favicons ─── #}
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml"/>
+<link rel="icon" href="/assets/favicon.png" type="image/png" sizes="32x32"/>
+<link rel="shortcut icon" href="/favicon.ico"/>
+
+{# ─── Fonts ─── #}
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&display=swap"/>
+
+{# ─── Styles ─── #}
+<link rel="stylesheet" href="/css/style.css"/>
+
+{# ─── Structured data ─── #}
+{% set personLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": site.name,
+  "url": site.baseUrl + t.urlPrefix,
+  "image": site.baseUrl + (t.meta.ogImage | default(site.ogImage)),
+  "jobTitle": t.meta.jobTitle,
+  "description": t.meta.description,
+  "email": "mailto:" + site.email,
+  "telephone": site.phone,
+  "alumniOf": [
+    { "@type": "CollegeOrUniversity", "name": "EPITA", "sameAs": "https://www.epita.fr" },
+    { "@type": "CollegeOrUniversity", "name": "Université du Québec à Chicoutimi", "sameAs": "https://www.uqac.ca" }
+  ],
+  "sameAs": [site.linkedin, site.github],
+  "knowsAbout": [
+    "Computer Vision", "Artificial Intelligence", "Deep Learning",
+    "GPU Computing", "CUDA", "OpenGL", "C++", "Python", "OpenCV", "PyTorch"
+  ],
+  "knowsLanguage": [
+    { "@type": "Language", "name": "French" },
+    { "@type": "Language", "name": "English" }
+  ]
+} %}
+<script type="application/ld+json">{{ personLd | dump | safe }}</script>
+{% if projectLd %}
+  <script type="application/ld+json">{{ projectLd | dump | safe }}</script>
+{% endif %}
+
+{# ─── Analytics ─── #}
+<script defer src="/_vercel/insights/script.js"></script>
+<script defer src="/_vercel/speed-insights/script.js"></script>

@@ -1,0 +1,36 @@
+{# Contact button row — used by both the hero and the contact section. #}
+{% import "partials/icons.njk" as icon %}
+
+{% macro actions(t, site, withCv=false) %}
+  <div class="btn-group">
+    <a href="mailto:{{ site.email }}" class="btn btn--primary">
+      {{ icon.mail() }}<span>{{ site.email }}</span>
+    </a>
+    <button class="btn btn--primary btn--copy" type="button" data-copy="{{ site.email }}" data-copy-kind="email" aria-label="{{ t.a11y.copyEmail }}" title="{{ t.a11y.copyEmail }}">
+      {{ icon.copy() }}
+    </button>
+  </div>
+
+  <div class="btn-group">
+    <a href="tel:{{ site.phone }}" class="btn btn--outline">
+      {{ icon.phone() }}<span>{{ site.phoneDisplay }}</span>
+    </a>
+    <button class="btn btn--outline btn--copy" type="button" data-copy="{{ site.phone }}" data-copy-kind="phone" aria-label="{{ t.a11y.copyPhone }}" title="{{ t.a11y.copyPhone }}">
+      {{ icon.copy() }}
+    </button>
+  </div>
+
+  <a href="{{ site.linkedin }}" target="_blank" rel="noopener noreferrer" class="btn btn--outline">
+    {{ icon.linkedin() }}<span>{{ t.hero.linkedinBtn }}</span>
+  </a>
+
+  <a href="{{ site.github }}" target="_blank" rel="noopener noreferrer" class="btn btn--outline">
+    {{ icon.github() }}<span>{{ t.hero.githubBtn }}</span>
+  </a>
+
+  {% if withCv and t.hero.cvUrl %}
+    <a href="{{ t.hero.cvUrl }}" target="_blank" rel="noopener noreferrer" class="btn btn--outline">
+      {{ icon.download() }}<span>{{ t.hero.cvBtn }}</span>
+    </a>
+  {% endif %}
+{% endmacro %}

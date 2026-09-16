@@ -1,0 +1,53 @@
+{#
+  Shared navigation. The caller sets, before including:
+    t          locale bundle
+    anchorBase "" on the home page, "/" or "/en/" on sub-pages
+    altUrl     same page in the other language
+    homeUrl    home page in the current language
+#}
+{% import "partials/icons.njk" as icon %}
+
+<a class="skip-link" href="#main">{{ t.a11y.skipToContent }}</a>
+
+<div id="scroll-progress" class="scroll-progress" aria-hidden="true"></div>
+
+<header class="nav" id="nav">
+  <nav class="nav__inner container" aria-label="{{ t.a11y.mainNav }}">
+    <a href="{{ homeUrl }}" class="nav__logo" aria-label="{{ t.a11y.home }}">
+      <span aria-hidden="true">{{ site.initials }}</span>
+    </a>
+
+    <ul class="nav__links" role="list">
+      <li><a href="{{ anchorBase }}#about">{{ t.nav.about }}</a></li>
+      <li><a href="{{ anchorBase }}#experience">{{ t.nav.experience }}</a></li>
+      <li><a href="{{ anchorBase }}#projects">{{ t.nav.projects }}</a></li>
+      <li><a href="{{ anchorBase }}#skills">{{ t.nav.skills }}</a></li>
+      <li><a href="{{ anchorBase }}#contact">{{ t.nav.contact }}</a></li>
+    </ul>
+
+    <div class="nav__controls">
+      <a href="{{ altUrl }}" class="nav__lang-toggle" hreflang="{{ t.altLabel | lower }}" lang="{{ t.altLabel | lower }}" aria-label="{{ t.a11y.switchLang }}">{{ t.altLabel }}</a>
+
+      <button class="nav__theme-toggle" id="theme-toggle" type="button" aria-label="{{ t.a11y.toggleTheme }}" aria-pressed="false">
+        {{ icon.sun() }}
+        {{ icon.moon() }}
+      </button>
+
+      <button class="nav__burger" id="nav-burger" type="button" aria-label="{{ t.a11y.openMenu }}" data-label-close="{{ t.a11y.closeMenu }}" aria-expanded="false" aria-controls="mobile-menu">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </button>
+    </div>
+  </nav>
+</header>
+
+<div class="mobile-menu" id="mobile-menu" hidden>
+  <ul class="mobile-menu__links" role="list">
+    <li><a href="{{ anchorBase }}#about">{{ t.nav.about }}</a></li>
+    <li><a href="{{ anchorBase }}#experience">{{ t.nav.experience }}</a></li>
+    <li><a href="{{ anchorBase }}#projects">{{ t.nav.projects }}</a></li>
+    <li><a href="{{ anchorBase }}#skills">{{ t.nav.skills }}</a></li>
+    <li><a href="{{ anchorBase }}#contact">{{ t.nav.contact }}</a></li>
+  </ul>
+</div>

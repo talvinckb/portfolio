@@ -12,7 +12,6 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy("css");
   eleventyConfig.addPassthroughCopy("js");
   eleventyConfig.addPassthroughCopy("robots.txt");
-  eleventyConfig.addPassthroughCopy("sitemap.xml");
   eleventyConfig.addPassthroughCopy({ "assets/favicon.ico": "favicon.ico" });
 
   eleventyConfig.ignores.add("README.md");
@@ -105,6 +104,20 @@ module.exports = function (eleventyConfig) {
   // ─── Projects collection ───
   eleventyConfig.addCollection("projects", function (collectionApi) {
     return collectionApi.getFilteredByTag("project");
+  });
+
+  // ─── Skill filtering ───
+  // A skill is only offered as a filter when something on the page actually
+  // carries that exact tag; otherwise clicking it would dim every card.
+  eleventyConfig.addFilter("isFilterable", function (skill, locale) {
+    const needle = String(skill).toLowerCase();
+    const matches = (tags) =>
+      (tags || []).some((tag) => String(tag).toLowerCase() === needle);
+
+    return (
+      locale.projects.items.some((p) => matches(p.stack)) ||
+      locale.experiences.items.some((e) => matches(e.tags))
+    );
   });
 
   return {
