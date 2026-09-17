@@ -66,6 +66,11 @@ Règles non négociables :
   en `--ink`.
 - **L'espacement des capitales reste serré** (`0.045em`). Des capitales
   très espacées datent une mise en page instantanément.
+- **Jamais `--ink` en fond d'un élément permanent.** `--ink` s'inverse
+  entre les thèmes : un fond encre devient une barre blanche en thème
+  sombre. Réservé aux états de survol, où l'inversion est justement l'effet
+  recherché. Les bandeaux durables (en-têtes de tableau, en-têtes de la
+  matrice de compétences) sont en `--blue`.
 
 Les couleurs sont des tokens redéfinis sous `:root[data-theme="dark"]` —
 `--bg`, `--bg-2`, `--surface`, `--ink`, `--ink-2`, `--ink-3`, `--rule`,
@@ -160,12 +165,19 @@ Ces fichiers sont ignorés par Git et régénérés à chaque build.
      "period": "4 semaines",
      "featured": true,        // true = vignette + page dédiée
      "kind": "academic",      // "academic" | "personal"
-     "github": null           // URL du dépôt, ou null
+     "github": null,          // URL du dépôt, ou null
+     "repoNote": null         // réserve sur ce que le dépôt public contient
    }
    ```
 
    `stack` est rendu en mono, séparé par ` / ` via CSS — pas de
    pastilles : garder quatre entrées au plus, sinon la ligne double.
+
+   `repoNote` est facultatif : il s'affiche sous la stack, dans la liste
+   des autres réalisations, quand le dépôt public ne représente qu'une
+   partie du projet (TinyX, par exemple, dont seul le frontend est public).
+   Mieux vaut le dire que laisser un recruteur cliquer et se tromper sur ce
+   qu'il regarde.
 
 2. Pour un projet `featured`, créer l'étude de cas dans `projects/fr/` et
    `projects/en/`. Le front-matter pilote l'en-tête et les métadonnées de
@@ -194,6 +206,12 @@ Ces fichiers sont ignorés par Git et régénérés à chaque build.
 
 - **Images** en WebP. Les vignettes de carte font 16/9 ; fournir une
   variante `-light` quand l'image est illisible sur fond clair.
+- **Tableaux Markdown** : trois usages coexistent — données chiffrées,
+  cellules de prose et grilles d'images comparatives. Le CSS les traite
+  ensemble : les cellules restent dans la police du corps avec
+  `font-variant-numeric: tabular-nums` (les colonnes de chiffres s'alignent
+  sans imposer du monospace à une phrase), et une image en cellule remplit
+  sa colonne sur une table `table-layout: fixed`.
 - **Vidéos** en MP4, toujours avec `preload="none"` et une image `poster`,
   pour qu'une démo de plusieurs mégaoctets ne soit jamais téléchargée sans
   action du visiteur :

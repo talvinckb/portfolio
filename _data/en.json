@@ -218,8 +218,8 @@
       {
         "id": "tinyx",
         "name": "TinyX",
-        "title": "Social network clone",
-        "tagline": "Twitter-like social platform built by a team of 14, microservices architecture and rigorous DevOps.",
+        "title": "Clone of the social network X",
+        "tagline": "X-style social platform built by a team of 14, microservices architecture and rigorous DevOps.",
         "thumbnail": null,
         "stack": [
           "Java/Quarkus",
@@ -229,7 +229,8 @@
         "period": "2 months",
         "featured": false,
         "kind": "academic",
-        "github": "https://github.com/talvinckb/mytinyx-frontend"
+        "github": "https://github.com/talvinckb/mytinyx-frontend",
+        "repoNote": "Public repository: front end only. The microservices back end lives on a private EPITA GitLab."
       },
       {
         "id": "tiger",

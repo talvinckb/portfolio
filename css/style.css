@@ -946,6 +946,15 @@ h4 {
   color: var(--ink-3);
 }
 
+.side-item__note {
+  margin-top: 0.5rem;
+  padding-left: 0.5rem;
+  border-left: 2px solid var(--blue);
+  font-size: var(--t-xs);
+  line-height: 1.45;
+  color: var(--ink-3);
+}
+
 .side-item__arrow {
   color: var(--ink-3);
   transition:
@@ -953,7 +962,16 @@ h4 {
     color var(--fast) var(--ease);
 }
 
-.side-item--linked:hover .side-item__arrow {
+.side-item--linked:hover .side-item__note {
+  margin-top: 0.5rem;
+  padding-left: 0.5rem;
+  border-left: 2px solid var(--blue);
+  font-size: var(--t-xs);
+  line-height: 1.45;
+  color: var(--ink-3);
+}
+
+.side-item__arrow {
   color: var(--blue);
   transform: translate(2px, -2px);
 }
@@ -1446,23 +1464,49 @@ h4 {
 .prose td {
   padding: 0.6rem var(--s-4);
   text-align: left;
-  white-space: nowrap;
   border-bottom: 1px solid var(--rule);
 }
 
+/* The header band is blue rather than ink: ink inverts between themes and
+   would turn into a white bar on a dark page. */
 .prose th {
-  background-color: var(--ink);
-  color: var(--bg);
+  background-color: var(--blue);
+  border-bottom-color: var(--blue);
+  color: var(--on-blue);
   font-size: var(--t-2xs);
   font-weight: 600;
   letter-spacing: 0.045em;
   text-transform: uppercase;
 }
 
+/* Cells hold prose as often as they hold numbers, so they stay in the body
+   face; tabular figures keep the numeric columns aligned anyway. */
 .prose td {
-  font-family: var(--font-mono);
-  font-size: var(--t-xs);
+  font-size: var(--t-sm);
+  font-variant-numeric: tabular-nums;
   color: var(--ink-2);
+  vertical-align: top;
+}
+
+.prose td code {
+  font-size: 0.9em;
+}
+
+/* Several tables are image grids rather than data: the picture fills its
+   cell instead of floating in the middle of it at its natural size, and the
+   columns split evenly rather than by the images' intrinsic widths. */
+.prose table:has(td img) {
+  table-layout: fixed;
+}
+
+.prose td img {
+  width: 100%;
+  margin: 0;
+  border: none;
+}
+
+.prose td:has(img) {
+  padding: 0.3rem;
 }
 
 .prose tbody tr:last-child td {
@@ -1777,7 +1821,16 @@ h4 {
     padding-top: 0.15rem;
   }
 
-  .side-item__arrow {
+  .side-item__note {
+  margin-top: 0.5rem;
+  padding-left: 0.5rem;
+  border-left: 2px solid var(--blue);
+  font-size: var(--t-xs);
+  line-height: 1.45;
+  color: var(--ink-3);
+}
+
+.side-item__arrow {
     align-self: center;
   }
 

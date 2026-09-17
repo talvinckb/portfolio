@@ -148,6 +148,9 @@
                   <p class="side-item__stack">
                     {% for s in p.stack %}<span>{{ s }}</span>{% endfor %}
                   </p>
+                  {% if p.repoNote %}
+                    <p class="side-item__note">{{ p.repoNote }}</p>
+                  {% endif %}
                 </div>
 
                 {% if p.github %}
