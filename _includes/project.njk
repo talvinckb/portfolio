@@ -86,7 +86,7 @@
           {% if stack %}
             <div class="case__fact case__fact--wide">
               <dt>{{ t.project.stackLabel }}</dt>
-              <dd>{{ stack | join(" · ") }}</dd>
+              <dd>{{ stack | join(" / ") }}</dd>
             </div>
           {% endif %}
         </dl>
@@ -94,17 +94,17 @@
         {% if github or demo or report %}
           <div class="actions">
             {% if demo %}
-              <a href="{{ demo }}" target="_blank" rel="noopener noreferrer" class="btn btn--solid">
+              <a href="{{ demo }}" target="_blank" rel="noopener noreferrer" class="btn btn--fill">
                 {{ icon.externalLink(15) }}<span>{{ t.project.demo }}</span>
               </a>
             {% endif %}
             {% if github %}
-              <a href="{{ github }}" target="_blank" rel="noopener noreferrer" class="btn btn--quiet">
+              <a href="{{ github }}" target="_blank" rel="noopener noreferrer" class="btn btn--line">
                 {{ icon.github(15) }}<span>{{ t.project.sourceCode }}</span>
               </a>
             {% endif %}
             {% if report %}
-              <a href="{{ report }}" target="_blank" rel="noopener noreferrer" class="btn btn--quiet">
+              <a href="{{ report }}" target="_blank" rel="noopener noreferrer" class="btn btn--line">
                 {{ icon.download(15) }}<span>{{ t.project.report }}</span>
               </a>
             {% endif %}
@@ -128,10 +128,10 @@
       </article>
 
       <nav class="case__nav wrap" aria-label="{{ t.nav.work }}">
-        <a href="{{ anchorBase }}#work" class="btn btn--quiet">
+        <a href="{{ anchorBase }}#work" class="btn btn--line">
           {{ icon.chevronLeft(15) }}<span>{{ t.project.back }}</span>
         </a>
-        <a href="mailto:{{ site.email }}" class="btn btn--solid">
+        <a href="mailto:{{ site.email }}" class="btn btn--fill">
           {{ icon.mail(15) }}<span>{{ t.project.contactCta }}</span>
         </a>
       </nav>

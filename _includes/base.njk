@@ -40,72 +40,64 @@
     <main id="main">
       <!-- ─── Hero ─── -->
       <section class="hero">
-        <div class="wrap hero__inner">
-          <p class="hero__eyebrow">
-            <span class="hero__mark" aria-hidden="true"></span>
-            <span>{{ t.hero.name }}</span>
-            <span aria-hidden="true">—</span>
+        <div class="wrap">
+          <p class="hero__kicker">
             <span>{{ t.hero.location }}</span>
+            <span class="hero__kicker-sep" aria-hidden="true"></span>
+            <span>{{ t.meta.jobTitle }}</span>
           </p>
 
-          <h1 class="hero__statement">{{ t.hero.statement }}</h1>
+          <h1 class="hero__title">{{ t.hero.statement }}</h1>
+
+          <p class="hero__status">{{ t.hero.status }}</p>
 
           <div class="hero__cols">
             <p class="hero__intro">{{ t.hero.intro }}</p>
-
-            <div class="hero__cta">
-              <p class="hero__status">
-                <span class="hero__status-mark" aria-hidden="true"></span>{{ t.hero.status }}
-              </p>
-
-              {{ contact.heroActions(t, site) }}
-            </div>
+            <div class="hero__cta">{{ contact.heroActions(t, site) }}</div>
           </div>
-        </div>
 
-        <ul class="facts wrap" role="list" aria-label="{{ t.a11y.keyFigures }}">
-          {% for fact in t.hero.facts %}
-            <li class="fact">
-              <p class="fact__value">{{ fact.value }}</p>
-              <p class="fact__label">{{ fact.label }}</p>
-            </li>
-          {% endfor %}
-        </ul>
+          <ul class="stats" role="list" aria-label="{{ t.a11y.keyFigures }}">
+            {% for fact in t.hero.facts %}
+              <li class="stat">
+                <p class="stat__value">{{ fact.value }}</p>
+                <p class="stat__label">{{ fact.label }}</p>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
       </section>
 
       <!-- ─── Work ─── -->
       <section id="work" class="section">
         <div class="wrap">
-          <header class="section__head">
-            <p class="section__index"><span aria-hidden="true">{{ t.projects.index }}</span>{{ t.projects.label }}</p>
-            <h2 class="section__title">{{ t.projects.title }}</h2>
-            <p class="section__lede">{{ t.projects.lede }}</p>
+          <header class="sec-head">
+            <p class="sec-head__eyebrow">
+              <span class="sec-head__num">{{ t.projects.index }}</span>{{ t.projects.label }}
+            </p>
+            <h2 class="sec-head__title">{{ t.projects.title }}</h2>
+            <p class="sec-head__lede">{{ t.projects.lede }}</p>
           </header>
 
           <ul class="work-grid" role="list">
-            {% for p in t.projects.items %}
-              {% if p.featured %}
-                {% set projectUrl = t.urlPrefix + "projects/" + p.id + "/" %}
-                <li>
-                  <article class="work-card">
-                    <div class="work-card__media">
-                      <img
-                        src="{{ p.thumbnail }}"
-                        data-src-dark="{{ p.thumbnail }}"
-                        data-src-light="{{ p.thumbnailLight | default(p.thumbnail) }}"
-                        alt="{{ t.a11y.projectPreview }} {{ p.name }}"
-                        width="800" height="450"
-                        loading="lazy" decoding="async"/>
-                    </div>
+            {% for p in t.projects.items | selectattr("featured") %}
+              {% set projectUrl = t.urlPrefix + "projects/" + p.id + "/" %}
+              <li>
+                <article class="work-card">
+                  <div class="work-card__media">
+                    <span class="work-card__index" aria-hidden="true">0{{ loop.index }}</span>
+                    <img
+                      src="{{ p.thumbnail }}"
+                      data-src-dark="{{ p.thumbnail }}"
+                      data-src-light="{{ p.thumbnailLight | default(p.thumbnail) }}"
+                      alt="{{ t.a11y.projectPreview }} {{ p.name }}"
+                      width="800" height="450"
+                      loading="lazy" decoding="async"/>
+                  </div>
 
+                  <div class="work-card__body">
                     <p class="work-card__meta">
                       <span class="work-card__name">{{ p.name }}</span>
                       {% if p.period %}<span class="work-card__period">{{ p.period }}</span>{% endif %}
-                      {% if p.github %}
-                        <a class="work-card__code" href="{{ p.github }}" target="_blank" rel="noopener noreferrer" aria-label="{{ t.a11y.sourceCode }} {{ p.name }}">
-                          {{ icon.github(14) }}
-                        </a>
-                      {% endif %}
                     </p>
 
                     <h3 class="work-card__title">
@@ -114,56 +106,67 @@
 
                     <p class="work-card__tagline">{{ p.tagline }}</p>
 
-                    <p class="work-card__stack">{{ p.stack | join(" · ") }}</p>
-
-                    <p class="work-card__cta" aria-hidden="true">
-                      {{ t.projects.viewProject }}{{ icon.arrowRight(14) }}
+                    <p class="work-card__stack">
+                      {% for s in p.stack %}<span>{{ s }}</span>{% endfor %}
                     </p>
-                  </article>
-                </li>
-              {% endif %}
+
+                    <p class="work-card__cta">
+                      <span>{{ t.projects.viewProject }}</span>
+                      {{ icon.arrowRight(15) }}
+                    </p>
+                  </div>
+
+                  {% if p.github %}
+                    <a class="work-card__code" href="{{ p.github }}" target="_blank" rel="noopener noreferrer" aria-label="{{ t.a11y.sourceCode }} {{ p.name }}">
+                      {{ icon.github(15) }}
+                    </a>
+                  {% endif %}
+                </article>
+              </li>
             {% endfor %}
           </ul>
 
           <h3 class="subhead">{{ t.projects.secondaryTitle }}</h3>
 
           <ul class="side-list" role="list">
-            {% for p in t.projects.items %}
-              {% if not p.featured %}
-                <li class="side-item{{ ' side-item--linked' if p.github }}">
-                  <p class="side-item__aside">
-                    <span class="side-item__name">{{ p.name }}</span>
-                    <span class="side-item__kind">{{ t.projects.labels[p.kind] }}</span>
+            {% for p in t.projects.items | rejectattr("featured") %}
+              <li class="side-item{{ ' side-item--linked' if p.github }}">
+                <p class="side-item__aside">
+                  <span class="side-item__name">{{ p.name }}</span>
+                  <span class="side-item__kind">{{ t.projects.labels[p.kind] }}</span>
+                </p>
+
+                <div class="side-item__body">
+                  <h4 class="side-item__title">
+                    {% if p.github %}
+                      <a href="{{ p.github }}" target="_blank" rel="noopener noreferrer">{{ p.title }}</a>
+                    {% else %}
+                      {{ p.title }}
+                    {% endif %}
+                  </h4>
+                  <p class="side-item__tagline">{{ p.tagline }}</p>
+                  <p class="side-item__stack">
+                    {% for s in p.stack %}<span>{{ s }}</span>{% endfor %}
                   </p>
+                </div>
 
-                  <div class="side-item__body">
-                    <h4 class="side-item__title">
-                      {% if p.github %}
-                        <a href="{{ p.github }}" target="_blank" rel="noopener noreferrer">{{ p.title }}</a>
-                      {% else %}
-                        {{ p.title }}
-                      {% endif %}
-                    </h4>
-                    <p class="side-item__tagline">{{ p.tagline }}</p>
-                    <p class="side-item__stack">{{ p.stack | join(" · ") }}</p>
-                  </div>
-
-                  {% if p.github %}
-                    <span class="side-item__arrow" aria-hidden="true">{{ icon.arrowUpRight(16) }}</span>
-                  {% endif %}
-                </li>
-              {% endif %}
+                {% if p.github %}
+                  <span class="side-item__arrow" aria-hidden="true">{{ icon.arrowUpRight(16) }}</span>
+                {% endif %}
+              </li>
             {% endfor %}
           </ul>
         </div>
       </section>
 
       <!-- ─── Background ─── -->
-      <section id="background" class="section section--rule">
+      <section id="background" class="section">
         <div class="wrap">
-          <header class="section__head">
-            <p class="section__index"><span aria-hidden="true">{{ t.background.index }}</span>{{ t.background.label }}</p>
-            <h2 class="section__title">{{ t.background.title }}</h2>
+          <header class="sec-head">
+            <p class="sec-head__eyebrow">
+              <span class="sec-head__num">{{ t.background.index }}</span>{{ t.background.label }}
+            </p>
+            <h2 class="sec-head__title">{{ t.background.title }}</h2>
           </header>
 
           <h3 class="subhead subhead--flush">{{ t.background.experienceTitle }}</h3>
@@ -177,7 +180,9 @@
                   </h4>
                   <p class="entry__org">{{ exp.company }}</p>
                   <p class="entry__desc">{{ exp.description }}</p>
-                  <p class="entry__tags">{{ exp.tags | join(" · ") }}</p>
+                  <p class="entry__tags">
+                    {% for tag in exp.tags %}<span>{{ tag }}</span>{% endfor %}
+                  </p>
                 </div>
               </li>
             {% endfor %}
@@ -211,20 +216,22 @@
       </section>
 
       <!-- ─── Skills ─── -->
-      <section id="skills" class="section section--rule">
+      <section id="skills" class="section">
         <div class="wrap">
-          <header class="section__head">
-            <p class="section__index"><span aria-hidden="true">{{ t.skills.index }}</span>{{ t.skills.label }}</p>
-            <h2 class="section__title">{{ t.skills.title }}</h2>
+          <header class="sec-head">
+            <p class="sec-head__eyebrow">
+              <span class="sec-head__num">{{ t.skills.index }}</span>{{ t.skills.label }}
+            </p>
+            <h2 class="sec-head__title">{{ t.skills.title }}</h2>
           </header>
 
-          <ul class="skills" role="list">
+          <ul class="matrix" role="list">
             {% for group in t.skills.groups %}
-              <li class="skill-col">
-                <h3 class="skill-col__title">{{ group.category }}</h3>
-                <ul class="skill-col__items" role="list">
+              <li class="matrix__col">
+                <h3 class="matrix__head">{{ group.category }}</h3>
+                <ul class="matrix__cells" role="list">
                   {% for item in group.items %}
-                    <li>{{ item }}</li>
+                    <li class="matrix__cell">{{ item }}</li>
                   {% endfor %}
                 </ul>
               </li>
@@ -234,12 +241,14 @@
       </section>
 
       <!-- ─── Contact ─── -->
-      <section id="contact" class="section section--rule">
+      <section id="contact" class="section section--block">
         <div class="wrap">
-          <header class="section__head">
-            <p class="section__index"><span aria-hidden="true">{{ t.contact.index }}</span>{{ t.contact.label }}</p>
-            <h2 class="section__title section__title--display">{{ t.contact.title }}</h2>
-            <p class="section__lede">{{ t.contact.text }}</p>
+          <header class="sec-head sec-head--invert">
+            <p class="sec-head__eyebrow">
+              <span class="sec-head__num">{{ t.contact.index }}</span>{{ t.contact.label }}
+            </p>
+            <h2 class="sec-head__title sec-head__title--xl">{{ t.contact.title }}</h2>
+            <p class="sec-head__lede">{{ t.contact.text }}</p>
           </header>
 
           {{ contact.contactBlock(t, site) }}

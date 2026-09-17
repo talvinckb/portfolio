@@ -1,63 +1,63 @@
 {# Contact affordances. Two shapes: a compact hero row, a full contact block. #}
 {% import "partials/icons.njk" as icon %}
 
-{# ─── Hero: one solid action, the rest as quiet links ─── #}
+{# ─── Hero: one filled action, the rest outlined ─── #}
 {% macro heroActions(t, site) %}
   <div class="actions">
-    <a href="{{ t.hero.cvUrl }}" class="btn btn--solid" target="_blank" rel="noopener noreferrer">
+    <a href="{{ t.hero.cvUrl }}" class="btn btn--fill" target="_blank" rel="noopener noreferrer">
       {{ icon.download(15) }}<span>{{ t.hero.cvBtn }}</span>
     </a>
 
-    <a href="mailto:{{ site.email }}" class="btn btn--quiet">
+    <a href="mailto:{{ site.email }}" class="btn btn--line">
       {{ icon.mail(15) }}<span>{{ t.hero.emailBtn }}</span>
     </a>
 
-    <a href="{{ site.linkedin }}" class="btn btn--quiet" target="_blank" rel="noopener noreferrer">
+    <a href="{{ site.linkedin }}" class="btn btn--line" target="_blank" rel="noopener noreferrer">
       {{ icon.linkedin(15) }}<span>{{ t.hero.linkedinBtn }}</span>
     </a>
 
-    <a href="{{ site.github }}" class="btn btn--quiet" target="_blank" rel="noopener noreferrer">
+    <a href="{{ site.github }}" class="btn btn--line" target="_blank" rel="noopener noreferrer">
       {{ icon.github(15) }}<span>{{ t.hero.githubBtn }}</span>
     </a>
   </div>
 {% endmacro %}
 
-{# ─── Contact section: the address itself is the headline ─── #}
+{# ─── Contact section: a ruled index of every way to reach me ─── #}
 {% macro contactBlock(t, site) %}
-  <ul class="contact-list" role="list">
-    <li class="contact-row">
-      <span class="contact-row__label">{{ t.contact.emailLabel }}</span>
-      <a class="contact-row__value" href="mailto:{{ site.email }}">{{ site.email }}</a>
-      <button class="contact-row__copy" type="button" data-copy="{{ site.email }}" data-copy-kind="email" aria-label="{{ t.a11y.copyEmail }}" title="{{ t.a11y.copyEmail }}">
+  <ul class="channels" role="list">
+    <li class="channel">
+      <span class="channel__label">{{ t.contact.emailLabel }}</span>
+      <a class="channel__value" href="mailto:{{ site.email }}">{{ site.email }}</a>
+      <button class="channel__copy" type="button" data-copy="{{ site.email }}" data-copy-kind="email" aria-label="{{ t.a11y.copyEmail }}" title="{{ t.a11y.copyEmail }}">
         {{ icon.copy(14) }}
       </button>
     </li>
 
-    <li class="contact-row">
-      <span class="contact-row__label">{{ t.contact.phoneLabel }}</span>
-      <a class="contact-row__value" href="tel:{{ site.phone }}">{{ site.phoneDisplay }}</a>
-      <button class="contact-row__copy" type="button" data-copy="{{ site.phone }}" data-copy-kind="phone" aria-label="{{ t.a11y.copyPhone }}" title="{{ t.a11y.copyPhone }}">
+    <li class="channel">
+      <span class="channel__label">{{ t.contact.phoneLabel }}</span>
+      <a class="channel__value" href="tel:{{ site.phone }}">{{ site.phoneDisplay }}</a>
+      <button class="channel__copy" type="button" data-copy="{{ site.phone }}" data-copy-kind="phone" aria-label="{{ t.a11y.copyPhone }}" title="{{ t.a11y.copyPhone }}">
         {{ icon.copy(14) }}
       </button>
     </li>
 
-    <li class="contact-row">
-      <span class="contact-row__label">LinkedIn</span>
-      <a class="contact-row__value" href="{{ site.linkedin }}" target="_blank" rel="noopener noreferrer">
+    <li class="channel">
+      <span class="channel__label">LinkedIn</span>
+      <a class="channel__value" href="{{ site.linkedin }}" target="_blank" rel="noopener noreferrer">
         in/talvin-ackbaraly{{ icon.arrowUpRight(14) }}
       </a>
     </li>
 
-    <li class="contact-row">
-      <span class="contact-row__label">GitHub</span>
-      <a class="contact-row__value" href="{{ site.github }}" target="_blank" rel="noopener noreferrer">
+    <li class="channel">
+      <span class="channel__label">GitHub</span>
+      <a class="channel__value" href="{{ site.github }}" target="_blank" rel="noopener noreferrer">
         @talvinckb{{ icon.arrowUpRight(14) }}
       </a>
     </li>
 
-    <li class="contact-row">
-      <span class="contact-row__label">CV</span>
-      <a class="contact-row__value" href="{{ t.hero.cvUrl }}" target="_blank" rel="noopener noreferrer">
+    <li class="channel">
+      <span class="channel__label">CV</span>
+      <a class="channel__value" href="{{ t.hero.cvUrl }}" target="_blank" rel="noopener noreferrer">
         {{ t.hero.cvBtn }}{{ icon.download(14) }}
       </a>
     </li>

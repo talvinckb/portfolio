@@ -34,28 +34,47 @@ compilation et servies en HTML statique.
   actions de contact sont des partials Nunjucks partagés entre la page
   d'accueil et les pages projet.
 - **Rien ne bouge sans raison.** Pas de dégradé, pas de flou, pas
-  d'animation d'apparition : la hiérarchie est portée par la typographie,
-  les filets et le blanc.
+  d'animation d'apparition : la hiérarchie est portée par la grille, la
+  typographie et les aplats.
 
 ## Direction artistique
 
-Une mise en page éditoriale : papier chaud, encre chaude, filets d'un
-pixel, un seul accent.
+Typographie internationale : gris froids, angles vifs, grille visible, et
+le **bleu comme élément de structure** — des aplats pleine largeur, pas un
+liseré décoratif.
 
 | Rôle | Police | Usage |
 |---|---|---|
-| Display | Instrument Serif | phrase d'accroche, titres de section, titres de projet, chiffres clés |
-| Texte | Inter | paragraphes, boutons, navigation |
-| Mono | JetBrains Mono | **toute** métadonnée : index de section, périodes, stack, libellés |
+| Titres | Archivo, `font-stretch: 112%`, 800 | accroche, titres de section, titres d'étude de cas |
+| Texte | Archivo, 400–700 | paragraphes, titres de carte, navigation, boutons |
+| Chiffres | Archivo, `font-stretch: 70%`, 700 | uniquement les chiffres clés du hero |
+| Données | IBM Plex Mono | périodes, stacks, index de section, code |
 
-La règle de lecture du design : ce qui est une donnée (une date, une stack,
-un numéro) est en mono ; ce qui est une affirmation est en serif ; ce qui
-se lit au kilomètre est en Inter.
+Une seule famille porte toute la page : son axe de largeur (`wdth`,
+62→125) fait le travail qu'une deuxième police ferait ailleurs. La mono
+est réservée à ce qui est une **donnée** — jamais à un libellé décoratif.
+
+Règles non négociables :
+
+- **`border-radius: 0` partout**, imposé dans le reset. Un seul coin
+  arrondi et tout le système s'effondre.
+- **Les filets portent la hiérarchie** : 2 px encre pour ouvrir une
+  section, 1 px `--rule` pour séparer des lignes de même niveau.
+- **Le bleu ne s'utilise pas en petites touches.** Bandeau de
+  disponibilité, en-têtes de la matrice de compétences, index des cartes,
+  section contact : ce sont des surfaces pleines. Le texte courant reste
+  en `--ink`.
+- **L'espacement des capitales reste serré** (`0.045em`). Des capitales
+  très espacées datent une mise en page instantanément.
 
 Les couleurs sont des tokens redéfinis sous `:root[data-theme="dark"]` —
-`--paper`, `--paper-2`, `--ink`, `--ink-2`, `--ink-3`, `--rule`,
-`--rule-strong`, `--accent`, `--on-accent`. **Aucune couleur en dur dans
-une règle**, sinon le thème sombre décroche.
+`--bg`, `--bg-2`, `--surface`, `--ink`, `--ink-2`, `--ink-3`, `--rule`,
+`--blue`, `--on-blue`, `--blue-soft`. **Aucune couleur en dur dans une
+règle**, sinon le thème sombre décroche.
+
+`.section--block` (la section contact) redéfinit `--ink`, `--rule` et
+`--blue` sur elle-même : tout ce qu'elle contient bascule en inversé sans
+qu'aucun composant n'ait à connaître le contexte.
 
 ## Arborescence
 
@@ -145,8 +164,8 @@ Ces fichiers sont ignorés par Git et régénérés à chaque build.
    }
    ```
 
-   `stack` est rendu en mono, joint par ` · ` — pas de pastilles : garder
-   quatre entrées au plus, sinon la ligne passe à deux lignes.
+   `stack` est rendu en mono, séparé par ` / ` via CSS — pas de
+   pastilles : garder quatre entrées au plus, sinon la ligne double.
 
 2. Pour un projet `featured`, créer l'étude de cas dans `projects/fr/` et
    `projects/en/`. Le front-matter pilote l'en-tête et les métadonnées de
@@ -204,6 +223,8 @@ Points à ne pas régresser :
   (`fr`, `en`, `x-default`) ;
 - une carte projet n'a qu'un seul lien étendu (`::after` sur le titre) : le
   lien GitHub qui le recouvre doit rester en `z-index: 2` ;
+- les aplats bleus sont vérifiés en contraste dans les deux thèmes
+  (`--blue` / `--on-blue`, `--block-bg` / `--block-ink`) ;
 - les animations sont neutralisées sous `prefers-reduced-motion`.
 
 ## Licence
