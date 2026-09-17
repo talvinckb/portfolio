@@ -91,6 +91,7 @@ ol[role="list"] {
 /* ─── Light ─── */
 :root,
 :root[data-theme="light"] {
+  color-scheme: light;
   --bg: #f1f2f5;
   --bg-2: #e5e7ed;
   --surface: #ffffff;
@@ -122,6 +123,7 @@ ol[role="list"] {
 
 /* ─── Dark ─── */
 :root[data-theme="dark"] {
+  color-scheme: dark;
   --bg: #0a0b0f;
   --bg-2: #14161d;
   --surface: #101218;
@@ -149,6 +151,42 @@ ol[role="list"] {
 
   --overlay: rgba(4, 5, 7, 0.82);
   --shade: 0 16px 44px rgba(0, 0, 0, 0.66);
+}
+
+/* Repli sans JavaScript : le script inline n'a pas posé data-theme,
+   la page suit alors l'OS. Palette identique au bloc ci-dessus —
+   toute modification doit être reportée dans les deux. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    color-scheme: dark;
+    --bg: #0a0b0f;
+    --bg-2: #14161d;
+    --surface: #101218;
+
+    --ink: #eef0f6;
+    --ink-2: #a6acbc;
+    --ink-3: #787f91;
+
+    --rule: #262a34;
+
+    --blue: #aab6cc;
+    --blue-hover: #c8d1e2;
+    --blue-soft: #1b202b;
+    --on-blue: #0a0b0f;
+
+    --block-bg: #171c26;
+    --block-ink: #ffffff;
+    --block-ink-2: rgba(255, 255, 255, 0.82);
+    --block-ink-3: rgba(255, 255, 255, 0.62);
+    --block-rule: rgba(255, 255, 255, 0.26);
+
+    --foot-bg: #07080b;
+    --foot-ink: #eef0f6;
+    --foot-ink-2: #787f91;
+
+    --overlay: rgba(4, 5, 7, 0.82);
+    --shade: 0 16px 44px rgba(0, 0, 0, 0.66);
+  }
 }
 
 /* ─────────────────────────────────────────────────────────────

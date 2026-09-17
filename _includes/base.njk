@@ -15,20 +15,31 @@
 {% import "partials/contact-actions.njk" as contact %}
 
 <!DOCTYPE html>
-<html lang="{{ lang }}" data-theme="light">
+<html lang="{{ lang }}">
   <head>
     <script>
       // Applied before first paint to avoid a flash of the wrong theme.
       (function () {
+        var stored = null;
+        // Le stockage de site peut lever (navigation privée, cookies bloqués) :
+        // on l'isole pour que l'échec ne coûte pas la préférence système.
         try {
-          var stored = localStorage.getItem("theme");
-          if (stored !== "light" && stored !== "dark") {
-            stored = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+          stored = localStorage.getItem("theme");
+        } catch (e) {}
+
+        var theme = stored === "light" || stored === "dark" ? stored : null;
+
+        if (!theme) {
+          try {
+            theme = window.matchMedia("(prefers-color-scheme: dark)").matches
+              ? "dark"
+              : "light";
+          } catch (e) {
+            theme = "light";
           }
-          document.documentElement.setAttribute("data-theme", stored);
-        } catch (e) {
-          document.documentElement.setAttribute("data-theme", "light");
         }
+
+        document.documentElement.setAttribute("data-theme", theme);
       })();
     </script>
     {% include "partials/head.njk" %}

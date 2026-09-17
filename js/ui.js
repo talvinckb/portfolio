@@ -30,10 +30,43 @@ function syncThemedImages(theme) {
 
 export function initTheme() {
   const toggle = document.getElementById("theme-toggle");
-  // The inline script in <head> already resolved the theme before paint.
-  const current = document.documentElement.getAttribute("data-theme") || "light";
-  syncThemedImages(current);
-  if (toggle) toggle.setAttribute("aria-pressed", String(current === "light"));
+
+  const apply = (theme) => {
+    document.documentElement.setAttribute("data-theme", theme);
+    if (toggle) toggle.setAttribute("aria-pressed", String(theme === "light"));
+    syncThemedImages(theme);
+  };
+
+  const systemTheme = () =>
+    window.matchMedia &&
+    window.matchMedia("(prefers-color-scheme: dark)").matches
+      ? "dark"
+      : "light";
+
+  // The inline script in <head> already resolved the theme before paint;
+  // the fallback only matters if it never ran, and must not contradict the
+  // CSS media query that covers that same case.
+  apply(document.documentElement.getAttribute("data-theme") || systemTheme());
+
+  // A click is an explicit choice; it outranks the system preference from
+  // then on. Tracked in memory too, since private mode can refuse to store it.
+  let chosen = false;
+  try {
+    const v = localStorage.getItem("theme");
+    chosen = v === "light" || v === "dark";
+  } catch (e) {
+    /* storage blocked — treat as no explicit choice */
+  }
+
+  // Until then, follow the system live rather than only on reload.
+  if (window.matchMedia) {
+    const media = window.matchMedia("(prefers-color-scheme: dark)");
+    const follow = (e) => {
+      if (!chosen) apply(e.matches ? "dark" : "light");
+    };
+    if (media.addEventListener) media.addEventListener("change", follow);
+    else if (media.addListener) media.addListener(follow);
+  }
 
   if (!toggle) return;
 
@@ -42,9 +75,8 @@ export function initTheme() {
       document.documentElement.getAttribute("data-theme") === "dark"
         ? "light"
         : "dark";
-    document.documentElement.setAttribute("data-theme", next);
-    toggle.setAttribute("aria-pressed", String(next === "light"));
-    syncThemedImages(next);
+    chosen = true;
+    apply(next);
     try {
       localStorage.setItem("theme", next);
     } catch (e) {
