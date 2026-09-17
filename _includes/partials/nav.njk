@@ -1,0 +1,70 @@
+{#
+  Shared navigation. The caller sets, before including:
+    t               locale bundle
+    anchorBase      "" on the home page, "/" or "/en/" on sub-pages
+    altUrl          same page in the other language
+    homeUrl         home page in the current language
+    readingProgress true only on long pages (case studies)
+#}
+{% import "partials/icons.njk" as icon %}
+
+<a class="skip-link" href="#main">{{ t.a11y.skipToContent }}</a>
+
+{% if readingProgress %}
+  <div id="scroll-progress" class="scroll-progress" aria-hidden="true"></div>
+{% endif %}
+
+{% set navItems = [
+  { href: anchorBase + "#work", label: t.nav.work },
+  { href: anchorBase + "#background", label: t.nav.background },
+  { href: anchorBase + "#skills", label: t.nav.skills },
+  { href: anchorBase + "#contact", label: t.nav.contact }
+] %}
+
+<header class="nav" id="nav">
+  <nav class="nav__inner" aria-label="{{ t.a11y.mainNav }}">
+    <a href="{{ homeUrl }}" class="nav__logo" aria-label="{{ t.a11y.home }}">
+      <span class="nav__mark" aria-hidden="true">{{ site.initials }}</span>
+      <span class="nav__name">{{ site.name }}</span>
+    </a>
+
+    <ul class="nav__links" role="list">
+      {% for item in navItems %}
+        <li><a href="{{ item.href }}">{{ item.label }}</a></li>
+      {% endfor %}
+    </ul>
+
+    <div class="nav__controls">
+      <a href="{{ altUrl }}" class="nav__lang" hreflang="{{ t.altLabel | lower }}" lang="{{ t.altLabel | lower }}" aria-label="{{ t.a11y.switchLang }}">{{ t.altLabel }}</a>
+
+      <button class="nav__theme" id="theme-toggle" type="button" aria-label="{{ t.a11y.toggleTheme }}" aria-pressed="false">
+        {{ icon.sun(16) }}
+        {{ icon.moon(16) }}
+      </button>
+
+      <button class="nav__burger" id="nav-burger" type="button" aria-label="{{ t.a11y.openMenu }}" data-label-close="{{ t.a11y.closeMenu }}" aria-expanded="false" aria-controls="mobile-menu">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </button>
+    </div>
+  </nav>
+</header>
+
+<div class="mobile-menu" id="mobile-menu" hidden>
+  <ul class="mobile-menu__links" role="list">
+    {% for item in navItems %}
+      <li>
+        <a href="{{ item.href }}">
+          <span class="mobile-menu__index" aria-hidden="true">0{{ loop.index }}</span>
+          <span>{{ item.label }}</span>
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+
+  <div class="mobile-menu__footer">
+    <a href="mailto:{{ site.email }}">{{ site.email }}</a>
+    <a href="{{ site.linkedin }}" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+    <a href="{{ site.github }}" target="_blank" rel="noopener noreferrer">GitHub</a>
+  </div>
+</div>

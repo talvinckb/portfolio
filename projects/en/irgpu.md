@@ -236,4 +236,4 @@ From **5.29 FPS** to **129.51 FPS**: a **×24.47 speedup** with near-perfect vis
 
 ### Real-Time Live Video Motion Detection Demo
 
-<video src="/assets/projects/irgpu/motion_detection_demo.mp4" autoplay loop muted playsinline class="project-video-demo" title="CUDA Real-Time Motion Detection Demo"></video>
+<video preload="none" poster="/assets/projects/irgpu/motion_detection_demo-poster.webp" controls src="/assets/projects/irgpu/motion_detection_demo.mp4" loop muted playsinline class="project-video-demo" title="CUDA Real-Time Motion Detection Demo"></video>

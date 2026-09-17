@@ -76,7 +76,7 @@ Without optimization, neighbor search is $O(N^2)$, unfeasible for 75,000 particl
 2. **Bitonic GPU Sort**: Pairs `(particleIndex, cellKey)` are sorted in parallel on GPU in $O(\log^2 N)$ steps — zero CPU transfers required.
 3. **Index Offset Table**: A fast pass identifies the starting index of each cell in the sorted array. Each particle then explores only its **27 adjacent 3D cells**.
 
-<video src="/assets/projects/pogl/fluid_2d_to_3d_transformation.mp4" autoplay loop muted playsinline class="project-video-demo" title="SPH solver evolution and transition from 2D domain to 3D volume"></video>
+<video preload="none" poster="/assets/projects/pogl/fluid_2d_to_3d_transformation-poster.webp" controls src="/assets/projects/pogl/fluid_2d_to_3d_transformation.mp4" loop muted playsinline class="project-video-demo" title="SPH solver evolution and transition from 2D domain to 3D volume"></video>
 
 ---
 
@@ -187,4 +187,4 @@ The camera is **orbital** (left click + drag) with scroll zoom.
 
 ### Real-Time Simulation Demo
 
-<video src="/assets/projects/pogl/fluid_simulation_demo.mp4" autoplay loop muted playsinline class="project-video-demo" title="3D Real-Time SPH Fluid Simulation Demo"></video>
+<video preload="none" poster="/assets/projects/pogl/fluid_simulation_demo-poster.webp" controls src="/assets/projects/pogl/fluid_simulation_demo.mp4" loop muted playsinline class="project-video-demo" title="3D Real-Time SPH Fluid Simulation Demo"></video>

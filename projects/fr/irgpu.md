@@ -236,4 +236,4 @@ De **5.29 FPS** à **129.51 FPS** : un gain de **×24.47** avec une précision v
 
 ### Démonstration du Résultat Visuel en Temps Réel
 
-<video src="/assets/projects/irgpu/motion_detection_demo.mp4" autoplay loop muted playsinline class="project-video-demo" title="Démonstration du filtre de détection de mouvement CUDA temps réel"></video>
+<video preload="none" poster="/assets/projects/irgpu/motion_detection_demo-poster.webp" controls src="/assets/projects/irgpu/motion_detection_demo.mp4" loop muted playsinline class="project-video-demo" title="Démonstration du filtre de détection de mouvement CUDA temps réel"></video>

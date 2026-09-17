@@ -76,7 +76,7 @@ Sans optimisation, la recherche de voisins est en $O(N^2)$, rédhibitoire pour 7
 2. **Tri Bitonic GPU** : Les paires `(particuleIndex, cellKey)` sont triées en parallèle sur GPU en $O(\log^2 N)$ étapes — aucun transfert CPU requis.
 3. **Table des Indices de Début** : Une passe rapide identifie le premier indice de chaque cellule dans le tableau trié. Chaque particule n'explore alors que ses **27 cellules 3D adjacentes**.
 
-<video src="/assets/projects/pogl/fluid_2d_to_3d_transformation.mp4" autoplay loop muted playsinline class="project-video-demo" title="Évolution et transition du solveur SPH du domaine 2D au volume 3D"></video>
+<video preload="none" poster="/assets/projects/pogl/fluid_2d_to_3d_transformation-poster.webp" controls src="/assets/projects/pogl/fluid_2d_to_3d_transformation.mp4" loop muted playsinline class="project-video-demo" title="Évolution et transition du solveur SPH du domaine 2D au volume 3D"></video>
 
 ---
 
@@ -187,4 +187,4 @@ La caméra est **orbitale** (clic gauche + glisser) avec zoom à la molette.
 
 ### Démonstration de la Simulation en Temps Réel
 
-<video src="/assets/projects/pogl/fluid_simulation_demo.mp4" autoplay loop muted playsinline class="project-video-demo" title="Démonstration de la simulation de fluide SPH 3D temps réel"></video>
+<video preload="none" poster="/assets/projects/pogl/fluid_simulation_demo-poster.webp" controls src="/assets/projects/pogl/fluid_simulation_demo.mp4" loop muted playsinline class="project-video-demo" title="Démonstration de la simulation de fluide SPH 3D temps réel"></video>
