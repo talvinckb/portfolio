@@ -1,8 +1,4 @@
-/* ═══════════════════════════════════════════════════════════════
-   Portfolio — Talvin Ackbaraly
-   Swiss grid: cool greys, square corners, one grotesque, blue as
-   structure rather than decoration.
-   ═══════════════════════════════════════════════════════════════ */
+/* Portfolio — Talvin Ackbaraly */
 
 /* ─────────────────────────────────────────────────────────────
    1. Reset
@@ -53,12 +49,9 @@ ol[role="list"] {
    ───────────────────────────────────────────────────────────── */
 
 :root {
-  /* One grotesque carries the whole page; its width axis does the work
-     a second family would otherwise do. Mono is reserved for data. */
-  --font-sans: "Archivo", "Helvetica Neue", Arial, sans-serif;
-  --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
-
-  --wide: 112%;
+  --font-sans: "Public Sans", "Helvetica Neue", Arial, sans-serif;
+  --font-serif: "Source Serif 4", Georgia, "Times New Roman", serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
 
   /* Type scale */
   --t-2xs: 0.6875rem;
@@ -108,12 +101,12 @@ ol[role="list"] {
 
   --rule: #cdd1da;
 
-  --blue: #1e37e6;
-  --blue-hover: #0d1fb5;
-  --blue-soft: #dfe3ff;
+  --blue: #35425c;
+  --blue-hover: #1e2738;
+  --blue-soft: #e2e5ec;
   --on-blue: #ffffff;
 
-  --block-bg: #1e37e6;
+  --block-bg: #1b2130;
   --block-ink: #ffffff;
   --block-ink-2: rgba(255, 255, 255, 0.84);
   --block-ink-3: rgba(255, 255, 255, 0.64);
@@ -139,12 +132,12 @@ ol[role="list"] {
 
   --rule: #262a34;
 
-  --blue: #7e9bff;
-  --blue-hover: #a5bbff;
-  --blue-soft: #141d3d;
-  --on-blue: #05060c;
+  --blue: #aab6cc;
+  --blue-hover: #c8d1e2;
+  --blue-soft: #1b202b;
+  --on-blue: #0a0b0f;
 
-  --block-bg: #14239b;
+  --block-bg: #171c26;
   --block-ink: #ffffff;
   --block-ink-2: rgba(255, 255, 255, 0.82);
   --block-ink-3: rgba(255, 255, 255, 0.62);
@@ -192,7 +185,8 @@ h1,
 h2,
 h3,
 h4 {
-  font-weight: 700;
+  font-family: var(--font-serif);
+  font-weight: 600;
   line-height: 1.15;
   color: var(--ink);
 }
@@ -436,9 +430,8 @@ h4 {
   padding-block: var(--s-4);
   border-bottom: 1px solid var(--rule);
   font-size: var(--t-2xl);
-  font-weight: 800;
-  font-stretch: var(--wide);
-  letter-spacing: -0.03em;
+  font-weight: 600;
+  letter-spacing: -0.015em;
   line-height: 1.1;
 }
 
@@ -447,7 +440,6 @@ h4 {
 }
 
 .mobile-menu__index {
-  font-family: var(--font-mono);
   font-size: var(--t-2xs);
   font-weight: 500;
   color: var(--blue);
@@ -548,10 +540,9 @@ h4 {
 .hero__title {
   margin-top: clamp(1rem, 2vw, 1.5rem);
   font-size: var(--t-display);
-  font-weight: 800;
-  font-stretch: var(--wide);
-  line-height: 0.96;
-  letter-spacing: -0.035em;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.02em;
 }
 
 .hero__status {
@@ -604,7 +595,6 @@ h4 {
 }
 
 .sec-head__num {
-  font-family: var(--font-mono);
   font-weight: 500;
   color: var(--blue);
 }
@@ -613,10 +603,9 @@ h4 {
   margin-top: var(--s-2);
   max-width: 24ch;
   font-size: var(--t-3xl);
-  font-weight: 800;
-  font-stretch: var(--wide);
-  line-height: 1.02;
-  letter-spacing: -0.03em;
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.012em;
 }
 
 .sec-head__title--xl {
@@ -715,7 +704,6 @@ h4 {
   height: 1.75rem;
   background-color: var(--blue);
   color: var(--on-blue);
-  font-family: var(--font-mono);
   font-size: var(--t-2xs);
   font-weight: 500;
 }
@@ -731,7 +719,6 @@ h4 {
   display: flex;
   align-items: baseline;
   gap: 0.5rem;
-  font-family: var(--font-mono);
   font-size: var(--t-2xs);
   color: var(--ink-3);
 }
@@ -776,7 +763,6 @@ h4 {
 
 .work-card__stack {
   margin-top: var(--s-3);
-  font-family: var(--font-mono);
   font-size: var(--t-2xs);
   line-height: 1.7;
   color: var(--ink-3);
@@ -868,7 +854,6 @@ h4 {
   flex-wrap: wrap;
   align-items: baseline;
   gap: 0.35rem 0.75rem;
-  font-family: var(--font-mono);
   font-size: var(--t-2xs);
 }
 
@@ -903,7 +888,6 @@ h4 {
 
 .side-item__stack {
   margin-top: 0.5rem;
-  font-family: var(--font-mono);
   font-size: var(--t-2xs);
   color: var(--ink-3);
 }
@@ -956,7 +940,6 @@ h4 {
 
 .entry__period {
   padding-top: 0.25rem;
-  font-family: var(--font-mono);
   font-size: var(--t-2xs);
   text-transform: uppercase;
   color: var(--ink-3);
@@ -976,7 +959,6 @@ h4 {
 .entry__type {
   padding: 0.1rem 0.4rem;
   border: 1px solid var(--rule);
-  font-family: var(--font-mono);
   font-size: var(--t-2xs);
   font-weight: 400;
   text-transform: uppercase;
@@ -1009,7 +991,6 @@ h4 {
 
 .entry__tags {
   margin-top: var(--s-3);
-  font-family: var(--font-mono);
   font-size: var(--t-2xs);
   color: var(--ink-3);
 }
@@ -1205,7 +1186,6 @@ h4 {
   padding: 0.25rem 0.5rem;
   background-color: var(--blue);
   color: var(--on-blue);
-  font-family: var(--font-mono);
   font-size: var(--t-2xs);
   font-weight: 500;
   text-transform: uppercase;
@@ -1215,10 +1195,9 @@ h4 {
   margin-top: var(--s-3);
   max-width: 20ch;
   font-size: clamp(2rem, 1.1rem + 3.6vw, 3.5rem);
-  font-weight: 800;
-  font-stretch: var(--wide);
-  line-height: 0.98;
-  letter-spacing: -0.035em;
+  font-weight: 600;
+  line-height: 1.04;
+  letter-spacing: -0.02em;
 }
 
 .case__tagline {
@@ -1249,7 +1228,6 @@ h4 {
 
 .case__fact dd {
   margin-top: 0.25rem;
-  font-family: var(--font-mono);
   font-size: var(--t-xs);
   color: var(--ink);
 }
@@ -1308,10 +1286,9 @@ h4 {
   padding-top: var(--s-3);
   border-top: 2px solid var(--ink);
   font-size: var(--t-2xl);
-  font-weight: 800;
-  font-stretch: var(--wide);
-  line-height: 1.05;
-  letter-spacing: -0.028em;
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
 }
 
 .prose h3 {
@@ -1548,7 +1525,6 @@ h4 {
 
 .pipeline-step__num {
   margin-bottom: 0.15rem;
-  font-family: var(--font-mono);
   font-size: 0.625rem;
   font-weight: 500;
   color: var(--blue);
