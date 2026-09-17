@@ -6,14 +6,17 @@
  * scrollable tables and math rendering.
  */
 
-import { initChrome, initNavScrollSpy } from "./ui.js";
+import { boot, initChrome, initNavScrollSpy } from "./ui.js";
 
-const LANG = document.documentElement.lang === "en" ? "en" : "fr";
+const lang = () => (document.documentElement.lang === "en" ? "en" : "fr");
 
-const STRINGS = {
-  fr: { close: "Fermer (Échap)", enlarged: "Vue agrandie" },
-  en: { close: "Close (Esc)", enlarged: "Enlarged view" },
-}[LANG];
+// Resolved per call, not at module load: a language swap does not re-evaluate
+// this module, so a value captured here would stay in the previous language.
+const strings = () =>
+  ({
+    fr: { close: "Fermer (Échap)", enlarged: "Vue agrandie" },
+    en: { close: "Close (Esc)", enlarged: "Enlarged view" },
+  })[lang()];
 
 /* ─────────────────────────────────────────────────────────────
    Lightbox — native <dialog> for focus trapping and Escape
@@ -28,7 +31,7 @@ function initLightbox() {
   const dialog = document.createElement("dialog");
   dialog.className = "lightbox";
   dialog.innerHTML = `
-    <button class="lightbox__close" type="button" aria-label="${STRINGS.close}" title="${STRINGS.close}">
+    <button class="lightbox__close" type="button" aria-label="${strings().close}" title="${strings().close}">
       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
     </button>
     <div class="lightbox__content"></div>
@@ -47,7 +50,7 @@ function initLightbox() {
 
       const img = document.createElement("img");
       img.src = source.currentSrc || source.src;
-      img.alt = source.alt || STRINGS.enlarged;
+      img.alt = source.alt || strings().enlarged;
       figure.appendChild(img);
 
       const captionText = (
@@ -115,7 +118,7 @@ function initTableWrappers() {
     wrapper.setAttribute("role", "region");
     wrapper.setAttribute(
       "aria-label",
-      LANG === "en" ? "Scrollable table" : "Tableau défilable",
+      lang() === "en" ? "Scrollable table" : "Tableau défilable",
     );
     table.parentNode.insertBefore(wrapper, table);
     wrapper.appendChild(table);
@@ -141,11 +144,15 @@ function renderMath() {
    Init
    ───────────────────────────────────────────────────────────── */
 
-initChrome();
-initNavScrollSpy();
-initTableWrappers();
-initLightbox();
+boot(() => {
+  initChrome();
+  initNavScrollSpy();
+  initTableWrappers();
+  initLightbox();
+  renderMath(); // no-op until KaTeX has landed; re-runs after a language swap
+});
 
 // KaTeX ships as a deferred classic script, so it may land after this module.
-if (window.renderMathInElement) renderMath();
-else window.addEventListener("load", renderMath, { once: true });
+if (!window.renderMathInElement) {
+  window.addEventListener("load", renderMath, { once: true });
+}

@@ -8,6 +8,20 @@
  * produces content, it only wires up interaction.
  */
 
+/* Switching language swaps the page contents in place instead of navigating.
+   Anything bound outside that markup — window, document, matchMedia, observers
+   — must therefore be undone before the swap, or it would stack up on every
+   switch. Everything below registers against this bus; the swap aborts it. */
+let bus = new AbortController();
+
+/** Re-runs the current page's own wiring after a swap. */
+let bootPage = null;
+
+export function boot(fn) {
+  bootPage = fn;
+  fn();
+}
+
 const prefersReducedMotion = () =>
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -64,7 +78,8 @@ export function initTheme() {
     const follow = (e) => {
       if (!chosen) apply(e.matches ? "dark" : "light");
     };
-    if (media.addEventListener) media.addEventListener("change", follow);
+    if (media.addEventListener)
+      media.addEventListener("change", follow, { signal: bus.signal });
     else if (media.addListener) media.addListener(follow);
   }
 
@@ -82,6 +97,129 @@ export function initTheme() {
     } catch (e) {
       /* private mode — the choice simply won't persist */
     }
+  });
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Language switch — swap the page without navigating
+   ───────────────────────────────────────────────────────────── */
+
+/* Eleventy renders /  and /en/ as two complete static documents. The link is a
+   real href, so without JS — or on a middle click — the browser navigates
+   normally. With JS we fetch the other document and swap its body in, which
+   keeps the scroll position exactly where it was: no reload, no jump. */
+
+const pageCache = new Map();
+
+/* Head tags whose content differs between languages. The stylesheet, fonts and
+   scripts are identical, so the head is patched rather than replaced. */
+const TRANSLATED_HEAD = [
+  "title",
+  'meta[name="description"]',
+  'meta[property="og:title"]',
+  'meta[property="og:description"]',
+  'meta[property="og:url"]',
+  'meta[property="og:locale"]',
+  'link[rel="canonical"]',
+];
+
+function fetchPage(url) {
+  if (!pageCache.has(url)) {
+    pageCache.set(
+      url,
+      fetch(url, { credentials: "same-origin" })
+        .then((res) => {
+          if (!res.ok) throw new Error(`${res.status}`);
+          return res.text();
+        })
+        .then((html) => new DOMParser().parseFromString(html, "text/html"))
+        .catch((err) => {
+          pageCache.delete(url); // never cache a failure
+          throw err;
+        }),
+    );
+  }
+  return pageCache.get(url);
+}
+
+function applyPage(doc) {
+  document.documentElement.lang = doc.documentElement.lang;
+
+  TRANSLATED_HEAD.forEach((sel) => {
+    const next = doc.head.querySelector(sel);
+    const current = document.head.querySelector(sel);
+    if (next && current) current.replaceWith(next.cloneNode(true));
+  });
+
+  // Tear down everything bound outside the markup before discarding it.
+  bus.abort();
+  bus = new AbortController();
+
+  const body = doc.body.cloneNode(true);
+  // A script node adopted from a parsed document would run a second time.
+  body.querySelectorAll("script").forEach((el) => el.remove());
+
+  document.body.replaceChildren(...body.childNodes);
+  document.body.className = doc.body.className;
+
+  if (bootPage) bootPage();
+}
+
+let historyBound = false;
+
+export function initLangSwitch() {
+  const link = document.querySelector(".nav__lang");
+  if (!link) return;
+
+  // The other language is one small document; fetching it on hover makes the
+  // swap feel immediate without costing anything on load.
+  link.addEventListener("pointerenter", () => {
+    fetchPage(link.href).catch(() => {});
+  });
+
+  link.addEventListener("click", (e) => {
+    // Leave modified clicks alone: they mean "open elsewhere".
+    if (
+      e.defaultPrevented ||
+      e.button !== 0 ||
+      e.metaKey ||
+      e.ctrlKey ||
+      e.shiftKey ||
+      e.altKey
+    ) {
+      return;
+    }
+
+    const url = link.href;
+    e.preventDefault();
+    const y = window.scrollY;
+
+    fetchPage(url)
+      .then((doc) => {
+        applyPage(doc);
+        history.pushState({ swapped: true }, "", url);
+        // scroll-behavior is smooth on <html>; an instant jump here keeps the
+        // position from visibly animating back.
+        window.scrollTo({ top: y, left: 0, behavior: "instant" });
+      })
+      .catch(() => {
+        window.location.href = url; // network trouble — let the browser do it
+      });
+  });
+
+  if (historyBound) return;
+  historyBound = true;
+
+  // Registered once for the session: back/forward must swap too, and this
+  // listener has to outlive the bus that the swap itself aborts.
+  window.addEventListener("popstate", () => {
+    const y = window.scrollY;
+    fetchPage(window.location.href)
+      .then((doc) => {
+        applyPage(doc);
+        window.scrollTo({ top: y, left: 0, behavior: "instant" });
+      })
+      .catch(() => window.location.reload());
   });
 }
 
@@ -112,17 +250,27 @@ export function initMobileMenu() {
     if (e.target.closest("a")) setOpen(false);
   });
 
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && burger.getAttribute("aria-expanded") === "true") {
-      setOpen(false);
-      burger.focus();
-    }
-  });
+  document.addEventListener(
+    "keydown",
+    (e) => {
+      if (e.key === "Escape" && burger.getAttribute("aria-expanded") === "true") {
+        setOpen(false);
+        burger.focus();
+      }
+    },
+    { signal: bus.signal },
+  );
 
   // Leaving the mobile breakpoint with the menu open would trap scrolling.
-  window.matchMedia("(min-width: 900px)").addEventListener("change", (e) => {
-    if (e.matches) setOpen(false);
-  });
+  window
+    .matchMedia("(min-width: 900px)")
+    .addEventListener(
+      "change",
+      (e) => {
+        if (e.matches) setOpen(false);
+      },
+      { signal: bus.signal },
+    );
 }
 
 /* ─────────────────────────────────────────────────────────────
@@ -136,7 +284,7 @@ export function initBackToTop() {
   const onScroll = () =>
     btn.classList.toggle("is-visible", window.scrollY > 400);
 
-  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("scroll", onScroll, { passive: true, signal: bus.signal });
   onScroll();
 
   btn.addEventListener("click", () => {
@@ -169,8 +317,8 @@ export function initScrollProgress() {
     requestAnimationFrame(paint);
   }
 
-  window.addEventListener("scroll", onScroll, { passive: true });
-  window.addEventListener("resize", onScroll, { passive: true });
+  window.addEventListener("scroll", onScroll, { passive: true, signal: bus.signal });
+  window.addEventListener("resize", onScroll, { passive: true, signal: bus.signal });
   paint();
 }
 
@@ -187,7 +335,7 @@ export function initNavScrollSpy() {
 
   if (nav) {
     const elevate = () => nav.classList.toggle("is-scrolled", window.scrollY > 20);
-    window.addEventListener("scroll", elevate, { passive: true });
+    window.addEventListener("scroll", elevate, { passive: true, signal: bus.signal });
     elevate();
   }
 
@@ -215,6 +363,7 @@ export function initNavScrollSpy() {
   );
 
   sections.forEach((s) => observer.observe(s));
+  bus.signal.addEventListener("abort", () => observer.disconnect(), { once: true });
 }
 
 /* ─────────────────────────────────────────────────────────────
@@ -257,23 +406,27 @@ export function initCopyButtons() {
   const lang = document.documentElement.lang === "en" ? "en" : "fr";
   const t = messages[lang];
 
-  document.addEventListener("click", async (e) => {
-    const btn = e.target.closest("[data-copy]");
-    if (!btn) return;
+  document.addEventListener(
+    "click",
+    async (e) => {
+      const btn = e.target.closest("[data-copy]");
+      if (!btn) return;
 
-    e.preventDefault();
-    const value = btn.dataset.copy;
-    if (!value) return;
+      e.preventDefault();
+      const value = btn.dataset.copy;
+      if (!value) return;
 
-    try {
-      await navigator.clipboard.writeText(value);
-      showToast(`${t[btn.dataset.copyKind] || t.email} : ${value}`);
-      btn.classList.add("is-copied");
-      setTimeout(() => btn.classList.remove("is-copied"), 1200);
-    } catch (err) {
-      showToast(t.error);
-    }
-  });
+      try {
+        await navigator.clipboard.writeText(value);
+        showToast(`${t[btn.dataset.copyKind] || t.email} : ${value}`);
+        btn.classList.add("is-copied");
+        setTimeout(() => btn.classList.remove("is-copied"), 1200);
+      } catch (err) {
+        showToast(t.error);
+      }
+    },
+    { signal: bus.signal },
+  );
 }
 
 /* ─────────────────────────────────────────────────────────────
@@ -282,6 +435,7 @@ export function initCopyButtons() {
 
 export function initChrome() {
   initTheme();
+  initLangSwitch();
   initMobileMenu();
   initBackToTop();
   initScrollProgress();
