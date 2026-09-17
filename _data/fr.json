@@ -22,8 +22,7 @@
     "copyEmail": "Copier l'adresse email",
     "copyPhone": "Copier le numéro de téléphone",
     "projectPreview": "Aperçu du projet",
-    "sourceCode": "Code source de",
-    "keyFigures": "Chiffres clés"
+    "sourceCode": "Code source de"
   },
   "nav": {
     "work": "Travaux",
@@ -41,25 +40,7 @@
     "cvUrl": "/assets/cv-talvin-ackbaraly-fr.pdf",
     "emailBtn": "Écrire un email",
     "linkedinBtn": "LinkedIn",
-    "githubBtn": "GitHub",
-    "facts": [
-      {
-        "value": "×24",
-        "label": "d'accélération CPU → GPU sur un pipeline de détection de mouvement, en CUDA"
-      },
-      {
-        "value": "75 000",
-        "label": "particules simulées à 60 FPS, physique des fluides entièrement sur GPU"
-      },
-      {
-        "value": "5 mois",
-        "label": "de développement en production chez Studiocanal — full-stack, CI/CD sur AWS"
-      },
-      {
-        "value": "2027",
-        "label": "diplôme d'ingénieur EPITA, spécialisation Image et intelligence artificielle"
-      }
-    ]
+    "githubBtn": "GitHub"
   },
   "projects": {
     "index": "01",

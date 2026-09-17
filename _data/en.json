@@ -22,8 +22,7 @@
     "copyEmail": "Copy email address",
     "copyPhone": "Copy phone number",
     "projectPreview": "Project preview",
-    "sourceCode": "Source code for",
-    "keyFigures": "Key figures"
+    "sourceCode": "Source code for"
   },
   "nav": {
     "work": "Work",
@@ -41,25 +40,7 @@
     "cvUrl": "/assets/cv-talvin-ackbaraly-en.pdf",
     "emailBtn": "Send an email",
     "linkedinBtn": "LinkedIn",
-    "githubBtn": "GitHub",
-    "facts": [
-      {
-        "value": "×24",
-        "label": "CPU → GPU speed-up on a motion-detection pipeline, written in CUDA"
-      },
-      {
-        "value": "75,000",
-        "label": "particles simulated at 60 FPS, fluid physics running entirely on the GPU"
-      },
-      {
-        "value": "5 months",
-        "label": "shipping to production at Studiocanal — full-stack, CI/CD on AWS"
-      },
-      {
-        "value": "2027",
-        "label": "MEng from EPITA, majoring in Image processing and artificial intelligence"
-      }
-    ]
+    "githubBtn": "GitHub"
   },
   "projects": {
     "index": "01",

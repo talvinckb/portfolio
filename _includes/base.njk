@@ -55,15 +55,6 @@
             <p class="hero__intro">{{ t.hero.intro }}</p>
             <div class="hero__cta">{{ contact.heroActions(t, site) }}</div>
           </div>
-
-          <ul class="stats" role="list" aria-label="{{ t.a11y.keyFigures }}">
-            {% for fact in t.hero.facts %}
-              <li class="stat">
-                <p class="stat__value">{{ fact.value }}</p>
-                <p class="stat__label">{{ fact.label }}</p>
-              </li>
-            {% endfor %}
-          </ul>
         </div>
       </section>
 

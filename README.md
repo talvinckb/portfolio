@@ -47,7 +47,6 @@ liseré décoratif.
 |---|---|---|
 | Titres | Archivo, `font-stretch: 112%`, 800 | accroche, titres de section, titres d'étude de cas |
 | Texte | Archivo, 400–700 | paragraphes, titres de carte, navigation, boutons |
-| Chiffres | Archivo, `font-stretch: 70%`, 700 | uniquement les chiffres clés du hero |
 | Données | IBM Plex Mono | périodes, stacks, index de section, code |
 
 Une seule famille porte toute la page : son axe de largeur (`wdth`,
@@ -117,7 +116,7 @@ qu'aucun composant n'ait à connaître le contexte.
 
 | Section | Ancre | Source |
 |---|---|---|
-| Hero — accroche, intro, disponibilité, chiffres clés | — | `hero` |
+| Hero — accroche, disponibilité, intro, liens | — | `hero` |
 | 01 Travaux — projets phares + autres réalisations | `#work` | `projects` |
 | 02 Parcours — expériences, formation, langues | `#background` | `background` |
 | 03 Compétences | `#skills` | `skills` |
@@ -125,16 +124,6 @@ qu'aucun composant n'ait à connaître le contexte.
 
 Les ancres sont volontairement en anglais des deux côtés : les deux locales
 partagent le même gabarit, donc les mêmes `id`.
-
-### Chiffres clés
-
-`hero.facts` est la première chose qu'un recruteur lit. Quatre entrées
-maximum, chacune adossée à un projet ou une expérience réelle — jamais un
-chiffre qu'une étude de cas ne peut pas justifier.
-
-```jsonc
-{ "value": "×24", "label": "d'accélération CPU → GPU sur un pipeline…" }
-```
 
 ## Développement
 
