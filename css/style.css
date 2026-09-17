@@ -77,7 +77,7 @@ ol[role="list"] {
 
   /* Layout */
   --wrap: 78rem;
-  --prose: 44rem;
+  --case: 64rem;
   --gutter: clamp(1.25rem, 4vw, 3rem);
   --nav-h: 3.75rem;
 
@@ -1155,6 +1155,14 @@ h4 {
   padding-top: clamp(1.75rem, 4vw, 3rem);
 }
 
+.case__head,
+.case__cover,
+.case__nav,
+.prose {
+  max-width: var(--case);
+  margin-inline: auto;
+}
+
 .case__back {
   display: inline-flex;
   align-items: center;
@@ -1193,7 +1201,6 @@ h4 {
 
 .case__title {
   margin-top: var(--s-3);
-  max-width: 20ch;
   font-size: clamp(2rem, 1.1rem + 3.6vw, 3.5rem);
   font-weight: 600;
   line-height: 1.04;
@@ -1266,18 +1273,8 @@ h4 {
 .prose {
   padding-top: clamp(2rem, 4vw, 3rem);
   font-size: var(--t-md);
-  line-height: 1.7;
+  line-height: 1.8;
   color: var(--ink-2);
-}
-
-.prose > p,
-.prose > ul,
-.prose > ol,
-.prose > blockquote,
-.prose > h2,
-.prose > h3,
-.prose > h4 {
-  max-width: var(--prose);
 }
 
 .prose h2 {
