@@ -33,7 +33,6 @@
   "hero": {
     "name": "Talvin Ackbaraly",
     "location": "Paris, France",
-    "statement": "I build systems that see, and I make them fast enough to run in real time.",
     "intro": "Engineering student at EPITA, Image major. I work on computer vision, deep learning and GPU computing — from CUDA ports of real-time algorithms to medical and heritage image segmentation. Five months at Studiocanal taught me what shipping actually means: CI/CD, code reviews, production.",
     "status": "Available for a 6-month final-year internship starting February 2027",
     "cvBtn": "Download CV",

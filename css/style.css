@@ -849,10 +849,6 @@ h4 {
    9. Work — secondary list
    ───────────────────────────────────────────────────────────── */
 
-.side-list {
-  border-top: 2px solid var(--ink);
-}
-
 .side-item {
   position: relative;
   display: grid;

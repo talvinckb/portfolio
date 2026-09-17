@@ -33,7 +33,6 @@
   "hero": {
     "name": "Talvin Ackbaraly",
     "location": "Paris, France",
-    "statement": "Je conçois des systèmes qui voient, et je les rends assez rapides pour le temps réel.",
     "intro": "Étudiant en cycle ingénieur à l'EPITA, majeure Image. Je travaille la vision par ordinateur, l'apprentissage profond et le calcul GPU — du portage CUDA d'algorithmes temps réel à la segmentation d'images médicales et patrimoniales. Cinq mois chez Studiocanal m'ont appris ce que « livrer » veut dire : CI/CD, revues de code, production.",
     "status": "Disponible pour un stage de fin d'études de 6 mois à partir de février 2027",
     "cvBtn": "Télécharger le CV",
