@@ -33,7 +33,7 @@
   "hero": {
     "name": "Talvin Ackbaraly",
     "location": "Paris, France",
-    "intro": "Étudiant en cycle ingénieur à l'EPITA, majeure Image. Je travaille la vision par ordinateur, l'apprentissage profond et le calcul GPU — du portage CUDA d'algorithmes temps réel à la segmentation d'images médicales et patrimoniales. Cinq mois chez Studiocanal m'ont appris ce que « livrer » veut dire : CI/CD, revues de code, production.",
+    "intro": "Étudiant en cycle ingénieur à l'EPITA, majeure Image. Je travaille la vision par ordinateur, l'apprentissage profond et le calcul GPU : portage CUDA d'algorithmes temps réel, segmentation d'images médicales et patrimoniales. J'ai également effectué un stage de cinq mois chez Studiocanal en développement full-stack et DevOps.",
     "status": "Disponible pour un stage de fin d'études de 6 mois à partir de février 2027",
     "cvBtn": "Télécharger le CV",
     "cvUrl": "/assets/cv-talvin-ackbaraly-fr.pdf",
@@ -44,8 +44,8 @@
   "projects": {
     "index": "01",
     "label": "Travaux",
-    "title": "Six projets, mesurés et documentés",
-    "lede": "Chaque projet marquant a son étude de cas : le problème, les choix techniques, les chiffres, et ce qui n'a pas marché.",
+    "title": "Projets sélectionnés",
+    "lede": "Chaque projet ci-dessous fait l'objet d'une étude de cas détaillée.",
     "secondaryTitle": "Autres réalisations",
     "viewProject": "Lire l'étude de cas",
     "codeLabel": "Code",
@@ -249,7 +249,7 @@
   "background": {
     "index": "02",
     "label": "Parcours",
-    "title": "Où j'ai appris, et sur quoi",
+    "title": "Expériences et formation",
     "experienceTitle": "Expériences",
     "educationTitle": "Formation",
     "extrasTitle": "Langues",
@@ -311,7 +311,7 @@
   "skills": {
     "index": "03",
     "label": "Compétences",
-    "title": "Ce que je sais faire",
+    "title": "Compétences techniques",
     "groups": [
       {
         "category": "Vision & IA",
@@ -350,8 +350,8 @@
   "contact": {
     "index": "04",
     "label": "Contact",
-    "title": "Parlons-en.",
-    "text": "Je cherche un stage de fin d'études de 6 mois à partir de février 2027, en vision par ordinateur, IA ou calcul GPU. Écrivez-moi : je réponds à tout le monde.",
+    "title": "Me contacter",
+    "text": "Je cherche un stage de fin d'études de 6 mois à partir de février 2027, en vision par ordinateur, IA ou calcul GPU. N'hésitez pas à me contacter.",
     "emailLabel": "Email",
     "phoneLabel": "Téléphone",
     "linkedinBtn": "LinkedIn",
