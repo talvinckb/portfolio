@@ -149,6 +149,29 @@ module.exports = function (eleventyConfig) {
     return `${url}?v=${hash}`;
   });
 
+  /** Escaped `text` with the first occurrence of each of `words` wrapped in
+      `<span class="hl">`, numbered for the stagger. A word missing from the
+      text fails the build rather than silently losing its highlight. */
+  eleventyConfig.addFilter("highlight", (text, words = []) => {
+    const escape = (s) =>
+      String(s).replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
+    const hits = words
+      .map((word) => {
+        const at = String(text).indexOf(word);
+        if (at === -1) throw new Error(`highlight: "${word}" not in "${text}"`);
+        return { at, word };
+      })
+      .sort((a, b) => a.at - b.at);
+    let out = "";
+    let pos = 0;
+    hits.forEach(({ at, word }, i) => {
+      out += escape(text.slice(pos, at));
+      out += `<span class="hl" style="--i: ${i}">${escape(word)}</span>`;
+      pos = at + word.length;
+    });
+    return out + escape(text.slice(pos));
+  });
+
   /** First entry of `items` whose id is `id`, or null. */
   eleventyConfig.addFilter("byId", (items, id) =>
     items.find((item) => item.id === id) || null,

@@ -81,7 +81,7 @@
                   <h3 class="work-card__title">
                     <a href="{{ projectUrl }}">{{ p.title }}</a>
                   </h3>
-                  <p class="work-card__tagline">{{ p.tagline }}</p>
+                  <p class="work-card__tagline">{{ p.tagline | highlight(p.highlights) | safe }}</p>
                   <p class="work-card__stack">{{ p.stack | join(" · ") }}</p>
                 </div>
 

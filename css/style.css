@@ -526,7 +526,8 @@ p {
    6. Detection box
    One rule: a box frames an image in which something is actually
    detected — a face in the portrait, a project under the pointer.
-   Never text, never decoration.
+   Never decoration. Text is only ever "detected" as a few key words
+   of a project card, highlighted along with its box (section 10).
    ───────────────────────────────────────────────────────────── */
 
 .detect {
@@ -875,6 +876,26 @@ p {
   font-size: 0.9375rem;
   line-height: 1.55;
   color: var(--ink-2);
+}
+
+/* The card's key words, "detected" with its box: a lime fill sweeps in
+   under each one, left to right, one after the other. */
+.work-card__tagline .hl {
+  margin-inline: -0.15em;
+  padding-inline: 0.15em;
+  background: linear-gradient(var(--accent), var(--accent)) no-repeat left / 0% 100%;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  transition:
+    background-size var(--normal) var(--ease),
+    color var(--normal) var(--ease);
+  transition-delay: calc(80ms + var(--i, 0) * 90ms);
+}
+
+.work-card:hover .work-card__tagline .hl,
+.work-card:focus-within .work-card__tagline .hl {
+  background-size: 100% 100%;
+  color: var(--on-accent);
 }
 
 .work-card__stack {
@@ -2175,6 +2196,10 @@ button.chip:hover {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+
+  .work-card__tagline .hl {
+    transition-delay: 0s;
   }
 }
 
