@@ -32,38 +32,15 @@
   },
   "hero": {
     "name": "Talvin Ackbaraly",
-    "kicker": "Vision par ordinateur, IA & calcul GPU",
-    "headline": "J'apprends aux machines à voir, et à le faire vite.",
+    "kicker": "vision par ordinateur · IA · calcul GPU",
     "intro": "Étudiant ingénieur à l'EPITA, majeure Image. De la segmentation d'archives de la BnF au portage CUDA d'algorithmes temps réel.",
-    "status": "Disponible · stage de fin d'études de 6 mois dès février 2027",
-    "location": "Paris, France",
-    "coords": "48.85° N · 2.35° E",
-    "ctaWork": "Voir les projets",
-    "ctaContact": "Me contacter",
+    "ctaWork": "voir-les-projets",
+    "ctaContact": "contact",
     "cvBtn": "CV",
     "cvUrl": "/assets/cv-talvin-ackbaraly-fr.pdf",
-    "photo": null,
-    "photoAlt": "Portrait de Talvin Ackbaraly",
-    "photoBox": {
-      "x": 27,
-      "y": 14,
-      "w": 46,
-      "h": 50
-    },
-    "photoSource": "portrait.webp",
-    "detections": "1 détection",
-    "detectionLabel": "talvin",
-    "media": {
-      "video": "/assets/projects/irgpu/motion_detection_hero.mp4",
-      "poster": "/assets/projects/irgpu/motion_detection_hero-poster.webp",
-      "alt": "Détection de mouvement temps réel sur GPU (projet IRGPU)",
-      "source": "irgpu · motion_detection",
-      "rate": "129 FPS",
-      "meta": [
-        "C++ / CUDA",
-        "×24 vs CPU",
-        "SSIM 0,9949"
-      ]
+    "terminal": {
+      "user": "talvin",
+      "host": "epita"
     }
   },
   "projects": {

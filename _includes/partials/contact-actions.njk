@@ -1,23 +1,27 @@
 {# Contact affordances. Two shapes: the hero's action row, the contact panel. #}
 {% import "partials/icons.njk" as icon %}
 
-{# ─── Hero: one accent action, one outlined, then icon links ─── #}
+{# ─── Hero: the same actions, written as commands in the terminal ─── #}
 {% macro heroActions(t, site, anchorBase) %}
   <div class="actions">
     <a href="{{ anchorBase }}#work" class="btn btn--accent">
-      <span>{{ t.hero.ctaWork }}</span>{{ icon.arrowRight(16) }}
+      <span><span class="btn__cmd" aria-hidden="true">./</span>{{ t.hero.ctaWork }}</span>{{ icon.arrowRight(16) }}
     </a>
 
     <a href="{{ anchorBase }}#contact" class="btn btn--line">
       <span>{{ t.hero.ctaContact }}</span>
     </a>
 
-    <a href="{{ site.github }}" class="btn btn--line btn--icon" target="_blank" rel="noopener noreferrer" aria-label="GitHub" title="GitHub">
-      {{ icon.github(18) }}
+    <a href="{{ t.hero.cvUrl }}" class="btn btn--line" target="_blank" rel="noopener noreferrer">
+      <span>cv.pdf</span>{{ icon.download(16) }}
     </a>
 
-    <a href="{{ site.linkedin }}" class="btn btn--line btn--icon" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" title="LinkedIn">
-      {{ icon.linkedin(18) }}
+    <a href="{{ site.github }}" class="btn btn--line" target="_blank" rel="noopener noreferrer">
+      <span>github</span>{{ icon.arrowUpRight(16) }}
+    </a>
+
+    <a href="{{ site.linkedin }}" class="btn btn--line" target="_blank" rel="noopener noreferrer">
+      <span>linkedin</span>{{ icon.arrowUpRight(16) }}
     </a>
   </div>
 {% endmacro %}

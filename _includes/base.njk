@@ -30,47 +30,23 @@
     <main id="main">
       <!-- ─── Hero ─── -->
       <section class="hero wrap">
-        <div class="hero__text">
-          <p class="status"><span class="status__dot" aria-hidden="true"></span>{{ t.hero.status }}</p>
+        {# The whole hero is one terminal window running `whoami`. #}
+        <div class="term">
+          <div class="term__bar" aria-hidden="true">
+            <span class="term__dots"><span></span><span></span><span></span></span>
+            <span>{{ t.hero.terminal.user }}@{{ t.hero.terminal.host }}: ~ — zsh</span>
+          </div>
+          <div class="term__body">
+            <p class="term__line" aria-hidden="true"><span class="term__prompt">$</span> whoami</p>
+            <h1 class="hero__title">{{ t.hero.name }}</h1>
+            <p class="hero__kicker">{{ t.hero.kicker }}</p>
+            <p class="hero__intro">{{ t.hero.intro }}</p>
 
-          <p class="hero__kicker">{{ t.hero.name }} — {{ t.hero.kicker }}</p>
-          <h1 class="hero__title">{{ t.hero.headline }}</h1>
-          <p class="hero__intro">{{ t.hero.intro }}</p>
+            {{ contact.heroActions(t, site, anchorBase) }}
 
-          {{ contact.heroActions(t, site, anchorBase) }}
+            <p class="term__line" aria-hidden="true"><span class="term__prompt">$</span> <span class="term__cursor"></span></p>
+          </div>
         </div>
-
-        {% if t.hero.photo %}
-          {# A real detection: the box sits on the face in the portrait. #}
-          {% set box = t.hero.photoBox %}
-          <figure class="viewer hero__viewer">
-            <div class="viewer__bar" aria-hidden="true">
-              <span>cam_01 · {{ t.hero.photoSource }}</span><span>{{ t.hero.detections }}</span>
-            </div>
-            <div class="viewer__frame viewer__frame--portrait">
-              <img src="{{ t.hero.photo }}" alt="{{ t.hero.photoAlt }}" width="800" height="1000" fetchpriority="high" decoding="async"/>
-              <span class="detect" style="--x: {{ box.x }}%; --y: {{ box.y }}%; --w: {{ box.w }}%; --h: {{ box.h }}%;" aria-hidden="true">
-                <span class="detect__label">{{ t.hero.detectionLabel }} · 0.99</span>
-              </span>
-            </div>
-            <div class="viewer__bar" aria-hidden="true">
-              <span>{{ t.hero.location }}</span><span>{{ t.hero.coords }}</span>
-            </div>
-          </figure>
-        {% else %}
-          {% set media = t.hero.media %}
-          <figure class="viewer hero__viewer">
-            <div class="viewer__bar" aria-hidden="true">
-              <span>{{ media.source }}</span><span class="viewer__live">{{ media.rate }}</span>
-            </div>
-            <div class="viewer__frame">
-              <video class="hero__video" poster="{{ media.poster }}" muted loop playsinline preload="none" aria-label="{{ media.alt }}" data-src="{{ media.video }}"></video>
-            </div>
-            <div class="viewer__bar" aria-hidden="true">
-              {% for m in media.meta %}<span>{{ m }}</span>{% endfor %}
-            </div>
-          </figure>
-        {% endif %}
       </section>
 
       <!-- ─── Work ─── -->

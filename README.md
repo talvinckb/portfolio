@@ -57,7 +57,6 @@ C'est l'élément signature (`.detect` + `.detect__label`), et il obéit à une
 seule règle : **une boîte encadre une image dans laquelle quelque chose est
 réellement détecté.**
 
-- le visage sur le portrait de l'accueil (`hero.photoBox`) ;
 - une carte projet, **au survol ou au focus uniquement**, une à la fois.
 
 Jamais autour d'un texte, d'un titre ou d'un bloc décoratif. Les images de
@@ -66,7 +65,8 @@ ajoute pas par-dessus.
 
 ### Règles
 
-- **Angles vifs partout.** Le seul arrondi est la pastille « disponible ».
+- **Angles vifs partout.** Les seuls arrondis sont les trois boutons de la
+  fenêtre du terminal, dans le hero.
 - **Le vert est un signal, pas un décor** : boîtes de détection, action
   principale, repère de la section en cours, état sélectionné. Le texte
   courant reste en `--ink` / `--ink-2`.
@@ -111,7 +111,7 @@ la préférence système.
 ├── css/style.css          # Design system complet
 ├── js/
 │   ├── ui.js              # Comportements partagés (thème, menu, toasts…)
-│   ├── main.js            # Page d'accueil (compétences, vidéo du hero)
+│   ├── main.js            # Page d'accueil (compétences)
 │   └── project.js         # Pages projet (sommaire, lightbox, tableaux, KaTeX)
 ├── scripts/fetch-cv.js    # Récupère les CV PDF depuis les releases GitHub
 ├── sitemap.njk            # Sitemap généré à partir de la collection projets
@@ -122,7 +122,7 @@ la préférence système.
 
 | Section | Ancre | Source |
 |---|---|---|
-| Hero — disponibilité, accroche, intro, actions, portrait (ou démo IRGPU) | — | `hero` |
+| Hero — un terminal qui lance `whoami` : nom, accroche, intro, actions | — | `hero` |
 | 01 Projets sélectionnés + autres réalisations | `#work` | `projects` |
 | 02 Parcours — deux frises : expériences, formation | `#background` | `background` |
 | 03 Compétences — chaque compétence mène aux projets qui l'utilisent | `#skills` | `skills` |
@@ -131,18 +131,13 @@ la préférence système.
 Les ancres sont volontairement en anglais des deux côtés : les deux locales
 partagent le même gabarit, donc les mêmes `id`.
 
-### Le portrait
+### Le terminal
 
-Tant que `hero.photo` vaut `null`, le hero affiche la démo vidéo d'IRGPU (`hero.media`, un extrait recadré en 4:5 et allégé de la démo complète)
-(lue seulement quand elle est visible, jamais sous `reduced-motion`). Pour
-passer au portrait :
-
-1. déposer l'image, recadrée en **4:5**, en WebP (≈ 800×1000) :
-   `assets/portrait.webp` ;
-2. renseigner `"photo": "/assets/portrait.webp"` dans `fr.json` **et**
-   `en.json` ;
-3. ajuster `hero.photoBox` (`x`, `y`, `w`, `h`, en % du cadre) pour que la
-   boîte tombe sur le visage.
+Le hero entier est une fenêtre de terminal qui lance `whoami` : le nom
+(le `h1`), l'accroche, l'intro, puis les actions écrites comme des commandes
+(`./voir-les-projets`, `contact`, `cv.pdf`, `github`, `linkedin`). Tout est
+du HTML rendu au build ; le prompt, la barre de fenêtre et le curseur sont
+décoratifs (`aria-hidden`). Textes : `hero` dans `fr.json` / `en.json`.
 
 ### Compétences → projets
 

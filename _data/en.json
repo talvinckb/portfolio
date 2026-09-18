@@ -32,38 +32,15 @@
   },
   "hero": {
     "name": "Talvin Ackbaraly",
-    "kicker": "Computer vision, AI & GPU computing",
-    "headline": "I teach machines to see, and to do it fast.",
+    "kicker": "computer vision · AI · GPU computing",
     "intro": "Engineering student at EPITA, Image major. From segmenting the BnF's archives to CUDA ports of real-time algorithms.",
-    "status": "Available · 6-month final-year internship from February 2027",
-    "location": "Paris, France",
-    "coords": "48.85° N · 2.35° E",
-    "ctaWork": "See the work",
-    "ctaContact": "Get in touch",
+    "ctaWork": "see-the-work",
+    "ctaContact": "contact",
     "cvBtn": "CV",
     "cvUrl": "/assets/cv-talvin-ackbaraly-en.pdf",
-    "photo": null,
-    "photoAlt": "Portrait of Talvin Ackbaraly",
-    "photoBox": {
-      "x": 27,
-      "y": 14,
-      "w": 46,
-      "h": 50
-    },
-    "photoSource": "portrait.webp",
-    "detections": "1 detection",
-    "detectionLabel": "talvin",
-    "media": {
-      "video": "/assets/projects/irgpu/motion_detection_hero.mp4",
-      "poster": "/assets/projects/irgpu/motion_detection_hero-poster.webp",
-      "alt": "Real-time GPU motion detection (IRGPU project)",
-      "source": "irgpu · motion_detection",
-      "rate": "129 FPS",
-      "meta": [
-        "C++ / CUDA",
-        "×24 vs CPU",
-        "SSIM 0.9949"
-      ]
+    "terminal": {
+      "user": "talvin",
+      "host": "epita"
     }
   },
   "projects": {

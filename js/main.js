@@ -11,8 +11,6 @@ import {
   boot,
   initChrome,
   initNavScrollSpy,
-  onTeardown,
-  prefersReducedMotion,
 } from "./ui.js";
 
 /* ─────────────────────────────────────────────────────────────
@@ -51,32 +49,8 @@ function initSkills() {
   select(chips[0].dataset.skill);
 }
 
-/* ─────────────────────────────────────────────────────────────
-   Hero video — plays only while visible, never against the
-   reduced-motion preference
-   ───────────────────────────────────────────────────────────── */
-
-function initHeroVideo() {
-  const video = document.querySelector(".hero__video");
-  if (!video || prefersReducedMotion()) return; // the poster stands in
-
-  const observer = new IntersectionObserver(([entry]) => {
-    if (entry.isIntersecting) {
-      // The file is fetched only once the hero is actually on screen.
-      if (!video.src) video.src = video.dataset.src;
-      video.play().catch(() => {});
-    } else {
-      video.pause();
-    }
-  });
-
-  observer.observe(video);
-  onTeardown(() => observer.disconnect());
-}
-
 boot(() => {
   initChrome();
   initNavScrollSpy();
   initSkills();
-  initHeroVideo();
 });
