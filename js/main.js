@@ -207,6 +207,18 @@ function initSkills() {
   const blocks = [...root.querySelectorAll("[data-uses]")];
   if (!chips.length || !panel) return;
 
+  // Touch screens get plain chips: the panel stays closed and nothing is
+  // clickable, so the buttons become inert labels.
+  if (matchMedia("(hover: none) and (pointer: coarse)").matches) {
+    chips.forEach((chip) => {
+      const label = document.createElement("span");
+      label.className = chip.className;
+      label.textContent = chip.textContent;
+      chip.replaceWith(label);
+    });
+    return;
+  }
+
   function select(skill) {
     panel.classList.toggle("is-open", Boolean(skill));
     chips.forEach((chip) =>

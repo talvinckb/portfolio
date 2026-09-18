@@ -674,6 +674,13 @@ p {
   color: var(--ink);
 }
 
+/* Enter is a keyboard shortcut: no use for it on touch screens. */
+@media (hover: none) and (pointer: coarse) {
+  .term__line--enter {
+    display: none;
+  }
+}
+
 .term__key {
   padding: 0.05em 0.45em;
   border: 1px solid var(--rule-2);
