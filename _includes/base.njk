@@ -21,6 +21,28 @@
 <html lang="{{ lang }}">
   <head>
     {% include "partials/theme-init.njk" %}
+    {# Decides before first paint whether the hero types itself out: first
+       visit of the session only, never with reduced motion or a #anchor.
+       If main.js never takes over, the page shows itself anyway. #}
+    <script>
+      (function () {
+        var root = document.documentElement;
+        try {
+          if (
+            location.hash ||
+            sessionStorage.getItem("intro-seen") ||
+            window.matchMedia("(prefers-reduced-motion: reduce)").matches
+          ) return;
+          sessionStorage.setItem("intro-seen", "1");
+        } catch (e) {
+          return;
+        }
+        root.classList.add("intro");
+        setTimeout(function () {
+          if (!root.hasAttribute("data-intro-live")) root.classList.remove("intro");
+        }, 2500);
+      })();
+    </script>
     {% include "partials/head.njk" %}
   </head>
 
@@ -37,7 +59,7 @@
             <span>{{ t.hero.terminal.user }}@{{ t.hero.terminal.host }}: ~ — zsh</span>
           </div>
           <div class="term__body">
-            <p class="term__line" aria-hidden="true"><span class="term__prompt">$</span> whoami</p>
+            <p class="term__line" aria-hidden="true"><span class="term__prompt">$</span> <span class="term__cmd">whoami</span></p>
             <h1 class="hero__title">{{ t.hero.name }}</h1>
             <p class="hero__kicker">{{ t.hero.kicker }}</p>
             <p class="hero__intro">{{ t.hero.intro }}</p>
@@ -45,7 +67,9 @@
 
             {{ contact.heroActions(t, site, anchorBase) }}
 
-            <p class="term__line" aria-hidden="true"><span class="term__prompt">$</span> <span class="term__cursor"></span></p>
+            {# Enter (or a tap) goes to the work. The real, focusable link is the
+               CTA above, so this one stays out of reach. #}
+            <p class="term__line" aria-hidden="true"><span class="term__prompt">$</span> <a class="term__suggest" href="{{ anchorBase }}#work" tabindex="-1" hidden><kbd class="term__key">↵ {{ t.hero.terminal.enterHint }}</kbd></a></p>
           </div>
         </div>
       </section>
@@ -68,9 +92,9 @@
 
                 <div class="work-card__media">
                   <img
-                    src="{{ p.thumbnail }}"
-                    data-src-dark="{{ p.thumbnail }}"
-                    data-src-light="{{ p.thumbnailLight | default(p.thumbnail) }}"
+                    src="{{ p.thumbnail | versioned }}"
+                    data-src-dark="{{ p.thumbnail | versioned }}"
+                    data-src-light="{{ (p.thumbnailLight | default(p.thumbnail)) | versioned }}"
                     alt=""
                     width="800" height="450"
                     loading="lazy" decoding="async"/>
@@ -81,7 +105,7 @@
                   <h3 class="work-card__title">
                     <a href="{{ projectUrl }}">{{ p.title }}</a>
                   </h3>
-                  <p class="work-card__tagline">{{ p.tagline }}</p>
+                  <p class="work-card__tagline">{{ p.tagline | highlight(p.highlights) | safe }}</p>
                   <p class="work-card__stack">{{ p.stack | join(" · ") }}</p>
                 </div>
 

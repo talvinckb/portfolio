@@ -35,7 +35,8 @@ compilation et servies en HTML statique.
   d'accueil et les pages projet.
 - **Rien ne bouge sans raison.** Pas d'animation d'apparition ni d'effet
   décoratif : le mouvement sert un état (survol, détection, section lue) et
-  disparaît sous `prefers-reduced-motion`.
+  disparaît sous `prefers-reduced-motion`. Seule exception : l'intro du
+  terminal, une fois par session, interruptible à tout moment.
 
 ## Direction artistique
 
@@ -111,7 +112,7 @@ la préférence système.
 ├── css/style.css          # Design system complet
 ├── js/
 │   ├── ui.js              # Comportements partagés (thème, menu, toasts…)
-│   ├── main.js            # Page d'accueil (compétences)
+│   ├── main.js            # Page d'accueil (intro du terminal, compétences)
 │   └── project.js         # Pages projet (sommaire, lightbox, tableaux, KaTeX)
 ├── scripts/fetch-cv.js    # Récupère les CV PDF depuis les releases GitHub
 ├── sitemap.njk            # Sitemap généré à partir de la collection projets
@@ -139,6 +140,15 @@ point qui pulse), puis les actions écrites comme des commandes
 (`./voir-les-projets`, `contact`, `cv.pdf`, `github`, `linkedin`). Tout est
 du HTML rendu au build ; le prompt, la barre de fenêtre et le curseur sont
 décoratifs (`aria-hidden`). Textes : `hero` dans `fr.json` / `en.json`.
+
+À la première visite de la session, le terminal s'écrit tout seul (~3 s) :
+`whoami` se tape à la main, puis la sortie défile derrière le curseur, ligne
+par ligne, et les commandes apparaissent une à une ; enfin la navbar et le
+reste de la page arrivent en fondu. Rien n'est bloqué : une touche, un
+clic, la molette ou un scroll termine l'animation d'un coup. Pas
+d'animation avec `prefers-reduced-motion`, avec une ancre (`/#contact`) ni
+sans JS. La dernière ligne affiche `↵ entrée` : Entrée (ou un tap) descend
+vers les projets.
 
 ### Compétences → projets
 
