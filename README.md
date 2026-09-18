@@ -33,52 +33,57 @@ compilation et servies en HTML statique.
 - **Le balisage n'existe qu'une fois.** Navigation, pied de page, icônes et
   actions de contact sont des partials Nunjucks partagés entre la page
   d'accueil et les pages projet.
-- **Rien ne bouge sans raison.** Pas de dégradé, pas de flou, pas
-  d'animation d'apparition : la hiérarchie est portée par la grille, la
-  typographie et les aplats.
+- **Rien ne bouge sans raison.** Pas d'animation d'apparition ni d'effet
+  décoratif : le mouvement sert un état (survol, détection, section lue) et
+  disparaît sous `prefers-reduced-motion`.
 
 ## Direction artistique
 
-Typographie internationale : gris froids, angles vifs, grille visible, et
-le **bleu comme élément de structure** — des aplats pleine largeur, pas un
-liseré décoratif.
+**« Labo de vision ».** Le site se lit comme l'écran d'un outil de vision
+par ordinateur : une grille de mesure en fond, des relevés en mono autour
+des images, et une seule couleur vive — le vert des boîtes de détection.
 
 | Rôle | Police | Usage |
 |---|---|---|
-| Titres | Archivo, `font-stretch: 112%`, 800 | accroche, titres de section, titres d'étude de cas |
-| Texte | Archivo, 400–700 | paragraphes, titres de carte, navigation, boutons |
-| Données | IBM Plex Mono | périodes, stacks, index de section, code |
+| Titres & texte | Geist, 400–700 | accroche, titres, paragraphes, boutons |
+| Données | Geist Mono, 400–500 | périodes, stacks, index de section, relevés, libellés |
 
-Une seule famille porte toute la page : son axe de largeur (`wdth`,
-62→125) fait le travail qu'une deuxième police ferait ailleurs. La mono
-est réservée à ce qui est une **donnée** — jamais à un libellé décoratif.
+La mono est réservée à ce qui est une **donnée** ou une métadonnée — jamais
+à un paragraphe.
 
-Règles non négociables :
+### La boîte de détection
 
-- **`border-radius: 0` partout**, imposé dans le reset. Un seul coin
-  arrondi et tout le système s'effondre.
-- **Les filets portent la hiérarchie** : 2 px encre pour ouvrir une
-  section, 1 px `--rule` pour séparer des lignes de même niveau.
-- **Le bleu ne s'utilise pas en petites touches.** Bandeau de
-  disponibilité, en-têtes de la matrice de compétences, index des cartes,
-  section contact : ce sont des surfaces pleines. Le texte courant reste
-  en `--ink`.
-- **L'espacement des capitales reste serré** (`0.045em`). Des capitales
-  très espacées datent une mise en page instantanément.
-- **Jamais `--ink` en fond d'un élément permanent.** `--ink` s'inverse
-  entre les thèmes : un fond encre devient une barre blanche en thème
-  sombre. Réservé aux états de survol, où l'inversion est justement l'effet
-  recherché. Les bandeaux durables (en-têtes de tableau, en-têtes de la
-  matrice de compétences) sont en `--blue`.
+C'est l'élément signature (`.detect` + `.detect__label`), et il obéit à une
+seule règle : **une boîte encadre une image dans laquelle quelque chose est
+réellement détecté.**
 
-Les couleurs sont des tokens redéfinis sous `:root[data-theme="dark"]` —
-`--bg`, `--bg-2`, `--surface`, `--ink`, `--ink-2`, `--ink-3`, `--rule`,
-`--blue`, `--on-blue`, `--blue-soft`. **Aucune couleur en dur dans une
-règle**, sinon le thème sombre décroche.
+- une carte projet, **au survol ou au focus uniquement**, une à la fois.
 
-`.section--block` (la section contact) redéfinit `--ink`, `--rule` et
-`--blue` sur elle-même : tout ce qu'elle contient bascule en inversé sans
-qu'aucun composant n'ait à connaître le contexte.
+Jamais autour d'un texte, d'un titre ou d'un bloc décoratif. Les images de
+résultats des études de cas portent déjà leurs propres détections : on n'en
+ajoute pas par-dessus.
+
+### Règles
+
+- **Angles vifs partout.** Les seuls arrondis sont, dans le hero, le point
+  « disponible » et les trois boutons de la fenêtre du terminal.
+- **Le vert est un signal, pas un décor** : boîtes de détection, action
+  principale, repère de la section en cours, état sélectionné. Le texte
+  courant reste en `--ink` / `--ink-2`.
+- **Deux tokens pour le vert.** `--accent` est le fond des aplats (texte
+  `--on-accent` dessus) ; `--accent-text` et `--detect` sont assombris en
+  thème clair, où le vert pur disparaîtrait sur le blanc.
+- **Les filets portent la hiérarchie** : `--rule-2` pour les cadres,
+  `--rule` pour séparer des lignes de même niveau.
+- **Un cadre ne se pose jamais sur un `.wrap`** : sa bordure engloberait la
+  gouttière. Le cadre est un enfant du `.wrap`.
+
+Les couleurs sont des tokens redéfinis sous `:root[data-theme="light"]` —
+`--bg`, `--surface`, `--surface-2`, `--ink`, `--ink-2`, `--ink-3`, `--rule`,
+`--rule-2`, `--grid-line`, `--accent`, `--on-accent`, `--accent-text`,
+`--detect`. **Aucune couleur en dur dans une règle**, sinon un thème
+décroche. Le sombre est l'aspect par défaut ; sans JavaScript, le site suit
+la préférence système.
 
 ## Arborescence
 
@@ -98,6 +103,7 @@ qu'aucun composant n'ait à connaître le contexte.
 │       ├── nav.njk        # Navigation + menu mobile
 │       ├── footer.njk     # Pied de page + retour en haut + toasts
 │       ├── icons.njk      # Macros SVG — source unique des icônes
+│       ├── theme-init.njk # Choix du thème avant le premier rendu
 │       └── contact-actions.njk  # heroActions() et contactBlock()
 ├── projects/
 │   ├── fr/*.md            # Études de cas FR  → /projects/<id>/
@@ -105,8 +111,8 @@ qu'aucun composant n'ait à connaître le contexte.
 ├── css/style.css          # Design system complet
 ├── js/
 │   ├── ui.js              # Comportements partagés (thème, menu, toasts…)
-│   ├── main.js            # Page d'accueil
-│   └── project.js         # Pages projet (lightbox, tableaux, KaTeX)
+│   ├── main.js            # Page d'accueil (compétences)
+│   └── project.js         # Pages projet (sommaire, lightbox, tableaux, KaTeX)
 ├── scripts/fetch-cv.js    # Récupère les CV PDF depuis les releases GitHub
 ├── sitemap.njk            # Sitemap généré à partir de la collection projets
 └── .eleventy.js
@@ -116,14 +122,32 @@ qu'aucun composant n'ait à connaître le contexte.
 
 | Section | Ancre | Source |
 |---|---|---|
-| Hero — accroche, disponibilité, intro, liens | — | `hero` |
-| 01 Travaux — projets phares + autres réalisations | `#work` | `projects` |
-| 02 Parcours — expériences, formation, langues | `#background` | `background` |
-| 03 Compétences | `#skills` | `skills` |
+| Hero — un terminal qui lance `whoami` : nom, accroche, intro, disponibilité, actions | — | `hero` |
+| 01 Projets sélectionnés + autres réalisations | `#work` | `projects` |
+| 02 Parcours — deux frises : expériences, formation | `#background` | `background` |
+| 03 Compétences — chaque compétence mène aux projets qui l'utilisent | `#skills` | `skills` |
 | 04 Contact | `#contact` | `contact` |
 
 Les ancres sont volontairement en anglais des deux côtés : les deux locales
 partagent le même gabarit, donc les mêmes `id`.
+
+### Le terminal
+
+Le hero entier est une fenêtre de terminal qui lance `whoami` : le nom
+(le `h1`), l'accroche, l'intro, la disponibilité (`hero.status`, avec un
+point qui pulse), puis les actions écrites comme des commandes
+(`./voir-les-projets`, `contact`, `cv.pdf`, `github`, `linkedin`). Tout est
+du HTML rendu au build ; le prompt, la barre de fenêtre et le curseur sont
+décoratifs (`aria-hidden`). Textes : `hero` dans `fr.json` / `en.json`.
+
+### Compétences → projets
+
+Chaque compétence de `skills.groups[].items` porte la liste `used` des `id`
+où elle a servi : un projet (`projects.items[].id`) ou une expérience
+(`background.experiences[].id`). Un projet avec étude de cas renvoie vers
+elle, un projet public vers GitHub. Une compétence dont `used` est vide
+s'affiche en pointillés, sans être cliquable — mieux vaut ça qu'un lien
+inventé.
 
 ## Développement
 
@@ -153,14 +177,15 @@ Ces fichiers sont ignorés par Git et régénérés à chaque build.
      "stack": ["C++", "CUDA"],
      "period": "4 semaines",
      "featured": true,        // true = vignette + page dédiée
-     "kind": "academic",      // "academic" | "personal"
      "github": null,          // URL du dépôt, ou null
      "repoNote": null         // réserve sur ce que le dépôt public contient
    }
    ```
 
-   `stack` est rendu en mono, séparé par ` / ` via CSS — pas de
-   pastilles : garder quatre entrées au plus, sinon la ligne double.
+   `stack` est rendu en mono, séparé par ` · ` — pas de pastilles : garder
+   quatre entrées au plus, sinon la ligne double.
+
+   Penser aussi à ajouter l'`id` dans le `used` des compétences concernées.
 
    `repoNote` est facultatif : il s'affiche sous la stack, dans la liste
    des autres réalisations, quand le dépôt public ne représente qu'une
@@ -186,8 +211,16 @@ Ces fichiers sont ignorés par Git et régénérés à chaque build.
    github: null
    demo: null
    report: null
+   brief:                     # le bloc « En bref » en tête de page
+     problem: "Le problème, en une phrase."
+     approach: "Ce qui a été fait, en une phrase."
+     result: "Le résultat mesuré, en une phrase."
+     role: "Ce que j'ai fait moi-même dans l'équipe."  # facultatif
    ---
    ```
+
+   Chaque titre `##` de l'étude de cas reçoit un `id` au build et devient
+   une entrée du sommaire latéral.
 
 3. Le sitemap se met à jour tout seul.
 
@@ -230,8 +263,8 @@ Points à ne pas régresser :
   (`fr`, `en`, `x-default`) ;
 - une carte projet n'a qu'un seul lien étendu (`::after` sur le titre) : le
   lien GitHub qui le recouvre doit rester en `z-index: 2` ;
-- les aplats bleus sont vérifiés en contraste dans les deux thèmes
-  (`--blue` / `--on-blue`, `--block-bg` / `--block-ink`) ;
+- les contrastes sont vérifiés dans les deux thèmes (AA : texte ≥ 4,5:1,
+  boîte de détection ≥ 3:1 sur le fond) ;
 - les animations sont neutralisées sous `prefers-reduced-motion`.
 
 ## Licence

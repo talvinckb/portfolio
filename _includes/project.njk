@@ -17,6 +17,9 @@
 {% set pageImageWidth = 1280 %}
 {% set pageImageHeight = 720 %}
 
+{% set sections = content | toc %}
+{% set pager = t.projects.items | neighbours(id) %}
+
 {% set projectLd = {
   "@context": "https://schema.org",
   "@type": "CreativeWork",
@@ -36,30 +39,7 @@
 <!DOCTYPE html>
 <html lang="{{ lang }}">
   <head>
-    <script>
-      (function () {
-        var stored = null;
-        // Le stockage de site peut lever (navigation privée, cookies bloqués) :
-        // on l'isole pour que l'échec ne coûte pas la préférence système.
-        try {
-          stored = localStorage.getItem("theme");
-        } catch (e) {}
-
-        var theme = stored === "light" || stored === "dark" ? stored : null;
-
-        if (!theme) {
-          try {
-            theme = window.matchMedia("(prefers-color-scheme: dark)").matches
-              ? "dark"
-              : "light";
-          } catch (e) {
-            theme = "light";
-          }
-        }
-
-        document.documentElement.setAttribute("data-theme", theme);
-      })();
-    </script>
+    {% include "partials/theme-init.njk" %}
     {% include "partials/head.njk" %}
 
     <!-- KaTeX — math rendering, loaded only on project pages -->
@@ -72,80 +52,147 @@
     {% include "partials/nav.njk" %}
 
     <main id="main" class="case">
-      <header class="case__head wrap">
-        <a href="{{ anchorBase }}#work" class="case__back">
-          {{ icon.chevronLeft(14) }}{{ t.project.back }}
-        </a>
+      <header class="case-head wrap">
+        <div class="case-head__text">
+          <a href="{{ anchorBase }}#work" class="case-head__back">
+            {{ icon.chevronLeft(14) }}{{ t.project.back }}
+          </a>
+          <p class="case-head__eyebrow">{{ t.project.eyebrow }} · {{ name }}</p>
+          <h1 class="case-head__title">{{ title }}</h1>
+          <p class="case-head__tagline">{{ tagline }}</p>
 
-        <p class="case__eyebrow">{{ name }}</p>
-        <h1 class="case__title">{{ title }}</h1>
-        <p class="case__tagline">{{ tagline }}</p>
+          {# One ruled line of metadata, label above value. #}
+          <dl class="facts">
+            {% if period %}
+              <div class="facts__item">
+                <dt>{{ t.project.duration }}</dt>
+                <dd>{{ period }}</dd>
+              </div>
+            {% endif %}
+            {% if team %}
+              <div class="facts__item">
+                <dt>{{ t.project.teamLabel }}</dt>
+                <dd>{{ team }} {{ t.project.team }}</dd>
+              </div>
+            {% endif %}
+            {% if stack %}
+              <div class="facts__item facts__item--stack">
+                <dt>{{ t.project.stackLabel }}</dt>
+                <dd>{{ stack | join(" · ") }}</dd>
+              </div>
+            {% endif %}
+          </dl>
 
-        <dl class="case__facts">
-          {% if period %}
-            <div class="case__fact">
-              <dt>{{ t.project.duration }}</dt>
-              <dd>{{ period }}</dd>
+          {% if github or demo or report %}
+            <div class="actions">
+              {% if demo %}
+                <a href="{{ demo }}" target="_blank" rel="noopener noreferrer" class="btn btn--accent">
+                  {{ icon.externalLink(15) }}<span>{{ t.project.demo }}</span>
+                </a>
+              {% endif %}
+              {% if github %}
+                <a href="{{ github }}" target="_blank" rel="noopener noreferrer" class="btn btn--line">
+                  {{ icon.github(15) }}<span>{{ t.project.sourceCode }}</span>
+                </a>
+              {% endif %}
+              {% if report %}
+                <a href="{{ report }}" target="_blank" rel="noopener noreferrer" class="btn btn--line">
+                  {{ icon.download(15) }}<span>{{ t.project.report }}</span>
+                </a>
+              {% endif %}
             </div>
           {% endif %}
-          {% if team %}
-            <div class="case__fact">
-              <dt>{{ t.project.teamLabel }}</dt>
-              <dd>{{ team }} {{ t.project.team }}</dd>
-            </div>
-          {% endif %}
-          {% if stack %}
-            <div class="case__fact case__fact--wide">
-              <dt>{{ t.project.stackLabel }}</dt>
-              <dd>{{ stack | join(" / ") }}</dd>
-            </div>
-          {% endif %}
-        </dl>
-
-        {% if github or demo or report %}
-          <div class="actions">
-            {% if demo %}
-              <a href="{{ demo }}" target="_blank" rel="noopener noreferrer" class="btn btn--fill">
-                {{ icon.externalLink(15) }}<span>{{ t.project.demo }}</span>
-              </a>
-            {% endif %}
-            {% if github %}
-              <a href="{{ github }}" target="_blank" rel="noopener noreferrer" class="btn btn--line">
-                {{ icon.github(15) }}<span>{{ t.project.sourceCode }}</span>
-              </a>
-            {% endif %}
-            {% if report %}
-              <a href="{{ report }}" target="_blank" rel="noopener noreferrer" class="btn btn--line">
-                {{ icon.download(15) }}<span>{{ t.project.report }}</span>
-              </a>
-            {% endif %}
-          </div>
-        {% endif %}
+        </div>
       </header>
 
-      <div class="case__cover wrap">
-        <img
-          src="{{ thumb }}"
-          data-src-dark="{{ thumb }}"
-          data-src-light="{{ thumbLight }}"
-          alt="{{ t.a11y.projectPreview }} {{ name }}"
-          class="case__cover-img"
-          width="1280" height="720"
-          fetchpriority="high" decoding="async"/>
+      <div class="case-body wrap">
+        {% if sections | length %}
+          <nav class="toc" aria-label="{{ t.project.toc }}">
+            <p class="label">{{ t.project.toc }}</p>
+            <ol class="toc__list" role="list">
+              {% if brief %}
+                <li><a href="#brief">{{ t.project.briefTitle }}</a></li>
+              {% endif %}
+              {% for s in sections %}
+                <li><a href="#{{ s.id }}">{{ s.text | safe }}</a></li>
+              {% endfor %}
+            </ol>
+          </nav>
+        {% endif %}
+
+        <div class="case-body__main">
+          <figure class="viewer case-cover">
+            <div class="viewer__frame">
+              <img
+                src="{{ thumb }}"
+                data-src-dark="{{ thumb }}"
+                data-src-light="{{ thumbLight }}"
+                alt="{{ t.a11y.projectPreview }} {{ name }}"
+                class="case-cover__img"
+                width="1280" height="720"
+                fetchpriority="high" decoding="async"/>
+            </div>
+          </figure>
+
+          {% if brief %}
+            <section class="brief" id="brief" aria-labelledby="brief-title">
+              <h2 class="visually-hidden" id="brief-title">{{ t.project.briefTitle }}</h2>
+              <div class="brief__cell">
+                <h3 class="label">{{ t.project.problem }}</h3>
+                <p>{{ brief.problem }}</p>
+              </div>
+              <div class="brief__cell">
+                <h3 class="label">{{ t.project.approach }}</h3>
+                <p>{{ brief.approach }}</p>
+              </div>
+              <div class="brief__cell brief__cell--result">
+                <h3 class="label">{{ t.project.result }}</h3>
+                <p>{{ brief.result }}</p>
+              </div>
+              {% if brief.role %}
+                <div class="brief__cell">
+                  <h3 class="label">{{ t.project.role }}</h3>
+                  <p>{{ brief.role }}</p>
+                </div>
+              {% endif %}
+            </section>
+          {% endif %}
+
+          <article class="prose">
+            {{ content | safe }}
+          </article>
+        </div>
       </div>
 
-      <article class="prose wrap">
-        {{ content | safe }}
-      </article>
+      <div class="wrap">
+        <nav class="pager" aria-label="{{ t.nav.work }}">
+          {% if pager.prev %}
+            <a href="{{ t.urlPrefix }}projects/{{ pager.prev.id }}/" class="pager__link" rel="prev">
+              <span class="label">{{ icon.chevronLeft(12) }}{{ t.project.prev }}</span>
+              <span class="pager__title">{{ pager.prev.name }}</span>
+              <span class="pager__sub">{{ pager.prev.title }}</span>
+            </a>
+          {% else %}
+            <a href="{{ anchorBase }}#work" class="pager__link">
+              <span class="label">{{ icon.chevronLeft(12) }}{{ t.project.backShort }}</span>
+              <span class="pager__title">{{ t.project.back }}</span>
+            </a>
+          {% endif %}
 
-      <nav class="case__nav wrap" aria-label="{{ t.nav.work }}">
-        <a href="{{ anchorBase }}#work" class="btn btn--line">
-          {{ icon.chevronLeft(15) }}<span>{{ t.project.back }}</span>
-        </a>
-        <a href="mailto:{{ site.email }}" class="btn btn--fill">
-          {{ icon.mail(15) }}<span>{{ t.project.contactCta }}</span>
-        </a>
-      </nav>
+          {% if pager.next %}
+            <a href="{{ t.urlPrefix }}projects/{{ pager.next.id }}/" class="pager__link pager__link--next" rel="next">
+              <span class="label">{{ t.project.next }}{{ icon.arrowRight(12) }}</span>
+              <span class="pager__title">{{ pager.next.name }}</span>
+              <span class="pager__sub">{{ pager.next.title }}</span>
+            </a>
+          {% else %}
+            <a href="mailto:{{ site.email }}" class="pager__link pager__link--next">
+              <span class="label">{{ t.contact.label }}{{ icon.arrowRight(12) }}</span>
+              <span class="pager__title">{{ t.project.contactCta }}</span>
+            </a>
+          {% endif %}
+        </nav>
+      </div>
     </main>
 
     {% include "partials/footer.njk" %}

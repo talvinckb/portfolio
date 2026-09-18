@@ -11,6 +11,10 @@ team: 2
 github: null
 demo: null
 report: null
+brief:
+  problem: "Localiser des plaques sur des images Full HD très variables, sans aucun réseau de neurones profond."
+  approach: "Vision classique et Random Forest, prototypés en Python puis réécrits en C++17, avec un module maison MyCV."
+  result: "F1 de 0,7535 sur les 1 440 images de test UFPR-ALPR, et 14 % de temps en moins par image en C++."
 ---
 
 ## Contexte & Problématique

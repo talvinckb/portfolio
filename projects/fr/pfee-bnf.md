@@ -20,6 +20,10 @@ team: 4
 github: null
 demo: null
 report: null
+brief:
+  problem: "Le catalogage des illustrations numérisées par la BnF sur Gallica reste en grande partie manuel."
+  approach: "Acquisition via les API IIIF, localisation et réorientation des illustrations (YOLO contre Florence-2), puis classification multi-labels (ConvNeXt)."
+  result: "Pipeline de données opérationnel, benchmark de détection engagé ; rendu final prévu fin janvier 2027."
 ---
 
 ## Contexte & Objectifs

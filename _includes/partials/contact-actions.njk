@@ -1,65 +1,68 @@
-{# Contact affordances. Two shapes: a compact hero row, a full contact block. #}
+{# Contact affordances. Two shapes: the hero's action row, the contact panel. #}
 {% import "partials/icons.njk" as icon %}
 
-{# ─── Hero: one filled action, the rest outlined ─── #}
-{% macro heroActions(t, site) %}
+{# ─── Hero: the same actions, written as commands in the terminal ─── #}
+{% macro heroActions(t, site, anchorBase) %}
   <div class="actions">
-    <a href="{{ t.hero.cvUrl }}" class="btn btn--fill" target="_blank" rel="noopener noreferrer">
-      {{ icon.download(15) }}<span>{{ t.hero.cvBtn }}</span>
+    <a href="{{ anchorBase }}#work" class="btn btn--accent">
+      <span><span class="btn__cmd" aria-hidden="true">./</span>{{ t.hero.ctaWork }}</span>{{ icon.arrowRight(16) }}
     </a>
 
-    <a href="mailto:{{ site.email }}" class="btn btn--line">
-      {{ icon.mail(15) }}<span>{{ t.hero.emailBtn }}</span>
+    <a href="{{ anchorBase }}#contact" class="btn btn--line">
+      <span>{{ t.hero.ctaContact }}</span>
     </a>
 
-    <a href="{{ site.linkedin }}" class="btn btn--line" target="_blank" rel="noopener noreferrer">
-      {{ icon.linkedin(15) }}<span>{{ t.hero.linkedinBtn }}</span>
+    <a href="{{ t.hero.cvUrl }}" class="btn btn--line" target="_blank" rel="noopener noreferrer">
+      <span>cv.pdf</span>{{ icon.download(16) }}
     </a>
 
     <a href="{{ site.github }}" class="btn btn--line" target="_blank" rel="noopener noreferrer">
-      {{ icon.github(15) }}<span>{{ t.hero.githubBtn }}</span>
+      <span>github</span>{{ icon.arrowUpRight(16) }}
+    </a>
+
+    <a href="{{ site.linkedin }}" class="btn btn--line" target="_blank" rel="noopener noreferrer">
+      <span>linkedin</span>{{ icon.arrowUpRight(16) }}
     </a>
   </div>
 {% endmacro %}
 
-{# ─── Contact section: a ruled index of every way to reach me ─── #}
+{# ─── Contact section: email first, then every other channel ─── #}
 {% macro contactBlock(t, site) %}
-  <ul class="channels" role="list">
-    <li class="channel">
-      <span class="channel__label">{{ t.contact.emailLabel }}</span>
-      <a class="channel__value" href="mailto:{{ site.email }}">{{ site.email }}</a>
-      <button class="channel__copy" type="button" data-copy="{{ site.email }}" data-copy-kind="email" aria-label="{{ t.a11y.copyEmail }}" title="{{ t.a11y.copyEmail }}">
+  <div class="reach">
+    <div class="reach__primary">
+      <a class="reach__email" href="mailto:{{ site.email }}">
+        {{ icon.mail(18) }}<span>{{ site.email }}</span>
+      </a>
+      <button class="reach__copy" type="button" data-copy="{{ site.email }}" data-copy-kind="email" aria-label="{{ t.a11y.copyEmail }}" title="{{ t.a11y.copyEmail }}">
+        {{ icon.copy(14) }}<span>{{ t.contact.copy }}</span>
+      </button>
+    </div>
+
+    <div class="reach__row">
+      <a class="reach__phone" href="tel:{{ site.phone }}">
+        <span class="reach__label">{{ t.contact.phoneLabel }}</span>{{ site.phoneDisplay }}
+      </a>
+      <button class="reach__copy reach__copy--quiet" type="button" data-copy="{{ site.phone }}" data-copy-kind="phone" aria-label="{{ t.a11y.copyPhone }}" title="{{ t.a11y.copyPhone }}">
         {{ icon.copy(14) }}
       </button>
-    </li>
+    </div>
 
-    <li class="channel">
-      <span class="channel__label">{{ t.contact.phoneLabel }}</span>
-      <a class="channel__value" href="tel:{{ site.phone }}">{{ site.phoneDisplay }}</a>
-      <button class="channel__copy" type="button" data-copy="{{ site.phone }}" data-copy-kind="phone" aria-label="{{ t.a11y.copyPhone }}" title="{{ t.a11y.copyPhone }}">
-        {{ icon.copy(14) }}
-      </button>
-    </li>
-
-    <li class="channel">
-      <span class="channel__label">LinkedIn</span>
-      <a class="channel__value" href="{{ site.linkedin }}" target="_blank" rel="noopener noreferrer">
-        in/talvin-ackbaraly{{ icon.arrowUpRight(14) }}
-      </a>
-    </li>
-
-    <li class="channel">
-      <span class="channel__label">GitHub</span>
-      <a class="channel__value" href="{{ site.github }}" target="_blank" rel="noopener noreferrer">
-        @talvinckb{{ icon.arrowUpRight(14) }}
-      </a>
-    </li>
-
-    <li class="channel">
-      <span class="channel__label">CV</span>
-      <a class="channel__value" href="{{ t.hero.cvUrl }}" target="_blank" rel="noopener noreferrer">
-        {{ t.hero.cvBtn }}{{ icon.download(14) }}
-      </a>
-    </li>
-  </ul>
+    <ul class="reach__links" role="list">
+      <li>
+        <a href="{{ site.linkedin }}" target="_blank" rel="noopener noreferrer">
+          {{ t.contact.linkedinBtn }}{{ icon.arrowUpRight(14) }}
+        </a>
+      </li>
+      <li>
+        <a href="{{ site.github }}" target="_blank" rel="noopener noreferrer">
+          {{ t.contact.githubBtn }}{{ icon.arrowUpRight(14) }}
+        </a>
+      </li>
+      <li>
+        <a href="{{ t.hero.cvUrl }}" target="_blank" rel="noopener noreferrer">
+          {{ t.contact.cvBtn }}{{ icon.download(14) }}
+        </a>
+      </li>
+    </ul>
+  </div>
 {% endmacro %}

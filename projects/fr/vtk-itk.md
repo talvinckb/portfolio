@@ -11,6 +11,10 @@ team: 4
 github: "https://github.com/Axthauvin/vtk-itk-project"
 demo: null
 report: null
+brief:
+  problem: "Quantifier l'évolution d'un gliome entre deux IRM d'un même patient, acquises à plusieurs mois d'intervalle."
+  approach: "Recalage 3D avec ITK, segmentation Multi-Otsu et region growing, visualisation 2D/3D avec VTK et PyQt6."
+  result: "Volume tumoral mesuré avant et après recalage, avec superposition interactive des deux acquisitions."
 ---
 
 ## Contexte & Objectifs

@@ -1,0 +1,25 @@
+{# Resolves the theme before first paint, so the page never flashes the wrong one. #}
+<script>
+  (function () {
+    var stored = null;
+    // Le stockage de site peut lever (navigation privée, cookies bloqués) :
+    // on l'isole pour que l'échec ne coûte pas la préférence système.
+    try {
+      stored = localStorage.getItem("theme");
+    } catch (e) {}
+
+    var theme = stored === "light" || stored === "dark" ? stored : null;
+
+    if (!theme) {
+      try {
+        theme = window.matchMedia("(prefers-color-scheme: dark)").matches
+          ? "dark"
+          : "light";
+      } catch (e) {
+        theme = "light";
+      }
+    }
+
+    document.documentElement.setAttribute("data-theme", theme);
+  })();
+</script>

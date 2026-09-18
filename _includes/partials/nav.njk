@@ -22,10 +22,9 @@
 ] %}
 
 <header class="nav" id="nav">
-  <nav class="nav__inner" aria-label="{{ t.a11y.mainNav }}">
+  <nav class="nav__inner wrap" aria-label="{{ t.a11y.mainNav }}">
     <a href="{{ homeUrl }}" class="nav__logo" aria-label="{{ t.a11y.home }}">
-      <span class="nav__mark" aria-hidden="true">{{ site.initials }}</span>
-      <span class="nav__name">{{ site.name }}</span>
+      <span class="nav__caret" aria-hidden="true"></span>{{ site.name | lower | replace(" ", ".") }}
     </a>
 
     <ul class="nav__links" role="list">
@@ -41,6 +40,10 @@
         {{ icon.sun(16) }}
         {{ icon.moon(16) }}
       </button>
+
+      <a href="{{ t.hero.cvUrl }}" class="nav__cv" target="_blank" rel="noopener noreferrer">
+        {{ t.hero.cvBtn }}{{ icon.download(14) }}
+      </a>
 
       <button class="nav__burger" id="nav-burger" type="button" aria-label="{{ t.a11y.openMenu }}" data-label-close="{{ t.a11y.closeMenu }}" aria-expanded="false" aria-controls="mobile-menu">
         <span aria-hidden="true"></span>
@@ -64,6 +67,7 @@
 
   <div class="mobile-menu__footer">
     <a href="mailto:{{ site.email }}">{{ site.email }}</a>
+    <a href="{{ t.hero.cvUrl }}" target="_blank" rel="noopener noreferrer">{{ t.contact.cvBtn }}</a>
     <a href="{{ site.linkedin }}" target="_blank" rel="noopener noreferrer">LinkedIn</a>
     <a href="{{ site.github }}" target="_blank" rel="noopener noreferrer">GitHub</a>
   </div>
