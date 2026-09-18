@@ -1,4 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
-  <rect width="32" height="32" fill="#35425c"/>
-  <text x="16" y="22" text-anchor="middle" font-family="'Public Sans', system-ui, sans-serif" font-weight="700" font-size="15" fill="#ffffff">TA</text>
+  <rect width="32" height="32" rx="7" fill="#0b0d10"/>
+  <path d="M8.5 10.5 15.5 16 8.5 21.5" fill="none" stroke="#c6f24e" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="18" y="20.2" width="7" height="3.2" rx="1" fill="#c6f24e"/>
 </svg>
