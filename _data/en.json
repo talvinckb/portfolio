@@ -8,7 +8,8 @@
     "title": "Talvin Ackbaraly — Computer Vision, AI & GPU Computing",
     "description": "EPITA engineering student, Image major. Computer vision, deep learning and GPU computing: ×24 CUDA port, real-time SPH simulation, medical and heritage image segmentation. Seeking a final-year internship (February 2027).",
     "jobTitle": "Computer Vision & GPU Computing Engineer",
-    "ogImage": "/assets/og-image-en.png"
+    "ogImage": "/assets/og-image-en.png",
+    "ogImageAlt": "Terminal showing: Talvin Ackbaraly, computer vision, AI, GPU computing. Available for a 6-month internship from February 2027."
   },
   "a11y": {
     "skipToContent": "Skip to main content",
@@ -306,7 +307,6 @@
   "skills": {
     "index": "03",
     "title": "Skills",
-    "hint": "Pick a skill to see where I used it.",
     "usedIn": "Used in",
     "groups": [
       {

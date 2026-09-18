@@ -674,6 +674,13 @@ p {
   color: var(--ink);
 }
 
+/* Enter is a keyboard shortcut: no use for it on touch screens. */
+@media (hover: none) and (pointer: coarse) {
+  .term__line--enter {
+    display: none;
+  }
+}
+
 .term__key {
   padding: 0.05em 0.45em;
   border: 1px solid var(--rule-2);
@@ -1197,6 +1204,10 @@ p {
     color var(--fast) var(--ease);
 }
 
+button.chip {
+  cursor: pointer;
+}
+
 button.chip:hover {
   border-color: var(--ink);
 }
@@ -1212,10 +1223,40 @@ button.chip:hover {
   border-style: dashed;
 }
 
+/* Collapsed by default; grid rows animate 0fr → 1fr so height eases. */
 .skills__uses {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    grid-template-rows 320ms var(--ease),
+    opacity 240ms var(--ease),
+    visibility 0s linear 320ms;
+}
+
+.skills__uses.is-open {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  visibility: visible;
+  transition-delay: 0s;
+}
+
+.skills__uses-clip {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.skills__card {
   padding: var(--s-5);
   border: 1px solid var(--rule-2);
   background-color: var(--surface);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skills__uses {
+    transition: none;
+  }
 }
 
 .skills__use {

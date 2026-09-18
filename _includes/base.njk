@@ -4,8 +4,8 @@
 {% set pageTitle = t.meta.title %}
 {% set pageDescription = t.meta.description %}
 {% set pageUrl = site.baseUrl + t.urlPrefix %}
-{% set pageImage = site.baseUrl + (t.meta.ogImage | default(site.ogImage)) %}
-{% set pageImageAlt = site.name + " — " + t.meta.jobTitle %}
+{% set pageImage = site.baseUrl + ((t.meta.ogImage | default(site.ogImage)) | versioned) %}
+{% set pageImageAlt = t.meta.ogImageAlt %}
 {% set pageType = "website" %}
 {% set anchorBase = "" %}
 {% set homeUrl = t.urlPrefix %}
@@ -69,7 +69,7 @@
 
             {# Enter (or a tap) goes to the work. The real, focusable link is the
                CTA above, so this one stays out of reach. #}
-            <p class="term__line" aria-hidden="true"><span class="term__prompt">$</span> <a class="term__suggest" href="{{ anchorBase }}#work" tabindex="-1" hidden><kbd class="term__key">↵ {{ t.hero.terminal.enterHint }}</kbd></a></p>
+            <p class="term__line term__line--enter" aria-hidden="true"><span class="term__prompt">$</span> <a class="term__suggest" href="{{ anchorBase }}#work" tabindex="-1" hidden><kbd class="term__key">↵ {{ t.hero.terminal.enterHint }}</kbd></a></p>
           </div>
         </div>
       </section>
@@ -191,7 +191,6 @@
       <section id="skills" class="section wrap">
         <header class="sec-head">
           <h2 class="sec-head__title"><span class="sec-head__num">{{ t.skills.index }}</span>{{ t.skills.title }}</h2>
-          <p class="sec-head__aside skills__hint" hidden>{{ t.skills.hint }}</p>
         </header>
 
         <div class="skills" data-skills>
@@ -215,7 +214,8 @@
           </div>
 
           {# One prerendered list per skill; the script shows the chosen one. #}
-          <div class="skills__uses" id="skills-uses" aria-live="polite" hidden>
+          <div class="skills__uses" id="skills-uses" aria-live="polite">
+           <div class="skills__uses-clip"><div class="skills__card">
             {% for group in t.skills.groups %}
               {% for item in group.items %}
                 {% if item.used | length %}
@@ -242,6 +242,7 @@
                 {% endif %}
               {% endfor %}
             {% endfor %}
+          </div></div>
           </div>
         </div>
       </section>
