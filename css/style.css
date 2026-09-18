@@ -1312,9 +1312,6 @@ button.chip:hover {
    ───────────────────────────────────────────────────────────── */
 
 .case-head {
-  display: grid;
-  gap: var(--s-6);
-  align-items: end;
   padding-block: clamp(2.5rem, 6vw, 5rem) var(--s-7);
 }
 
@@ -1364,21 +1361,40 @@ button.chip:hover {
 }
 
 .facts {
-  display: grid;
-  grid-template-columns: max-content 1fr;
-  gap: var(--s-3) var(--s-5);
-  padding: var(--s-5);
-  border: 1px solid var(--rule-2);
-  background-color: var(--surface);
-  font-size: 0.9375rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-4) var(--s-7);
+  align-self: stretch;
+  margin-top: var(--s-3);
+  padding-top: var(--s-4);
+  border-top: 1px solid var(--rule-2);
+}
+
+.facts__item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-1);
+}
+
+.facts__item--stack {
+  flex: 1 1 18rem;
 }
 
 .facts dt {
-  padding-top: 0.15rem;
   font-family: var(--font-mono);
   font-size: var(--t-mono);
   text-transform: uppercase;
   color: var(--ink-3);
+}
+
+.facts dd {
+  font-size: 0.9375rem;
+}
+
+.facts__item--stack dd {
+  font-family: var(--font-mono);
+  font-size: var(--t-sm);
+  color: var(--ink-2);
 }
 
 .case-cover .viewer__frame {
@@ -1990,10 +2006,6 @@ button.chip:hover {
     grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
   }
 
-  .case-head {
-    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
-    gap: var(--s-7);
-  }
 }
 
 @media (min-width: 1100px) {

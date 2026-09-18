@@ -54,15 +54,15 @@
     "detections": "1 detection",
     "detectionLabel": "talvin",
     "media": {
-      "video": "/assets/projects/pogl/fluid_simulation_demo.mp4",
-      "poster": "/assets/projects/pogl/fluid_simulation_demo-poster.webp",
-      "alt": "Real-time SPH fluid simulation (POGL project)",
-      "source": "pogl · sph_fluid",
-      "rate": "60 FPS",
+      "video": "/assets/projects/irgpu/motion_detection_hero.mp4",
+      "poster": "/assets/projects/irgpu/motion_detection_hero-poster.webp",
+      "alt": "Real-time GPU motion detection (IRGPU project)",
+      "source": "irgpu · motion_detection",
+      "rate": "129 FPS",
       "meta": [
-        "75,000 particles",
-        "compute shaders",
-        "SSFR"
+        "C++ / CUDA",
+        "×24 vs CPU",
+        "SSIM 0.9949"
       ]
     }
   },

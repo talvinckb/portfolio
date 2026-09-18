@@ -313,6 +313,30 @@ export function initBackToTop() {
 }
 
 /* ─────────────────────────────────────────────────────────────
+   Logo — on the page it links to, it scrolls back to the top
+   ───────────────────────────────────────────────────────────── */
+
+/* The logo links to the home page. Followed from the home page itself, that
+   link would reload the document; scrolling up is what the click means. From
+   any other page it stays a normal link. */
+export function initLogo() {
+  const logo = document.querySelector(".nav__logo");
+  if (!logo) return;
+
+  logo.addEventListener("click", (e) => {
+    if (logo.pathname !== window.location.pathname) return;
+    if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: scrollBehavior() });
+    // Drop a lingering #section so a reload lands at the top too.
+    if (window.location.hash) {
+      history.replaceState(history.state, "", window.location.pathname);
+    }
+  });
+}
+
+/* ─────────────────────────────────────────────────────────────
    Reading progress
    ───────────────────────────────────────────────────────────── */
 
@@ -498,6 +522,7 @@ export function initChrome() {
   initLangSwitch();
   initMobileMenu();
   initBackToTop();
+  initLogo();
   initScrollProgress();
   initCopyButtons();
 }

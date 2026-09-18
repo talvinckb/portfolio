@@ -122,7 +122,7 @@ la préférence système.
 
 | Section | Ancre | Source |
 |---|---|---|
-| Hero — disponibilité, accroche, intro, actions, portrait (ou démo POGL) | — | `hero` |
+| Hero — disponibilité, accroche, intro, actions, portrait (ou démo IRGPU) | — | `hero` |
 | 01 Projets sélectionnés + autres réalisations | `#work` | `projects` |
 | 02 Parcours — deux frises : expériences, formation | `#background` | `background` |
 | 03 Compétences — chaque compétence mène aux projets qui l'utilisent | `#skills` | `skills` |
@@ -133,7 +133,7 @@ partagent le même gabarit, donc les mêmes `id`.
 
 ### Le portrait
 
-Tant que `hero.photo` vaut `null`, le hero affiche la démo vidéo de POGL
+Tant que `hero.photo` vaut `null`, le hero affiche la démo vidéo d'IRGPU (`hero.media`, un extrait recadré en 4:5 et allégé de la démo complète)
 (lue seulement quand elle est visible, jamais sous `reduced-motion`). Pour
 passer au portrait :
 

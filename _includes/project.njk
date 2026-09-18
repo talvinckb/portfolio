@@ -61,6 +61,28 @@
           <h1 class="case-head__title">{{ title }}</h1>
           <p class="case-head__tagline">{{ tagline }}</p>
 
+          {# One ruled line of metadata, label above value. #}
+          <dl class="facts">
+            {% if period %}
+              <div class="facts__item">
+                <dt>{{ t.project.duration }}</dt>
+                <dd>{{ period }}</dd>
+              </div>
+            {% endif %}
+            {% if team %}
+              <div class="facts__item">
+                <dt>{{ t.project.teamLabel }}</dt>
+                <dd>{{ team }} {{ t.project.team }}</dd>
+              </div>
+            {% endif %}
+            {% if stack %}
+              <div class="facts__item facts__item--stack">
+                <dt>{{ t.project.stackLabel }}</dt>
+                <dd>{{ stack | join(" · ") }}</dd>
+              </div>
+            {% endif %}
+          </dl>
+
           {% if github or demo or report %}
             <div class="actions">
               {% if demo %}
@@ -81,21 +103,6 @@
             </div>
           {% endif %}
         </div>
-
-        <dl class="facts">
-          {% if period %}
-            <dt>{{ t.project.duration }}</dt>
-            <dd>{{ period }}</dd>
-          {% endif %}
-          {% if team %}
-            <dt>{{ t.project.teamLabel }}</dt>
-            <dd>{{ team }} {{ t.project.team }}</dd>
-          {% endif %}
-          {% if stack %}
-            <dt>{{ t.project.stackLabel }}</dt>
-            <dd>{{ stack | join(", ") }}</dd>
-          {% endif %}
-        </dl>
       </header>
 
       <div class="wrap">
