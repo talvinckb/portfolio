@@ -121,11 +121,12 @@ ol[role="list"] {
   --rule: #dcdfd9;
   --rule-2: #c3c8c0;
   --grid-line: rgb(0 0 0 / 0.04);
+  /* Same lime as dark for fills and strokes. Lime text on white would
+     be unreadable, so text keeps a deeper green. */
   --accent: #c6f24e;
   --on-accent: #0b0d10;
   --accent-text: #3d6604;
-  /* Lime on white would vanish: the box keeps its hue, darker. */
-  --detect: #5e9400;
+  --detect: #c6f24e;
   --overlay: rgb(236 238 233 / 0.92);
   --shade: 0 24px 60px rgb(14 16 19 / 0.16);
 }
@@ -145,7 +146,7 @@ ol[role="list"] {
     --rule-2: #c3c8c0;
     --grid-line: rgb(0 0 0 / 0.04);
     --accent-text: #3d6604;
-    --detect: #5e9400;
+    --detect: #c6f24e;
     --overlay: rgb(236 238 233 / 0.92);
     --shade: 0 24px 60px rgb(14 16 19 / 0.16);
   }
@@ -199,7 +200,7 @@ body.has-menu-open {
 }
 
 :focus-visible {
-  outline: 2px solid var(--detect);
+  outline: 2px solid var(--accent-text);
   outline-offset: 3px;
 }
 
