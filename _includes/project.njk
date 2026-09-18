@@ -105,21 +105,6 @@
         </div>
       </header>
 
-      <div class="wrap">
-        <figure class="viewer case-cover">
-          <div class="viewer__frame">
-            <img
-              src="{{ thumb }}"
-              data-src-dark="{{ thumb }}"
-              data-src-light="{{ thumbLight }}"
-              alt="{{ t.a11y.projectPreview }} {{ name }}"
-              class="case-cover__img"
-              width="1280" height="720"
-              fetchpriority="high" decoding="async"/>
-          </div>
-        </figure>
-      </div>
-
       <div class="case-body wrap">
         {% if sections | length %}
           <nav class="toc" aria-label="{{ t.project.toc }}">
@@ -136,6 +121,19 @@
         {% endif %}
 
         <div class="case-body__main">
+          <figure class="viewer case-cover">
+            <div class="viewer__frame">
+              <img
+                src="{{ thumb }}"
+                data-src-dark="{{ thumb }}"
+                data-src-light="{{ thumbLight }}"
+                alt="{{ t.a11y.projectPreview }} {{ name }}"
+                class="case-cover__img"
+                width="1280" height="720"
+                fetchpriority="high" decoding="async"/>
+            </div>
+          </figure>
+
           {% if brief %}
             <section class="brief" id="brief" aria-labelledby="brief-title">
               <h2 class="visually-hidden" id="brief-title">{{ t.project.briefTitle }}</h2>

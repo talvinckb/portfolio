@@ -1312,7 +1312,7 @@ button.chip:hover {
    ───────────────────────────────────────────────────────────── */
 
 .case-head {
-  padding-block: clamp(2.5rem, 6vw, 5rem) var(--s-7);
+  padding-block: clamp(2.5rem, 5vw, 4rem) 0;
 }
 
 .case-head__text {
@@ -1343,8 +1343,8 @@ button.chip:hover {
 }
 
 .case-head__title {
-  max-width: 20ch;
-  font-size: var(--t-3xl);
+  max-width: 24ch;
+  font-size: clamp(1.875rem, 1.2rem + 2.2vw, 2.75rem);
   line-height: 1.04;
   letter-spacing: -0.04em;
 }
@@ -1397,6 +1397,10 @@ button.chip:hover {
   color: var(--ink-2);
 }
 
+.case-cover {
+  margin-bottom: var(--s-7);
+}
+
 .case-cover .viewer__frame {
   aspect-ratio: 16 / 9;
 }
@@ -1418,7 +1422,6 @@ button.chip:hover {
 
 .case-body__main {
   min-width: 0;
-  max-width: 48rem;
 }
 
 /* Cells are separated by the 1px gap showing the rule colour through. */
@@ -2027,13 +2030,21 @@ button.chip:hover {
     justify-content: flex-end;
   }
 
+  /* Content on the left, aligned with the title; contents on the right. */
   .case-body {
-    grid-template-columns: 14rem minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr) 14rem;
     gap: var(--s-8);
+  }
+
+  .case-body__main {
+    grid-column: 1;
+    grid-row: 1;
   }
 
   .toc {
     display: block;
+    grid-column: 2;
+    grid-row: 1;
     position: sticky;
     top: calc(var(--nav-h) + var(--s-6));
     align-self: start;
