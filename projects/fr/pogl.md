@@ -11,6 +11,10 @@ team: 2
 github: "https://github.com/talvinckb/OpenGL-Water-Simulation"
 demo: null
 report: null
+brief:
+  problem: "Simuler et rendre un fluide 3D crédible en temps réel."
+  approach: "Physique SPH entièrement sur GPU en compute shaders (hachage spatial, tri bitonique), rendu de surface SSFR multi-passes."
+  result: "Plus de 75 000 particules à 60 FPS, sans aucun transfert CPU ↔ GPU pendant la simulation."
 ---
 
 ## Contexte & Objectifs

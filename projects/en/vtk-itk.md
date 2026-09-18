@@ -11,6 +11,10 @@ team: 4
 github: "https://github.com/Axthauvin/vtk-itk-project"
 demo: null
 report: null
+brief:
+  problem: "Quantify how a glioma evolves between two MRI scans of the same patient, months apart."
+  approach: "3D registration with ITK, Multi-Otsu and region-growing segmentation, 2D/3D visualization with VTK and PyQt6."
+  result: "Tumor volume measured before and after registration, with an interactive overlay of both scans."
 ---
 
 ## Context & Objectives

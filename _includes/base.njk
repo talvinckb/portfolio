@@ -11,37 +11,16 @@
 {% set homeUrl = t.urlPrefix %}
 {% set altUrl = t.altUrl %}
 
+{% set featured = t.projects.items | selectattr("featured") %}
+{% set others = t.projects.items | rejectattr("featured") %}
+
 {% import "partials/icons.njk" as icon %}
 {% import "partials/contact-actions.njk" as contact %}
 
 <!DOCTYPE html>
 <html lang="{{ lang }}">
   <head>
-    <script>
-      // Applied before first paint to avoid a flash of the wrong theme.
-      (function () {
-        var stored = null;
-        // Le stockage de site peut lever (navigation privée, cookies bloqués) :
-        // on l'isole pour que l'échec ne coûte pas la préférence système.
-        try {
-          stored = localStorage.getItem("theme");
-        } catch (e) {}
-
-        var theme = stored === "light" || stored === "dark" ? stored : null;
-
-        if (!theme) {
-          try {
-            theme = window.matchMedia("(prefers-color-scheme: dark)").matches
-              ? "dark"
-              : "light";
-          } catch (e) {
-            theme = "light";
-          }
-        }
-
-        document.documentElement.setAttribute("data-theme", theme);
-      })();
-    </script>
+    {% include "partials/theme-init.njk" %}
     {% include "partials/head.njk" %}
   </head>
 
@@ -50,211 +29,232 @@
 
     <main id="main">
       <!-- ─── Hero ─── -->
-      <section class="hero">
-        <div class="wrap">
-          <p class="hero__kicker">
-            <span>{{ t.hero.location }}</span>
-            <span class="hero__kicker-sep" aria-hidden="true"></span>
-            <span>{{ t.meta.jobTitle }}</span>
-          </p>
+      <section class="hero wrap">
+        <div class="hero__text">
+          <p class="status"><span class="status__dot" aria-hidden="true"></span>{{ t.hero.status }}</p>
 
-          <h1 class="hero__title">{{ t.hero.name }}</h1>
+          <p class="hero__kicker">{{ t.hero.name }} — {{ t.hero.kicker }}</p>
+          <h1 class="hero__title">{{ t.hero.headline }}</h1>
+          <p class="hero__intro">{{ t.hero.intro }}</p>
 
-          <p class="hero__status">{{ t.hero.status }}</p>
+          {{ contact.heroActions(t, site, anchorBase) }}
+        </div>
 
-          <div class="hero__cols">
-            <p class="hero__intro">{{ t.hero.intro }}</p>
-            <div class="hero__cta">{{ contact.heroActions(t, site) }}</div>
+        {% if t.hero.photo %}
+          {# A real detection: the box sits on the face in the portrait. #}
+          {% set box = t.hero.photoBox %}
+          <figure class="viewer hero__viewer">
+            <div class="viewer__bar" aria-hidden="true">
+              <span>cam_01 · {{ t.hero.photoSource }}</span><span>{{ t.hero.detections }}</span>
+            </div>
+            <div class="viewer__frame viewer__frame--portrait">
+              <img src="{{ t.hero.photo }}" alt="{{ t.hero.photoAlt }}" width="800" height="1000" fetchpriority="high" decoding="async"/>
+              <span class="detect" style="--x: {{ box.x }}%; --y: {{ box.y }}%; --w: {{ box.w }}%; --h: {{ box.h }}%;" aria-hidden="true">
+                <span class="detect__label">{{ t.hero.detectionLabel }} · 0.99</span>
+              </span>
+            </div>
+            <div class="viewer__bar" aria-hidden="true">
+              <span>{{ t.hero.location }}</span><span>{{ t.hero.coords }}</span>
+            </div>
+          </figure>
+        {% else %}
+          {% set media = t.hero.media %}
+          <figure class="viewer hero__viewer">
+            <div class="viewer__bar" aria-hidden="true">
+              <span>{{ media.source }}</span><span class="viewer__live">{{ media.rate }}</span>
+            </div>
+            <div class="viewer__frame">
+              <video class="hero__video" poster="{{ media.poster }}" muted loop playsinline preload="none" aria-label="{{ media.alt }}" data-src="{{ media.video }}"></video>
+            </div>
+            <div class="viewer__bar" aria-hidden="true">
+              {% for m in media.meta %}<span>{{ m }}</span>{% endfor %}
+            </div>
+          </figure>
+        {% endif %}
+      </section>
+
+      <!-- ─── Work ─── -->
+      <section id="work" class="section wrap">
+        <header class="sec-head">
+          <h2 class="sec-head__title"><span class="sec-head__num">{{ t.projects.index }}</span>{{ t.projects.title }}</h2>
+          <p class="sec-head__aside">{{ featured | length }} {{ t.projects.count }}</p>
+        </header>
+
+        <ul class="work-grid" role="list">
+          {% for p in featured %}
+            {% set projectUrl = t.urlPrefix + "projects/" + p.id + "/" %}
+            <li>
+              <article class="work-card">
+                {# The one detection box a card gets: on hover or focus, around the card itself. #}
+                <span class="detect" aria-hidden="true">
+                  <span class="detect__label">{{ p.id }} · 0.{{ 100 - loop.index }}</span>
+                </span>
+
+                <div class="work-card__media">
+                  <img
+                    src="{{ p.thumbnail }}"
+                    data-src-dark="{{ p.thumbnail }}"
+                    data-src-light="{{ p.thumbnailLight | default(p.thumbnail) }}"
+                    alt=""
+                    width="800" height="450"
+                    loading="lazy" decoding="async"/>
+                </div>
+
+                <div class="work-card__body">
+                  <p class="work-card__meta">{{ p.name }}{% if p.period %} · {{ p.period }}{% endif %}</p>
+                  <h3 class="work-card__title">
+                    <a href="{{ projectUrl }}">{{ p.title }}</a>
+                  </h3>
+                  <p class="work-card__tagline">{{ p.tagline }}</p>
+                  <p class="work-card__stack">{{ p.stack | join(" · ") }}</p>
+                </div>
+
+                {% if p.github %}
+                  <a class="work-card__code" href="{{ p.github }}" target="_blank" rel="noopener noreferrer" aria-label="{{ t.a11y.sourceCode }} {{ p.name }}" title="{{ t.projects.codeLabel }}">
+                    {{ icon.github(16) }}
+                  </a>
+                {% endif %}
+              </article>
+            </li>
+          {% endfor %}
+        </ul>
+
+        <header class="sub-head">
+          <h3 class="sub-head__title">{{ t.projects.secondaryTitle }}</h3>
+          <p class="sub-head__aside">{{ others | length }} · {{ t.projects.secondaryNote }}</p>
+        </header>
+
+        <ul class="other-list" role="list">
+          {% for p in others %}
+            <li class="other{{ ' other--linked' if p.github }}">
+              <p class="other__name">{{ p.name }}</p>
+              <div class="other__body">
+                <h4 class="other__title">
+                  {% if p.github %}
+                    <a href="{{ p.github }}" target="_blank" rel="noopener noreferrer">{{ p.title }}</a>
+                  {% else %}
+                    {{ p.title }}
+                  {% endif %}
+                </h4>
+                <p class="other__tagline">{{ p.tagline }}</p>
+                {% if p.repoNote %}<p class="other__note">{{ p.repoNote }}</p>{% endif %}
+              </div>
+              <p class="other__stack">{{ p.stack | join(" · ") }}</p>
+              <p class="other__repo">
+                {% if p.github %}{{ t.projects.publicRepo }}{{ icon.arrowUpRight(13) }}{% else %}{{ t.projects.privateRepo }}{% endif %}
+              </p>
+            </li>
+          {% endfor %}
+        </ul>
+      </section>
+
+      <!-- ─── Background ─── -->
+      <section id="background" class="section wrap">
+        <header class="sec-head">
+          <h2 class="sec-head__title"><span class="sec-head__num">{{ t.background.index }}</span>{{ t.background.title }}</h2>
+        </header>
+
+        <div class="timelines">
+          <div>
+            <h3 class="label">{{ t.background.experienceTitle }}</h3>
+            <ol class="timeline" role="list">
+              {% for exp in t.background.experiences %}
+                <li class="timeline__item{{ ' timeline__item--current' if loop.first }}">
+                  <p class="timeline__when">{{ exp.period }} · {{ exp.type }}</p>
+                  <h4 class="timeline__title">{{ exp.company }} <span>— {{ exp.title }}</span></h4>
+                  <p class="timeline__desc">{{ exp.description }}</p>
+                  <p class="timeline__tags">{{ exp.tags | join(" · ") }}</p>
+                </li>
+              {% endfor %}
+            </ol>
+          </div>
+
+          <div>
+            <h3 class="label">{{ t.background.educationTitle }}</h3>
+            <ol class="timeline" role="list">
+              {% for edu in t.background.education %}
+                <li class="timeline__item{{ ' timeline__item--current' if loop.first }}">
+                  <p class="timeline__when">{{ edu.period }} · {{ edu.location }}</p>
+                  <h4 class="timeline__title">{{ edu.institution }}</h4>
+                  <p class="timeline__desc">{{ edu.degree }}{% if edu.description %}. {{ edu.description }}{% endif %}</p>
+                </li>
+              {% endfor %}
+            </ol>
+
+            <p class="extras">
+              <span class="label">{{ t.background.extrasTitle }}</span>{{ t.background.extras | join(" · ") }}
+            </p>
           </div>
         </div>
       </section>
 
-      <!-- ─── Work ─── -->
-      <section id="work" class="section">
-        <div class="wrap">
-          <header class="sec-head">
-            <p class="sec-head__eyebrow">
-              <span class="sec-head__num">{{ t.projects.index }}</span>{{ t.projects.label }}
-            </p>
-            <h2 class="sec-head__title">{{ t.projects.title }}</h2>
-            <p class="sec-head__lede">{{ t.projects.lede }}</p>
-          </header>
-
-          <ul class="work-grid" role="list">
-            {% for p in t.projects.items | selectattr("featured") %}
-              {% set projectUrl = t.urlPrefix + "projects/" + p.id + "/" %}
-              <li>
-                <article class="work-card">
-                  <div class="work-card__media">
-                    <span class="work-card__index" aria-hidden="true">0{{ loop.index }}</span>
-                    <img
-                      src="{{ p.thumbnail }}"
-                      data-src-dark="{{ p.thumbnail }}"
-                      data-src-light="{{ p.thumbnailLight | default(p.thumbnail) }}"
-                      alt="{{ t.a11y.projectPreview }} {{ p.name }}"
-                      width="800" height="450"
-                      loading="lazy" decoding="async"/>
-                  </div>
-
-                  <div class="work-card__body">
-                    <p class="work-card__meta">
-                      <span class="work-card__name">{{ p.name }}</span>
-                      {% if p.period %}<span class="work-card__period">{{ p.period }}</span>{% endif %}
-                    </p>
-
-                    <h3 class="work-card__title">
-                      <a href="{{ projectUrl }}">{{ p.title }}</a>
-                    </h3>
-
-                    <p class="work-card__tagline">{{ p.tagline }}</p>
-
-                    <p class="work-card__stack">
-                      {% for s in p.stack %}<span>{{ s }}</span>{% endfor %}
-                    </p>
-
-                    <p class="work-card__cta">
-                      <span>{{ t.projects.viewProject }}</span>
-                      {{ icon.arrowRight(15) }}
-                    </p>
-                  </div>
-
-                  {% if p.github %}
-                    <a class="work-card__code" href="{{ p.github }}" target="_blank" rel="noopener noreferrer" aria-label="{{ t.a11y.sourceCode }} {{ p.name }}">
-                      {{ icon.github(15) }}
-                    </a>
-                  {% endif %}
-                </article>
-              </li>
-            {% endfor %}
-          </ul>
-
-          <h3 class="subhead">{{ t.projects.secondaryTitle }}</h3>
-
-          <ul class="side-list" role="list">
-            {% for p in t.projects.items | rejectattr("featured") %}
-              <li class="side-item{{ ' side-item--linked' if p.github }}">
-                <p class="side-item__aside">
-                  <span class="side-item__name">{{ p.name }}</span>
-                  <span class="side-item__kind">{{ t.projects.labels[p.kind] }}</span>
-                </p>
-
-                <div class="side-item__body">
-                  <h4 class="side-item__title">
-                    {% if p.github %}
-                      <a href="{{ p.github }}" target="_blank" rel="noopener noreferrer">{{ p.title }}</a>
-                    {% else %}
-                      {{ p.title }}
-                    {% endif %}
-                  </h4>
-                  <p class="side-item__tagline">{{ p.tagline }}</p>
-                  <p class="side-item__stack">
-                    {% for s in p.stack %}<span>{{ s }}</span>{% endfor %}
-                  </p>
-                  {% if p.repoNote %}
-                    <p class="side-item__note">{{ p.repoNote }}</p>
-                  {% endif %}
-                </div>
-
-                {% if p.github %}
-                  <span class="side-item__arrow" aria-hidden="true">{{ icon.arrowUpRight(16) }}</span>
-                {% endif %}
-              </li>
-            {% endfor %}
-          </ul>
-        </div>
-      </section>
-
-      <!-- ─── Background ─── -->
-      <section id="background" class="section">
-        <div class="wrap">
-          <header class="sec-head">
-            <p class="sec-head__eyebrow">
-              <span class="sec-head__num">{{ t.background.index }}</span>{{ t.background.label }}
-            </p>
-            <h2 class="sec-head__title">{{ t.background.title }}</h2>
-          </header>
-
-          <h3 class="subhead subhead--flush">{{ t.background.experienceTitle }}</h3>
-          <ol class="entries" role="list">
-            {% for exp in t.background.experiences %}
-              <li class="entry">
-                <p class="entry__period">{{ exp.period }}</p>
-                <div class="entry__body">
-                  <h4 class="entry__title">
-                    {{ exp.title }}<span class="entry__type">{{ exp.type }}</span>
-                  </h4>
-                  <p class="entry__org">{{ exp.company }}</p>
-                  <p class="entry__desc">{{ exp.description }}</p>
-                  <p class="entry__tags">
-                    {% for tag in exp.tags %}<span>{{ tag }}</span>{% endfor %}
-                  </p>
-                </div>
-              </li>
-            {% endfor %}
-          </ol>
-
-          <h3 class="subhead">{{ t.background.educationTitle }}</h3>
-          <ol class="entries" role="list">
-            {% for edu in t.background.education %}
-              <li class="entry">
-                <p class="entry__period">{{ edu.period }}</p>
-                <div class="entry__body">
-                  <h4 class="entry__title">
-                    {{ edu.institution }}<span class="entry__type">{{ edu.location }}</span>
-                  </h4>
-                  <p class="entry__org entry__org--plain">{{ edu.degree }}</p>
-                  {% if edu.description %}
-                    <p class="entry__desc">{{ edu.description }}</p>
-                  {% endif %}
-                </div>
-              </li>
-            {% endfor %}
-          </ol>
-
-          <h3 class="subhead">{{ t.background.extrasTitle }}</h3>
-          <ul class="extras" role="list">
-            {% for extra in t.background.extras %}
-              <li>{{ extra }}</li>
-            {% endfor %}
-          </ul>
-        </div>
-      </section>
-
       <!-- ─── Skills ─── -->
-      <section id="skills" class="section">
-        <div class="wrap">
-          <header class="sec-head">
-            <p class="sec-head__eyebrow">
-              <span class="sec-head__num">{{ t.skills.index }}</span>{{ t.skills.label }}
-            </p>
-            <h2 class="sec-head__title">{{ t.skills.title }}</h2>
-          </header>
+      <section id="skills" class="section wrap">
+        <header class="sec-head">
+          <h2 class="sec-head__title"><span class="sec-head__num">{{ t.skills.index }}</span>{{ t.skills.title }}</h2>
+          <p class="sec-head__aside skills__hint" hidden>{{ t.skills.hint }}</p>
+        </header>
 
-          <ul class="matrix" role="list">
+        <div class="skills" data-skills>
+          <div class="skills__groups">
             {% for group in t.skills.groups %}
-              <li class="matrix__col">
-                <h3 class="matrix__head">{{ group.category }}</h3>
-                <ul class="matrix__cells" role="list">
+              <div class="skills__group">
+                <h3 class="skills__category">{{ group.category }}</h3>
+                <ul class="chips" role="list">
                   {% for item in group.items %}
-                    <li class="matrix__cell">{{ item }}</li>
+                    <li>
+                      {% if item.used | length %}
+                        <button class="chip" type="button" aria-pressed="false" aria-controls="skills-uses" data-skill="{{ item.name | slugify }}">{{ item.name }}</button>
+                      {% else %}
+                        <span class="chip chip--static">{{ item.name }}</span>
+                      {% endif %}
+                    </li>
                   {% endfor %}
                 </ul>
-              </li>
+              </div>
             {% endfor %}
-          </ul>
+          </div>
+
+          {# One prerendered list per skill; the script shows the chosen one. #}
+          <div class="skills__uses" id="skills-uses" aria-live="polite" hidden>
+            {% for group in t.skills.groups %}
+              {% for item in group.items %}
+                {% if item.used | length %}
+                  <div class="skills__use" data-uses="{{ item.name | slugify }}" hidden>
+                    <p class="label">{{ item.name }} — {{ t.skills.usedIn }}</p>
+                    <ul class="skills__links" role="list">
+                      {% for uid in item.used %}
+                        {% set p = t.projects.items | byId(uid) %}
+                        {% set exp = t.background.experiences | byId(uid) %}
+                        <li>
+                          {% if p and p.featured %}
+                            <a href="{{ t.urlPrefix }}projects/{{ p.id }}/">{{ p.name }}</a>
+                          {% elif p and p.github %}
+                            <a href="{{ p.github }}" target="_blank" rel="noopener noreferrer">{{ p.name }}{{ icon.arrowUpRight(12) }}</a>
+                          {% elif p %}
+                            <span>{{ p.name }}</span>
+                          {% elif exp %}
+                            <a href="#background">{{ exp.company }}</a>
+                          {% endif %}
+                        </li>
+                      {% endfor %}
+                    </ul>
+                  </div>
+                {% endif %}
+              {% endfor %}
+            {% endfor %}
+          </div>
         </div>
       </section>
 
       <!-- ─── Contact ─── -->
-      <section id="contact" class="section section--block">
-        <div class="wrap">
-          <header class="sec-head sec-head--invert">
-            <p class="sec-head__eyebrow">
-              <span class="sec-head__num">{{ t.contact.index }}</span>{{ t.contact.label }}
-            </p>
-            <h2 class="sec-head__title sec-head__title--xl">{{ t.contact.title }}</h2>
-            <p class="sec-head__lede">{{ t.contact.text }}</p>
-          </header>
+      <section id="contact" class="section wrap">
+        <div class="contact">
+          <div class="contact__text">
+            <p class="contact__eyebrow">{{ t.contact.index }} — {{ t.contact.label }}</p>
+            <h2 class="contact__title">{{ t.contact.title }}</h2>
+            <p class="contact__lede">{{ t.contact.text }}</p>
+          </div>
 
           {{ contact.contactBlock(t, site) }}
         </div>

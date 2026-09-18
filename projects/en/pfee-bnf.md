@@ -20,6 +20,10 @@ team: 4
 github: null
 demo: null
 report: null
+brief:
+  problem: "Cataloguing the illustrations the BnF digitizes on Gallica is still largely manual."
+  approach: "IIIF API ingestion, illustration localization and reorientation (YOLO vs Florence-2), then multi-label classification (ConvNeXt)."
+  result: "Data pipeline in place, detection benchmark under way; final delivery due end of January 2027."
 ---
 
 ## Context & Objectives

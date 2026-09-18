@@ -22,7 +22,12 @@ export function boot(fn) {
   fn();
 }
 
-const prefersReducedMotion = () =>
+/** Runs `fn` when the current page's wiring is torn down (language swap). */
+export function onTeardown(fn) {
+  bus.signal.addEventListener("abort", fn, { once: true });
+}
+
+export const prefersReducedMotion = () =>
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 const scrollBehavior = () => (prefersReducedMotion() ? "auto" : "smooth");
@@ -91,7 +96,13 @@ export function initTheme() {
         ? "light"
         : "dark";
     chosen = true;
-    apply(next);
+    // A short cross-fade between the two themes where the browser can do it;
+    // an instant switch otherwise, and whenever motion is reduced.
+    if (document.startViewTransition && !prefersReducedMotion()) {
+      document.startViewTransition(() => apply(next));
+    } else {
+      apply(next);
+    }
     try {
       localStorage.setItem("theme", next);
     } catch (e) {
@@ -142,7 +153,11 @@ function fetchPage(url) {
   return pageCache.get(url);
 }
 
-function applyPage(doc) {
+/** Path of the document on screen — updated by every swap. */
+let shownPath = window.location.pathname;
+
+function applyPage(doc, url) {
+  shownPath = new URL(url, window.location.href).pathname;
   document.documentElement.lang = doc.documentElement.lang;
 
   TRANSLATED_HEAD.forEach((sel) => {
@@ -196,7 +211,7 @@ export function initLangSwitch() {
 
     fetchPage(url)
       .then((doc) => {
-        applyPage(doc);
+        applyPage(doc, url);
         history.pushState({ swapped: true }, "", url);
         // scroll-behavior is smooth on <html>; an instant jump here keeps the
         // position from visibly animating back.
@@ -212,11 +227,15 @@ export function initLangSwitch() {
 
   // Registered once for the session: back/forward must swap too, and this
   // listener has to outlive the bus that the swap itself aborts.
+  // Clicking an in-page anchor (#work…) fires popstate as well: only a change
+  // of document may swap the page, or the swap would cancel the anchor's
+  // scroll — which is what made some links need a second click.
   window.addEventListener("popstate", () => {
+    if (window.location.pathname === shownPath) return;
     const y = window.scrollY;
     fetchPage(window.location.href)
       .then((doc) => {
-        applyPage(doc);
+        applyPage(doc, window.location.href);
         window.scrollTo({ top: y, left: 0, behavior: "instant" });
       })
       .catch(() => window.location.reload());
@@ -327,43 +346,84 @@ export function initScrollProgress() {
    ───────────────────────────────────────────────────────────── */
 
 export function initNavScrollSpy() {
-  const nav = document.getElementById("nav");
   const links = [
     ...document.querySelectorAll('.nav__links a[href*="#"], .mobile-menu__links a[href*="#"]'),
   ];
-  const sections = [...document.querySelectorAll("main section[id]")];
+  const sections = [...document.querySelectorAll("main section[id]")].filter((s) =>
+    links.some((link) => link.hash === `#${s.id}`),
+  );
+  if (!sections.length) return;
 
-  if (nav) {
-    const elevate = () => nav.classList.toggle("is-scrolled", window.scrollY > 20);
-    window.addEventListener("scroll", elevate, { passive: true, signal: bus.signal });
-    elevate();
+  // One underline slides between the desktop links instead of each link
+  // drawing its own: the move between two sections reads as one motion.
+  const bar = document.querySelector(".nav__links");
+  let indicator = null;
+  if (bar) {
+    // A list may only hold <li>; this one is presentational.
+    indicator = document.createElement("li");
+    indicator.className = "nav__indicator";
+    indicator.setAttribute("role", "none");
+    indicator.setAttribute("aria-hidden", "true");
+    bar.appendChild(indicator);
   }
 
-  if (!sections.length || !links.length) return;
+  let current;
 
-  // IntersectionObserver instead of measuring offsets on every scroll tick.
-  const visible = new Set();
+  function place(link) {
+    if (!indicator) return;
+    if (!link) {
+      indicator.classList.remove("is-visible");
+      return;
+    }
+    indicator.style.setProperty("--x", `${link.offsetLeft}px`);
+    indicator.style.setProperty("--w", `${link.offsetWidth}px`);
+    // The first placement must not slide in from the left edge.
+    if (!indicator.classList.contains("is-visible")) {
+      indicator.classList.add("is-placing");
+      indicator.getBoundingClientRect();
+      indicator.classList.remove("is-placing");
+    }
+    indicator.classList.add("is-visible");
+  }
 
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) visible.add(entry.target.id);
-        else visible.delete(entry.target.id);
-      });
+  // The active section is the last one whose top has passed 40% of the
+  // viewport — so between two sections the previous one stays active
+  // instead of the underline blinking off.
+  let queued = false;
 
-      const active = sections.find((s) => visible.has(s.id))?.id;
-      links.forEach((link) =>
-        link.classList.toggle(
-          "is-active",
-          Boolean(active) && link.getAttribute("href").endsWith(`#${active}`),
-        ),
-      );
-    },
-    { rootMargin: "-45% 0px -50% 0px", threshold: 0 },
-  );
+  function update(force) {
+    queued = false;
+    const line = window.innerHeight * 0.4;
+    let active = null;
+    for (const section of sections) {
+      if (section.getBoundingClientRect().top <= line) active = section.id;
+      else break;
+    }
+    // At the very bottom the last section may never reach the line.
+    const el = document.scrollingElement || document.documentElement;
+    if (el.scrollTop + el.clientHeight >= el.scrollHeight - 2) {
+      active = sections[sections.length - 1].id;
+    }
+    if (active === current && !force) return;
+    current = active;
 
-  sections.forEach((s) => observer.observe(s));
-  bus.signal.addEventListener("abort", () => observer.disconnect(), { once: true });
+    links.forEach((link) =>
+      link.classList.toggle("is-active", Boolean(active) && link.hash === `#${active}`),
+    );
+    place(bar && active ? bar.querySelector(`a[href$="#${active}"]`) : null);
+  }
+
+  const onScroll = () => {
+    if (queued) return;
+    queued = true;
+    requestAnimationFrame(() => update(false));
+  };
+
+  window.addEventListener("scroll", onScroll, { passive: true, signal: bus.signal });
+  window.addEventListener("resize", () => update(true), { passive: true, signal: bus.signal });
+  // Webfonts change the links' widths once they land.
+  document.fonts?.ready.then(() => update(true));
+  update(true);
 }
 
 /* ─────────────────────────────────────────────────────────────

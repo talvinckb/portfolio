@@ -2,6 +2,15 @@ const markdownIt = require("markdown-it");
 const implicitFigures = require("markdown-it-implicit-figures");
 const fetchCv = require("./scripts/fetch-cv");
 
+/** ASCII slug: "Contexte & Problématique" → "contexte-problematique". */
+const slug = (text) =>
+  String(text)
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+
 module.exports = function (eleventyConfig) {
   eleventyConfig.on("eleventy.before", async () => {
     await fetchCv();
@@ -99,7 +108,41 @@ module.exports = function (eleventyConfig) {
     },
   );
 
+  // Every h2 of a case study gets a stable id, so the table of contents and
+  // the scroll spy can point at it. Ids are unique within one document.
+  md.core.ruler.push("heading_ids", (state) => {
+    const seen = new Map();
+    state.tokens.forEach((token, i) => {
+      if (token.type !== "heading_open" || token.tag !== "h2") return;
+      const base = slug(state.tokens[i + 1].content) || "section";
+      const n = seen.get(base) || 0;
+      seen.set(base, n + 1);
+      token.attrSet("id", n ? `${base}-${n + 1}` : base);
+    });
+  });
+
   eleventyConfig.setLibrary("md", md);
+
+  // ─── Filters ───
+
+  /** Table of contents of a rendered case study: its h2, in order. */
+  eleventyConfig.addFilter("toc", (html) =>
+    [...String(html).matchAll(/<h2 id="([^"]+)">([\s\S]*?)<\/h2>/g)].map(
+      ([, id, inner]) => ({ id, text: inner.replace(/<[^>]+>/g, "").trim() }),
+    ),
+  );
+
+  /** The featured projects before and after `id`, for the case-study pager. */
+  eleventyConfig.addFilter("neighbours", (items, id) => {
+    const featured = items.filter((p) => p.featured);
+    const i = featured.findIndex((p) => p.id === id);
+    return { prev: featured[i - 1] || null, next: featured[i + 1] || null };
+  });
+
+  /** First entry of `items` whose id is `id`, or null. */
+  eleventyConfig.addFilter("byId", (items, id) =>
+    items.find((item) => item.id === id) || null,
+  );
 
   // ─── Projects collection ───
   eleventyConfig.addCollection("projects", function (collectionApi) {

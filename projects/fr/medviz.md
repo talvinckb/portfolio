@@ -12,6 +12,10 @@ team: 4
 github: "https://github.com/talvinckb/Medviz"
 demo: null
 report: null
+brief:
+  problem: "Prédire l'évolution de la capacité respiratoire (FVC) de patients atteints de fibrose pulmonaire à partir de scanners CT."
+  approach: "Biomarqueurs radiomiques extraits des volumes 3D, régression XGBoost quantile, visualisation 3D web (FastAPI, Next.js, Docker)."
+  result: "MAE de 87,1 mL avec XGBoost ; les biomarqueurs 3D réduisent l'erreur de 7,6 mL."
 ---
 
 ## Contexte & Problématique
