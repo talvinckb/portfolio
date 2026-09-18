@@ -41,7 +41,8 @@
     "cvUrl": "/assets/cv-talvin-ackbaraly-en.pdf",
     "terminal": {
       "user": "talvin",
-      "host": "epita"
+      "host": "epita",
+      "enterHint": "enter"
     }
   },
   "projects": {

@@ -663,6 +663,76 @@ p {
   }
 }
 
+/* The Enter hint on the last prompt: Enter or a tap goes to the work. */
+.term__suggest {
+  color: var(--ink-3);
+  text-decoration: none;
+}
+
+.term__suggest:hover,
+.term__suggest.is-run {
+  color: var(--ink);
+}
+
+.term__key {
+  padding: 0.05em 0.45em;
+  border: 1px solid var(--rule-2);
+  font-family: inherit;
+  font-size: var(--t-mono);
+  color: var(--ink-3);
+}
+
+/* No Enter key to hint at on touch screens. */
+@media (hover: none) {
+  .term__key {
+    display: none;
+  }
+}
+
+/* While typing: the rest of the text is laid out but invisible, and the
+   cursor takes no room — it sits on the next character, like a real block
+   cursor — so the terminal never changes size. */
+.term__ghost {
+  visibility: hidden;
+}
+
+.term__cursor--float {
+  position: relative;
+  width: 0;
+  height: 0;
+  vertical-align: baseline;
+  background-color: transparent;
+}
+
+.term__cursor--float::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -0.2em;
+  width: 0.55em;
+  height: 1.15em;
+  background-color: var(--ink);
+}
+
+/* First visit: the terminal types itself out (js/main.js). Everything keeps
+   its place in the layout — only visibility changes, so nothing jumps. */
+.intro .term__body > :not(.is-shown),
+.intro .hero .actions > :not(.is-shown) {
+  visibility: hidden;
+}
+
+.intro .nav,
+.intro main > :not(.hero),
+.intro .footer {
+  opacity: 0;
+}
+
+.intro-reveal .nav,
+.intro-reveal main > :not(.hero),
+.intro-reveal .footer {
+  transition: opacity 0.6s var(--ease);
+}
+
 .hero__title {
   font-family: var(--font-sans);
   font-size: clamp(3rem, 1.2rem + 7vw, 7rem);
@@ -2218,7 +2288,8 @@ button.chip:hover {
   .detect,
   .term__bar,
   .term__prompt,
-  .term__cursor {
+  .term__cursor,
+  .term__suggest {
     display: none !important;
   }
 
