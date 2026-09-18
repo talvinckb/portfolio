@@ -65,8 +65,8 @@ ajoute pas par-dessus.
 
 ### Règles
 
-- **Angles vifs partout.** Les seuls arrondis sont les trois boutons de la
-  fenêtre du terminal, dans le hero.
+- **Angles vifs partout.** Les seuls arrondis sont, dans le hero, le point
+  « disponible » et les trois boutons de la fenêtre du terminal.
 - **Le vert est un signal, pas un décor** : boîtes de détection, action
   principale, repère de la section en cours, état sélectionné. Le texte
   courant reste en `--ink` / `--ink-2`.
@@ -122,7 +122,7 @@ la préférence système.
 
 | Section | Ancre | Source |
 |---|---|---|
-| Hero — un terminal qui lance `whoami` : nom, accroche, intro, actions | — | `hero` |
+| Hero — un terminal qui lance `whoami` : nom, accroche, intro, disponibilité, actions | — | `hero` |
 | 01 Projets sélectionnés + autres réalisations | `#work` | `projects` |
 | 02 Parcours — deux frises : expériences, formation | `#background` | `background` |
 | 03 Compétences — chaque compétence mène aux projets qui l'utilisent | `#skills` | `skills` |
@@ -134,7 +134,8 @@ partagent le même gabarit, donc les mêmes `id`.
 ### Le terminal
 
 Le hero entier est une fenêtre de terminal qui lance `whoami` : le nom
-(le `h1`), l'accroche, l'intro, puis les actions écrites comme des commandes
+(le `h1`), l'accroche, l'intro, la disponibilité (`hero.status`, avec un
+point qui pulse), puis les actions écrites comme des commandes
 (`./voir-les-projets`, `contact`, `cv.pdf`, `github`, `linkedin`). Tout est
 du HTML rendu au build ; le prompt, la barre de fenêtre et le curseur sont
 décoratifs (`aria-hidden`). Textes : `hero` dans `fr.json` / `en.json`.
