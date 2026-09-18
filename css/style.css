@@ -1494,8 +1494,8 @@ button.chip:hover {
 .pager__link {
   display: flex;
   flex-direction: column;
-  gap: var(--s-2);
-  padding-block: var(--s-6);
+  gap: var(--s-1);
+  padding-block: var(--s-5);
   border-bottom: 1px solid var(--rule);
 }
 
@@ -1514,6 +1514,11 @@ button.chip:hover {
 .pager__sub {
   font-size: var(--t-sm);
   color: var(--ink-2);
+}
+
+/* The pager closes the page: the footer follows it closely. */
+.case + .footer {
+  margin-top: var(--s-6);
 }
 
 .pager__link:hover .pager__title {
