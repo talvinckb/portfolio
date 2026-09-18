@@ -1,6 +1,8 @@
 const markdownIt = require("markdown-it");
 const implicitFigures = require("markdown-it-implicit-figures");
 const fetchCv = require("./scripts/fetch-cv");
+const crypto = require("crypto");
+const fs = require("fs");
 
 /** ASCII slug: "Contexte & Problématique" → "contexte-problematique". */
 const slug = (text) =>
@@ -137,6 +139,14 @@ module.exports = function (eleventyConfig) {
     const featured = items.filter((p) => p.featured);
     const i = featured.findIndex((p) => p.id === id);
     return { prev: featured[i - 1] || null, next: featured[i + 1] || null };
+  });
+
+  /** `/css/style.css` → `/css/style.css?v=<content hash>`: a changed file gets
+      a new URL, so no browser keeps the old one next to the new HTML. */
+  eleventyConfig.addFilter("versioned", (url) => {
+    const file = fs.readFileSync(`.${url}`);
+    const hash = crypto.createHash("md5").update(file).digest("hex").slice(0, 8);
+    return `${url}?v=${hash}`;
   });
 
   /** First entry of `items` whose id is `id`, or null. */
