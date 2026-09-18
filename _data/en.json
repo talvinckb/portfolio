@@ -306,7 +306,6 @@
   "skills": {
     "index": "03",
     "title": "Skills",
-    "hint": "Pick a skill to see where I used it.",
     "usedIn": "Used in",
     "groups": [
       {

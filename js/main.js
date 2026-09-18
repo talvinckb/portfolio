@@ -149,7 +149,11 @@ function initTerminal() {
   }
 
   // How long each line of output takes to print, in order.
-  const durations = [380, 280, 520, 320];
+  const durations = [300, 220, 420, 260];
+  // Beats of the scene: Enter is pressed, the shell "thinks", then the output
+  // arrives line by line with a short breath between lines.
+  const RUN_PAUSE = 550;
+  const LINE_GAP = 170;
 
   (async () => {
     const { signal } = skip;
@@ -158,7 +162,10 @@ function initTerminal() {
     await wait(300, signal);
 
     for (const t of texts.filter((t) => t.line === first)) await type(t);
-    await wait(200, signal);
+    // Enter pressed: the cursor drops out while the command "runs".
+    await wait(150, signal);
+    cursor.remove();
+    await wait(RUN_PAUSE, signal);
 
     for (const [i, line] of output.entries()) {
       if (done) return;
@@ -166,7 +173,7 @@ function initTerminal() {
       for (const t of texts.filter((t) => t.line === line)) {
         await type(t, durations[i] ?? 400);
       }
-      await wait(70, signal);
+      await wait(LINE_GAP, signal);
     }
 
     // The actions come up one command at a time.
@@ -201,6 +208,7 @@ function initSkills() {
   if (!chips.length || !panel) return;
 
   function select(skill) {
+    panel.classList.toggle("is-open", Boolean(skill));
     chips.forEach((chip) =>
       chip.setAttribute("aria-pressed", String(chip.dataset.skill === skill)),
     );
@@ -209,15 +217,14 @@ function initSkills() {
     });
   }
 
-  // Radio-like: one skill is always shown once the panel has been revealed.
+  // Clicking the selected skill again deselects it and hides the panel.
   chips.forEach((chip) =>
-    chip.addEventListener("click", () => select(chip.dataset.skill)),
+    chip.addEventListener("click", () =>
+      select(chip.getAttribute("aria-pressed") === "true" ? null : chip.dataset.skill),
+    ),
   );
 
-  panel.hidden = false;
-  document.querySelector(".skills__hint")?.removeAttribute("hidden");
-  // Start on an example, so the panel explains itself.
-  select(chips[0].dataset.skill);
+  select(null);
 }
 
 boot(() => {

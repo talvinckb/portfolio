@@ -306,7 +306,6 @@
   "skills": {
     "index": "03",
     "title": "Compétences",
-    "hint": "Choisissez une compétence pour voir où je l'ai utilisée.",
     "usedIn": "Utilisé dans",
     "groups": [
       {

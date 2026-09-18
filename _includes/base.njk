@@ -191,7 +191,6 @@
       <section id="skills" class="section wrap">
         <header class="sec-head">
           <h2 class="sec-head__title"><span class="sec-head__num">{{ t.skills.index }}</span>{{ t.skills.title }}</h2>
-          <p class="sec-head__aside skills__hint" hidden>{{ t.skills.hint }}</p>
         </header>
 
         <div class="skills" data-skills>
@@ -215,7 +214,8 @@
           </div>
 
           {# One prerendered list per skill; the script shows the chosen one. #}
-          <div class="skills__uses" id="skills-uses" aria-live="polite" hidden>
+          <div class="skills__uses" id="skills-uses" aria-live="polite">
+           <div class="skills__uses-clip"><div class="skills__card">
             {% for group in t.skills.groups %}
               {% for item in group.items %}
                 {% if item.used | length %}
@@ -242,6 +242,7 @@
                 {% endif %}
               {% endfor %}
             {% endfor %}
+          </div></div>
           </div>
         </div>
       </section>
