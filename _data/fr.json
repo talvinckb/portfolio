@@ -47,9 +47,7 @@
   "projects": {
     "index": "01",
     "title": "Projets sélectionnés",
-    "count": "études de cas",
     "secondaryTitle": "Autres réalisations",
-    "secondaryNote": "code source quand il est public",
     "codeLabel": "Code",
     "publicRepo": "GitHub",
     "privateRepo": "non public",

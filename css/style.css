@@ -761,8 +761,7 @@ p {
   color: var(--accent-text);
 }
 
-.sec-head__aside,
-.sub-head__aside {
+.sec-head__aside {
   font-family: var(--font-mono);
   font-size: var(--t-mono);
   color: var(--ink-3);
