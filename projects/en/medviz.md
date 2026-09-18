@@ -12,6 +12,10 @@ team: 4
 github: "https://github.com/talvinckb/Medviz"
 demo: null
 report: null
+brief:
+  problem: "Predict how lung capacity (FVC) evolves in pulmonary fibrosis patients from CT scans."
+  approach: "Radiomic biomarkers extracted from 3D volumes, quantile XGBoost regression, 3D web visualization (FastAPI, Next.js, Docker)."
+  result: "MAE of 87.1 mL with XGBoost; the 3D biomarkers cut the error by 7.6 mL."
 ---
 
 ## Context & Problem Statement

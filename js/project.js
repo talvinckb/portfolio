@@ -6,7 +6,7 @@
  * scrollable tables and math rendering.
  */
 
-import { boot, initChrome, initNavScrollSpy } from "./ui.js";
+import { boot, initChrome, initNavScrollSpy, onTeardown } from "./ui.js";
 
 const lang = () => (document.documentElement.lang === "en" ? "en" : "fr");
 
@@ -24,7 +24,7 @@ const strings = () =>
 
 function initLightbox() {
   const zoomables = document.querySelectorAll(
-    ".prose img, .case__cover-img, .pipeline-workflow",
+    ".prose img, .case-cover__img, .pipeline-workflow",
   );
   if (!zoomables.length) return;
 
@@ -126,6 +126,47 @@ function initTableWrappers() {
 }
 
 /* ─────────────────────────────────────────────────────────────
+   Table of contents — highlight the section being read
+   ───────────────────────────────────────────────────────────── */
+
+function initTocSpy() {
+  const links = [...document.querySelectorAll(".toc__list a")];
+  if (!links.length) return;
+
+  const pairs = links
+    .map((link) => [document.getElementById(link.hash.slice(1)), link])
+    .filter(([target]) => target);
+  if (!pairs.length) return;
+
+  // The section being read is the last heading above the upper third of the
+  // viewport. A handful of headings: measuring them per frame is cheap.
+  let queued = false;
+
+  function paint() {
+    queued = false;
+    const line = window.innerHeight / 3;
+    let active = pairs[0][1];
+    for (const [target, link] of pairs) {
+      if (target.getBoundingClientRect().top <= line) active = link;
+      else break;
+    }
+    links.forEach((link) => link.classList.toggle("is-active", link === active));
+  }
+
+  function onScroll() {
+    if (queued) return;
+    queued = true;
+    requestAnimationFrame(paint);
+  }
+
+  const controller = new AbortController();
+  window.addEventListener("scroll", onScroll, { passive: true, signal: controller.signal });
+  window.addEventListener("resize", onScroll, { passive: true, signal: controller.signal });
+  onTeardown(() => controller.abort());
+  paint();
+}
+
+/* ─────────────────────────────────────────────────────────────
    KaTeX
    ───────────────────────────────────────────────────────────── */
 
@@ -149,6 +190,7 @@ boot(() => {
   initNavScrollSpy();
   initTableWrappers();
   initLightbox();
+  initTocSpy();
   renderMath(); // no-op until KaTeX has landed; re-runs after a language swap
 });
 

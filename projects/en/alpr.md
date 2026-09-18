@@ -11,6 +11,10 @@ team: 2
 github: null
 demo: null
 report: null
+brief:
+  problem: "Locate licence plates in highly variable Full HD images, without any deep neural network."
+  approach: "Classical vision and a Random Forest, prototyped in Python then rewritten in C++17, with a custom MyCV module."
+  result: "F1 of 0.7535 on the 1,440 UFPR-ALPR test images, and 14% less time per image in C++."
 ---
 
 ## Context & Problem Statement

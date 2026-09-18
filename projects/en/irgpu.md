@@ -11,6 +11,10 @@ team: 4
 github: null
 demo: null
 report: null
+brief:
+  problem: "The reference C++ version tops out at 5.29 FPS, far from the 30 FPS real-time bar."
+  approach: "One thread per pixel, then 6 optimizations measured with Nsight: memory, float, random, shared memory, tiling, block geometry."
+  result: "129.5 FPS, a ×24.47 speed-up, with output nearly identical to the CPU (SSIM 0.9949)."
 ---
 
 ## Context & Problem Statement

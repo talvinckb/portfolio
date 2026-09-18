@@ -32,27 +32,49 @@
   },
   "hero": {
     "name": "Talvin Ackbaraly",
+    "kicker": "Vision par ordinateur, IA & calcul GPU",
+    "headline": "J'apprends aux machines à voir, et à le faire vite.",
+    "intro": "Étudiant ingénieur à l'EPITA, majeure Image. De la segmentation d'archives de la BnF au portage CUDA d'algorithmes temps réel.",
+    "status": "Disponible · stage de fin d'études de 6 mois dès février 2027",
     "location": "Paris, France",
-    "intro": "Étudiant en cycle ingénieur à l'EPITA, majeure Image. Je travaille la vision par ordinateur, l'apprentissage profond et le calcul GPU : portage CUDA d'algorithmes temps réel, segmentation d'images médicales et patrimoniales. J'ai également effectué un stage de cinq mois chez Studiocanal en développement full-stack et DevOps.",
-    "status": "Disponible pour un stage de fin d'études de 6 mois à partir de février 2027",
-    "cvBtn": "Télécharger le CV",
+    "coords": "48.85° N · 2.35° E",
+    "ctaWork": "Voir les projets",
+    "ctaContact": "Me contacter",
+    "cvBtn": "CV",
     "cvUrl": "/assets/cv-talvin-ackbaraly-fr.pdf",
-    "emailBtn": "Écrire un email",
-    "linkedinBtn": "LinkedIn",
-    "githubBtn": "GitHub"
+    "photo": null,
+    "photoAlt": "Portrait de Talvin Ackbaraly",
+    "photoBox": {
+      "x": 27,
+      "y": 14,
+      "w": 46,
+      "h": 50
+    },
+    "photoSource": "portrait.webp",
+    "detections": "1 détection",
+    "detectionLabel": "talvin",
+    "media": {
+      "video": "/assets/projects/pogl/fluid_simulation_demo.mp4",
+      "poster": "/assets/projects/pogl/fluid_simulation_demo-poster.webp",
+      "alt": "Simulation de fluide SPH temps réel (projet POGL)",
+      "source": "pogl · sph_fluid",
+      "rate": "60 FPS",
+      "meta": [
+        "75 000 particules",
+        "compute shaders",
+        "SSFR"
+      ]
+    }
   },
   "projects": {
     "index": "01",
-    "label": "Travaux",
     "title": "Projets sélectionnés",
-    "lede": "Chaque projet ci-dessous fait l'objet d'une étude de cas détaillée.",
+    "count": "études de cas",
     "secondaryTitle": "Autres réalisations",
-    "viewProject": "Lire l'étude de cas",
+    "secondaryNote": "code source quand il est public",
     "codeLabel": "Code",
-    "labels": {
-      "academic": "Académique",
-      "personal": "Personnel"
-    },
+    "publicRepo": "GitHub",
+    "privateRepo": "non public",
     "items": [
       {
         "id": "pfee-bnf",
@@ -69,7 +91,6 @@
         ],
         "period": "8 mois (en cours)",
         "featured": true,
-        "kind": "academic",
         "github": null
       },
       {
@@ -87,7 +108,6 @@
         ],
         "period": "5 semaines",
         "featured": true,
-        "kind": "academic",
         "github": null
       },
       {
@@ -105,7 +125,6 @@
         ],
         "period": "4 semaines",
         "featured": true,
-        "kind": "academic",
         "github": null
       },
       {
@@ -123,7 +142,6 @@
         ],
         "period": "1 mois",
         "featured": true,
-        "kind": "academic",
         "github": "https://github.com/talvinckb/Medviz"
       },
       {
@@ -141,7 +159,6 @@
         ],
         "period": "1 mois",
         "featured": true,
-        "kind": "academic",
         "github": "https://github.com/talvinckb/OpenGL-Water-Simulation"
       },
       {
@@ -160,7 +177,6 @@
         ],
         "period": "3 semaines",
         "featured": true,
-        "kind": "academic",
         "github": "https://github.com/Axthauvin/vtk-itk-project"
       },
       {
@@ -176,7 +192,6 @@
         ],
         "period": "Projet personnel",
         "featured": false,
-        "kind": "personal",
         "github": "https://github.com/talvinckb/gitlab-to-github"
       },
       {
@@ -192,7 +207,6 @@
         ],
         "period": "Synthèse d'images",
         "featured": false,
-        "kind": "academic",
         "github": "https://github.com/talvinckb/3D-L-System"
       },
       {
@@ -208,9 +222,8 @@
         ],
         "period": "2 mois",
         "featured": false,
-        "kind": "academic",
         "github": "https://github.com/talvinckb/mytinyx-frontend",
-        "repoNote": "Dépôt public : le frontend uniquement. Le backend microservices est sur un GitLab privé EPITA."
+        "repoNote": "Dépôt public : le frontend uniquement. Le backend microservices est sur un GitLab privé EPITA."
       },
       {
         "id": "tiger",
@@ -225,7 +238,6 @@
         ],
         "period": "2 mois",
         "featured": false,
-        "kind": "academic",
         "github": null
       },
       {
@@ -241,15 +253,13 @@
         ],
         "period": "3 mois",
         "featured": false,
-        "kind": "academic",
         "github": null
       }
     ]
   },
   "background": {
     "index": "02",
-    "label": "Parcours",
-    "title": "Expériences et formation",
+    "title": "Parcours",
     "experienceTitle": "Expériences",
     "educationTitle": "Formation",
     "extrasTitle": "Langues",
@@ -258,6 +268,7 @@
     ],
     "experiences": [
       {
+        "id": "studiocanal",
         "title": "Développeur full-stack & DevOps",
         "type": "Stage",
         "company": "Studiocanal",
@@ -272,6 +283,7 @@
         ]
       },
       {
+        "id": "hitachi",
         "title": "Consultant en informatique",
         "type": "Stage",
         "company": "Hitachi Solutions France",
@@ -310,39 +322,136 @@
   },
   "skills": {
     "index": "03",
-    "label": "Compétences",
-    "title": "Compétences techniques",
+    "title": "Compétences",
+    "hint": "Choisissez une compétence pour voir où je l'ai utilisée.",
+    "usedIn": "Utilisé dans",
     "groups": [
       {
         "category": "Vision & IA",
         "items": [
-          "Traitement d'image",
-          "Deep Learning",
-          "Machine Learning",
-          "OpenCV",
-          "PyTorch",
-          "XGBoost"
+          {
+            "name": "Traitement d'image",
+            "used": [
+              "pfee-bnf",
+              "medviz",
+              "ocr-sudoku"
+            ]
+          },
+          {
+            "name": "Deep Learning",
+            "used": [
+              "pfee-bnf"
+            ]
+          },
+          {
+            "name": "Machine Learning",
+            "used": [
+              "alpr"
+            ]
+          },
+          {
+            "name": "OpenCV",
+            "used": [
+              "alpr"
+            ]
+          },
+          {
+            "name": "PyTorch",
+            "used": [
+              "pfee-bnf"
+            ]
+          },
+          {
+            "name": "XGBoost",
+            "used": [
+              "medviz"
+            ]
+          }
         ]
       },
       {
         "category": "Calcul haute performance",
         "items": [
-          "CUDA",
-          "GPU Computing",
-          "OpenGL",
-          "GLSL",
-          "Nsight"
+          {
+            "name": "CUDA",
+            "used": [
+              "irgpu"
+            ]
+          },
+          {
+            "name": "GPU Computing",
+            "used": [
+              "irgpu"
+            ]
+          },
+          {
+            "name": "OpenGL",
+            "used": [
+              "pogl",
+              "l-system"
+            ]
+          },
+          {
+            "name": "GLSL",
+            "used": [
+              "pogl"
+            ]
+          },
+          {
+            "name": "Nsight",
+            "used": [
+              "irgpu"
+            ]
+          }
         ]
       },
       {
         "category": "Développement",
         "items": [
-          "C++",
-          "Python",
-          "Java",
-          "React/Next.js",
-          "Docker",
-          "CI/CD, AWS"
+          {
+            "name": "C++",
+            "used": [
+              "irgpu",
+              "alpr",
+              "pogl",
+              "l-system",
+              "tiger"
+            ]
+          },
+          {
+            "name": "Python",
+            "used": [
+              "pfee-bnf",
+              "alpr",
+              "vtk-itk",
+              "gitlab-to-github"
+            ]
+          },
+          {
+            "name": "Java",
+            "used": [
+              "tinyx"
+            ]
+          },
+          {
+            "name": "React/Next.js",
+            "used": [
+              "medviz",
+              "tinyx"
+            ]
+          },
+          {
+            "name": "Docker",
+            "used": [
+              "medviz"
+            ]
+          },
+          {
+            "name": "CI/CD, AWS",
+            "used": [
+              "studiocanal"
+            ]
+          }
         ]
       }
     ]
@@ -350,16 +459,18 @@
   "contact": {
     "index": "04",
     "label": "Contact",
-    "title": "Me contacter",
-    "text": "Je cherche un stage de fin d'études de 6 mois à partir de février 2027, en vision par ordinateur, IA ou calcul GPU. N'hésitez pas à me contacter.",
-    "emailLabel": "Email",
+    "title": "Un stage en vision, IA ou calcul GPU ? Parlons-en.",
+    "text": "Stage de fin d'études de 6 mois, à partir de février 2027.",
     "phoneLabel": "Téléphone",
+    "copy": "Copier",
     "linkedinBtn": "LinkedIn",
-    "githubBtn": "GitHub"
+    "githubBtn": "GitHub",
+    "cvBtn": "CV (PDF)"
   },
   "project": {
     "back": "Tous les travaux",
     "backShort": "Travaux",
+    "eyebrow": "Étude de cas",
     "team": "personnes",
     "duration": "Durée",
     "teamLabel": "Équipe",
@@ -367,10 +478,17 @@
     "sourceCode": "Code source",
     "demo": "Démo",
     "report": "Rapport PDF",
-    "contactCta": "Discuter de ce projet"
+    "contactCta": "Discuter de ce projet",
+    "toc": "Sommaire",
+    "briefTitle": "En bref",
+    "problem": "Problème",
+    "approach": "Approche",
+    "result": "Résultat",
+    "role": "Mon rôle",
+    "prev": "Projet précédent",
+    "next": "Projet suivant"
   },
   "footer": {
-    "built": "Eleventy, CSS natif, sans framework",
-    "colophon": "Code source du site"
+    "built": "Eleventy, CSS natif, sans framework"
   }
 }
