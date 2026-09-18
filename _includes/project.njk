@@ -124,9 +124,9 @@
           <figure class="viewer case-cover">
             <div class="viewer__frame">
               <img
-                src="{{ thumb }}"
-                data-src-dark="{{ thumb }}"
-                data-src-light="{{ thumbLight }}"
+                src="{{ thumb | versioned }}"
+                data-src-dark="{{ thumb | versioned }}"
+                data-src-light="{{ thumbLight | versioned }}"
                 alt="{{ t.a11y.projectPreview }} {{ name }}"
                 class="case-cover__img"
                 width="1280" height="720"

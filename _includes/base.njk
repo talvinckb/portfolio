@@ -92,9 +92,9 @@
 
                 <div class="work-card__media">
                   <img
-                    src="{{ p.thumbnail }}"
-                    data-src-dark="{{ p.thumbnail }}"
-                    data-src-light="{{ p.thumbnailLight | default(p.thumbnail) }}"
+                    src="{{ p.thumbnail | versioned }}"
+                    data-src-dark="{{ p.thumbnail | versioned }}"
+                    data-src-light="{{ (p.thumbnailLight | default(p.thumbnail)) | versioned }}"
                     alt=""
                     width="800" height="450"
                     loading="lazy" decoding="async"/>
