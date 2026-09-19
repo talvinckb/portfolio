@@ -1662,10 +1662,12 @@ button.chip:hover {
    17. Prose — the Markdown body of a case study
    ───────────────────────────────────────────────────────────── */
 
+/* Long words (identifiers, URLs) break rather than widen the page on a phone. */
 .prose {
   font-size: var(--t-md);
   line-height: 1.75;
   color: var(--ink-2);
+  overflow-wrap: anywhere;
 }
 
 .prose > :first-child {
@@ -1759,6 +1761,7 @@ button.chip:hover {
 }
 
 .prose pre code {
+  overflow-wrap: normal;
   padding: 0;
   border: none;
   background: none;
@@ -1953,6 +1956,7 @@ button.chip:hover {
 .katex {
   font-size: 1.05em;
   color: var(--ink);
+  overflow-wrap: normal;
 }
 
 /* ─────────────────────────────────────────────────────────────
@@ -2004,11 +2008,13 @@ button.chip:hover {
   display: flex;
   flex-direction: column;
   align-items: center;
-  max-width: 100%;
+  width: 100%;
 }
 
+/* Bounded by the dialog's padded box, not the viewport: a vw width would
+   spill past the padding on a phone and sit off-centre. */
 .lightbox__figure img {
-  max-width: min(92vw, 1400px);
+  max-width: min(100%, 1400px);
   max-height: 80dvh;
   object-fit: contain;
   border: 1px solid var(--rule-2);
@@ -2021,7 +2027,7 @@ button.chip:hover {
 }
 
 .pipeline-workflow--enlarged {
-  width: min(92vw, 1100px);
+  width: min(100%, 1100px);
   cursor: default;
   box-shadow: var(--shade);
 }
@@ -2276,6 +2282,19 @@ button.chip:hover {
   .reach__email {
     padding-inline: var(--s-4);
     font-size: var(--t-sm);
+  }
+
+  .prose th {
+    white-space: normal;
+  }
+
+  .prose th,
+  .prose td {
+    padding-inline: var(--s-3);
+  }
+
+  .lightbox {
+    padding: var(--s-4);
   }
 
   .pipeline-workflow {
