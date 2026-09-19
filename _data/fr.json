@@ -164,21 +164,6 @@
         "github": "https://github.com/Axthauvin/vtk-itk-project"
       },
       {
-        "id": "gitlab-to-github",
-        "name": "gitlab-to-github",
-        "title": "Outil CLI de migration de dépôts",
-        "tagline": "Migration de dépôts GitLab vers GitHub — code, wikis, issues et merge requests comprises.",
-        "thumbnail": null,
-        "stack": [
-          "Python",
-          "CLI",
-          "API REST"
-        ],
-        "period": "Projet personnel",
-        "featured": false,
-        "github": "https://github.com/talvinckb/gitlab-to-github"
-      },
-      {
         "id": "l-system",
         "name": "3D L-System",
         "title": "Générateur procédural de plantes 3D",
@@ -420,8 +405,7 @@
             "used": [
               "pfee-bnf",
               "alpr",
-              "vtk-itk",
-              "gitlab-to-github"
+              "vtk-itk"
             ]
           },
           {
