@@ -252,6 +252,20 @@
     ],
     "experiences": [
       {
+        "id": "freelance",
+        "title": "Full-stack developer",
+        "type": "Alongside studies",
+        "company": "Freelance",
+        "period": "Since 2026",
+        "description": "Design and development of custom management applications for businesses, from requirements gathering to hosting. Done in my spare time: my studies and end-of-studies internship remain my priority.",
+        "tags": [
+          "Full-Stack",
+          "Client relations",
+          "Deployment",
+          "Hosting"
+        ]
+      },
+      {
         "id": "studiocanal",
         "title": "Full-stack & DevOps developer",
         "type": "Internship",
