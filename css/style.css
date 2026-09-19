@@ -2008,11 +2008,13 @@ button.chip:hover {
   display: flex;
   flex-direction: column;
   align-items: center;
-  max-width: 100%;
+  width: 100%;
 }
 
+/* Bounded by the dialog's padded box, not the viewport: a vw width would
+   spill past the padding on a phone and sit off-centre. */
 .lightbox__figure img {
-  max-width: min(92vw, 1400px);
+  max-width: min(100%, 1400px);
   max-height: 80dvh;
   object-fit: contain;
   border: 1px solid var(--rule-2);
@@ -2025,7 +2027,7 @@ button.chip:hover {
 }
 
 .pipeline-workflow--enlarged {
-  width: min(92vw, 1100px);
+  width: min(100%, 1100px);
   cursor: default;
   box-shadow: var(--shade);
 }
@@ -2289,6 +2291,10 @@ button.chip:hover {
   .prose th,
   .prose td {
     padding-inline: var(--s-3);
+  }
+
+  .lightbox {
+    padding: var(--s-4);
   }
 
   .pipeline-workflow {
