@@ -1662,10 +1662,12 @@ button.chip:hover {
    17. Prose — the Markdown body of a case study
    ───────────────────────────────────────────────────────────── */
 
+/* Long words (identifiers, URLs) break rather than widen the page on a phone. */
 .prose {
   font-size: var(--t-md);
   line-height: 1.75;
   color: var(--ink-2);
+  overflow-wrap: anywhere;
 }
 
 .prose > :first-child {
@@ -1759,6 +1761,7 @@ button.chip:hover {
 }
 
 .prose pre code {
+  overflow-wrap: normal;
   padding: 0;
   border: none;
   background: none;
@@ -1953,6 +1956,7 @@ button.chip:hover {
 .katex {
   font-size: 1.05em;
   color: var(--ink);
+  overflow-wrap: normal;
 }
 
 /* ─────────────────────────────────────────────────────────────
@@ -2276,6 +2280,15 @@ button.chip:hover {
   .reach__email {
     padding-inline: var(--s-4);
     font-size: var(--t-sm);
+  }
+
+  .prose th {
+    white-space: normal;
+  }
+
+  .prose th,
+  .prose td {
+    padding-inline: var(--s-3);
   }
 
   .pipeline-workflow {
