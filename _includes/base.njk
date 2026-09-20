@@ -91,13 +91,19 @@
                 </span>
 
                 <div class="work-card__media">
-                  <img
-                    src="{{ p.thumbnail | versioned }}"
-                    data-src-dark="{{ p.thumbnail | versioned }}"
-                    data-src-light="{{ (p.thumbnailLight | default(p.thumbnail)) | versioned }}"
-                    alt=""
-                    width="800" height="450"
-                    loading="lazy" decoding="async"/>
+                  {# La variante claire est choisie au parsing : un échange en JS
+                     après le premier rendu ferait clignoter la vignette. #}
+                  <picture>
+                    <source
+                      data-theme-source="light"
+                      media="(prefers-color-scheme: light)"
+                      srcset="{{ (p.thumbnailLight | default(p.thumbnail)) | versioned }}"/>
+                    <img
+                      src="{{ p.thumbnail | versioned }}"
+                      alt=""
+                      width="800" height="450"
+                      loading="lazy" decoding="async"/>
+                  </picture>
                 </div>
 
                 <div class="work-card__body">
