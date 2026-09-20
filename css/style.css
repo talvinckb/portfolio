@@ -1163,6 +1163,15 @@ p {
   color: var(--ink-2);
 }
 
+.extras__item {
+  padding: var(--s-1) var(--s-3);
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--ink);
+}
+
 /* ─────────────────────────────────────────────────────────────
    13. Skills
    ───────────────────────────────────────────────────────────── */

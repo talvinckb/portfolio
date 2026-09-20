@@ -181,7 +181,7 @@
             </ol>
 
             <p class="extras">
-              <span class="label">{{ t.background.extrasTitle }}</span>{{ t.background.extras | join(" · ") }}
+              <span class="label">{{ t.background.extrasTitle }}</span>{% for item in t.background.extras %}<span class="extras__item">{{ item }}</span>{% endfor %}
             </p>
           </div>
         </div>
