@@ -8,18 +8,38 @@
       stored = localStorage.getItem("theme");
     } catch (e) {}
 
-    var theme = stored === "light" || stored === "dark" ? stored : null;
+    var system = "light";
+    try {
+      if (window.matchMedia("(prefers-color-scheme: dark)").matches) system = "dark";
+    } catch (e) {}
 
-    if (!theme) {
-      try {
-        theme = window.matchMedia("(prefers-color-scheme: dark)").matches
-          ? "dark"
-          : "light";
-      } catch (e) {
-        theme = "light";
+    var theme = stored === "light" || stored === "dark" ? stored : system;
+
+    document.documentElement.setAttribute("data-theme", theme);
+
+    // Les vignettes à variante claire sont choisies par <picture>, donc sur la
+    // seule préférence système. Quand un choix explicite la contredit, il faut
+    // corriger les sources pendant l'analyse du document : après le premier
+    // rendu, la mauvaise image aurait déjà été peinte.
+    if (theme === system) return;
+
+    function retarget() {
+      var sources = document.querySelectorAll("source[data-theme-source]");
+      for (var i = 0; i < sources.length; i++) {
+        sources[i].media =
+          sources[i].getAttribute("data-theme-source") === theme ? "all" : "not all";
       }
     }
 
-    document.documentElement.setAttribute("data-theme", theme);
+    var observer = new MutationObserver(retarget);
+    observer.observe(document.documentElement, { childList: true, subtree: true });
+    document.addEventListener(
+      "DOMContentLoaded",
+      function () {
+        retarget();
+        observer.disconnect();
+      },
+      { once: true },
+    );
   })();
 </script>

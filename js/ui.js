@@ -36,14 +36,13 @@ const scrollBehavior = () => (prefersReducedMotion() ? "auto" : "smooth");
    Theme
    ───────────────────────────────────────────────────────────── */
 
-/** Swap thumbnails that ship a dedicated light-theme variant. */
+/* Thumbnails with a dedicated light variant are <picture> elements whose
+   source carries the system-preference media query, so the right file is
+   already chosen when the document is parsed. Once a theme is applied here the
+   choice is explicit, and that media query must stop having a say. */
 function syncThemedImages(theme) {
-  document.querySelectorAll("img[data-src-light]").forEach((img) => {
-    const next =
-      theme === "light"
-        ? img.dataset.srcLight || img.dataset.srcDark
-        : img.dataset.srcDark;
-    if (next && img.getAttribute("src") !== next) img.src = next;
+  document.querySelectorAll("source[data-theme-source]").forEach((source) => {
+    source.media = source.dataset.themeSource === theme ? "all" : "not all";
   });
 }
 

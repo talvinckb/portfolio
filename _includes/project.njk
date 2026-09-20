@@ -123,14 +123,18 @@
         <div class="case-body__main">
           <figure class="viewer case-cover">
             <div class="viewer__frame">
-              <img
-                src="{{ thumb | versioned }}"
-                data-src-dark="{{ thumb | versioned }}"
-                data-src-light="{{ thumbLight | versioned }}"
-                alt="{{ t.a11y.projectPreview }} {{ name }}"
-                class="case-cover__img"
-                width="1280" height="720"
-                fetchpriority="high" decoding="async"/>
+              <picture>
+                <source
+                  data-theme-source="light"
+                  media="(prefers-color-scheme: light)"
+                  srcset="{{ thumbLight | versioned }}"/>
+                <img
+                  src="{{ thumb | versioned }}"
+                  alt="{{ t.a11y.projectPreview }} {{ name }}"
+                  class="case-cover__img"
+                  width="1280" height="720"
+                  fetchpriority="high" decoding="async"/>
+              </picture>
             </div>
           </figure>
 
