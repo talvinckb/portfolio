@@ -127,24 +127,6 @@
         "github": "https://github.com/talvinckb/Medviz"
       },
       {
-        "id": "pogl",
-        "name": "POGL",
-        "title": "Simulation de fluide temps réel",
-        "tagline": "Moteur SPH 3D temps réel, 75 000 particules à 60 FPS — physique GPU via compute shaders et rendu de surface SSFR.",
-        "highlights": ["75 000 particules", "60 FPS"],
-        "thumbnail": "/assets/projects/pogl/thumbnail-16x9.webp",
-        "thumbnailLight": "/assets/projects/pogl/thumbnail-16x9-light.webp",
-        "stack": [
-          "C++",
-          "OpenGL",
-          "Compute Shaders",
-          "GLSL"
-        ],
-        "period": "1 mois",
-        "featured": true,
-        "github": "https://github.com/talvinckb/OpenGL-Water-Simulation"
-      },
-      {
         "id": "vtk-itk",
         "name": "VTK-ITK",
         "title": "Recalage & suivi longitudinal de tumeur cérébrale",
@@ -162,6 +144,24 @@
         "period": "3 semaines",
         "featured": true,
         "github": "https://github.com/Axthauvin/vtk-itk-project"
+      },
+      {
+        "id": "pogl",
+        "name": "POGL",
+        "title": "Simulation de fluide temps réel",
+        "tagline": "Moteur SPH 3D temps réel, 75 000 particules à 60 FPS — physique GPU via compute shaders et rendu de surface SSFR.",
+        "highlights": ["75 000 particules", "60 FPS"],
+        "thumbnail": "/assets/projects/pogl/thumbnail-16x9.webp",
+        "thumbnailLight": "/assets/projects/pogl/thumbnail-16x9-light.webp",
+        "stack": [
+          "C++",
+          "OpenGL",
+          "Compute Shaders",
+          "GLSL"
+        ],
+        "period": "1 mois",
+        "featured": true,
+        "github": "https://github.com/talvinckb/OpenGL-Water-Simulation"
       },
       {
         "id": "l-system",
