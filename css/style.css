@@ -101,10 +101,10 @@ ol[role="list"] {
   --rule: #1f242b;
   --rule-2: #2c333b;
   --grid-line: rgb(255 255 255 / 0.03);
-  --accent: #c6f24e;
+  --accent: #5aa9ff;
   --on-accent: #0b0d10;
-  --accent-text: #c6f24e;
-  --detect: #c6f24e;
+  --accent-text: #5aa9ff;
+  --detect: #5aa9ff;
   --overlay: rgb(5 6 8 / 0.88);
   --shade: 0 24px 60px rgb(0 0 0 / 0.45);
 }
@@ -112,22 +112,22 @@ ol[role="list"] {
 /* ─── Light ─── */
 :root[data-theme="light"] {
   color-scheme: light;
-  --bg: #f5f6f3;
+  --bg: #f4f6f9;
   --surface: #ffffff;
-  --surface-2: #eceee9;
+  --surface-2: #e9edf2;
   --ink: #0e1013;
   --ink-2: #434951;
   --ink-3: #5f666e;
-  --rule: #dcdfd9;
-  --rule-2: #c3c8c0;
+  --rule: #d8dee6;
+  --rule-2: #bfc7d1;
   --grid-line: rgb(0 0 0 / 0.04);
-  /* Same lime as dark for fills and strokes. Lime text on white would
-     be unreadable, so text keeps a deeper green. */
-  --accent: #c6f24e;
+  /* Same blue as dark for fills and strokes. Light blue text on white would
+     be too faint, so text keeps a deeper blue. */
+  --accent: #5aa9ff;
   --on-accent: #0b0d10;
-  --accent-text: #3d6604;
-  --detect: #c6f24e;
-  --overlay: rgb(236 238 233 / 0.92);
+  --accent-text: #1d4ed8;
+  --detect: #5aa9ff;
+  --overlay: rgb(233 237 242 / 0.92);
   --shade: 0 24px 60px rgb(14 16 19 / 0.16);
 }
 
@@ -136,18 +136,18 @@ ol[role="list"] {
 @media (prefers-color-scheme: light) {
   :root:not([data-theme]) {
     color-scheme: light;
-    --bg: #f5f6f3;
+    --bg: #f4f6f9;
     --surface: #ffffff;
-    --surface-2: #eceee9;
+    --surface-2: #e9edf2;
     --ink: #0e1013;
     --ink-2: #434951;
     --ink-3: #5f666e;
-    --rule: #dcdfd9;
-    --rule-2: #c3c8c0;
+    --rule: #d8dee6;
+    --rule-2: #bfc7d1;
     --grid-line: rgb(0 0 0 / 0.04);
-    --accent-text: #3d6604;
-    --detect: #c6f24e;
-    --overlay: rgb(236 238 233 / 0.92);
+    --accent-text: #1d4ed8;
+    --detect: #5aa9ff;
+    --overlay: rgb(233 237 242 / 0.92);
     --shade: 0 24px 60px rgb(14 16 19 / 0.16);
   }
 }
@@ -960,7 +960,7 @@ picture {
   color: var(--ink-2);
 }
 
-/* The card's key words, "detected" with its box: a lime fill sweeps in
+/* The card's key words, "detected" with its box: a blue fill sweeps in
    under each one, left to right, one after the other. */
 .work-card__tagline .hl {
   margin-inline: -0.15em;
