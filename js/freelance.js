@@ -121,6 +121,50 @@ function initSpotlight() {
   });
 }
 
+/* ─── Bento on phones: a swipeable row with its position dots ─── */
+
+function initCarousel() {
+  const bento = document.querySelector(".bento");
+  if (!bento) return;
+  const tiles = [...bento.children];
+
+  const dots = document.createElement("div");
+  dots.className = "bento__dots";
+  dots.setAttribute("aria-hidden", "true");
+  dots.append(...tiles.map(() => document.createElement("span")));
+  bento.after(dots);
+
+  let current = -1;
+  const update = () => {
+    // The card snapped at the start, or the last one once the row ends.
+    const gap = (tile) => Math.abs(tile.offsetLeft - tiles[0].offsetLeft - bento.scrollLeft);
+    const atEnd = bento.scrollLeft + bento.clientWidth >= bento.scrollWidth - 2;
+    const index = atEnd
+      ? tiles.length - 1
+      : tiles.reduce((best, tile, i) => (gap(tile) < gap(tiles[best]) ? i : best), 0);
+    if (index === current) return;
+    dots.children[current]?.classList.remove("is-on");
+    dots.children[index].classList.add("is-on");
+    current = index;
+  };
+
+  let frame = 0;
+  bento.addEventListener("scroll", () => {
+    cancelAnimationFrame(frame);
+    frame = requestAnimationFrame(update);
+  }, { passive: true });
+  update();
+
+  // Cards off to the side never cross the viewport, so the row reveals as one.
+  if (!("IntersectionObserver" in window)) return;
+  const observer = new IntersectionObserver(([entry]) => {
+    if (!entry.isIntersecting || bento.scrollWidth <= bento.clientWidth) return;
+    tiles.forEach((tile) => tile.classList.add("is-in"));
+    observer.disconnect();
+  }, { threshold: 0.18 });
+  observer.observe(bento);
+}
+
 /* ─── Header state and the mobile dock ─── */
 
 function initChrome() {
@@ -128,6 +172,7 @@ function initChrome() {
   const dock = document.getElementById("dock");
   const hero = document.querySelector(".hero");
   const contact = document.getElementById("contact");
+  const footer = document.querySelector(".foot");
 
   const onScroll = () => bar?.classList.toggle("is-scrolled", window.scrollY > 24);
   onScroll();
@@ -135,16 +180,17 @@ function initChrome() {
 
   if (!dock || !hero || !contact) return;
   // The dock shows once the hero's own button is gone, and steps aside at
-  // the form it leads to.
+  // the form it leads to and at the footer, which has its own way there.
   const actions = hero.querySelector(".hero__actions") || hero;
   const onScreen = new Map();
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => onScreen.set(entry.target, entry.isIntersecting));
     const pastHero = !onScreen.get(actions) && actions.getBoundingClientRect().top < 0;
-    dock.classList.toggle("is-shown", pastHero && !onScreen.get(contact));
+    dock.classList.toggle("is-shown", pastHero && !onScreen.get(contact) && !onScreen.get(footer));
   });
   observer.observe(actions);
   observer.observe(contact);
+  if (footer) observer.observe(footer);
 }
 
 /* ─── Video: a branded play button, native controls once playing ─── */
@@ -252,6 +298,7 @@ initSwap();
 initTilt();
 initReveal();
 initSpotlight();
+initCarousel();
 initChrome();
 initPlayer();
 initBrief();
