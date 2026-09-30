@@ -1879,15 +1879,6 @@ ol {
   animation-duration: 30s;
 }
 
-.offer__shapes span:nth-child(3) {
-  top: 48%;
-  right: 42%;
-  width: 26px;
-  aspect-ratio: 1;
-  border: 0;
-  border-radius: 50%;
-  background-color: var(--y);
-}
 
 @keyframes spin {
   to {
@@ -2509,6 +2500,13 @@ ol {
   border-radius: 50%;
 }
 
+/* Below two columns it would sit on the title. */
+@media (max-width: 1039px) {
+  .contact__shapes span:nth-child(1) {
+    display: none;
+  }
+}
+
 .contact__shapes span:nth-child(2) {
   bottom: 8%;
   left: 5%;
@@ -2562,67 +2560,16 @@ ol {
 .reach {
   display: grid;
   gap: 14px;
-  margin-top: 14px;
   max-width: 460px;
+  margin-top: 14px;
 }
 
-.reach__mail {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 10px 14px;
-}
-
-.reach__mail a,
-.reach__phone {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  font-family: var(--display);
-  font-size: clamp(1.15rem, 1rem + 0.7vw, 1.5rem);
-  font-weight: 700;
-  letter-spacing: -0.015em;
-  text-decoration: underline;
-  text-decoration-thickness: 2px;
-  text-underline-offset: 5px;
-  text-decoration-color: rgb(14 13 22 / 0.3);
-  transition: text-decoration-color 200ms var(--ease);
-  overflow-wrap: anywhere;
-}
-
-.reach__mail a:hover,
-.reach__phone:hover {
-  text-decoration-color: var(--ink);
-}
-
-.reach__phone {
-  width: fit-content;
-}
-
-.reach__copy {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 12px;
-  border: 0;
-  border-radius: 999px;
-  background-color: var(--ink);
-  color: var(--paper);
-  font-size: 0.82rem;
-  font-weight: 600;
-  transition: transform 200ms var(--ease);
-}
-
-.reach__copy:hover {
-  transform: scale(1.05);
-}
-
-.malt {
+/* One card per way to reach me: the whole card is the link. */
+.channel {
   display: flex;
   align-items: center;
   gap: 14px;
-  margin-top: 10px;
-  padding: 16px 20px 16px 16px;
+  padding: 14px 20px 14px 14px;
   border-radius: var(--r);
   background-color: var(--ink);
   color: var(--paper);
@@ -2632,12 +2579,18 @@ ol {
     box-shadow 250ms var(--ease);
 }
 
-.malt:hover {
+.channel:hover {
   transform: translate(-2px, -2px);
   box-shadow: 7px 7px 0 var(--v);
 }
 
-.malt__icon {
+.channel:active {
+  transform: translate(5px, 5px);
+  box-shadow: 0 0 0 var(--v);
+  transition-duration: 80ms;
+}
+
+.channel__icon {
   display: grid;
   flex: none;
   place-items: center;
@@ -2648,17 +2601,36 @@ ol {
   color: var(--ink);
 }
 
-.malt > span:nth-child(2) {
+.channel__text {
   display: grid;
   flex: 1;
+  min-width: 0;
   gap: 2px;
-  font-size: 0.9rem;
-  color: var(--mute);
 }
 
-.malt strong {
-  color: var(--paper);
-  font-size: 1.05rem;
+.channel__text > span {
+  color: var(--mute);
+  font-size: 0.85rem;
+}
+
+.channel__text strong {
+  font-family: var(--display);
+  font-size: clamp(1.05rem, 0.95rem + 0.5vw, 1.25rem);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  overflow-wrap: anywhere;
+}
+
+.channel > .icon {
+  color: var(--mute);
+  transition:
+    transform 250ms var(--ease),
+    color 250ms var(--ease);
+}
+
+.channel:hover > .icon {
+  color: var(--y);
+  transform: translate(2px, -2px);
 }
 
 /* The brief form, and the outcomes that take its place in the same card */
@@ -2998,7 +2970,7 @@ ol {
   color: var(--y);
 }
 
-/* ─── Mobile dock + toast ─── */
+/* ─── Mobile dock ─── */
 
 .dock {
   position: fixed;
@@ -3018,30 +2990,6 @@ ol {
   .dock {
     display: none;
   }
-}
-
-.toast {
-  position: fixed;
-  left: 50%;
-  bottom: 96px;
-  z-index: 80;
-  padding: 12px 20px;
-  border-radius: 999px;
-  background-color: var(--paper);
-  color: var(--ink);
-  font-weight: 600;
-  box-shadow: 0 20px 40px -12px rgb(0 0 0 / 0.6);
-  opacity: 0;
-  pointer-events: none;
-  transform: translate(-50%, 16px);
-  transition:
-    opacity 300ms var(--ease),
-    transform 300ms var(--ease);
-}
-
-.toast.is-on {
-  opacity: 1;
-  transform: translate(-50%, 0);
 }
 
 /* ─── Scroll reveal (freelance.js adds .is-in) ─── */

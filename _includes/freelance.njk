@@ -64,9 +64,8 @@
         "name": site.name,
         "jobTitle": f.about.role,
         "url": site.baseUrl + "/",
-        "sameAs": [site.linkedin, site.github, f.malt]
-      },
-      "sameAs": [f.malt]
+        "sameAs": [site.linkedin, site.github]
+      }
     } %}
     <script type="application/ld+json">{{ serviceLd | dump | safe }}</script>
 
@@ -107,7 +106,6 @@
           <p class="foot__id"><strong>{{ site.name }}</strong> · {{ f.footer.tagline }}</p>
           <ul class="foot__links" role="list">
             <li><a href="mailto:{{ f.email }}">Email</a></li>
-            <li><a href="{{ f.malt }}" target="_blank" rel="noopener noreferrer">Malt</a></li>
             <li><a href="{{ site.linkedin }}" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
             <li><a href="/">{{ f.footer.portfolio }}</a></li>
           </ul>
@@ -118,8 +116,6 @@
 
     {# Mobile only: the way to the contact form never leaves the thumb. #}
     <a class="dock btn btn--y" href="#contact" id="dock" aria-hidden="true" tabindex="-1">{{ f.hero.cta }}{{ icon.arrowRight(18) }}</a>
-
-    <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
     <script type="module" src="{{ '/js/freelance.js' | versioned }}"></script>
   </body>

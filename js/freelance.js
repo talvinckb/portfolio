@@ -5,18 +5,6 @@
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
 
-const toast = (() => {
-  const el = document.getElementById("toast");
-  let timer;
-  return (message) => {
-    if (!el) return;
-    el.textContent = message;
-    el.classList.add("is-on");
-    clearTimeout(timer);
-    timer = setTimeout(() => el.classList.remove("is-on"), 2600);
-  };
-})();
-
 /* ─── Hero: the word and the mockups change together ─── */
 
 function initSwap() {
@@ -179,21 +167,6 @@ function initPlayer() {
   });
 }
 
-/* ─── Copy email ─── */
-
-function initCopy() {
-  document.querySelectorAll("[data-copy]").forEach((button) => {
-    button.addEventListener("click", async () => {
-      try {
-        await navigator.clipboard.writeText(button.dataset.copy);
-        toast(button.dataset.copied || "Copié");
-      } catch {
-        toast(button.dataset.copy);
-      }
-    });
-  });
-}
-
 /* ─── Brief form: sent by /api/contact, answered in place ─── */
 
 function initBrief() {
@@ -281,5 +254,4 @@ initReveal();
 initSpotlight();
 initChrome();
 initPlayer();
-initCopy();
 initBrief();

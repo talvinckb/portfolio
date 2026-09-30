@@ -5,7 +5,6 @@
     "ogImage": "/assets/freelance/og-freelance.png",
     "ogImageAlt": "Talvin Ackbaraly, développeur freelance : je crée votre site, de l'idée à la mise en ligne."
   },
-  "malt": "https://www.malt.fr/profile/talvinackbaraly",
   "email": "contact@talvin-ackbaraly.com",
   "nav": [
     {
@@ -66,7 +65,7 @@
     "reassurance": [
       "Devis gratuit",
       "Sans engagement",
-      "Paiement sécurisé via Malt"
+      "Un seul interlocuteur"
     ],
     "mockUrl": "votre-projet.fr"
   },
@@ -254,10 +253,6 @@
       {
         "q": "Êtes-vous disponible ?",
         "a": "Oui, j'accepte de nouveaux projets dès maintenant, en parallèle de mes études d'ingénieur. À partir de février 2027, je poursuis le freelance pendant mon stage de fin d'études, avec une disponibilité plus réduite : les délais sont adaptés et annoncés dans le devis."
-      },
-      {
-        "q": "Pourquoi passer par Malt ?",
-        "a": "C'est facultatif. Malt sécurise le paiement et gère la facturation : un cadre rassurant si c'est notre première collaboration. On peut aussi travailler en direct, comme vous préférez."
       }
     ]
   },
@@ -307,11 +302,10 @@
       "honeypot": "Ne pas remplir ce champ"
     },
     "direct": "Ou directement :",
-    "copy": "Copier",
-    "copied": "Adresse copiée",
-    "phoneLabel": "Téléphone",
-    "maltTitle": "Passer par Malt",
-    "maltText": "Paiement sécurisé et facturation gérée par la plateforme."
+    "channels": {
+      "emailLabel": "Par e-mail",
+      "phoneLabel": "Par téléphone"
+    }
   },
   "footer": {
     "big": "On s'y met ?",

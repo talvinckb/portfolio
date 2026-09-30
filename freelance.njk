@@ -150,7 +150,7 @@ eleventyExcludeFromCollections: true
 
 <!-- ─── What you get ─── -->
 <section class="sec offer" id="offre">
-  <div class="offer__shapes" aria-hidden="true"><span></span><span></span><span></span></div>
+  <div class="offer__shapes" aria-hidden="true"><span></span><span></span></div>
   <div class="wrap">
     <div class="offer__grid">
       <header class="head offer__head reveal">
@@ -257,18 +257,22 @@ eleventyExcludeFromCollections: true
       <p class="contact__lede">{{ f.contact.lede }}</p>
 
       <p class="contact__direct">{{ f.contact.direct }}</p>
-      <div class="reach">
-        <div class="reach__mail">
-          <a href="mailto:{{ f.email }}">{{ icon.mail(18) }}{{ f.email }}</a>
-          <button class="reach__copy" type="button" data-copy="{{ f.email }}" data-copied="{{ f.contact.copied }}" aria-label="Copier l'adresse email">{{ icon.copy(14) }}<span>{{ f.contact.copy }}</span></button>
-        </div>
-        <a class="reach__phone" href="tel:{{ site.phone }}">{{ icon.phone(18) }}{{ site.phoneDisplay }}</a>
-        <a class="malt" href="{{ f.malt }}" target="_blank" rel="noopener noreferrer">
-          <span class="malt__icon" aria-hidden="true">{{ icon.shield(22) }}</span>
-          <span><strong>{{ f.contact.maltTitle }}</strong><span>{{ f.contact.maltText }}</span></span>
-          {{ icon.arrowUpRight(18) }}
-        </a>
-      </div>
+      <ul class="reach" role="list">
+        <li>
+          <a class="channel" href="mailto:{{ f.email }}">
+            <span class="channel__icon" aria-hidden="true">{{ icon.mail(22) }}</span>
+            <span class="channel__text"><span>{{ f.contact.channels.emailLabel }}</span><strong>{{ f.email }}</strong></span>
+            {{ icon.arrowUpRight(18) }}
+          </a>
+        </li>
+        <li>
+          <a class="channel" href="tel:{{ site.phone }}">
+            <span class="channel__icon" aria-hidden="true">{{ icon.phone(22) }}</span>
+            <span class="channel__text"><span>{{ f.contact.channels.phoneLabel }}</span><strong>{{ site.phoneDisplay }}</strong></span>
+            {{ icon.arrowUpRight(18) }}
+          </a>
+        </li>
+      </ul>
     </div>
 
     {% set form = f.contact.form %}
