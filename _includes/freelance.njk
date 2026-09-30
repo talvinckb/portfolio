@@ -45,9 +45,11 @@
     <link rel="icon" href="{{ '/assets/favicon-freelance.png' | versioned }}" type="image/png" sizes="192x192"/>
     <link rel="apple-touch-icon" href="{{ '/assets/apple-touch-icon-freelance.png' | versioned }}"/>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com"/>
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Inter:wght@400..700&display=swap"/>
+    {# Self-hosted and preloaded, so they land before the hero's entrance
+       instead of swapping in halfway through it. Unversioned URLs: a
+       preload is only reused when it matches the @font-face URL exactly. #}
+    <link rel="preload" href="/assets/fonts/bricolage-grotesque-latin.woff2" as="font" type="font/woff2" crossorigin/>
+    <link rel="preload" href="/assets/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin/>
     <link rel="stylesheet" href="{{ '/css/freelance.css' | versioned }}"/>
 
     {% set serviceLd = {
