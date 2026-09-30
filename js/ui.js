@@ -117,7 +117,7 @@ export function initTheme() {
 /* Eleventy renders /  and /en/ as two complete static documents. The link is a
    real href, so without JS — or on a middle click — the browser navigates
    normally. With JS we fetch the other document and swap its body in, which
-   keeps the scroll position exactly where it was: no reload, no jump. */
+   keeps the reader where they were: no reload, no jump. */
 
 const pageCache = new Map();
 
@@ -131,6 +131,7 @@ const TRANSLATED_HEAD = [
   'meta[property="og:url"]',
   'meta[property="og:locale"]',
   'link[rel="canonical"]',
+  'meta[name="robots"]', // EN pages only: present on one side, absent on the other
 ];
 
 function fetchPage(url) {
@@ -163,6 +164,8 @@ function applyPage(doc, url) {
     const next = doc.head.querySelector(sel);
     const current = document.head.querySelector(sel);
     if (next && current) current.replaceWith(next.cloneNode(true));
+    else if (next) document.head.appendChild(next.cloneNode(true));
+    else if (current) current.remove();
   });
 
   // Tear down everything bound outside the markup before discarding it.
@@ -177,6 +180,51 @@ function applyPage(doc, url) {
   document.body.className = doc.body.className;
 
   if (bootPage) bootPage();
+}
+
+/* Both languages render the same template, so their headings pair up one to
+   one. The two texts don't run to the same length, though: a raw scrollY
+   would land in another section. The position is kept instead as "this far
+   between heading i and heading i + 1", which reads the same in both. */
+const ANCHORS = "main :is(h1, h2, h3)";
+
+function readingPosition() {
+  const tops = [...document.querySelectorAll(ANCHORS)].map(
+    (el) => el.getBoundingClientRect().top,
+  );
+  let i = -1;
+  tops.forEach((top, k) => {
+    if (top <= 0) i = k;
+  });
+  if (i < 0) return { y: window.scrollY, count: tops.length };
+
+  const span = i + 1 < tops.length ? tops[i + 1] - tops[i] : 0;
+  return {
+    y: window.scrollY,
+    count: tops.length,
+    index: i,
+    // Past the last heading there is no span: keep a pixel offset instead.
+    progress: span > 0 ? -tops[i] / span : null,
+    offset: -tops[i],
+  };
+}
+
+function restorePosition(pos) {
+  const tops = [...document.querySelectorAll(ANCHORS)].map(
+    (el) => el.getBoundingClientRect().top,
+  );
+  let top = pos.y; // above the first heading, or headings that don't pair up
+  if (pos.index !== undefined && tops.length === pos.count) {
+    const i = pos.index;
+    const within =
+      pos.progress !== null && i + 1 < tops.length
+        ? pos.progress * (tops[i + 1] - tops[i])
+        : pos.offset;
+    top = window.scrollY + tops[i] + within;
+  }
+  // scroll-behavior is smooth on <html>; an instant jump here keeps the
+  // position from visibly animating back.
+  window.scrollTo({ top, left: 0, behavior: "instant" });
 }
 
 let historyBound = false;
@@ -206,15 +254,15 @@ export function initLangSwitch() {
 
     const url = link.href;
     e.preventDefault();
-    const y = window.scrollY;
 
     fetchPage(url)
       .then((doc) => {
+        // Measured once the document is in hand, not at click time: the reader
+        // may have kept scrolling while it was fetched.
+        const pos = readingPosition();
         applyPage(doc, url);
         history.pushState({ swapped: true }, "", url);
-        // scroll-behavior is smooth on <html>; an instant jump here keeps the
-        // position from visibly animating back.
-        window.scrollTo({ top: y, left: 0, behavior: "instant" });
+        restorePosition(pos);
       })
       .catch(() => {
         window.location.href = url; // network trouble — let the browser do it
@@ -231,11 +279,11 @@ export function initLangSwitch() {
   // scroll — which is what made some links need a second click.
   window.addEventListener("popstate", () => {
     if (window.location.pathname === shownPath) return;
-    const y = window.scrollY;
     fetchPage(window.location.href)
       .then((doc) => {
+        const pos = readingPosition();
         applyPage(doc, window.location.href);
-        window.scrollTo({ top: y, left: 0, behavior: "instant" });
+        restorePosition(pos);
       })
       .catch(() => window.location.reload());
   });

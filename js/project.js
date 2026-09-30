@@ -1,9 +1,9 @@
 /**
  * Portfolio — Project case-study pages
  * ────────────────────────────────────
- * FR and EN are separate static documents, so the language switch is a
- * plain link. This file only adds page-local behaviour: image lightbox,
- * scrollable tables and math rendering.
+ * FR and EN are separate static documents; the language switch swaps one
+ * for the other (see ui.js). This file only adds page-local behaviour: image
+ * lightbox, scrollable tables and math rendering.
  */
 
 import { boot, initChrome, initNavScrollSpy, onTeardown } from "./ui.js";
