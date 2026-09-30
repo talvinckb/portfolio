@@ -237,56 +237,6 @@ function initBrief() {
   });
 }
 
-/* ─── Proof: this page's own numbers, measured in the visitor's browser ─── */
-
-function initStats() {
-  const load = document.querySelector('[data-stat="load"]');
-  const weight = document.querySelector('[data-stat="weight"]');
-  if (!load || !weight || !("performance" in window)) return;
-
-  const format = (value, decimals) =>
-    value.toLocaleString("fr-FR", { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
-
-  const countTo = (el, target, decimals, unit) => {
-    if (reduceMotion) {
-      el.textContent = `${format(target, decimals)} ${unit}`;
-      return;
-    }
-    const start = performance.now();
-    const step = (now) => {
-      const t = Math.min((now - start) / 1200, 1);
-      const eased = 1 - Math.pow(1 - t, 4);
-      el.textContent = `${format(target * eased, decimals)} ${unit}`;
-      if (t < 1) requestAnimationFrame(step);
-    };
-    requestAnimationFrame(step);
-  };
-
-  const measure = () => {
-    const paint = performance.getEntriesByName("first-contentful-paint")[0];
-    const nav = performance.getEntriesByType("navigation")[0];
-    const ms = paint?.startTime || nav?.domContentLoadedEventEnd;
-    if (ms) countTo(load, ms / 1000, 2, "s");
-
-    // What the page cost to download, the video left out since it only
-    // loads on demand. A cached file counts at its encoded size.
-    const size = (entry) => entry.transferSize || entry.encodedBodySize || 0;
-    const bytes = performance
-      .getEntriesByType("resource")
-      .filter((entry) => !/\.mp4(\?|$)/.test(entry.name))
-      .reduce((sum, entry) => sum + size(entry), nav ? size(nav) : 0);
-    if (bytes) countTo(weight, bytes / 1024, 0, "Ko");
-  };
-
-  // Measured when the numbers come into view: by then the page has loaded.
-  new IntersectionObserver(([entry], observer) => {
-    if (!entry.isIntersecting) return;
-    observer.disconnect();
-    if (document.readyState === "complete") measure();
-    else window.addEventListener("load", measure, { once: true });
-  }).observe(load);
-}
-
 initSwap();
 initTilt();
 initReveal();
@@ -295,4 +245,3 @@ initChrome();
 initPlayer();
 initCopy();
 initBrief();
-initStats();

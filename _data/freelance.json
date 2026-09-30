@@ -26,7 +26,6 @@
   ],
   "navCta": "Parlons-en",
   "hero": {
-    "status": "Disponible pour de nouveaux projets",
     "lead": "Je crée votre",
     "tail": "de l'idée à la mise en ligne.",
     "srTitle": "Je crée votre site ou votre application, de l'idée à la mise en ligne.",
@@ -226,35 +225,6 @@
       }
     ],
     "photoAlt": "Portrait de Talvin Ackbaraly"
-  },
-  "proof": {
-    "eyebrow": "La preuve par l'exemple",
-    "title": "Le site que vous lisez, *je l'ai codé.*",
-    "lede": "Sans template ni constructeur de site : chaque ligne est écrite à la main. Les chiffres ci-dessous sont mesurés en direct, dans votre navigateur.",
-    "stats": [
-      {
-        "id": "load",
-        "label": "Temps d'affichage de cette page",
-        "fallback": "—"
-      },
-      {
-        "id": "weight",
-        "label": "Poids de la page (hors vidéo)",
-        "fallback": "—"
-      },
-      {
-        "id": "framework",
-        "label": "Framework JavaScript",
-        "value": "0"
-      }
-    ],
-    "clients": [],
-    "engineer": {
-      "title": "Côté ingénierie",
-      "text": "Vision par ordinateur, IA, calcul GPU : mes projets d'école et de recherche sont sur mon portfolio.",
-      "cta": "Voir le portfolio",
-      "href": "/"
-    }
   },
   "faq": {
     "eyebrow": "FAQ",
