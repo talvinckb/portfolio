@@ -39,10 +39,11 @@
     <meta name="twitter:image" content="{{ pageImage }}"/>
     <meta name="twitter:image:alt" content="{{ f.meta.ogImageAlt }}"/>
 
-    <link rel="icon" href="{{ '/assets/favicon.svg' | versioned }}" type="image/svg+xml"/>
-    <link rel="icon" href="{{ '/assets/favicon.png' | versioned }}" type="image/png" sizes="192x192"/>
-    <link rel="shortcut icon" href="/favicon.ico"/>
-    <link rel="apple-touch-icon" href="{{ '/assets/apple-touch-icon.png' | versioned }}"/>
+    {# Same monogram as the portfolio, in the freelance colours. No .ico:
+       /favicon.ico is shared, and Google only shows the homepage's anyway. #}
+    <link rel="icon" href="{{ '/assets/favicon-freelance.svg' | versioned }}" type="image/svg+xml"/>
+    <link rel="icon" href="{{ '/assets/favicon-freelance.png' | versioned }}" type="image/png" sizes="192x192"/>
+    <link rel="apple-touch-icon" href="{{ '/assets/apple-touch-icon-freelance.png' | versioned }}"/>
 
     <link rel="preconnect" href="https://fonts.googleapis.com"/>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
