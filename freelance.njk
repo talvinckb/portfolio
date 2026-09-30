@@ -1,0 +1,355 @@
+---
+layout: freelance.njk
+permalink: /freelance/
+eleventyExcludeFromCollections: true
+---
+{% set f = freelance %}
+{% import "partials/icons.njk" as icon %}
+{% import "partials/freelance-mocks.njk" as mock %}
+{% set benefitIcons = { sparkle: icon.sparkle(22), phone: icon.phone(22), bolt: icon.bolt(22), search: icon.search(22), edit: icon.edit(22) } %}
+
+<!-- ─── Hero ─── -->
+<section class="hero" id="top">
+  <div class="hero__bg" aria-hidden="true">
+    <span class="orb orb--v"></span>
+    <span class="orb orb--y"></span>
+    <span class="hero__grid"></span>
+  </div>
+
+  <div class="wrap hero__inner">
+    <div class="hero__text">
+      <p class="status"><span class="status__dot" aria-hidden="true"></span>{{ f.hero.status }}</p>
+
+      <h1 class="hero__title">
+        <span class="sr">{{ f.hero.srTitle }}</span>
+        <span class="hero__lines" aria-hidden="true">
+          <span class="line"><span>{{ f.hero.lead }}</span></span>
+          <span class="line line--swap">
+            <span class="swap" id="swap">
+              {% for w in f.hero.words %}<span class="swap__word{{ ' is-on' if loop.first }}" data-kind="{{ w.kind }}">{{ w.text }}</span>{% endfor %}
+            </span>
+          </span>
+          <span class="line"><span>{{ f.hero.tail }}</span></span>
+        </span>
+      </h1>
+
+      <p class="hero__intro">{{ f.hero.intro }}</p>
+
+      <div class="hero__actions">
+        <a class="btn btn--y btn--lg" href="#contact">{{ f.hero.cta }}{{ icon.arrowRight(20) }}</a>
+        <a class="btn btn--ghost btn--lg" href="#video"><span class="btn__play" aria-hidden="true">{{ icon.play(12) }}</span>{{ f.hero.ctaVideo }}</a>
+      </div>
+
+      <ul class="hero__trust" role="list">
+        {% for item in f.hero.reassurance %}<li>{{ icon.check(16) }}{{ item }}</li>{% endfor %}
+      </ul>
+    </div>
+
+    <div class="hero__visual" aria-hidden="true">
+      <div class="stage" id="stage" data-kind="{{ f.hero.words[0].kind }}">
+        <div class="browser">
+          <div class="browser__bar">
+            <span class="browser__dots"><span></span><span></span><span></span></span>
+            <span class="browser__url">{{ f.hero.mockUrl }}</span>
+          </div>
+          <div class="browser__view">
+            {% for w in f.hero.words %}<div class="view{{ ' is-on' if loop.first }}" data-kind="{{ w.kind }}">{{ mock.screen(w.kind) }}</div>{% endfor %}
+          </div>
+        </div>
+
+        <div class="phone">
+          <div class="phone__view">
+            {% for w in f.hero.words %}<div class="view{{ ' is-on' if loop.first }}" data-kind="{{ w.kind }}">{{ mock.phoneScreen(w.kind) }}</div>{% endfor %}
+          </div>
+        </div>
+
+        <span class="float float--1">{{ icon.check(14) }}Site en ligne</span>
+        <span class="float float--2">{{ icon.phone(14) }}Adapté au mobile</span>
+        <span class="float float--3">{{ icon.search(14) }}Visible sur Google</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Ribbons ─── -->
+<div class="ribbons" aria-hidden="true">
+  {% for tone in ["y", "v"] %}
+    <div class="ribbon ribbon--{{ tone }}">
+      <div class="ribbon__track">
+        {% for copy in [1, 2] %}
+          <span class="ribbon__set">
+            {% for item in f.marquee %}<span>{{ item }}</span><span class="ribbon__star">✦</span>{% endfor %}
+          </span>
+        {% endfor %}
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+<!-- ─── Video ─── -->
+<section class="sec" id="video">
+  <div class="wrap">
+    <header class="head head--center reveal">
+      <p class="eyebrow">{{ f.video.eyebrow }}</p>
+      <h2 class="head__title">{{ f.video.title }}</h2>
+    </header>
+
+    <figure class="player reveal" id="player">
+      <video
+        src="{{ '/assets/freelance/presentation.mp4' | versioned }}"
+        poster="{{ '/assets/freelance/presentation-poster.webp' | versioned }}"
+        width="1920" height="1080"
+        preload="none" playsinline controls></video>
+      <button class="player__play" type="button" hidden>
+        <span class="player__pill">
+          <span class="player__ring" aria-hidden="true">{{ icon.play(18) }}</span>
+          <span>{{ f.video.play }}</span>
+          <span class="player__time" aria-hidden="true">{{ f.video.duration }}</span>
+        </span>
+      </button>
+      <figcaption class="player__caption">{{ f.video.caption }}</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ─── Kinds of project ─── -->
+<section class="sec" id="projets">
+  <div class="wrap">
+    <header class="head reveal">
+      <p class="eyebrow">{{ f.projects.eyebrow }}</p>
+      <h2 class="head__title">{{ f.projects.title | emphasis | safe }}</h2>
+      <p class="head__lede">{{ f.projects.lede }}</p>
+    </header>
+
+    <ul class="bento" role="list">
+      {% for item in f.projects.items %}
+        <li class="tile tile--{{ item.kind }} reveal" style="--d: {{ loop.index0 % 3 }}">
+          <div class="tile__art" aria-hidden="true">
+            {% if item.kind == "mobile" %}
+              <div class="mini-phone"><div class="mini-phone__view">{{ mock.phoneScreen("app") }}</div></div>
+              <div class="mini-phone mini-phone--back"><div class="mini-phone__view">{{ mock.phoneScreen("shop") }}</div></div>
+            {% else %}
+              <div class="mini-browser">
+                <span class="mini-browser__bar"><span></span><span></span><span></span></span>
+                <div class="mini-browser__view">{{ mock.screen(item.kind) }}</div>
+              </div>
+            {% endif %}
+          </div>
+          <div class="tile__body">
+            <h3 class="tile__title">{{ item.title }}</h3>
+            <p class="tile__text">{{ item.text }}</p>
+          </div>
+        </li>
+      {% endfor %}
+      <li class="tile tile--more reveal">
+        <p class="tile__big">{{ f.projects.more.title }}</p>
+        <p class="tile__text">{{ f.projects.more.text }}</p>
+        <a class="btn btn--ink" href="#contact">{{ f.projects.more.cta }}{{ icon.arrowRight(18) }}</a>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- ─── What you get ─── -->
+<section class="sec offer" id="offre">
+  <div class="offer__shapes" aria-hidden="true"><span></span><span></span><span></span></div>
+  <div class="wrap">
+    <div class="offer__grid">
+      <header class="head offer__head reveal">
+        <p class="eyebrow">{{ f.offer.eyebrow }}</p>
+        <h2 class="head__title">{{ f.offer.title | emphasis | safe }}</h2>
+      </header>
+
+      <ol class="benefits" role="list">
+        {% for b in f.offer.benefits %}
+          <li class="benefit reveal">
+            <span class="benefit__icon" aria-hidden="true">{{ benefitIcons[b.icon] | safe }}</span>
+            <div>
+              <h3 class="benefit__title">{{ b.title }}</h3>
+              <p class="benefit__text">{{ b.text }}</p>
+            </div>
+            <span class="benefit__check" aria-hidden="true">{{ icon.check(18) }}</span>
+          </li>
+        {% endfor %}
+      </ol>
+    </div>
+
+    <div class="features reveal">
+      <p class="features__title">{{ f.offer.featuresTitle }}</p>
+      <ul class="features__list" role="list">
+        {% for item in f.offer.features %}<li style="--i: {{ loop.index0 }}">{{ icon.plus(14) }}{{ item }}</li>{% endfor %}
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Process ─── -->
+<section class="sec" id="methode">
+  <div class="wrap">
+    <header class="head head--center reveal">
+      <p class="eyebrow">{{ f.process.eyebrow }}</p>
+      <h2 class="head__title">{{ f.process.title | emphasis | safe }}</h2>
+    </header>
+
+    <ol class="steps" id="steps" role="list">
+      {% for s in f.process.steps %}
+        <li class="step" style="--d: {{ loop.index0 }}">
+          <span class="step__num" aria-hidden="true">0{{ loop.index }}</span>
+          <h3 class="step__title"><span class="sr">Étape {{ loop.index }} : </span>{{ s.title }}</h3>
+          <p class="step__text">{{ s.text }}</p>
+        </li>
+      {% endfor %}
+    </ol>
+
+    <p class="promise reveal">{{ f.process.promise }} <strong>{{ f.process.promiseHighlight }}</strong></p>
+  </div>
+</section>
+
+<!-- ─── About ─── -->
+<section class="sec about" id="moi">
+  <div class="wrap about__grid">
+    <div class="about__photo reveal">
+      <div class="portrait">
+        <img src="{{ '/assets/freelance/talvin.webp' | versioned }}" alt="{{ f.about.photoAlt }}" width="640" height="640" loading="lazy" decoding="async"/>
+      </div>
+      <span class="sticker sticker--1" aria-hidden="true">{{ icon.school(16) }}EPITA</span>
+      <span class="sticker sticker--2" aria-hidden="true">{{ icon.film(16) }}Studiocanal</span>
+    </div>
+
+    <div class="about__text reveal">
+      <p class="eyebrow">{{ f.about.eyebrow }}</p>
+      <h2 class="head__title">{{ f.about.greeting }} <em>{{ f.about.name }}.</em></h2>
+      <p class="about__role">{{ f.about.role }}</p>
+      {% for p in f.about.text %}<p class="about__p">{{ p }}</p>{% endfor %}
+      <ul class="badges" role="list">
+        {% set badgeIcons = { school: icon.school(18), film: icon.film(18) } %}
+        {% for b in f.about.badges %}<li>{{ badgeIcons[b.icon] | safe }}{{ b.text }}</li>{% endfor %}
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Proof ─── -->
+<section class="sec proof" id="preuve">
+  <div class="wrap">
+    <header class="head reveal">
+      <p class="eyebrow">{{ f.proof.eyebrow }}</p>
+      <h2 class="head__title">{{ f.proof.title | emphasis | safe }}</h2>
+      <p class="head__lede">{{ f.proof.lede }}</p>
+    </header>
+
+    <div class="proof__grid">
+      {% for s in f.proof.stats %}
+        <div class="stat reveal" style="--d: {{ loop.index0 }}">
+          <p class="stat__value" data-stat="{{ s.id }}">{{ s.value | default(s.fallback) }}</p>
+          <p class="stat__label">{{ s.label }}</p>
+        </div>
+      {% endfor %}
+
+      <a class="stat stat--link reveal" style="--d: 3" href="{{ f.proof.engineer.href }}">
+        <p class="stat__kicker">{{ f.proof.engineer.title }}</p>
+        <p class="stat__label">{{ f.proof.engineer.text }}</p>
+        <span class="stat__cta">{{ f.proof.engineer.cta }}{{ icon.arrowUpRight(16) }}</span>
+      </a>
+    </div>
+
+    {% if f.proof.clients | length %}
+      <ul class="clients" role="list">
+        {% for c in f.proof.clients %}
+          <li class="client reveal">
+            <p class="client__name">{{ c.name }}</p>
+            <p class="client__text">{{ c.text }}</p>
+            {% if c.url %}<a href="{{ c.url }}" target="_blank" rel="noopener noreferrer">{{ c.urlLabel | default("Voir le site") }}{{ icon.arrowUpRight(14) }}</a>{% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </div>
+</section>
+
+<!-- ─── FAQ ─── -->
+<section class="sec" id="faq">
+  <div class="wrap faq">
+    <header class="head faq__head reveal">
+      <p class="eyebrow">{{ f.faq.eyebrow }}</p>
+      <h2 class="head__title">{{ f.faq.title | emphasis | safe }}</h2>
+      <p class="head__lede">Une autre question&nbsp;? <a href="#contact">Écrivez-moi.</a></p>
+    </header>
+
+    <div class="faq__list">
+      {% for item in f.faq.items %}
+        <details class="qa reveal" name="faq">
+          <summary class="qa__q"><span>{{ item.q }}</span><span class="qa__icon" aria-hidden="true">{{ icon.plus(20) }}</span></summary>
+          <div class="qa__a"><p>{{ item.a }}</p></div>
+        </details>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- ─── Contact ─── -->
+<section class="sec contact" id="contact">
+  <div class="contact__shapes" aria-hidden="true"><span></span><span></span></div>
+  <div class="wrap contact__grid">
+    <div class="contact__text">
+      <p class="eyebrow">{{ f.contact.eyebrow }}</p>
+      <h2 class="contact__title">{{ f.contact.title | emphasis | safe }}</h2>
+      <p class="contact__lede">{{ f.contact.lede }}</p>
+
+      <p class="contact__direct">{{ f.contact.direct }}</p>
+      <div class="reach">
+        <div class="reach__mail">
+          <a href="mailto:{{ site.email }}">{{ icon.mail(18) }}{{ site.email }}</a>
+          <button class="reach__copy" type="button" data-copy="{{ site.email }}" data-copied="{{ f.contact.copied }}" aria-label="Copier l'adresse email">{{ icon.copy(14) }}<span>{{ f.contact.copy }}</span></button>
+        </div>
+        <a class="reach__phone" href="tel:{{ site.phone }}">{{ icon.phone(18) }}{{ site.phoneDisplay }}</a>
+        <a class="malt" href="{{ f.malt }}" target="_blank" rel="noopener noreferrer">
+          <span class="malt__icon" aria-hidden="true">{{ icon.shield(22) }}</span>
+          <span><strong>{{ f.contact.maltTitle }}</strong><span>{{ f.contact.maltText }}</span></span>
+          {{ icon.arrowUpRight(18) }}
+        </a>
+      </div>
+    </div>
+
+    {% set form = f.contact.form %}
+    <form class="brief" id="brief" action="mailto:{{ site.email }}" method="post" enctype="text/plain" data-email="{{ site.email }}" data-subject="{{ form.subject }}" novalidate>
+      <fieldset class="brief__field">
+        <legend class="brief__label">{{ form.typesLabel }}</legend>
+        <div class="choices">
+          {% for type in form.types %}
+            <label class="choice"><input type="checkbox" name="type" value="{{ type }}"/><span>{{ type }}</span></label>
+          {% endfor %}
+        </div>
+      </fieldset>
+
+      <div class="brief__row">
+        <label class="brief__field">
+          <span class="brief__label">{{ form.nameLabel }}</span>
+          <input class="input" type="text" name="name" autocomplete="name" placeholder="{{ form.namePlaceholder }}"/>
+        </label>
+        <label class="brief__field">
+          <span class="brief__label">{{ form.companyLabel }} <span class="brief__opt">{{ form.companyOptional }}</span></span>
+          <input class="input" type="text" name="company" autocomplete="organization" placeholder="{{ form.companyPlaceholder }}"/>
+        </label>
+      </div>
+
+      <fieldset class="brief__field">
+        <legend class="brief__label">{{ form.timingLabel }}</legend>
+        <div class="choices">
+          {% for timing in form.timings %}
+            <label class="choice"><input type="radio" name="timing" value="{{ timing }}"{{ ' checked' if loop.first }}/><span>{{ timing }}</span></label>
+          {% endfor %}
+        </div>
+      </fieldset>
+
+      <label class="brief__field">
+        <span class="brief__label">{{ form.messageLabel }}</span>
+        <textarea class="input input--area" name="message" rows="4" required placeholder="{{ form.messagePlaceholder }}" aria-describedby="brief-error"></textarea>
+        <span class="brief__error" id="brief-error" data-message="{{ form.errorMessage }}"></span>
+      </label>
+
+      <button class="btn btn--y btn--lg brief__submit" type="submit">{{ form.submit }}{{ icon.arrowRight(20) }}</button>
+      <p class="brief__note">{{ form.note }}</p>
+    </form>
+  </div>
+</section>

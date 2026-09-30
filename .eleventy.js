@@ -172,6 +172,14 @@ module.exports = function (eleventyConfig) {
     return out + escape(text.slice(pos));
   });
 
+  /** Escaped `text` with each `*word*` turned into `<em>word</em>`, the
+      convention the freelance video uses for its highlighted words. */
+  eleventyConfig.addFilter("emphasis", (text) =>
+    String(text)
+      .replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`)
+      .replace(/\*([^*]+)\*/g, "<em>$1</em>"),
+  );
+
   /** First entry of `items` whose id is `id`, or null. */
   eleventyConfig.addFilter("byId", (items, id) =>
     items.find((item) => item.id === id) || null,

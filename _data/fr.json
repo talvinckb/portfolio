@@ -29,7 +29,8 @@
     "work": "Travaux",
     "background": "Parcours",
     "skills": "Compétences",
-    "contact": "Contact"
+    "contact": "Contact",
+    "freelance": "Freelance"
   },
   "hero": {
     "name": "Talvin Ackbaraly",
@@ -442,6 +443,7 @@
     "label": "Contact",
     "title": "Un stage en vision, IA ou calcul GPU ? Parlons-en.",
     "text": "Stage de fin d'études de 6 mois, à partir de février 2027.",
+    "freelance": "Un projet de site ou d'application ? Découvrez mon offre freelance",
     "phoneLabel": "Téléphone",
     "copy": "Copier",
     "linkedinBtn": "LinkedIn",

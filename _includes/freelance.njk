@@ -1,0 +1,126 @@
+{#
+  Layout of the freelance page. Deliberately apart from the portfolio: it
+  speaks to clients, not recruiters, and wears the identity of the freelance
+  video (ink, yellow, violet, Bricolage Grotesque) so a viewer who clicks
+  through from it lands somewhere familiar. Content: _data/freelance.json.
+#}
+{% set f = freelance %}
+{% set pageUrl = site.baseUrl + page.url %}
+{% set pageImage = site.baseUrl + (f.meta.ogImage | versioned) %}
+{% import "partials/icons.njk" as icon %}
+
+<!DOCTYPE html>
+<html lang="fr" class="no-js">
+  <head>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <title>{{ f.meta.title }}</title>
+    <meta name="description" content="{{ f.meta.description }}"/>
+    <meta name="author" content="{{ site.name }}"/>
+    <meta name="color-scheme" content="dark"/>
+    <meta name="theme-color" content="#0e0d16"/>
+    <link rel="canonical" href="{{ pageUrl }}"/>
+
+    <meta property="og:type" content="website"/>
+    <meta property="og:url" content="{{ pageUrl }}"/>
+    <meta property="og:title" content="{{ f.meta.title }}"/>
+    <meta property="og:description" content="{{ f.meta.description }}"/>
+    <meta property="og:site_name" content="{{ site.name }}"/>
+    <meta property="og:locale" content="fr_FR"/>
+    <meta property="og:image" content="{{ pageImage }}"/>
+    <meta property="og:image:width" content="1200"/>
+    <meta property="og:image:height" content="630"/>
+    <meta property="og:image:alt" content="{{ f.meta.ogImageAlt }}"/>
+    <meta name="twitter:card" content="summary_large_image"/>
+    <meta name="twitter:title" content="{{ f.meta.title }}"/>
+    <meta name="twitter:description" content="{{ f.meta.description }}"/>
+    <meta name="twitter:image" content="{{ pageImage }}"/>
+    <meta name="twitter:image:alt" content="{{ f.meta.ogImageAlt }}"/>
+
+    <link rel="icon" href="{{ '/assets/favicon.svg' | versioned }}" type="image/svg+xml"/>
+    <link rel="icon" href="{{ '/assets/favicon.png' | versioned }}" type="image/png" sizes="192x192"/>
+    <link rel="shortcut icon" href="/favicon.ico"/>
+    <link rel="apple-touch-icon" href="{{ '/assets/apple-touch-icon.png' | versioned }}"/>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Inter:wght@400..700&display=swap"/>
+    <link rel="stylesheet" href="{{ '/css/freelance.css' | versioned }}"/>
+
+    {% set serviceLd = {
+      "@context": "https://schema.org",
+      "@type": "ProfessionalService",
+      "name": site.name + " — développeur freelance",
+      "url": pageUrl,
+      "image": pageImage,
+      "description": f.meta.description,
+      "email": site.email,
+      "telephone": site.phone,
+      "areaServed": { "@type": "Country", "name": "France" },
+      "founder": {
+        "@type": "Person",
+        "name": site.name,
+        "jobTitle": f.about.role,
+        "url": site.baseUrl + "/",
+        "sameAs": [site.linkedin, site.github, f.malt]
+      },
+      "sameAs": [f.malt]
+    } %}
+    <script type="application/ld+json">{{ serviceLd | dump | safe }}</script>
+
+    {% set faqEntities = [] %}
+    {% for item in f.faq.items %}
+      {% set _ = faqEntities.push({ "@type": "Question", "name": item.q, "acceptedAnswer": { "@type": "Answer", "text": item.a } }) %}
+    {% endfor %}
+    <script type="application/ld+json">{{ { "@context": "https://schema.org", "@type": "FAQPage", "mainEntity": faqEntities } | dump | safe }}</script>
+
+    <script defer src="/_vercel/insights/script.js"></script>
+    <script defer src="/_vercel/speed-insights/script.js"></script>
+  </head>
+
+  <body class="fl">
+    <a class="skip" href="#main">Aller au contenu</a>
+
+    <header class="bar" id="bar">
+      <nav class="bar__inner" aria-label="Navigation">
+        <a class="bar__logo" href="#top" aria-label="Haut de page">
+          <span class="bar__mark" aria-hidden="true">T</span>
+          <span>Talvin<span class="bar__dot">.</span></span>
+        </a>
+        <ul class="bar__links" role="list">
+          {% for item in f.nav %}<li><a href="{{ item.href }}">{{ item.label }}</a></li>{% endfor %}
+        </ul>
+        <a class="btn btn--y btn--sm" href="#contact">{{ f.navCta }}{{ icon.arrowRight(16) }}</a>
+      </nav>
+    </header>
+
+    <main id="main">
+      {{ content | safe }}
+    </main>
+
+    <footer class="foot">
+      <div class="wrap">
+        <a class="foot__big" href="#contact">{{ f.footer.big }}<span class="foot__arrow" aria-hidden="true">{{ icon.arrowUpRight(64) }}</span></a>
+        <div class="foot__row">
+          <p class="foot__id"><strong>{{ site.name }}</strong> · {{ f.footer.tagline }}</p>
+          <ul class="foot__links" role="list">
+            <li><a href="mailto:{{ site.email }}">Email</a></li>
+            <li><a href="{{ f.malt }}" target="_blank" rel="noopener noreferrer">Malt</a></li>
+            <li><a href="{{ site.linkedin }}" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+            <li><a href="/">{{ f.footer.portfolio }}</a></li>
+          </ul>
+          <p class="foot__meta">&copy; {{ buildYear }} · {{ f.footer.built }}</p>
+        </div>
+      </div>
+    </footer>
+
+    {# Mobile only: the way to the contact form never leaves the thumb. #}
+    <a class="dock btn btn--y" href="#contact" id="dock" aria-hidden="true" tabindex="-1">{{ f.hero.cta }}{{ icon.arrowRight(18) }}</a>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <script type="module" src="{{ '/js/freelance.js' | versioned }}"></script>
+  </body>
+</html>
