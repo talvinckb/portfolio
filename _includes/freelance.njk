@@ -56,7 +56,7 @@
       "url": pageUrl,
       "image": pageImage,
       "description": f.meta.description,
-      "email": site.email,
+      "email": f.email,
       "telephone": site.phone,
       "areaServed": { "@type": "Country", "name": "France" },
       "founder": {
@@ -106,7 +106,7 @@
         <div class="foot__row">
           <p class="foot__id"><strong>{{ site.name }}</strong> · {{ f.footer.tagline }}</p>
           <ul class="foot__links" role="list">
-            <li><a href="mailto:{{ site.email }}">Email</a></li>
+            <li><a href="mailto:{{ f.email }}">Email</a></li>
             <li><a href="{{ f.malt }}" target="_blank" rel="noopener noreferrer">Malt</a></li>
             <li><a href="{{ site.linkedin }}" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
             <li><a href="/">{{ f.footer.portfolio }}</a></li>

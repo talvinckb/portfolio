@@ -266,7 +266,8 @@ Ces fichiers sont ignorés par Git et régénérés à chaque build.
 `/freelance/` s'adresse aux clients, pas aux recruteurs : elle a son propre
 layout (`_includes/freelance.njk`), sa feuille de style et son script, et
 reprend l'identité de la vidéo de présentation freelance. Tous ses textes
-sont dans `_data/freelance.json`.
+sont dans `_data/freelance.json`, y compris son adresse pro
+(`email`, `contact@talvin-ackbaraly.com`) : le portfolio garde `site.email`.
 
 ### Formulaire de contact
 
@@ -282,8 +283,8 @@ refus des requêtes venant d'un autre site.
 | Variable (Vercel) | Rôle |
 |---|---|
 | `RESEND_API_KEY` | **obligatoire** — clé API Resend |
-| `CONTACT_TO` | adresse qui reçoit les demandes (défaut : `site.email`) |
-| `CONTACT_FROM` | expéditeur (défaut : `Talvin Ackbaraly <contact@talvin-ackbaraly.com>`) |
+| `CONTACT_TO` | adresse qui reçoit les demandes (défaut : `freelance.email`) |
+| `CONTACT_FROM` | expéditeur (défaut : `freelance.email`, au nom de `site.name`) |
 
 L'expéditeur doit appartenir à un domaine vérifié dans Resend
 (enregistrements DNS chez OVH). En local, `npm run dev` ne sert pas

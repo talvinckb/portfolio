@@ -259,8 +259,8 @@ eleventyExcludeFromCollections: true
       <p class="contact__direct">{{ f.contact.direct }}</p>
       <div class="reach">
         <div class="reach__mail">
-          <a href="mailto:{{ site.email }}">{{ icon.mail(18) }}{{ site.email }}</a>
-          <button class="reach__copy" type="button" data-copy="{{ site.email }}" data-copied="{{ f.contact.copied }}" aria-label="Copier l'adresse email">{{ icon.copy(14) }}<span>{{ f.contact.copy }}</span></button>
+          <a href="mailto:{{ f.email }}">{{ icon.mail(18) }}{{ f.email }}</a>
+          <button class="reach__copy" type="button" data-copy="{{ f.email }}" data-copied="{{ f.contact.copied }}" aria-label="Copier l'adresse email">{{ icon.copy(14) }}<span>{{ f.contact.copy }}</span></button>
         </div>
         <a class="reach__phone" href="tel:{{ site.phone }}">{{ icon.phone(18) }}{{ site.phoneDisplay }}</a>
         <a class="malt" href="{{ f.malt }}" target="_blank" rel="noopener noreferrer">
@@ -321,7 +321,7 @@ eleventyExcludeFromCollections: true
 
         <button class="btn btn--y btn--lg brief__submit" type="submit" data-sending="{{ form.sending }}"><span>{{ form.submit }}</span>{{ icon.arrowRight(20) }}</button>
         <p class="brief__alert" id="brief-alert" role="alert" hidden
-          data-send="{{ form.errorSend }}" data-rate="{{ form.errorRate }}"><span></span> <a href="mailto:{{ site.email }}">{{ site.email }}</a></p>
+          data-send="{{ form.errorSend }}" data-rate="{{ form.errorRate }}"><span></span> <a href="mailto:{{ f.email }}">{{ f.email }}</a></p>
         <p class="brief__note">{{ form.note }}</p>
       </form>
 
@@ -336,7 +336,7 @@ eleventyExcludeFromCollections: true
       <div class="brief-done brief-done--fail" id="oups" tabindex="-1">
         <h3 class="brief-done__title">{{ form.failTitle }}</h3>
         <p class="brief-done__text">{{ form.failText }}</p>
-        <a class="btn btn--y" href="mailto:{{ site.email }}">{{ icon.mail(18) }}{{ site.email }}</a>
+        <a class="btn btn--y" href="mailto:{{ f.email }}">{{ icon.mail(18) }}{{ f.email }}</a>
       </div>
     </div>
   </div>

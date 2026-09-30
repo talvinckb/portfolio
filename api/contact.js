@@ -7,11 +7,13 @@
 //
 // Environment:
 //   RESEND_API_KEY  required
-//   CONTACT_TO      where requests land (default: site.email)
-//   CONTACT_FROM    verified sender (default: contact@<site domain>)
+//   CONTACT_TO      where requests land (default: freelance.email)
+//   CONTACT_FROM    sender (default: freelance.email, a verified domain)
 
 const site = require("../_data/site.json");
-const { contact } = require("../_data/freelance.json");
+const freelance = require("../_data/freelance.json");
+
+const { contact } = freelance;
 
 const PAGE = "/freelance/";
 const LIMITS = { name: 100, company: 120, email: 200, message: 5000 };
@@ -24,8 +26,8 @@ const RATE = { max: 5, windowMs: 10 * 60 * 1000 };
 const hits = new Map();
 
 const domain = new URL(site.baseUrl).hostname.replace(/^www\./, "");
-const TO = process.env.CONTACT_TO || site.email;
-const FROM = process.env.CONTACT_FROM || `${site.name} <contact@${domain}>`;
+const TO = process.env.CONTACT_TO || freelance.email;
+const FROM = process.env.CONTACT_FROM || `${site.name} <${freelance.email}>`;
 
 const escape = (s) =>
   String(s).replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`);
