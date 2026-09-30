@@ -269,6 +269,11 @@ reprend l'identité de la vidéo de présentation freelance. Tous ses textes
 sont dans `_data/freelance.json`, y compris son adresse pro
 (`email`, `contact@talvin-ackbaraly.com`) : le portfolio garde `site.email`.
 
+Ses polices (Bricolage Grotesque, Inter) sont hébergées dans `assets/fonts/`
+(sous-ensemble latin de Google Fonts) et préchargées, pour que l'animation
+du hero ne démarre pas avec la police de secours. Elles sont servies avec un
+cache `immutable` : pour changer une police, changer aussi son nom de fichier.
+
 ### Formulaire de contact
 
 Le formulaire est envoyé à la fonction Vercel `api/contact.js`, qui envoie
