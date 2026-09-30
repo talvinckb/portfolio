@@ -18,7 +18,8 @@
   { href: anchorBase + "#work", label: t.nav.work },
   { href: anchorBase + "#background", label: t.nav.background },
   { href: anchorBase + "#skills", label: t.nav.skills },
-  { href: anchorBase + "#contact", label: t.nav.contact }
+  { href: anchorBase + "#contact", label: t.nav.contact },
+  { href: "/freelance/", label: t.nav.freelance, cls: "nav__freelance" }
 ] %}
 
 <header class="nav" id="nav">
@@ -29,7 +30,7 @@
 
     <ul class="nav__links" role="list">
       {% for item in navItems %}
-        <li><a href="{{ item.href }}">{{ item.label }}</a></li>
+        <li><a href="{{ item.href }}"{% if item.cls %} class="{{ item.cls }}"{% endif %}>{{ item.label }}</a></li>
       {% endfor %}
     </ul>
 
@@ -57,7 +58,7 @@
   <ul class="mobile-menu__links" role="list">
     {% for item in navItems %}
       <li>
-        <a href="{{ item.href }}">
+        <a href="{{ item.href }}"{% if item.cls %} class="{{ item.cls }}"{% endif %}>
           <span class="mobile-menu__index" aria-hidden="true">0{{ loop.index }}</span>
           <span>{{ item.label }}</span>
         </a>

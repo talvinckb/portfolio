@@ -29,7 +29,8 @@
     "work": "Work",
     "background": "Background",
     "skills": "Skills",
-    "contact": "Contact"
+    "contact": "Contact",
+    "freelance": "Freelance"
   },
   "hero": {
     "name": "Talvin Ackbaraly",
@@ -442,6 +443,7 @@
     "label": "Contact",
     "title": "An internship in vision, AI or GPU computing? Let's talk.",
     "text": "6-month final-year internship, starting February 2027.",
+    "freelance": "A website or app project? See my freelance offer (in French)",
     "phoneLabel": "Phone",
     "copy": "Copy",
     "linkedinBtn": "LinkedIn",

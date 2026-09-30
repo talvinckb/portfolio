@@ -1,0 +1,317 @@
+{
+  "meta": {
+    "title": "Création de site internet et d'application — Talvin Ackbaraly, développeur freelance",
+    "description": "Site vitrine, boutique en ligne, réservation, application web ou mobile : je crée votre projet de A à Z, de l'idée à la mise en ligne. Devis gratuit et sans engagement.",
+    "ogImage": "/assets/freelance/og-freelance.png",
+    "ogImageAlt": "Talvin Ackbaraly, développeur freelance : je crée votre site, de l'idée à la mise en ligne."
+  },
+  "email": "contact@talvin-ackbaraly.com",
+  "nav": [
+    {
+      "href": "#projets",
+      "label": "Projets"
+    },
+    {
+      "href": "#offre",
+      "label": "L'offre"
+    },
+    {
+      "href": "#methode",
+      "label": "Méthode"
+    },
+    {
+      "href": "#faq",
+      "label": "FAQ"
+    }
+  ],
+  "navCta": "Parlons-en",
+  "hero": {
+    "lead": "Je crée votre",
+    "tail": "de l'idée à la mise en ligne.",
+    "srTitle": "Je crée votre site ou votre application, de l'idée à la mise en ligne.",
+    "words": [
+      {
+        "kind": "vitrine",
+        "text": "site vitrine"
+      },
+      {
+        "kind": "shop",
+        "text": "boutique en ligne"
+      },
+      {
+        "kind": "booking",
+        "text": "site de réservation"
+      },
+      {
+        "kind": "app",
+        "text": "application web"
+      },
+      {
+        "kind": "mobile",
+        "text": "app mobile"
+      },
+      {
+        "kind": "portfolio",
+        "text": "portfolio"
+      },
+      {
+        "kind": "blog",
+        "text": "blog"
+      }
+    ],
+    "intro": "Quel que soit votre projet, je m'occupe de tout : design, développement, mise en ligne. Un seul interlocuteur, du premier échange au jour J.",
+    "cta": "Démarrer mon projet",
+    "ctaVideo": "Voir la vidéo",
+    "reassurance": [
+      "Devis gratuit",
+      "Sans engagement",
+      "Un seul interlocuteur"
+    ],
+    "mockUrl": "votre-projet.fr"
+  },
+  "marquee": [
+    "Site vitrine",
+    "Boutique en ligne",
+    "Réservation",
+    "App mobile",
+    "App web",
+    "Portfolio",
+    "Blog",
+    "Landing page",
+    "Espace client",
+    "Et bien plus"
+  ],
+  "video": {
+    "eyebrow": "En vidéo",
+    "title": "36 secondes pour faire connaissance",
+    "play": "Lancer la vidéo",
+    "caption": "Qui je suis, ce que je crée et comment on travaille ensemble.",
+    "duration": "0:36"
+  },
+  "projects": {
+    "eyebrow": "Tout type de projet",
+    "title": "Votre idée, *en ligne.*",
+    "lede": "Les exemples ne sont que des exemples : si votre projet tient sur un écran, je peux le créer.",
+    "items": [
+      {
+        "kind": "vitrine",
+        "title": "Site vitrine",
+        "text": "Présentez votre activité et donnez envie de vous contacter, dès la première visite."
+      },
+      {
+        "kind": "shop",
+        "title": "Boutique en ligne",
+        "text": "Catalogue, panier, paiement sécurisé : vendez en ligne, jour et nuit."
+      },
+      {
+        "kind": "booking",
+        "title": "Réservation en ligne",
+        "text": "Vos clients choisissent un créneau et réservent en quelques clics."
+      },
+      {
+        "kind": "app",
+        "title": "Application web",
+        "text": "Un outil sur mesure, accessible depuis n'importe quel navigateur."
+      },
+      {
+        "kind": "mobile",
+        "title": "Application mobile",
+        "text": "Votre service dans la poche de vos clients."
+      },
+      {
+        "kind": "portfolio",
+        "title": "Portfolio",
+        "text": "Vos réalisations mises en valeur, comme elles le méritent."
+      },
+      {
+        "kind": "blog",
+        "title": "Blog & média",
+        "text": "Publiez facilement et soyez trouvé sur Google."
+      }
+    ],
+    "more": {
+      "title": "Et bien plus.",
+      "text": "Votre projet ne rentre dans aucune case ? C'est souvent les plus intéressants.",
+      "cta": "Parlons-en"
+    }
+  },
+  "offer": {
+    "eyebrow": "Ce que vous obtenez",
+    "title": "Un site qui travaille *pour vous.*",
+    "benefits": [
+      {
+        "icon": "sparkle",
+        "title": "Un design moderne qui inspire confiance",
+        "text": "Une image professionnelle dès la première seconde, à votre image."
+      },
+      {
+        "icon": "phone",
+        "title": "Parfait sur mobile",
+        "text": "Pensé pour le téléphone, là où la plupart de vos visiteurs vous découvrent."
+      },
+      {
+        "icon": "bolt",
+        "title": "Rapide à charger",
+        "text": "Moins d'attente, plus de visiteurs qui restent."
+      },
+      {
+        "icon": "search",
+        "title": "Optimisé pour Google",
+        "text": "Structure, balises et performances soignées pour être trouvé."
+      },
+      {
+        "icon": "edit",
+        "title": "Facile à faire évoluer",
+        "text": "Modifications sur demande, ou une interface d'édition si vous voulez être autonome."
+      }
+    ],
+    "featuresTitle": "Et selon vos besoins :",
+    "features": [
+      "Paiement en ligne",
+      "Prise de rendez-vous",
+      "Espace client",
+      "Multilingue",
+      "Back-office",
+      "Newsletter",
+      "Formulaires",
+      "Blog",
+      "Connexion à vos outils",
+      "Hébergement & mise en ligne",
+      "Nom de domaine",
+      "Statistiques de visite"
+    ]
+  },
+  "process": {
+    "eyebrow": "Méthode",
+    "title": "Comment *ça se passe*",
+    "steps": [
+      {
+        "title": "Échange",
+        "text": "On parle de votre projet, de vos objectifs et de votre budget. Vous recevez un devis clair, gratuit."
+      },
+      {
+        "title": "Maquette",
+        "text": "Vous voyez votre site avant qu'il existe. On ajuste ensemble jusqu'à ce qu'il vous ressemble."
+      },
+      {
+        "title": "Développement",
+        "text": "Je construis votre site et vous suivez l'avancement à chaque étape."
+      },
+      {
+        "title": "Mise en ligne",
+        "text": "Nom de domaine, hébergement, référencement : je m'occupe de tout, et je reste là après."
+      }
+    ],
+    "promise": "Un seul interlocuteur, de l'idée à la mise en ligne.",
+    "promiseHighlight": "Je gère tout."
+  },
+  "about": {
+    "eyebrow": "Qui je suis",
+    "greeting": "Moi, c'est",
+    "name": "Talvin",
+    "role": "Développeur full-stack freelance",
+    "text": [
+      "Élève ingénieur à l'EPITA, j'ai notamment travaillé chez Studiocanal, où j'ai développé une plateforme interne de gestion des droits de films et mis en place son déploiement sur le cloud.",
+      "Aujourd'hui, je mets cette exigence au service de votre projet : un code solide, un design soigné, et quelqu'un qui répond quand vous avez une question."
+    ],
+    "badges": [
+      {
+        "icon": "school",
+        "text": "Élève ingénieur EPITA"
+      },
+      {
+        "icon": "film",
+        "text": "Expérience chez Studiocanal"
+      }
+    ],
+    "photoAlt": "Portrait de Talvin Ackbaraly"
+  },
+  "faq": {
+    "eyebrow": "FAQ",
+    "title": "Vos questions, *mes réponses*",
+    "items": [
+      {
+        "q": "Combien coûte un site ?",
+        "a": "Chaque projet est différent : le prix dépend du nombre de pages, des fonctionnalités et du niveau de personnalisation. Après un premier échange, je vous envoie un devis détaillé, gratuit et sans engagement."
+      },
+      {
+        "q": "Comment se passe le devis ?",
+        "a": "On échange sur votre projet, par téléphone, en visio ou par message. Je vous envoie ensuite un devis écrit : ce qui est inclus, le prix et le calendrier. Rien ne démarre sans votre accord."
+      },
+      {
+        "q": "Combien de temps faut-il ?",
+        "a": "Cela dépend de l'ampleur du projet : un site vitrine se réalise bien plus vite qu'une application sur mesure. Le calendrier est fixé dans le devis, étape par étape, et je vous tiens informé tout au long du projet."
+      },
+      {
+        "q": "Et après la mise en ligne ?",
+        "a": "Je ne disparais pas : corrections, mises à jour, nouvelles pages ou nouvelles fonctionnalités, je reste votre interlocuteur. Les modalités du suivi sont prévues dans le devis."
+      },
+      {
+        "q": "Pourrai-je modifier mon site moi-même ?",
+        "a": "Si vous le souhaitez, oui : je peux intégrer une interface d'édition simple pour changer vos textes, vos photos ou vos produits. Sinon, je m'en occupe sur demande."
+      },
+      {
+        "q": "Êtes-vous disponible ?",
+        "a": "Oui, j'accepte de nouveaux projets dès maintenant, en parallèle de mes études d'ingénieur. À partir de février 2027, je poursuis le freelance pendant mon stage de fin d'études, avec une disponibilité plus réduite : les délais sont adaptés et annoncés dans le devis."
+      }
+    ]
+  },
+  "contact": {
+    "eyebrow": "Contact",
+    "title": "Parlons de *votre projet*",
+    "lede": "Décrivez votre idée en quelques mots, même si elle n'est pas encore très claire. Je vous réponds personnellement.",
+    "form": {
+      "typesLabel": "Votre projet",
+      "typesPlaceholder": "Choisissez un ou plusieurs types",
+      "types": [
+        "Site vitrine",
+        "Boutique en ligne",
+        "Réservation",
+        "Application web",
+        "Application mobile",
+        "Portfolio",
+        "Blog",
+        "Autre"
+      ],
+      "nameLabel": "Votre nom",
+      "namePlaceholder": "Camille Martin",
+      "companyLabel": "Entreprise",
+      "companyOptional": "facultatif",
+      "companyPlaceholder": "Votre activité",
+      "timingLabel": "Échéance",
+      "timings": [
+        "Dès que possible",
+        "D'ici 1 à 3 mois",
+        "Pas de date précise"
+      ],
+      "messageLabel": "Votre projet en quelques mots",
+      "messagePlaceholder": "J'aimerais un site pour présenter mon activité et permettre à mes clients de réserver en ligne…",
+      "submit": "Envoyer ma demande",
+      "errorMessage": "Dites-moi en quelques mots ce que vous avez en tête.",
+      "emailLabel": "Votre e-mail",
+      "emailPlaceholder": "camille@exemple.fr",
+      "note": "Vous recevez une copie de votre message par e-mail.",
+      "sending": "Envoi…",
+      "errorEmail": "Indiquez une adresse e-mail valide pour que je puisse vous répondre.",
+      "errorSend": "L'envoi n'a pas abouti. Réessayez, ou écrivez-moi directement :",
+      "errorRate": "Beaucoup de messages en peu de temps : réessayez dans quelques minutes, ou écrivez-moi directement :",
+      "doneTitle": "Message envoyé !",
+      "doneText": "Merci, votre demande est bien arrivée. Une copie vient de partir dans votre boîte mail, et je reviens vers vous personnellement.",
+      "doneAgain": "Envoyer une autre demande",
+      "failTitle": "L'envoi n'a pas abouti",
+      "failText": "Désolé, votre message n'est pas parti. Écrivez-moi directement :",
+      "honeypot": "Ne pas remplir ce champ"
+    },
+    "direct": "Ou directement :",
+    "channels": {
+      "emailLabel": "Par e-mail",
+      "phoneLabel": "Par téléphone"
+    }
+  },
+  "footer": {
+    "big": "On s'y met ?",
+    "tagline": "Développeur full-stack freelance",
+    "portfolio": "Portfolio ingénieur",
+    "built": "Codé à la main, sans framework."
+  }
+}

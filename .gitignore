@@ -6,3 +6,7 @@ _site/
 Thumbs.db
 
 assets/cv-*.pdf
+
+# Local secrets (vercel dev, vercel env pull)
+.env*
+.vercel/

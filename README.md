@@ -261,6 +261,35 @@ Ces fichiers sont ignorés par Git et régénérés à chaque build.
 - **Image Open Graph** : `assets/og-image.png` (FR) et `og-image-en.png`
   (EN), 1200×630.
 
+## Page freelance
+
+`/freelance/` s'adresse aux clients, pas aux recruteurs : elle a son propre
+layout (`_includes/freelance.njk`), sa feuille de style et son script, et
+reprend l'identité de la vidéo de présentation freelance. Tous ses textes
+sont dans `_data/freelance.json`, y compris son adresse pro
+(`email`, `contact@talvin-ackbaraly.com`) : le portfolio garde `site.email`.
+
+### Formulaire de contact
+
+Le formulaire est envoyé à la fonction Vercel `api/contact.js`, qui envoie
+deux e-mails via [Resend](https://resend.com) : la demande (vers
+`CONTACT_TO`, avec le client en « répondre à ») et un accusé de réception
+au client. Sans JavaScript, le formulaire est posté normalement et la
+fonction redirige vers `#merci` ou `#oups`.
+
+Anti-spam : champ piège invisible, envoi trop rapide ignoré, limite par IP,
+refus des requêtes venant d'un autre site.
+
+| Variable (Vercel) | Rôle |
+|---|---|
+| `RESEND_API_KEY` | **obligatoire** — clé API Resend |
+| `CONTACT_TO` | adresse qui reçoit les demandes (défaut : `freelance.email`) |
+| `CONTACT_FROM` | expéditeur (défaut : `freelance.email`, au nom de `site.name`) |
+
+L'expéditeur doit appartenir à un domaine vérifié dans Resend
+(enregistrements DNS chez OVH). En local, `npm run dev` ne sert pas
+`/api` : utiliser `vercel dev` pour tester l'envoi.
+
 ## Accessibilité & SEO
 
 Points à ne pas régresser :

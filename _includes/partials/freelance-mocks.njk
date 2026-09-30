@@ -1,0 +1,129 @@
+{#
+  Generic wireframes of the kinds of site the freelance page talks about:
+  coloured blocks, never a real client or a real figure (same rule as the
+  video's SiteMock). Purely decorative, so every caller puts them inside an
+  aria-hidden container. Blocks: .m-img picture, .m-h heading, .m-p text
+  line, .m-cta button, .m-chip small pill.
+#}
+
+{% macro _nav(extra="") %}
+  <span class="m-nav"><span class="m-logo"></span><span class="m-links"><span></span><span></span><span></span></span>{{ extra | safe }}</span>
+{% endmacro %}
+
+{# ─── Desktop screens, drawn in a 16:10 browser viewport ─── #}
+{% macro screen(kind) %}
+  {% if kind == "vitrine" %}
+    <span class="scr scr--vitrine">
+      {{ _nav('<span class="m-cta m-cta--s"></span>') }}
+      <span class="m-hero">
+        <span class="m-copy">
+          <span class="m-chip"></span>
+          <span class="m-h"></span><span class="m-h m-h--s"></span>
+          <span class="m-p"></span><span class="m-p m-p--s"></span>
+          <span class="m-btns"><span class="m-cta"></span><span class="m-cta m-cta--ghost"></span></span>
+        </span>
+        <span class="m-img m-img--tall"></span>
+      </span>
+      <span class="m-row">
+        {% for i in range(3) %}<span class="m-card"><span class="m-dot"></span><span class="m-p"></span><span class="m-p m-p--s"></span></span>{% endfor %}
+      </span>
+    </span>
+  {% elif kind == "shop" %}
+    <span class="scr scr--shop">
+      {{ _nav('<span class="m-cart"><span class="m-badge"></span></span>') }}
+      <span class="m-banner"><span class="m-h m-h--s"></span><span class="m-chip m-chip--y"></span></span>
+      <span class="m-grid4">
+        {% for i in range(4) %}<span class="m-prod"><span class="m-img"></span><span class="m-p"></span><span class="m-price"></span></span>{% endfor %}
+      </span>
+    </span>
+  {% elif kind == "booking" %}
+    <span class="scr scr--booking">
+      {{ _nav('<span class="m-cta m-cta--s"></span>') }}
+      <span class="m-split">
+        <span class="m-copy">
+          <span class="m-h"></span>
+          <span class="m-p m-p--s"></span>
+          <span class="m-service is-on"></span><span class="m-service"></span><span class="m-service"></span>
+        </span>
+        <span class="m-cal">
+          <span class="m-cal__head"></span>
+          <span class="m-cal__grid">
+            {% for i in range(28) %}<span class="{{ 'is-on' if i == 10 }}{{ 'is-off' if i in [0, 1, 6, 13, 20, 27] }}"></span>{% endfor %}
+          </span>
+          <span class="m-slots"><span></span><span class="is-on"></span><span></span><span></span></span>
+        </span>
+      </span>
+    </span>
+  {% elif kind == "app" %}
+    <span class="scr scr--app">
+      <span class="m-side"><span class="m-logo"></span>{% for i in range(5) %}<span class="{{ 'is-on' if loop.index == 2 }}"></span>{% endfor %}</span>
+      <span class="m-main">
+        <span class="m-top"><span class="m-h m-h--s"></span><span class="m-avatar"></span></span>
+        <span class="m-kpis">{% for i in range(3) %}<span class="m-kpi"><span class="m-p m-p--s"></span><span class="m-h m-h--xs"></span></span>{% endfor %}</span>
+        <span class="m-chart">{% for h in [38, 62, 45, 80, 56, 92, 70, 84] %}<span style="--h: {{ h }}%; --i: {{ loop.index0 }}"></span>{% endfor %}</span>
+        <span class="m-rows">{% for i in range(3) %}<span></span>{% endfor %}</span>
+      </span>
+    </span>
+  {% elif kind == "mobile" %}
+    <span class="scr scr--mobile">
+      {{ _nav() }}
+      <span class="m-hero">
+        <span class="m-copy">
+          <span class="m-h"></span><span class="m-h m-h--s"></span>
+          <span class="m-p"></span><span class="m-p m-p--s"></span>
+          <span class="m-stores"><span></span><span></span></span>
+        </span>
+        <span class="m-halo"></span>
+      </span>
+    </span>
+  {% elif kind == "portfolio" %}
+    <span class="scr scr--portfolio">
+      {{ _nav() }}
+      <span class="m-h m-h--xl"></span>
+      <span class="m-masonry">
+        {% for tone in ["a", "b", "c", "d", "e", "f"] %}<span class="m-img m-img--{{ tone }}"></span>{% endfor %}
+      </span>
+    </span>
+  {% elif kind == "blog" %}
+    <span class="scr scr--blog">
+      {{ _nav() }}
+      <span class="m-feature"><span class="m-img"></span><span class="m-copy"><span class="m-chip m-chip--y"></span><span class="m-h"></span><span class="m-h m-h--s"></span><span class="m-p"></span></span></span>
+      <span class="m-row">
+        {% for tone in ["b", "c", "d"] %}<span class="m-post"><span class="m-img m-img--{{ tone }}"></span><span class="m-p"></span><span class="m-p m-p--s"></span></span>{% endfor %}
+      </span>
+    </span>
+  {% endif %}
+{% endmacro %}
+
+{# ─── Phone screens: the same kinds, stacked for a 9:19 viewport ─── #}
+{% macro phoneScreen(kind) %}
+  <span class="pscr pscr--{{ kind }}">
+    <span class="m-pbar"><span class="m-logo"></span><span class="m-burger"></span></span>
+    {% if kind == "vitrine" %}
+      <span class="m-img"></span>
+      <span class="m-h"></span><span class="m-p"></span><span class="m-p m-p--s"></span>
+      <span class="m-cta"></span>
+    {% elif kind == "shop" %}
+      <span class="m-grid2">{% for i in range(6) %}<span class="m-prod"><span class="m-img"></span><span class="m-price"></span></span>{% endfor %}</span>
+      <span class="m-cta m-cta--wide"></span>
+    {% elif kind == "booking" %}
+      <span class="m-h m-h--s"></span>
+      <span class="m-cal__grid">{% for i in range(21) %}<span class="{{ 'is-on' if i == 9 }}{{ 'is-off' if i in [0, 6, 13, 20] }}"></span>{% endfor %}</span>
+      <span class="m-slots"><span></span><span class="is-on"></span><span></span></span>
+      <span class="m-cta m-cta--wide"></span>
+    {% elif kind == "app" or kind == "mobile" %}
+      <span class="m-kpi m-kpi--wide"><span class="m-p m-p--s"></span><span class="m-h m-h--xs"></span></span>
+      <span class="m-chart">{% for h in [40, 70, 52, 88, 64] %}<span style="--h: {{ h }}%; --i: {{ loop.index0 }}"></span>{% endfor %}</span>
+      <span class="m-rows">{% for i in range(2) %}<span></span>{% endfor %}</span>
+      <span class="m-tabs"><span class="is-on"></span><span></span><span></span><span></span></span>
+    {% elif kind == "portfolio" %}
+      <span class="m-h m-h--s"></span>
+      <span class="m-grid2">{% for tone in ["a", "b", "c", "d"] %}<span class="m-img m-img--{{ tone }}"></span>{% endfor %}</span>
+    {% elif kind == "blog" %}
+      <span class="m-img"></span>
+      <span class="m-h"></span><span class="m-p"></span>
+      <span class="m-post"><span class="m-img m-img--c"></span><span class="m-p"></span></span>
+      <span class="m-post"><span class="m-img m-img--d"></span><span class="m-p"></span></span>
+    {% endif %}
+  </span>
+{% endmacro %}
