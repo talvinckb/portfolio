@@ -2229,6 +2229,9 @@ ol {
 
 .about {
   background: linear-gradient(to bottom, var(--ink), #151226 50%, var(--ink));
+  /* The tilted yellow card pokes past the edge on phones; body's clip does
+     not stop mobile browsers from widening the layout viewport. */
+  overflow-x: clip;
 }
 
 .about__grid {
