@@ -278,13 +278,21 @@ eleventyExcludeFromCollections: true
     {% set form = f.contact.form %}
     <div class="brief-card" id="brief-card">
       <form class="brief" id="brief" action="/api/contact" method="post" novalidate>
+        {# Dropdowns of checkboxes (several kinds can apply) or radios (one
+           timing). The summary reads back the choice (freelance.js). #}
         <fieldset class="brief__field">
           <legend class="brief__label">{{ form.typesLabel }}</legend>
-          <div class="choices">
-            {% for type in form.types %}
-              <label class="choice"><input type="checkbox" name="type" value="{{ type }}"/><span>{{ type }}</span></label>
-            {% endfor %}
-          </div>
+          <details class="picker">
+            <summary class="input picker__summary">
+              <span class="picker__value" data-placeholder="{{ form.typesPlaceholder }}">{{ form.typesPlaceholder }}</span>
+              {{ icon.chevronDown(18) }}
+            </summary>
+            <div class="picker__panel">
+              {% for type in form.types %}
+                <label class="picker__opt"><input type="checkbox" name="type" value="{{ type }}"/><span class="picker__box" aria-hidden="true">{{ icon.check(14) }}</span>{{ type }}</label>
+              {% endfor %}
+            </div>
+          </details>
         </fieldset>
 
         <div class="brief__row">
@@ -299,19 +307,26 @@ eleventyExcludeFromCollections: true
           </label>
         </div>
 
-        <label class="brief__field">
-          <span class="brief__label">{{ form.companyLabel }} <span class="brief__opt">{{ form.companyOptional }}</span></span>
-          <input class="input" type="text" name="company" autocomplete="organization" maxlength="120" placeholder="{{ form.companyPlaceholder }}"/>
-        </label>
-
-        <fieldset class="brief__field">
-          <legend class="brief__label">{{ form.timingLabel }}</legend>
-          <div class="choices">
-            {% for timing in form.timings %}
-              <label class="choice"><input type="radio" name="timing" value="{{ timing }}"{{ ' checked' if loop.first }}/><span>{{ timing }}</span></label>
-            {% endfor %}
-          </div>
-        </fieldset>
+        <div class="brief__row">
+          <label class="brief__field">
+            <span class="brief__label">{{ form.companyLabel }} <span class="brief__opt">{{ form.companyOptional }}</span></span>
+            <input class="input" type="text" name="company" autocomplete="organization" maxlength="120" placeholder="{{ form.companyPlaceholder }}"/>
+          </label>
+          <fieldset class="brief__field">
+            <legend class="brief__label">{{ form.timingLabel }}</legend>
+            <details class="picker picker--single">
+              <summary class="input picker__summary">
+                <span class="picker__value">{{ form.timings[0] }}</span>
+                {{ icon.chevronDown(18) }}
+              </summary>
+              <div class="picker__panel">
+                {% for timing in form.timings %}
+                  <label class="picker__opt"><input type="radio" name="timing" value="{{ timing }}"{{ ' checked' if loop.first }}/><span class="picker__box" aria-hidden="true">{{ icon.check(14) }}</span>{{ timing }}</label>
+                {% endfor %}
+              </div>
+            </details>
+          </fieldset>
+        </div>
 
         <label class="brief__field">
           <span class="brief__label">{{ form.messageLabel }}</span>

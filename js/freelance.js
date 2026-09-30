@@ -213,6 +213,56 @@ function initPlayer() {
   });
 }
 
+/* ─── Brief form: the dropdowns (project kinds, timing) ─── */
+
+function initPickers() {
+  document.querySelectorAll(".picker").forEach((picker) => {
+    const summary = picker.querySelector("summary");
+    const value = picker.querySelector(".picker__value");
+    const inputs = [...picker.querySelectorAll("input")];
+    const single = inputs[0]?.type === "radio";
+
+    // The summary reads back what is ticked, or the placeholder.
+    const sync = () => {
+      const ticked = inputs.filter((input) => input.checked).map((input) => input.value);
+      value.textContent = ticked.length ? ticked.join(", ") : value.dataset.placeholder;
+      picker.classList.toggle("has-value", ticked.length > 0);
+    };
+    sync(); // Choices the browser restored on reload.
+    // form.reset() fires before the inputs are cleared.
+    picker.closest("form")?.addEventListener("reset", () => setTimeout(sync));
+
+    const close = (focus) => {
+      picker.open = false;
+      if (focus) summary.focus();
+    };
+    // One timing only: picking it is done. A click closes the list, arrow
+    // keys moving through the radios don't (Enter does, below).
+    let pointer = false;
+    picker.querySelector(".picker__panel").addEventListener("pointerdown", () => (pointer = true));
+    picker.addEventListener("change", () => {
+      sync();
+      if (single && pointer) close(true);
+      pointer = false;
+    });
+    document.addEventListener("click", (event) => {
+      if (picker.open && !picker.contains(event.target)) close();
+    });
+    picker.addEventListener("keydown", (event) => {
+      pointer = false;
+      if (!picker.open) return;
+      if (event.key === "Escape" || (single && event.key === "Enter" && event.target.type === "radio")) {
+        event.preventDefault();
+        close(true);
+      }
+    });
+    // Tabbing out of the list closes it.
+    picker.addEventListener("focusout", (event) => {
+      if (event.relatedTarget && !picker.contains(event.relatedTarget)) close();
+    });
+  });
+}
+
 /* ─── Brief form: sent by /api/contact, answered in place ─── */
 
 function initBrief() {
@@ -301,4 +351,5 @@ initSpotlight();
 initCarousel();
 initChrome();
 initPlayer();
+initPickers();
 initBrief();

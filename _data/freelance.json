@@ -262,6 +262,7 @@
     "lede": "Décrivez votre idée en quelques mots, même si elle n'est pas encore très claire. Je vous réponds personnellement.",
     "form": {
       "typesLabel": "Votre projet",
+      "typesPlaceholder": "Choisissez un ou plusieurs types",
       "types": [
         "Site vitrine",
         "Boutique en ligne",

@@ -2715,7 +2715,7 @@ ol {
   font-size: clamp(1.05rem, 0.95rem + 0.5vw, 1.25rem);
   font-weight: 700;
   letter-spacing: -0.01em;
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
 }
 
 .channel > .icon {
@@ -2761,6 +2761,11 @@ ol {
   color: var(--mute);
 }
 
+/* A legend sits outside its fieldset's grid, so it gets the gap itself. */
+legend.brief__label {
+  margin-bottom: 10px;
+}
+
 .brief__opt {
   color: rgb(255 255 255 / 0.45);
   font-weight: 400;
@@ -2777,31 +2782,131 @@ ol {
   }
 }
 
-.choices {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.choice {
+/* Project kinds: a dropdown of checkboxes over the fields below. */
+/* min-width: a grid item never shrinks below its content otherwise. */
+.picker {
   position: relative;
-  cursor: pointer;
+  min-width: 0;
 }
 
-.choice input {
+.picker__summary {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+
+.picker__summary::-webkit-details-marker {
+  display: none;
+}
+
+/* A long choice wraps onto more lines rather than widening the field. */
+.picker__value {
+  flex: 1;
+  min-width: 0;
+  color: rgb(255 255 255 / 0.36);
+  overflow-wrap: break-word;
+}
+
+.picker.has-value .picker__value {
+  color: var(--paper);
+}
+
+.picker__summary .icon {
+  color: var(--mute);
+  transition: transform 300ms var(--ease);
+}
+
+.picker[open] .picker__summary {
+  border-color: var(--y);
+  box-shadow: 0 0 0 4px rgb(255 221 51 / 0.18);
+}
+
+.picker[open] .picker__summary .icon {
+  transform: rotate(180deg);
+}
+
+.picker__panel {
   position: absolute;
-  inset: 0;
-  opacity: 0;
-  cursor: pointer;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  z-index: 5;
+  display: grid;
+  gap: 2px;
+  padding: 8px;
+  border: 1.5px solid var(--line-2);
+  border-radius: 16px;
+  background-color: var(--ink-3);
+  box-shadow: 0 24px 50px -12px rgb(0 0 0 / 0.8);
+  animation: picker-in 250ms var(--ease);
 }
 
-.choice span {
-  display: block;
-  padding: 9px 15px;
-  border: 1.5px solid var(--line-2);
-  border-radius: 999px;
-  font-size: 0.92rem;
+/* Phones: the list is as wide as its longest option, not the field. */
+@media (max-width: 559px) {
+  .picker__panel {
+    right: auto;
+    width: max-content;
+    max-width: 100%;
+  }
+}
+
+@media (min-width: 560px) {
+  .picker:not(.picker--single) .picker__panel {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.picker--single .picker__panel {
+  right: auto;
+  width: max-content;
+  min-width: 100%;
+}
+
+.picker--single .picker__box {
+  border-radius: 50%;
+}
+
+@keyframes picker-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+
+.picker__opt {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
   font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background-color 200ms var(--ease);
+}
+
+.picker__opt:hover {
+  background-color: rgb(255 255 255 / 0.06);
+}
+
+.picker__opt input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.picker__box {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border: 1.5px solid var(--line-2);
+  border-radius: 7px;
+  color: transparent;
   transition:
     background-color 200ms var(--ease),
     border-color 200ms var(--ease),
@@ -2809,18 +2914,14 @@ ol {
     transform 300ms var(--spring);
 }
 
-.choice:hover span {
-  border-color: var(--paper);
-}
-
-.choice input:checked + span {
+.picker__opt input:checked + .picker__box {
   border-color: var(--y);
   background-color: var(--y);
   color: var(--ink);
-  transform: scale(1.04);
+  transform: scale(1.08);
 }
 
-.choice input:focus-visible + span {
+.picker__opt input:focus-visible + .picker__box {
   outline: 3px solid var(--y);
   outline-offset: 2px;
 }
@@ -2980,7 +3081,7 @@ ol {
 
 .brief-done .btn {
   white-space: normal;
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
 }
 
 .brief__note {
