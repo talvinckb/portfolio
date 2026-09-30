@@ -272,44 +272,72 @@ eleventyExcludeFromCollections: true
     </div>
 
     {% set form = f.contact.form %}
-    <form class="brief" id="brief" action="mailto:{{ site.email }}" method="post" enctype="text/plain" data-email="{{ site.email }}" data-subject="{{ form.subject }}" novalidate>
-      <fieldset class="brief__field">
-        <legend class="brief__label">{{ form.typesLabel }}</legend>
-        <div class="choices">
-          {% for type in form.types %}
-            <label class="choice"><input type="checkbox" name="type" value="{{ type }}"/><span>{{ type }}</span></label>
-          {% endfor %}
-        </div>
-      </fieldset>
+    <div class="brief-card" id="brief-card">
+      <form class="brief" id="brief" action="/api/contact" method="post" novalidate>
+        <fieldset class="brief__field">
+          <legend class="brief__label">{{ form.typesLabel }}</legend>
+          <div class="choices">
+            {% for type in form.types %}
+              <label class="choice"><input type="checkbox" name="type" value="{{ type }}"/><span>{{ type }}</span></label>
+            {% endfor %}
+          </div>
+        </fieldset>
 
-      <div class="brief__row">
-        <label class="brief__field">
-          <span class="brief__label">{{ form.nameLabel }}</span>
-          <input class="input" type="text" name="name" autocomplete="name" placeholder="{{ form.namePlaceholder }}"/>
-        </label>
+        <div class="brief__row">
+          <label class="brief__field">
+            <span class="brief__label">{{ form.nameLabel }}</span>
+            <input class="input" type="text" name="name" autocomplete="name" maxlength="100" placeholder="{{ form.namePlaceholder }}"/>
+          </label>
+          <label class="brief__field">
+            <span class="brief__label">{{ form.emailLabel }}</span>
+            <input class="input" type="email" name="email" autocomplete="email" maxlength="200" required placeholder="{{ form.emailPlaceholder }}" aria-describedby="brief-email-error"/>
+            <span class="brief__error" id="brief-email-error" data-message="{{ form.errorEmail }}"></span>
+          </label>
+        </div>
+
         <label class="brief__field">
           <span class="brief__label">{{ form.companyLabel }} <span class="brief__opt">{{ form.companyOptional }}</span></span>
-          <input class="input" type="text" name="company" autocomplete="organization" placeholder="{{ form.companyPlaceholder }}"/>
+          <input class="input" type="text" name="company" autocomplete="organization" maxlength="120" placeholder="{{ form.companyPlaceholder }}"/>
         </label>
+
+        <fieldset class="brief__field">
+          <legend class="brief__label">{{ form.timingLabel }}</legend>
+          <div class="choices">
+            {% for timing in form.timings %}
+              <label class="choice"><input type="radio" name="timing" value="{{ timing }}"{{ ' checked' if loop.first }}/><span>{{ timing }}</span></label>
+            {% endfor %}
+          </div>
+        </fieldset>
+
+        <label class="brief__field">
+          <span class="brief__label">{{ form.messageLabel }}</span>
+          <textarea class="input input--area" name="message" rows="4" maxlength="5000" required placeholder="{{ form.messagePlaceholder }}" aria-describedby="brief-error"></textarea>
+          <span class="brief__error" id="brief-error" data-message="{{ form.errorMessage }}"></span>
+        </label>
+
+        {# Anti-spam: people never see this field, bots fill it. #}
+        <label class="brief__hp" aria-hidden="true">{{ form.honeypot }}<input type="text" name="website" tabindex="-1" autocomplete="off"/></label>
+        <input type="hidden" name="t" value=""/>
+
+        <button class="btn btn--y btn--lg brief__submit" type="submit" data-sending="{{ form.sending }}"><span>{{ form.submit }}</span>{{ icon.arrowRight(20) }}</button>
+        <p class="brief__alert" id="brief-alert" role="alert" hidden
+          data-send="{{ form.errorSend }}" data-rate="{{ form.errorRate }}"><span></span> <a href="mailto:{{ site.email }}">{{ site.email }}</a></p>
+        <p class="brief__note">{{ form.note }}</p>
+      </form>
+
+      {# Outcomes. JavaScript shows them in place; a plain form post is
+         redirected to #merci or #oups, and :target does the rest. #}
+      <div class="brief-done" id="merci" tabindex="-1">
+        <span class="brief-done__icon" aria-hidden="true">{{ icon.check(34) }}</span>
+        <h3 class="brief-done__title">{{ form.doneTitle }}</h3>
+        <p class="brief-done__text">{{ form.doneText }}</p>
+        <a class="btn btn--ghost" href="#contact" data-brief-again>{{ form.doneAgain }}</a>
       </div>
-
-      <fieldset class="brief__field">
-        <legend class="brief__label">{{ form.timingLabel }}</legend>
-        <div class="choices">
-          {% for timing in form.timings %}
-            <label class="choice"><input type="radio" name="timing" value="{{ timing }}"{{ ' checked' if loop.first }}/><span>{{ timing }}</span></label>
-          {% endfor %}
-        </div>
-      </fieldset>
-
-      <label class="brief__field">
-        <span class="brief__label">{{ form.messageLabel }}</span>
-        <textarea class="input input--area" name="message" rows="4" required placeholder="{{ form.messagePlaceholder }}" aria-describedby="brief-error"></textarea>
-        <span class="brief__error" id="brief-error" data-message="{{ form.errorMessage }}"></span>
-      </label>
-
-      <button class="btn btn--y btn--lg brief__submit" type="submit">{{ form.submit }}{{ icon.arrowRight(20) }}</button>
-      <p class="brief__note">{{ form.note }}</p>
-    </form>
+      <div class="brief-done brief-done--fail" id="oups" tabindex="-1">
+        <h3 class="brief-done__title">{{ form.failTitle }}</h3>
+        <p class="brief-done__text">{{ form.failText }}</p>
+        <a class="btn btn--y" href="mailto:{{ site.email }}">{{ icon.mail(18) }}{{ site.email }}</a>
+      </div>
+    </div>
   </div>
 </section>

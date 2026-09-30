@@ -1,6 +1,6 @@
 // Freelance page. Everything here is an enhancement: without it the page
 // still reads top to bottom, the video has native controls and the form
-// falls back to a plain mailto.
+// posts to /api/contact like any HTML form.
 
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const finePointer = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
@@ -194,46 +194,84 @@ function initCopy() {
   });
 }
 
-/* ─── Brief form: builds a ready-to-send email ─── */
+/* ─── Brief form: sent by /api/contact, answered in place ─── */
 
 function initBrief() {
+  const card = document.getElementById("brief-card");
   const form = document.getElementById("brief");
-  if (!form) return;
-  const message = form.elements.message;
-  const error = document.getElementById("brief-error");
+  if (!card || !form) return;
 
-  const clearError = () => {
-    message.removeAttribute("aria-invalid");
-    error.textContent = "";
+  const { email, message, t } = form.elements;
+  const submit = form.querySelector(".brief__submit");
+  const submitLabel = submit.querySelector("span");
+  const idle = submitLabel.textContent;
+  const alert = document.getElementById("brief-alert");
+  const done = document.getElementById("merci");
+
+  // When the form appeared: the server ignores forms sent too quickly.
+  const stamp = () => (t.value = String(Date.now()));
+  stamp();
+
+  const fieldError = (input, show) => {
+    const error = document.getElementById(input.getAttribute("aria-describedby"));
+    if (show) input.setAttribute("aria-invalid", "true");
+    else input.removeAttribute("aria-invalid");
+    error.textContent = show ? error.dataset.message : "";
   };
-  message.addEventListener("input", clearError);
+  [email, message].forEach((input) => input.addEventListener("input", () => fieldError(input, false)));
 
-  form.addEventListener("submit", (event) => {
+  const busy = (on) => {
+    submit.disabled = on;
+    submit.setAttribute("aria-busy", String(on));
+    submitLabel.textContent = on ? submit.dataset.sending : idle;
+  };
+
+  const fail = (kind) => {
+    alert.querySelector("span").textContent = alert.dataset[kind === "rate" ? "rate" : "send"];
+    alert.hidden = false;
+  };
+
+  form.addEventListener("submit", async (event) => {
     event.preventDefault();
-    const data = new FormData(form);
-    const text = String(data.get("message") || "").trim();
-    if (!text) {
-      message.setAttribute("aria-invalid", "true");
-      error.textContent = error.dataset.message;
-      message.focus();
+    alert.hidden = true;
+
+    const badEmail = !email.value.trim() || !email.checkValidity();
+    const badMessage = !message.value.trim();
+    fieldError(email, badEmail);
+    fieldError(message, badMessage);
+    if (badEmail || badMessage) {
+      (badEmail ? email : message).focus();
       return;
     }
-    clearError();
 
-    const types = data.getAll("type");
-    const name = String(data.get("name") || "").trim();
-    const company = String(data.get("company") || "").trim();
-    const subject = [form.dataset.subject, types.join(", "), name].filter(Boolean).join(" — ");
-    const details = [
-      types.length && `Projet : ${types.join(", ")}`,
-      `Échéance : ${data.get("timing")}`,
-      name && `Nom : ${name}`,
-      company && `Entreprise : ${company}`,
-    ].filter(Boolean);
-    const body = ["Bonjour Talvin,", "", text, "", "—", ...details].join("\n");
+    const data = new FormData(form);
+    const payload = Object.fromEntries(data);
+    payload.type = data.getAll("type");
 
-    window.location.href = `mailto:${form.dataset.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    toast("Votre messagerie s'ouvre…");
+    busy(true);
+    try {
+      const response = await fetch(form.action, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const result = await response.json().catch(() => ({}));
+      if (!response.ok || !result.ok) throw new Error(result.error || response.status);
+
+      form.reset();
+      card.classList.add("is-done");
+      done.focus();
+    } catch (error) {
+      fail(error.message);
+    } finally {
+      busy(false);
+    }
+  });
+
+  card.querySelector("[data-brief-again]")?.addEventListener("click", () => {
+    card.classList.remove("is-done");
+    stamp();
+    requestAnimationFrame(() => form.querySelector("input:not([type=hidden])")?.focus());
   });
 }
 

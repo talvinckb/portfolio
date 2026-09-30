@@ -2661,15 +2661,19 @@ ol {
   font-size: 1.05rem;
 }
 
-/* The brief form */
-.brief {
-  display: grid;
-  gap: 22px;
+/* The brief form, and the outcomes that take its place in the same card */
+.brief-card {
+  position: relative;
   padding: clamp(22px, 4vw, 40px);
   border-radius: var(--r-lg);
   background-color: var(--ink);
   color: var(--paper);
   box-shadow: 10px 10px 0 var(--v);
+}
+
+.brief {
+  display: grid;
+  gap: 22px;
 }
 
 .brief__field {
@@ -2802,6 +2806,112 @@ ol {
 .brief__submit {
   width: 100%;
   margin-top: 4px;
+}
+
+.brief__submit[aria-busy="true"] {
+  cursor: progress;
+  opacity: 0.75;
+}
+
+.brief__submit[aria-busy="true"] .icon {
+  animation: nudge 0.8s ease-in-out infinite;
+}
+
+@keyframes nudge {
+  50% {
+    transform: translateX(5px);
+  }
+}
+
+.brief__alert {
+  padding: 12px 16px;
+  border-radius: 14px;
+  background-color: rgb(255 122 122 / 0.12);
+  color: #ffb3b3;
+  font-size: 0.92rem;
+}
+
+.brief__alert[hidden] {
+  display: none;
+}
+
+.brief__alert a {
+  color: var(--paper);
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Out of sight and out of reach for people; bots still fill it. */
+.brief__hp {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.brief-done {
+  display: none;
+  justify-items: center;
+  gap: 14px;
+  padding-block: clamp(24px, 6vw, 64px);
+  text-align: center;
+}
+
+.brief-done:focus {
+  outline: none;
+}
+
+.brief-card.is-done .brief,
+.brief-card.is-failed .brief,
+.brief-card:has(.brief-done:target) .brief {
+  display: none;
+}
+
+.brief-card.is-done #merci,
+.brief-card.is-failed #oups,
+.brief-done:target {
+  display: grid;
+  animation: rise 700ms var(--ease) both;
+}
+
+.brief-done__icon {
+  display: grid;
+  place-items: center;
+  width: 84px;
+  height: 84px;
+  margin-bottom: 6px;
+  border-radius: 50%;
+  background-color: var(--y);
+  color: var(--ink);
+  box-shadow: 6px 6px 0 var(--v);
+  animation: pop 700ms var(--spring) 150ms both;
+}
+
+@keyframes pop {
+  from {
+    transform: scale(0) rotate(-30deg);
+  }
+}
+
+.brief-done__title {
+  font-family: var(--display);
+  font-size: clamp(1.8rem, 1.4rem + 1.6vw, 2.6rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+}
+
+.brief-done__text {
+  max-width: 38ch;
+  margin-bottom: 10px;
+  color: var(--mute);
+}
+
+.brief-done .btn {
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 
 .brief__note {
