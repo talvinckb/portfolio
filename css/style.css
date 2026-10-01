@@ -161,6 +161,11 @@ ol[role="list"] {
   --accent-soft: rgb(29 74 255 / 0.09);
   --overlay: rgb(242 243 245 / 0.94);
   --shade: 0 40px 80px -40px rgb(13 14 17 / 0.28);
+  /* Strip panels: light visuals, dark text over a pale fade. */
+  --panel-bg: #e3e6eb;
+  --panel-ink: #0d0e11;
+  --panel-fade: rgb(242 243 245 / 0.94);
+  --panel-chip: rgb(13 14 17 / 0.08);
 }
 
 /* ─── Dark ─── */
@@ -180,6 +185,10 @@ ol[role="list"] {
   --accent-soft: rgb(138 162 255 / 0.13);
   --overlay: rgb(8 9 12 / 0.92);
   --shade: 0 40px 80px -40px rgb(0 0 0 / 0.8);
+  --panel-bg: #0b0d10;
+  --panel-ink: #ffffff;
+  --panel-fade: rgb(8 9 12 / 0.8);
+  --panel-chip: rgb(255 255 255 / 0.16);
 }
 
 /* Without JavaScript the inline script never sets data-theme:
@@ -201,6 +210,10 @@ ol[role="list"] {
     --accent-soft: rgb(138 162 255 / 0.13);
     --overlay: rgb(8 9 12 / 0.92);
     --shade: 0 40px 80px -40px rgb(0 0 0 / 0.8);
+    --panel-bg: #0b0d10;
+    --panel-ink: #ffffff;
+    --panel-fade: rgb(8 9 12 / 0.8);
+    --panel-chip: rgb(255 255 255 / 0.16);
   }
 }
 
@@ -986,8 +999,8 @@ picture {
   min-width: 0;
   overflow: hidden;
   border-radius: var(--radius);
-  background-color: #0b0d10;
-  color: #fff;
+  background-color: var(--panel-bg);
+  color: var(--panel-ink);
   transition: flex-grow 0.8s var(--ease-out);
   animation: panel-in 1s var(--ease-out) both;
   animation-delay: calc(var(--i) * 70ms + 650ms);
@@ -1019,12 +1032,13 @@ picture {
   transform: none;
 }
 
-/* A shade at the foot, so white text reads over any visual. */
+/* A fade at the foot, so the text reads over any visual: pale in the
+   light theme, dark in the dark one. */
 .panel::after {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgb(8 9 12 / 0.15) 0%, transparent 35%, rgb(8 9 12 / 0.8) 100%);
+  background: linear-gradient(180deg, transparent 45%, var(--panel-fade) 100%);
 }
 
 .panel__num,
@@ -1066,7 +1080,7 @@ picture {
   width: 2.4rem;
   height: 2.4rem;
   border-radius: 50%;
-  background-color: rgb(255 255 255 / 0.16);
+  background-color: var(--panel-chip);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   opacity: 0;

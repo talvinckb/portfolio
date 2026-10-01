@@ -61,7 +61,14 @@
         <div class="strip" data-strip>
           {% for p in featured %}
             <a class="panel{{ ' is-open' if loop.first }}" href="#p-{{ p.id }}" style="--i: {{ loop.index0 }}; --focus: {{ p.focus | default('50%') }}">
-              <img src="{{ p.thumbnail | versioned }}" alt="" width="1600" height="900"/>
+              {# Same light/dark pair as the cards, picked at parse time. #}
+              <picture>
+                <source
+                  data-theme-source="light"
+                  media="(prefers-color-scheme: light)"
+                  srcset="{{ (p.thumbnailLight | default(p.thumbnail)) | versioned }}"/>
+                <img src="{{ p.thumbnail | versioned }}" alt="" width="1600" height="900"/>
+              </picture>
               <span class="panel__num" aria-hidden="true">{{ two(loop.index) }}</span>
               <span class="panel__label" aria-hidden="true">{{ p.name }}</span>
               <span class="panel__go" aria-hidden="true">{{ icon.arrowDown(15) }}</span>
