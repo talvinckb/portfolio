@@ -33,8 +33,8 @@ compilation et servies en HTML statique.
 - **Le balisage n'existe qu'une fois.** Navigation, pied de page, icônes et
   actions de contact sont des partials Nunjucks partagés entre la page
   d'accueil et les pages projet.
-- **Trois moments de mouvement, pas plus.** Le nom qui se lève et le
-  bandeau des projets à l'arrivée, les cartes qui s'empilent au scroll, et
+- **Trois moments de mouvement, pas plus.** Le nom qui se lève à
+  l'arrivée, les cartes qui s'empilent au scroll, et
   les sections qui montent en entrant dans l'écran. Le reste ne bouge
   qu'au survol. Tout disparaît sous `prefers-reduced-motion`.
 
@@ -70,8 +70,8 @@ latin, poids variables). Funnel Display et Funnel Sans sont préchargées.
 - **Le bouton Freelance est la seule exception** : jaune, violet, Bricolage
   et ombre décalée, les couleurs de `/freelance` (`--fl-*`), pour annoncer
   qu'on change d'univers.
-- **Aucun projet n'est mis en avant** plus qu'un autre : le bandeau et les
-  cartes les montrent tous de la même façon.
+- **Aucun projet n'est mis en avant** plus qu'un autre : les cartes les
+  montrent tous de la même façon.
 - **La mono est réservée aux données** et métadonnées, jamais à un
   paragraphe.
 
@@ -108,7 +108,7 @@ suit la préférence système.
 ├── css/style.css          # Design system complet
 ├── js/
 │   ├── ui.js              # Comportements partagés (thème, menu, toasts…)
-│   ├── main.js            # Page d'accueil (bandeau, cartes, compétences)
+│   ├── main.js            # Page d'accueil (cartes, compétences)
 │   └── project.js         # Pages projet (sommaire, lightbox, tableaux, KaTeX)
 ├── scripts/fetch-cv.js    # Récupère les CV PDF depuis les releases GitHub
 ├── sitemap.njk            # Sitemap généré à partir de la collection projets
@@ -120,7 +120,6 @@ suit la préférence système.
 | Section | Ancre | Source |
 |---|---|---|
 | Hero — rôle, disponibilité, nom, accroche, actions | — | `hero` |
-| Bandeau des six projets | — | `projects.items` (`featured`) |
 | Projets sélectionnés + autres réalisations | `#work` | `projects` |
 | Parcours — expériences, formation | `#background` | `background` |
 | Compétences — chaque compétence mène aux projets qui l'utilisent | `#skills` | `skills` |
@@ -129,18 +128,12 @@ suit la préférence système.
 Les ancres sont volontairement en anglais des deux côtés : les deux locales
 partagent le même gabarit, donc les mêmes `id`.
 
-### Le hero et le bandeau
+### Le hero
 
 Le nom (`h1`) occupe toute la largeur et se lève lettre par lettre ; les
 lettres sont `aria-hidden` et le nom complet reste lisible par les lecteurs
 d'écran. L'animation ne se joue qu'une fois : un changement de langue
 reconstruit le hero sans la rejouer (`html.hero-played`).
-
-Sous le hero, le bandeau montre les six projets à égalité : un panneau
-s'ouvre à la fois, à tour de rôle toutes les 3,4 s, ou au survol et au
-focus. Le cadrage d'un visuel étroit se règle avec `focus` (position
-horizontale, `50%` par défaut). Sur téléphone, le bandeau devient une
-rangée de cartes à faire défiler, sans rotation.
 
 ### Les cartes de projets
 
@@ -182,7 +175,6 @@ Ces fichiers sont ignorés par Git et régénérés à chaque build.
      "id": "mon-projet",
      "name": "NOM",
      "title": "Titre complet",
-     "short": "Le titre en quelques mots",  // bandeau du hero
      "tagline": "Une phrase de résumé.",
      "highlights": ["mot clé"], // mots du tagline soulignés sur la carte
      "thumbnail": "/assets/projects/mon-projet/thumbnail-16x9.webp",
@@ -190,10 +182,9 @@ Ces fichiers sont ignorés par Git et régénérés à chaque build.
      "stack": ["C++", "CUDA"],
      "period": "4 semaines",
      "team": 4,               // 2 s'affiche « binôme »
-     "featured": true,        // true = carte + bandeau + page dédiée
+     "featured": true,        // true = carte + page dédiée
      "github": null,          // URL du dépôt, ou null
-     "repoNote": null,        // réserve sur ce que le dépôt public contient
-     "focus": "50%"           // cadrage horizontal dans le bandeau (facultatif)
+     "repoNote": null         // réserve sur ce que le dépôt public contient
    }
    ```
 

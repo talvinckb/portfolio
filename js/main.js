@@ -39,52 +39,6 @@ function initHeroOnce() {
 }
 
 /* ─────────────────────────────────────────────────────────────
-   Strip — one project open at a time, in turn
-   ───────────────────────────────────────────────────────────── */
-
-/* Panels open on hover or focus. Left alone, they take turns. On a phone
-   the strip is a row of cards to swipe through: nothing cycles there. */
-function initStrip() {
-  const strip = document.querySelector("[data-strip]");
-  if (!strip) return;
-
-  const panels = [...strip.querySelectorAll(".panel")];
-  const signal = binding();
-  const wide = window.matchMedia("(min-width: 721px)");
-  let current = panels.findIndex((p) => p.classList.contains("is-open"));
-  let held = false;
-  let timer = 0;
-
-  const open = (i) => {
-    current = i;
-    panels.forEach((p, k) => p.classList.toggle("is-open", k === i));
-  };
-
-  const cycle = () => {
-    clearInterval(timer);
-    if (prefersReducedMotion() || !wide.matches) return;
-    timer = setInterval(() => {
-      if (!held && !document.hidden) open((current + 1) % panels.length);
-    }, 3400);
-  };
-
-  panels.forEach((panel, i) => {
-    panel.addEventListener("pointerenter", () => { held = true; open(i); }, { signal });
-    panel.addEventListener("focus", () => { held = true; open(i); }, { signal });
-    panel.addEventListener("blur", () => { held = false; }, { signal });
-  });
-  strip.addEventListener("pointerleave", () => { held = false; cycle(); }, { signal });
-  wide.addEventListener("change", cycle, { signal });
-
-  // Starts once the strip has risen into place.
-  const start = setTimeout(cycle, 1800);
-  onTeardown(() => {
-    clearTimeout(start);
-    clearInterval(timer);
-  });
-}
-
-/* ─────────────────────────────────────────────────────────────
    Work — the card being covered shrinks back
    ───────────────────────────────────────────────────────────── */
 
@@ -258,7 +212,6 @@ boot(() => {
   initChrome();
   initHeroOnce();
   initNavScrollSpy();
-  initStrip();
   initStack();
   initCursor();
   initSkills();

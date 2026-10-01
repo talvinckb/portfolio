@@ -48,7 +48,6 @@
     "secondaryTitle": "Other work",
     "publicRepo": "GitHub",
     "privateRepo": "Code not public",
-    "stripLabel": "The six projects at a glance",
     "read": "Read the case study",
     "cursor": "Read it",
     "sourceCode": "Source code",
@@ -59,7 +58,6 @@
         "id": "pfee-bnf",
         "name": "PFEE — BNF",
         "title": "Segmentation & classification of heritage illustrations",
-        "short": "Segmentation of heritage illustrations",
         "tagline": "Automatic detection of illustrations in digitized heritage documents, in partnership with the BNF.",
         "highlights": ["illustrations", "BNF"],
         "thumbnail": "/assets/projects/pfee-bnf/thumbnail-16x9.webp",
@@ -79,7 +77,6 @@
         "id": "alpr",
         "name": "ALPR",
         "title": "Automatic license plate recognition",
-        "short": "Plate reading, without deep learning",
         "tagline": "Complete ALPR system without deep learning (classical vision + machine learning), with rigorous Python vs C++ benchmarks.",
         "highlights": ["without deep learning", "Python vs C++"],
         "thumbnail": "/assets/projects/alpr/thumbnail-16x9.webp",
@@ -93,14 +90,12 @@
         "period": "5 weeks",
         "team": 2,
         "featured": true,
-        "github": null,
-        "focus": "72%"
+        "github": null
       },
       {
         "id": "irgpu",
         "name": "IRGPU",
         "title": "Real-time video motion detection — GPU port",
-        "short": "Motion detection, CUDA port",
         "tagline": "CPU → GPU port of a real-time algorithm achieving a ×24 performance gain via CUDA.",
         "highlights": ["×24", "CUDA"],
         "thumbnail": "/assets/projects/irgpu/thumbnail-16x9.webp",
@@ -120,7 +115,6 @@
         "id": "medviz",
         "name": "MedViz",
         "title": "Medical prediction & 3D visualization",
-        "short": "Medical prediction and 3D visualization",
         "tagline": "Full FVC prediction pipeline from pulmonary CT scans, with 3D visualization in the browser.",
         "highlights": ["FVC prediction", "3D visualization"],
         "thumbnail": "/assets/projects/medviz/thumbnail-16x9.webp",
@@ -134,14 +128,12 @@
         "period": "1 month",
         "team": 4,
         "featured": true,
-        "github": "https://github.com/talvinckb/Medviz",
-        "focus": "76%"
+        "github": "https://github.com/talvinckb/Medviz"
       },
       {
         "id": "vtk-itk",
         "name": "VTK-ITK",
         "title": "Brain tumor registration & longitudinal tracking",
-        "short": "Longitudinal brain tumor tracking",
         "tagline": "3D MRI alignment (ITK) with tumor segmentation and interactive multi-view visualization (VTK + PyQt6) — quantifying the evolution of a glioma.",
         "highlights": ["tumor segmentation", "glioma"],
         "thumbnail": "/assets/projects/vtk-itk/thumbnail-16x9.webp",
@@ -162,7 +154,6 @@
         "id": "pogl",
         "name": "POGL",
         "title": "Real-time fluid simulation",
-        "short": "Real-time fluid simulation",
         "tagline": "Real-time 3D SPH engine, 75,000 particles at 60 FPS — GPU physics via compute shaders and SSFR surface rendering.",
         "highlights": ["75,000 particles", "60 FPS"],
         "thumbnail": "/assets/projects/pogl/thumbnail-16x9.webp",
@@ -176,8 +167,7 @@
         "period": "1 month",
         "team": 2,
         "featured": true,
-        "github": "https://github.com/talvinckb/OpenGL-Water-Simulation",
-        "focus": "66%"
+        "github": "https://github.com/talvinckb/OpenGL-Water-Simulation"
       },
       {
         "id": "l-system",

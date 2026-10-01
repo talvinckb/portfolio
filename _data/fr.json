@@ -48,7 +48,6 @@
     "secondaryTitle": "Autres réalisations",
     "publicRepo": "GitHub",
     "privateRepo": "Code non public",
-    "stripLabel": "Les six projets en un coup d'œil",
     "read": "Lire l'étude de cas",
     "cursor": "Lire l'étude",
     "sourceCode": "Code source",
@@ -59,7 +58,6 @@
         "id": "pfee-bnf",
         "name": "PFEE — BNF",
         "title": "Segmentation et classification d'illustrations patrimoniales",
-        "short": "Segmentation d'illustrations patrimoniales",
         "tagline": "Détection automatique d'illustrations dans des documents patrimoniaux numérisés, en partenariat avec la BNF.",
         "highlights": ["illustrations", "BNF"],
         "thumbnail": "/assets/projects/pfee-bnf/thumbnail-16x9.webp",
@@ -79,7 +77,6 @@
         "id": "alpr",
         "name": "ALPR",
         "title": "Reconnaissance automatique de plaques d'immatriculation",
-        "short": "Lecture de plaques, sans deep learning",
         "tagline": "Système ALPR complet sans Deep Learning (vision classique + machine learning), avec benchmarks rigoureux Python vs C++.",
         "highlights": ["sans Deep Learning", "Python vs C++"],
         "thumbnail": "/assets/projects/alpr/thumbnail-16x9.webp",
@@ -93,14 +90,12 @@
         "period": "5 semaines",
         "team": 2,
         "featured": true,
-        "github": null,
-        "focus": "72%"
+        "github": null
       },
       {
         "id": "irgpu",
         "name": "IRGPU",
         "title": "Détection de mouvement vidéo — portage GPU",
-        "short": "Détection de mouvement, portage CUDA",
         "tagline": "Portage CPU → GPU d'un algorithme temps réel avec un gain de performance de ×24 via CUDA.",
         "highlights": ["×24", "CUDA"],
         "thumbnail": "/assets/projects/irgpu/thumbnail-16x9.webp",
@@ -120,7 +115,6 @@
         "id": "medviz",
         "name": "MedViz",
         "title": "Prédiction médicale & visualisation 3D",
-        "short": "Prédiction médicale et visualisation 3D",
         "tagline": "Pipeline complet de prédiction de la FVC à partir de scanners CT pulmonaires, avec visualisation 3D dans le navigateur.",
         "highlights": ["prédiction de la FVC", "visualisation 3D"],
         "thumbnail": "/assets/projects/medviz/thumbnail-16x9.webp",
@@ -134,14 +128,12 @@
         "period": "1 mois",
         "team": 4,
         "featured": true,
-        "github": "https://github.com/talvinckb/Medviz",
-        "focus": "76%"
+        "github": "https://github.com/talvinckb/Medviz"
       },
       {
         "id": "vtk-itk",
         "name": "VTK-ITK",
         "title": "Recalage & suivi longitudinal de tumeur cérébrale",
-        "short": "Suivi longitudinal de tumeur cérébrale",
         "tagline": "Alignement 3D d'IRM cérébrales (ITK) et segmentation tumorale avec visualisation multi-vues (VTK + PyQt6) — quantification de l'évolution d'un gliome.",
         "highlights": ["segmentation tumorale", "gliome"],
         "thumbnail": "/assets/projects/vtk-itk/thumbnail-16x9.webp",
@@ -162,7 +154,6 @@
         "id": "pogl",
         "name": "POGL",
         "title": "Simulation de fluide temps réel",
-        "short": "Simulation de fluide temps réel",
         "tagline": "Moteur SPH 3D temps réel, 75 000 particules à 60 FPS — physique GPU via compute shaders et rendu de surface SSFR.",
         "highlights": ["75 000 particules", "60 FPS"],
         "thumbnail": "/assets/projects/pogl/thumbnail-16x9.webp",
@@ -176,8 +167,7 @@
         "period": "1 mois",
         "team": 2,
         "featured": true,
-        "github": "https://github.com/talvinckb/OpenGL-Water-Simulation",
-        "focus": "66%"
+        "github": "https://github.com/talvinckb/OpenGL-Water-Simulation"
       },
       {
         "id": "l-system",
