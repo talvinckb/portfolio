@@ -23,7 +23,9 @@
     "copyEmail": "Copy email address",
     "copyPhone": "Copy phone number",
     "projectPreview": "Project preview",
-    "sourceCode": "Source code for"
+    "sourceCode": "Source code for",
+    "prevProject": "Previous project",
+    "nextProject": "Next project"
   },
   "nav": {
     "work": "Work",

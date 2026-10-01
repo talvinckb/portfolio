@@ -79,6 +79,52 @@ function initStack() {
 }
 
 /* ─────────────────────────────────────────────────────────────
+   Work — arrows for the carousel on small screens
+   ───────────────────────────────────────────────────────────── */
+
+/* Below 960px the cards scroll sideways (CSS). The arrows only show when
+   the row actually overflows, move it by one card, and grey out at
+   either end. Swiping and the trackpad keep working as usual. */
+function initStackNav() {
+  const stack = document.querySelector("[data-stack]");
+  const nav = document.querySelector("[data-stack-nav]");
+  if (!stack || !nav) return;
+
+  const [prev, next] = nav.querySelectorAll("button");
+  const signal = binding();
+  let queued = false;
+
+  function paint() {
+    queued = false;
+    const max = stack.scrollWidth - stack.clientWidth;
+    nav.hidden = max <= 2;
+    prev.disabled = stack.scrollLeft <= 2;
+    next.disabled = stack.scrollLeft >= max - 2;
+  }
+
+  const schedule = () => {
+    if (queued) return;
+    queued = true;
+    requestAnimationFrame(paint);
+  };
+
+  nav.addEventListener("click", (e) => {
+    const btn = e.target.closest("button[data-dir]");
+    if (!btn) return;
+    const card = stack.querySelector(".card");
+    const gap = parseFloat(getComputedStyle(stack).columnGap) || 0;
+    stack.scrollBy({
+      left: Number(btn.dataset.dir) * (card.offsetWidth + gap),
+      behavior: prefersReducedMotion() ? "auto" : "smooth",
+    });
+  }, { signal });
+
+  stack.addEventListener("scroll", schedule, { passive: true, signal });
+  window.addEventListener("resize", schedule, { passive: true, signal });
+  paint();
+}
+
+/* ─────────────────────────────────────────────────────────────
    Work — a badge follows the pointer over the visuals
    ───────────────────────────────────────────────────────────── */
 
@@ -213,6 +259,7 @@ boot(() => {
   initHeroOnce();
   initNavScrollSpy();
   initStack();
+  initStackNav();
   initCursor();
   initSkills();
 });

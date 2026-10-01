@@ -58,10 +58,18 @@
 
       <!-- ─── Work ─── -->
       <section id="work" class="section wrap" aria-labelledby="work-title">
-        <h2 class="section__title" id="work-title">{{ t.projects.title }}<sup class="section__count">{{ two(count) }}</sup></h2>
+        <div class="section__head">
+          <h2 class="section__title" id="work-title">{{ t.projects.title }}<sup class="section__count">{{ two(count) }}</sup></h2>
+          {# Only on small screens, where the cards become a carousel. #}
+          <div class="stack-nav" data-stack-nav hidden>
+            <button class="stack-nav__btn" type="button" data-dir="-1" aria-label="{{ t.a11y.prevProject }}" aria-controls="stack">{{ icon.chevronLeft(18) }}</button>
+            <button class="stack-nav__btn" type="button" data-dir="1" aria-label="{{ t.a11y.nextProject }}" aria-controls="stack">{{ icon.chevronRight(18) }}</button>
+          </div>
+        </div>
 
-        {# Cards stack as the page scrolls; main.js shrinks the one being covered. #}
-        <div class="stack" data-stack data-cursor-label="{{ t.projects.cursor }}">
+        {# Cards stack as the page scrolls on large screens, main.js shrinking
+           the one being covered; on small screens they scroll sideways. #}
+        <div class="stack" id="stack" data-stack data-cursor-label="{{ t.projects.cursor }}">
           {% for p in featured %}
             {% set projectUrl = t.urlPrefix + "projects/" + p.id + "/" %}
             <article class="card" id="p-{{ p.id }}" style="--i: {{ loop.index0 }}" aria-labelledby="card-{{ p.id }}">
