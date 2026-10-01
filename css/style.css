@@ -152,7 +152,7 @@ ol[role="list"] {
   --surface-2: #e9ebef;
   --ink: #0d0e11;
   --ink-2: #474b54;
-  --ink-3: #6b707a;
+  --ink-3: #656a74;
   --rule: #dcdfe4;
   --rule-2: #c5c9d0;
   --accent: #1d4aff;
@@ -1718,7 +1718,7 @@ button.skill:hover,
 }
 
 .contact .label {
-  color: rgb(255 255 255 / 0.72);
+  color: rgb(255 255 255 / 0.85);
 }
 
 .contact__title {
