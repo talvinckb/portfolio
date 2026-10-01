@@ -12,236 +12,316 @@ import {
   initChrome,
   initNavScrollSpy,
   onTeardown,
+  prefersReducedMotion,
 } from "./ui.js";
 
-/* ─────────────────────────────────────────────────────────────
-   Hero — the terminal types `whoami` on the first visit
-   ───────────────────────────────────────────────────────────── */
-
-/* The inline script in <head> decides whether to play (html.intro). Nothing
-   is ever blocked: any key, click, wheel or scroll finishes it at once. */
-
-/** setTimeout as a promise, cut short when `signal` aborts. */
-const wait = (ms, signal) =>
-  new Promise((resolve) => {
-    const id = setTimeout(resolve, ms);
-    signal.addEventListener("abort", () => {
-      clearTimeout(id);
-      resolve();
-    });
-  });
-
-function initTerminal() {
-  const root = document.documentElement;
-  const body = document.querySelector(".hero .term__body");
-  if (!body) return;
-
-  const cta = body.querySelector(".btn--accent");
-  const suggest = body.querySelector(".term__suggest");
-  const bound = new AbortController();
-  onTeardown(() => bound.abort());
-
-  // Enter accepts the suggestion — unless focus is on something Enter
-  // already means something for, or the hero has scrolled away.
-  function armEnter() {
-    if (!cta || !suggest) return;
-    suggest.hidden = false;
-    document.addEventListener(
-      "keydown",
-      (e) => {
-        if (e.key !== "Enter" || e.repeat || e.isComposing) return;
-        if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
-        const active = document.activeElement;
-        if (active && active !== document.body) return;
-        if (body.getBoundingClientRect().bottom < 0) return;
-
-        e.preventDefault();
-        suggest.classList.add("is-run");
-        setTimeout(() => suggest.classList.remove("is-run"), 700);
-        cta.click();
-      },
-      { signal: bound.signal },
-    );
-  }
-
-  if (!root.classList.contains("intro")) {
-    armEnter();
-    return;
-  }
-  root.setAttribute("data-intro-live", "");
-
-  const lines = [...body.children];
-  const first = lines[0];
-  const actions = body.querySelector(".actions");
-  const output = lines.slice(1, -1).filter((line) => line !== actions);
-  const cursor = document.createElement("span");
-  cursor.className = "term__cursor term__cursor--float";
-  const skip = new AbortController();
-  let done = false;
-
-  /* Every text node the intro types out. Each one is split into what is
-     typed so far and a "ghost" holding the rest, laid out but invisible:
-     the text always takes its final place, so nothing moves while it types
-     — whatever the wrapping, and even if the web fonts land mid-way. */
-  const texts = [];
-  for (const line of [first, ...output]) {
-    const walker = document.createTreeWalker(line, NodeFilter.SHOW_TEXT);
-    const nodes = [];
-    while (walker.nextNode()) {
-      if (walker.currentNode.nodeValue.trim()) nodes.push(walker.currentNode);
-    }
-    for (const node of nodes) {
-      const text = node.nodeValue;
-      // One wrapper, so a flex line (the status) still sees a single item.
-      const wrap = document.createElement("span");
-      const ghost = document.createElement("span");
-      ghost.className = "term__ghost";
-      ghost.textContent = text;
-      node.nodeValue = "";
-      node.replaceWith(wrap);
-      wrap.append(node, ghost);
-      texts.push({ node, ghost, wrap, line, text });
-    }
-  }
-  body.setAttribute("aria-busy", "true");
-
-  function finish() {
-    if (done) return;
-    done = true;
-    skip.abort();
-    texts.forEach(({ node, wrap, text }) => {
-      node.nodeValue = text;
-      wrap.replaceWith(node);
-    });
-    cursor.remove();
-    lines.forEach((line) => line.classList.add("is-shown"));
-    actions?.querySelectorAll(":scope > *").forEach((el) => el.classList.add("is-shown"));
-    body.removeAttribute("aria-busy");
-    root.classList.add("intro-reveal");
-    root.classList.remove("intro");
-    root.removeAttribute("data-intro-live");
-    setTimeout(() => root.classList.remove("intro-reveal"), 700);
-    armEnter();
-  }
-
-  // Synchronous on purpose: a language swap reboots the page right after.
-  onTeardown(finish);
-  ["keydown", "pointerdown", "wheel", "touchstart", "scroll"].forEach((type) =>
-    window.addEventListener(type, finish, {
-      passive: true,
-      signal: skip.signal,
-    }),
-  );
-
-  /* Types a text into place, the cursor riding at its end. Without a
-     duration it is typed by hand (uneven keystrokes); with one, it streams
-     out like program output, a few characters per frame. */
-  async function type({ node, ghost, text }, duration) {
-    node.after(cursor);
-    const step = duration ? Math.ceil(text.length / (duration / 16)) : 1;
-    for (let i = step; ; i += step) {
-      if (done) return;
-      node.nodeValue = text.slice(0, i);
-      ghost.textContent = text.slice(i);
-      if (i >= text.length) return;
-      await wait(duration ? 16 : 50 + Math.random() * 70, skip.signal);
-    }
-  }
-
-  // How long each line of output takes to print, in order.
-  const durations = [300, 220, 420, 260];
-  // Beats of the scene: Enter is pressed, the shell "thinks", then the output
-  // arrives line by line with a short breath between lines.
-  const RUN_PAUSE = 550;
-  const LINE_GAP = 170;
-
-  (async () => {
-    const { signal } = skip;
-    first.classList.add("is-shown");
-    texts[0].node.after(cursor);
-    await wait(300, signal);
-
-    for (const t of texts.filter((t) => t.line === first)) await type(t);
-    // Enter pressed: the cursor drops out while the command "runs".
-    await wait(150, signal);
-    cursor.remove();
-    await wait(RUN_PAUSE, signal);
-
-    for (const [i, line] of output.entries()) {
-      if (done) return;
-      line.classList.add("is-shown");
-      for (const t of texts.filter((t) => t.line === line)) {
-        await type(t, durations[i] ?? 400);
-      }
-      await wait(LINE_GAP, signal);
-    }
-
-    // The actions come up one command at a time.
-    if (actions && !done) {
-      cursor.remove();
-      actions.classList.add("is-shown");
-      for (const el of actions.children) {
-        if (done) return;
-        el.classList.add("is-shown");
-        await wait(60, signal);
-      }
-    }
-    await wait(120, signal);
-    finish();
-  })();
+/** An AbortController torn down with the page's wiring. */
+function binding() {
+  const controller = new AbortController();
+  onTeardown(() => controller.abort());
+  return controller.signal;
 }
 
 /* ─────────────────────────────────────────────────────────────
-   Skills — pick a skill, see the projects that used it
+   Hero — the name rises once per visit
+   ───────────────────────────────────────────────────────────── */
+
+/* The letters animate in CSS. A language swap rebuilds the hero, which
+   would replay it: once played, html.hero-played switches it off. */
+function initHeroOnce() {
+  const root = document.documentElement;
+  if (root.classList.contains("hero-played")) return;
+  const id = setTimeout(() => root.classList.add("hero-played"), 1600);
+  onTeardown(() => {
+    clearTimeout(id);
+    root.classList.add("hero-played");
+  });
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Work — the card being covered shrinks back
+   ───────────────────────────────────────────────────────────── */
+
+/* The cards are sticky (CSS); this only measures how much of each one the
+   next card covers, as --p from 0 to 1, which the CSS turns into scale and
+   fade. Six cards: measuring them per frame is cheap. */
+function initStack() {
+  const cards = [...document.querySelectorAll("[data-stack] .card")];
+  if (cards.length < 2) return;
+
+  const signal = binding();
+  const sticky = window.matchMedia("(min-width: 960px) and (min-height: 620px)");
+  let queued = false;
+
+  function paint() {
+    queued = false;
+    const on = sticky.matches && !prefersReducedMotion();
+    for (let i = 0; i < cards.length - 1; i++) {
+      let p = 0;
+      if (on) {
+        const a = cards[i].getBoundingClientRect();
+        const b = cards[i + 1].getBoundingClientRect();
+        p = Math.max(0, Math.min(1, (a.bottom - b.top) / a.height));
+      }
+      cards[i].style.setProperty("--p", p.toFixed(3));
+    }
+  }
+
+  const onScroll = () => {
+    if (queued) return;
+    queued = true;
+    requestAnimationFrame(paint);
+  };
+
+  window.addEventListener("scroll", onScroll, { passive: true, signal });
+  window.addEventListener("resize", onScroll, { passive: true, signal });
+  paint();
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Work — arrows for the carousel on small screens
+   ───────────────────────────────────────────────────────────── */
+
+/* Below 960px the cards scroll sideways (CSS). The arrows only show when
+   the row actually overflows, move it by one card, and grey out at
+   either end. Swiping and the trackpad keep working as usual. */
+function initStackNav() {
+  const stack = document.querySelector("[data-stack]");
+  const nav = document.querySelector("[data-stack-nav]");
+  if (!stack || !nav) return;
+
+  const [prev, next] = nav.querySelectorAll("button");
+  const signal = binding();
+  let queued = false;
+
+  function paint() {
+    queued = false;
+    const max = stack.scrollWidth - stack.clientWidth;
+    nav.hidden = max <= 2;
+    prev.disabled = stack.scrollLeft <= 2;
+    next.disabled = stack.scrollLeft >= max - 2;
+  }
+
+  const schedule = () => {
+    if (queued) return;
+    queued = true;
+    requestAnimationFrame(paint);
+  };
+
+  nav.addEventListener("click", (e) => {
+    const btn = e.target.closest("button[data-dir]");
+    if (!btn) return;
+    const card = stack.querySelector(".card");
+    const gap = parseFloat(getComputedStyle(stack).columnGap) || 0;
+    stack.scrollBy({
+      left: Number(btn.dataset.dir) * (card.offsetWidth + gap),
+      behavior: prefersReducedMotion() ? "auto" : "smooth",
+    });
+  }, { signal });
+
+  stack.addEventListener("scroll", schedule, { passive: true, signal });
+  window.addEventListener("resize", schedule, { passive: true, signal });
+  paint();
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Work — a badge follows the pointer over the visuals
+   ───────────────────────────────────────────────────────────── */
+
+function initCursor() {
+  const stack = document.querySelector("[data-stack]");
+  if (!stack || !stack.querySelector("[data-cursor]")) return;
+  if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+
+  const badge = document.createElement("div");
+  badge.className = "cursor";
+  badge.setAttribute("aria-hidden", "true");
+  badge.textContent = stack.dataset.cursorLabel || "";
+  document.body.appendChild(badge);
+
+  const signal = binding();
+  onTeardown(() => badge.remove());
+
+  const ease = prefersReducedMotion() ? 1 : 0.2;
+  let x = 0, y = 0, tx = 0, ty = 0, frame = 0;
+  let shown = false;
+  let pointer = null; // last known position, null once it left the window
+
+  function move() {
+    x += (tx - x) * ease;
+    y += (ty - y) * ease;
+    // `translate`, not `transform`: the individual property is applied
+    // after `scale`, so the badge shrinks in place instead of sliding
+    // towards the corner as its offset shrinks with it.
+    badge.style.translate = `${x}px ${y}px`;
+    frame = Math.abs(tx - x) + Math.abs(ty - y) > 0.3 ? requestAnimationFrame(move) : 0;
+  }
+
+  /* One question decides everything: is the pointer over a visual right
+     now? Asked on every move, and again after a scroll, which slides the
+     visuals under a still pointer without any pointer event. */
+  function update(over) {
+    if (over && !shown) {
+      // Appears where the pointer is, rather than gliding in from afar.
+      x = tx;
+      y = ty;
+      badge.style.translate = `${x}px ${y}px`;
+    }
+    shown = over;
+    badge.classList.toggle("is-visible", over);
+    if (over && !frame) frame = requestAnimationFrame(move);
+  }
+
+  document.addEventListener("pointermove", (e) => {
+    if (e.pointerType !== "mouse") return;
+    pointer = { x: e.clientX, y: e.clientY };
+    tx = e.clientX;
+    ty = e.clientY;
+    update(Boolean(e.target.closest?.("[data-cursor]")));
+  }, { passive: true, signal });
+
+  let queued = false;
+  window.addEventListener("scroll", () => {
+    if (queued || !pointer) return;
+    queued = true;
+    requestAnimationFrame(() => {
+      queued = false;
+      const el = document.elementFromPoint(pointer.x, pointer.y);
+      update(Boolean(el?.closest("[data-cursor]")));
+    });
+  }, { passive: true, signal });
+
+  document.documentElement.addEventListener("pointerleave", () => {
+    pointer = null;
+    update(false);
+  }, { signal });
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Background — experience or education, one at a time
+   ───────────────────────────────────────────────────────────── */
+
+/* Both groups are in the page; this reveals the tabs, hides the group not
+   chosen and lets the arrow keys move between tabs. The skills panel links
+   to experiences only, so following one brings that tab back. */
+function initPathTabs() {
+  const path = document.querySelector("[data-path]");
+  const list = path?.querySelector("[data-path-tabs]");
+  if (!list) return;
+
+  const tabs = [...list.querySelectorAll('[role="tab"]')];
+  const panels = tabs.map((tab) => document.getElementById(tab.getAttribute("aria-controls")));
+  const signal = binding();
+
+  panels.forEach((panel, i) => {
+    panel.setAttribute("role", "tabpanel");
+    panel.setAttribute("aria-labelledby", tabs[i].id);
+  });
+
+  function select(index, focus = false) {
+    tabs.forEach((tab, i) => {
+      const on = i === index;
+      tab.setAttribute("aria-selected", String(on));
+      tab.tabIndex = on ? 0 : -1;
+      panels[i].hidden = !on;
+    });
+    if (focus) tabs[index].focus();
+  }
+
+  list.addEventListener("click", (e) => {
+    const tab = e.target.closest('[role="tab"]');
+    if (tab) select(tabs.indexOf(tab));
+  }, { signal });
+
+  list.addEventListener("keydown", (e) => {
+    const current = tabs.indexOf(document.activeElement);
+    const last = tabs.length - 1;
+    const next = {
+      ArrowRight: current + 1,
+      ArrowDown: current + 1,
+      ArrowLeft: current - 1,
+      ArrowUp: current - 1,
+      Home: 0,
+      End: last,
+    }[e.key];
+    if (next === undefined || current < 0) return;
+    e.preventDefault();
+    select((next + tabs.length) % tabs.length, true);
+  }, { signal });
+
+  document.addEventListener("click", (e) => {
+    if (e.target.closest('[data-skills] a[href="#background"]')) select(0);
+  }, { signal });
+
+  list.hidden = false;
+  path.classList.add("is-tabbed");
+  select(Math.max(0, tabs.findIndex((tab) => tab.getAttribute("aria-selected") === "true")));
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Skills — point at a skill, see the projects that used it
    ───────────────────────────────────────────────────────────── */
 
 /* Every skill's list of projects is already in the page, one hidden block
-   each; this only chooses which block shows. Without JavaScript the chips
-   stay a plain list and the panel stays hidden. */
+   each; this only chooses which block shows. The last one chosen stays,
+   so the pointer can travel down to its links. Without JavaScript the
+   skills stay a plain list and the panel stays hidden. */
 function initSkills() {
   const root = document.querySelector("[data-skills]");
   if (!root) return;
 
-  const chips = [...root.querySelectorAll("button[data-skill]")];
+  const skills = [...root.querySelectorAll("button[data-skill]")];
+  const groups = root.querySelector(".skills__groups");
   const panel = root.querySelector(".skills__uses");
   const blocks = [...root.querySelectorAll("[data-uses]")];
-  if (!chips.length || !panel) return;
+  if (!skills.length || !panel) return;
 
-  // Touch screens get plain chips: the panel stays closed and nothing is
-  // clickable, so the buttons become inert labels.
+  // Touch screens get a plain list: the panel would open far below the
+  // tapped skill, so nothing is clickable there.
   if (matchMedia("(hover: none) and (pointer: coarse)").matches) {
-    chips.forEach((chip) => {
+    skills.forEach((skill) => {
       const label = document.createElement("span");
-      label.className = chip.className;
-      label.textContent = chip.textContent;
-      chip.replaceWith(label);
+      label.className = `${skill.className} skill--static`;
+      label.textContent = skill.textContent;
+      skill.replaceWith(label);
     });
     return;
   }
 
-  function select(skill) {
-    panel.classList.toggle("is-open", Boolean(skill));
-    chips.forEach((chip) =>
-      chip.setAttribute("aria-pressed", String(chip.dataset.skill === skill)),
+  const signal = binding();
+
+  function select(id) {
+    panel.classList.toggle("is-open", Boolean(id));
+    skills.forEach((skill) =>
+      skill.setAttribute("aria-pressed", String(skill.dataset.skill === id)),
     );
     blocks.forEach((block) => {
-      block.hidden = block.dataset.uses !== skill;
+      block.hidden = block.dataset.uses !== id;
     });
   }
 
-  // Clicking the selected skill again deselects it and hides the panel.
-  chips.forEach((chip) =>
-    chip.addEventListener("click", () =>
-      select(chip.getAttribute("aria-pressed") === "true" ? null : chip.dataset.skill),
-    ),
-  );
+  skills.forEach((skill) => {
+    skill.addEventListener("pointerenter", () => select(skill.dataset.skill), { signal });
+    skill.addEventListener("focus", () => select(skill.dataset.skill), { signal });
+    skill.addEventListener("click", () => select(skill.dataset.skill), { signal });
+  });
+
+  // The other skills step back while one is pointed at.
+  groups.addEventListener("pointerover", (e) => {
+    groups.classList.toggle("is-dim", Boolean(e.target.closest("button[data-skill]")));
+  }, { signal });
+  groups.addEventListener("pointerleave", () => groups.classList.remove("is-dim"), { signal });
 
   select(null);
 }
 
 boot(() => {
   initChrome();
-  initTerminal();
+  initHeroOnce();
   initNavScrollSpy();
+  initStack();
+  initStackNav();
+  initCursor();
+  initPathTabs();
   initSkills();
 });

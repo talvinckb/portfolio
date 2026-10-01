@@ -416,6 +416,15 @@ export function initScrollProgress() {
    Nav elevation + scroll spy
    ───────────────────────────────────────────────────────────── */
 
+/* The header sits flat on the hero and frosts over once the page moves. */
+export function initNavElevation() {
+  const nav = document.getElementById("nav");
+  if (!nav) return;
+  const paint = () => nav.classList.toggle("is-scrolled", window.scrollY > 8);
+  window.addEventListener("scroll", paint, { passive: true, signal: bus.signal });
+  paint();
+}
+
 export function initNavScrollSpy() {
   const links = [
     ...document.querySelectorAll('.nav__links a[href*="#"], .mobile-menu__links a[href*="#"]'),
@@ -425,7 +434,7 @@ export function initNavScrollSpy() {
   );
   if (!sections.length) return;
 
-  // One underline slides between the desktop links instead of each link
+  // One pill slides between the desktop links instead of each link
   // drawing its own: the move between two sections reads as one motion.
   const bar = document.querySelector(".nav__links");
   let indicator = null;
@@ -572,4 +581,5 @@ export function initChrome() {
   initLogo();
   initScrollProgress();
   initCopyButtons();
+  initNavElevation();
 }

@@ -9,7 +9,7 @@
     "description": "EPITA engineering student specialising in computer vision, AI and GPU computing. I'm looking for a final-year internship starting February 2027.",
     "jobTitle": "Computer Vision & GPU Computing Engineer",
     "ogImage": "/assets/og-image-en.png",
-    "ogImageAlt": "Terminal showing: Talvin Ackbaraly, computer vision, AI, GPU computing. Available for a 6-month internship from February 2027."
+    "ogImageAlt": "Talvin Ackbaraly — computer vision, AI and GPU computing. Engineering student at EPITA, available for a 6-month internship from February 2027."
   },
   "a11y": {
     "skipToContent": "Skip to main content",
@@ -23,7 +23,9 @@
     "copyEmail": "Copy email address",
     "copyPhone": "Copy phone number",
     "projectPreview": "Project preview",
-    "sourceCode": "Source code for"
+    "sourceCode": "Source code for",
+    "prevProject": "Previous project",
+    "nextProject": "Next project"
   },
   "nav": {
     "work": "Work",
@@ -34,26 +36,27 @@
   },
   "hero": {
     "name": "Talvin Ackbaraly",
-    "kicker": "computer vision · AI · GPU computing",
-    "intro": "Engineering student at EPITA, Image major. From segmenting the BnF's archives to CUDA ports of real-time algorithms.",
-    "status": "available · 6-month final-year internship from February 2027",
-    "ctaWork": "see-the-work",
-    "ctaContact": "contact",
+    "role": "Engineering student at EPITA, Image major",
+    "status": "Available for a 6-month internship from February 2027",
+    "leadStrong": "Computer vision, AI and GPU computing.",
+    "lead": "I build complete image pipelines, from the Python prototype to the CUDA port.",
+    "ctaWork": "See the work",
+    "ctaContact": "Get in touch",
     "cvBtn": "CV",
-    "cvUrl": "/assets/cv-talvin-ackbaraly-en.pdf",
-    "terminal": {
-      "user": "talvin",
-      "host": "epita",
-      "enterHint": "enter"
-    }
+    "cvUrl": "/assets/cv-talvin-ackbaraly-en.pdf"
   },
   "projects": {
-    "index": "01",
     "title": "Selected projects",
     "secondaryTitle": "Other work",
-    "codeLabel": "Code",
+    "showOthers": "Show",
+    "hideOthers": "Hide",
     "publicRepo": "GitHub",
-    "privateRepo": "not public",
+    "privateRepo": "Code not public",
+    "read": "Read the case study",
+    "cursor": "Read it",
+    "sourceCode": "Source code",
+    "teamOf": "team of",
+    "pair": "pair",
     "items": [
       {
         "id": "pfee-bnf",
@@ -70,6 +73,7 @@
           "YOLO"
         ],
         "period": "8 months (ongoing)",
+        "team": 4,
         "featured": true,
         "github": null
       },
@@ -88,6 +92,7 @@
           "Machine Learning"
         ],
         "period": "5 weeks",
+        "team": 2,
         "featured": true,
         "github": null
       },
@@ -106,6 +111,7 @@
           "GPU Computing"
         ],
         "period": "4 weeks",
+        "team": 4,
         "featured": true,
         "github": null
       },
@@ -124,6 +130,7 @@
           "Docker"
         ],
         "period": "1 month",
+        "team": 4,
         "featured": true,
         "github": "https://github.com/talvinckb/Medviz"
       },
@@ -143,6 +150,7 @@
           "Matplotlib"
         ],
         "period": "3 weeks",
+        "team": 4,
         "featured": true,
         "github": "https://github.com/Axthauvin/vtk-itk-project"
       },
@@ -161,6 +169,7 @@
           "GLSL"
         ],
         "period": "1 month",
+        "team": 2,
         "featured": true,
         "github": "https://github.com/talvinckb/OpenGL-Water-Simulation"
       },
@@ -228,7 +237,6 @@
     ]
   },
   "background": {
-    "index": "02",
     "title": "Background",
     "experienceTitle": "Experience",
     "educationTitle": "Education",
@@ -236,10 +244,12 @@
     "extras": [
       "English — TOEIC certified"
     ],
+    "now": "Current",
     "experiences": [
       {
         "id": "freelance",
         "title": "Full-stack developer",
+        "note": "alongside studies",
         "type": "Alongside studies",
         "company": "Freelance",
         "period": "Sept. 2026 — present",
@@ -290,6 +300,7 @@
       },
       {
         "institution": "Université du Québec à Chicoutimi",
+        "short": "UQAC",
         "location": "Canada",
         "degree": "Academic exchange — semester 4",
         "period": "Jan. — May 2024",
@@ -305,7 +316,6 @@
     ]
   },
   "skills": {
-    "index": "03",
     "title": "Skills",
     "usedIn": "Used in",
     "groups": [
@@ -439,7 +449,6 @@
     ]
   },
   "contact": {
-    "index": "04",
     "label": "Contact",
     "title": "An internship in vision, AI or GPU computing? Let's talk.",
     "text": "6-month final-year internship, starting February 2027.",

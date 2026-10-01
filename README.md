@@ -33,58 +33,54 @@ compilation et servies en HTML statique.
 - **Le balisage n'existe qu'une fois.** Navigation, pied de page, icônes et
   actions de contact sont des partials Nunjucks partagés entre la page
   d'accueil et les pages projet.
-- **Rien ne bouge sans raison.** Pas d'animation d'apparition ni d'effet
-  décoratif : le mouvement sert un état (survol, détection, section lue) et
-  disparaît sous `prefers-reduced-motion`. Seule exception : l'intro du
-  terminal, une fois par session, interruptible à tout moment.
+- **Trois moments de mouvement, pas plus.** Le nom qui se lève à
+  l'arrivée, les cartes qui s'empilent au scroll, et
+  les sections qui montent en entrant dans l'écran. Le reste ne bouge
+  qu'au survol. Tout disparaît sous `prefers-reduced-motion`.
 
 ## Direction artistique
 
-**« Labo de vision ».** Le site se lit comme l'écran d'un outil de vision
-par ordinateur : une grille de mesure en fond, des relevés en mono autour
-des images, et une seule couleur vive — le vert des boîtes de détection.
+**« Galerie claire ».** Un site clair et calme où les visuels des projets
+apportent toute la couleur : une typographie très grande, un seul accent
+bleu outremer, des surfaces blanches arrondies. Volontairement à l'opposé de
+la page `/freelance` (sombre, jaune et violet, ombres décalées).
 
 | Rôle | Police | Usage |
 |---|---|---|
-| Titres & texte | Geist, 400–700 | accroche, titres, paragraphes, boutons |
-| Données | Geist Mono, 400–500 | périodes, stacks, index de section, relevés, libellés |
+| Titres | Funnel Display, 300–800 | nom, titres de section et de carte, accroches |
+| Texte | Funnel Sans, 300–800 | paragraphes, boutons, navigation |
+| Données | Geist Mono, 400–500 | périodes, stacks, index, libellés |
+| Bouton Freelance | Bricolage Grotesque | uniquement ce bouton, qui reprend /freelance |
 
-La mono est réservée à ce qui est une **donnée** ou une métadonnée — jamais
-à un paragraphe.
-
-### La boîte de détection
-
-C'est l'élément signature (`.detect` + `.detect__label`), et il obéit à une
-seule règle : **une boîte encadre une image dans laquelle quelque chose est
-réellement détecté.**
-
-- une carte projet, **au survol ou au focus uniquement**, une à la fois.
-
-Jamais autour d'un texte, d'un titre ou d'un bloc décoratif. Les images de
-résultats des études de cas portent déjà leurs propres détections : on n'en
-ajoute pas par-dessus.
+Les quatre polices sont auto-hébergées dans `assets/fonts/` (sous-ensemble
+latin, poids variables). Funnel Display et Funnel Sans sont préchargées.
 
 ### Règles
 
-- **Angles vifs partout.** Les seuls arrondis sont, dans le hero, le point
-  « disponible » et les trois boutons de la fenêtre du terminal.
-- **Le vert est un signal, pas un décor** : boîtes de détection, action
-  principale, repère de la section en cours, état sélectionné. Le texte
-  courant reste en `--ink` / `--ink-2`.
-- **Deux tokens pour le vert.** `--accent` est le fond des aplats (texte
-  `--on-accent` dessus) ; `--accent-text` et `--detect` sont assombris en
-  thème clair, où le vert pur disparaîtrait sur le blanc.
-- **Les filets portent la hiérarchie** : `--rule-2` pour les cadres,
-  `--rule` pour séparer des lignes de même niveau.
-- **Un cadre ne se pose jamais sur un `.wrap`** : sa bordure engloberait la
-  gouttière. Le cadre est un enfant du `.wrap`.
+- **Un seul accent.** `--accent` sert à l'action principale, aux mots clés
+  des cartes, aux index et à l'état sélectionné. Le texte courant reste en
+  `--ink` / `--ink-2`. Le bleu plein n'apparaît en aplat qu'une fois : le
+  bloc contact (`--block`), identique dans les deux thèmes.
+- **Arrondis partout**, sur trois rayons : pastilles (`99px`) pour les
+  boutons et étiquettes, `--radius` pour les images et cartes moyennes,
+  `--radius-lg` pour les grandes cartes.
+- **Les surfaces portent la hiérarchie** : `--surface` (blanc) pour ce qui
+  se détache du fond, un filet `--rule` en `box-shadow: inset` pour le
+  contour, `--shade` pour ce qui flotte (cartes, ligne survolée).
+- **Le bouton Freelance est la seule exception** : jaune, violet, Bricolage
+  et ombre décalée, les couleurs de `/freelance` (`--fl-*`), pour annoncer
+  qu'on change d'univers.
+- **Aucun projet n'est mis en avant** plus qu'un autre : les cartes les
+  montrent tous de la même façon.
+- **La mono est réservée aux données** et métadonnées, jamais à un
+  paragraphe.
 
-Les couleurs sont des tokens redéfinis sous `:root[data-theme="light"]` —
+Les couleurs sont des tokens redéfinis sous `:root[data-theme="dark"]` —
 `--bg`, `--surface`, `--surface-2`, `--ink`, `--ink-2`, `--ink-3`, `--rule`,
-`--rule-2`, `--grid-line`, `--accent`, `--on-accent`, `--accent-text`,
-`--detect`. **Aucune couleur en dur dans une règle**, sinon un thème
-décroche. Le sombre est l'aspect par défaut ; sans JavaScript, le site suit
-la préférence système.
+`--rule-2`, `--accent`, `--on-accent`, `--accent-text`, `--accent-soft`,
+`--overlay`, `--shade`. **Aucune couleur en dur dans une règle**, sinon un
+thème décroche. Le clair est l'aspect par défaut ; sans JavaScript, le site
+suit la préférence système.
 
 ## Arborescence
 
@@ -105,14 +101,14 @@ la préférence système.
 │       ├── footer.njk     # Pied de page + retour en haut + toasts
 │       ├── icons.njk      # Macros SVG — source unique des icônes
 │       ├── theme-init.njk # Choix du thème avant le premier rendu
-│       └── contact-actions.njk  # heroActions() et contactBlock()
+│       └── contact-actions.njk  # contactBlock() du bloc contact
 ├── projects/
 │   ├── fr/*.md            # Études de cas FR  → /projects/<id>/
 │   └── en/*.md            # Études de cas EN  → /en/projects/<id>/
 ├── css/style.css          # Design system complet
 ├── js/
 │   ├── ui.js              # Comportements partagés (thème, menu, toasts…)
-│   ├── main.js            # Page d'accueil (intro du terminal, compétences)
+│   ├── main.js            # Page d'accueil (cartes, compétences)
 │   └── project.js         # Pages projet (sommaire, lightbox, tableaux, KaTeX)
 ├── scripts/fetch-cv.js    # Récupère les CV PDF depuis les releases GitHub
 ├── sitemap.njk            # Sitemap généré à partir de la collection projets
@@ -123,32 +119,29 @@ la préférence système.
 
 | Section | Ancre | Source |
 |---|---|---|
-| Hero — un terminal qui lance `whoami` : nom, accroche, intro, disponibilité, actions | — | `hero` |
-| 01 Projets sélectionnés + autres réalisations | `#work` | `projects` |
-| 02 Parcours — deux frises : expériences, formation | `#background` | `background` |
-| 03 Compétences — chaque compétence mène aux projets qui l'utilisent | `#skills` | `skills` |
-| 04 Contact | `#contact` | `contact` |
+| Hero — rôle, disponibilité, nom, accroche, actions | — | `hero` |
+| Projets sélectionnés + autres réalisations | `#work` | `projects` |
+| Parcours — expériences, formation | `#background` | `background` |
+| Compétences — chaque compétence mène aux projets qui l'utilisent | `#skills` | `skills` |
+| Contact | `#contact` | `contact` |
 
 Les ancres sont volontairement en anglais des deux côtés : les deux locales
 partagent le même gabarit, donc les mêmes `id`.
 
-### Le terminal
+### Le hero
 
-Le hero entier est une fenêtre de terminal qui lance `whoami` : le nom
-(le `h1`), l'accroche, l'intro, la disponibilité (`hero.status`, avec un
-point qui pulse), puis les actions écrites comme des commandes
-(`./voir-les-projets`, `contact`, `cv.pdf`, `github`, `linkedin`). Tout est
-du HTML rendu au build ; le prompt, la barre de fenêtre et le curseur sont
-décoratifs (`aria-hidden`). Textes : `hero` dans `fr.json` / `en.json`.
+Le nom (`h1`) occupe toute la largeur et se lève lettre par lettre ; les
+lettres sont `aria-hidden` et le nom complet reste lisible par les lecteurs
+d'écran. L'animation ne se joue qu'une fois : un changement de langue
+reconstruit le hero sans la rejouer (`html.hero-played`).
 
-À la première visite de la session, le terminal s'écrit tout seul (~3 s) :
-`whoami` se tape à la main, puis la sortie défile derrière le curseur, ligne
-par ligne, et les commandes apparaissent une à une ; enfin la navbar et le
-reste de la page arrivent en fondu. Rien n'est bloqué : une touche, un
-clic, la molette ou un scroll termine l'animation d'un coup. Pas
-d'animation avec `prefers-reduced-motion`, avec une ancre (`/#contact`) ni
-sans JS. La dernière ligne affiche `↵ entrée` : Entrée (ou un tap) descend
-vers les projets.
+### Les cartes de projets
+
+Sur un écran assez grand (960 × 620 px et plus), les cartes sont `sticky`
+et s'empilent sous le header ; `main.js` mesure la part de chaque carte
+recouverte par la suivante (`--p`, de 0 à 1) et le CSS la fait reculer et
+s'estomper. Un badge « Lire l'étude » suit le pointeur sur les visuels
+(souris uniquement). La variante claire ou sombre du visuel suit le thème.
 
 ### Compétences → projets
 
@@ -156,8 +149,9 @@ Chaque compétence de `skills.groups[].items` porte la liste `used` des `id`
 où elle a servi : un projet (`projects.items[].id`) ou une expérience
 (`background.experiences[].id`). Un projet avec étude de cas renvoie vers
 elle, un projet public vers GitHub. Une compétence dont `used` est vide
-s'affiche en pointillés, sans être cliquable — mieux vaut ça qu'un lien
-inventé.
+s'affiche sans être cliquable — mieux vaut ça qu'un lien inventé. Survoler
+une compétence ouvre la liste de ses projets ; sur écran tactile, la liste
+reste une simple énumération.
 
 ## Développement
 
@@ -182,18 +176,21 @@ Ces fichiers sont ignorés par Git et régénérés à chaque build.
      "name": "NOM",
      "title": "Titre complet",
      "tagline": "Une phrase de résumé.",
+     "highlights": ["mot clé"], // mots du tagline soulignés sur la carte
      "thumbnail": "/assets/projects/mon-projet/thumbnail-16x9.webp",
      "thumbnailLight": "/assets/projects/mon-projet/thumbnail-16x9-light.webp",
      "stack": ["C++", "CUDA"],
      "period": "4 semaines",
-     "featured": true,        // true = vignette + page dédiée
+     "team": 4,               // 2 s'affiche « binôme »
+     "featured": true,        // true = carte + page dédiée
      "github": null,          // URL du dépôt, ou null
      "repoNote": null         // réserve sur ce que le dépôt public contient
    }
    ```
 
-   `stack` est rendu en mono, séparé par ` · ` — pas de pastilles : garder
-   quatre entrées au plus, sinon la ligne double.
+   `stack` est rendu en pastilles mono sur la carte : garder quatre ou cinq
+   entrées au plus. Chaque mot de `highlights` doit apparaître tel quel dans
+   `tagline`, sinon le build échoue.
 
    Penser aussi à ajouter l'`id` dans le `used` des compétences concernées.
 
@@ -305,10 +302,11 @@ Points à ne pas régresser :
   valide quel que soit le formatage du gabarit autour ;
 - chaque page déclare `og:image`, `canonical` et ses trois `hreflang`
   (`fr`, `en`, `x-default`) ;
-- une carte projet n'a qu'un seul lien étendu (`::after` sur le titre) : le
-  lien GitHub qui le recouvre doit rester en `z-index: 2` ;
-- les contrastes sont vérifiés dans les deux thèmes (AA : texte ≥ 4,5:1,
-  boîte de détection ≥ 3:1 sur le fond) ;
+- une carte projet n'a qu'un lien focusable vers l'étude de cas (le
+  bouton) : le visuel répète ce lien pour la souris seulement
+  (`tabindex="-1"`, `aria-hidden`) ;
+- les contrastes sont vérifiés dans les deux thèmes, bloc bleu compris
+  (AA : texte ≥ 4,5:1, éléments graphiques ≥ 3:1 sur le fond) ;
 - les animations sont neutralisées sous `prefers-reduced-motion`.
 
 ## Licence

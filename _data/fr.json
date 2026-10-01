@@ -9,7 +9,7 @@
     "description": "Étudiant ingénieur à l'EPITA, spécialisé en vision par ordinateur, IA et calcul GPU. Je recherche un stage de fin d'études à partir de février 2027.",
     "jobTitle": "Ingénieur vision par ordinateur & calcul GPU",
     "ogImage": "/assets/og-image.png",
-    "ogImageAlt": "Terminal affichant : Talvin Ackbaraly, vision par ordinateur, IA, calcul GPU. Disponible pour un stage de 6 mois dès février 2027."
+    "ogImageAlt": "Talvin Ackbaraly — vision par ordinateur, IA et calcul GPU. Élève ingénieur à l'EPITA, disponible pour un stage de 6 mois dès février 2027."
   },
   "a11y": {
     "skipToContent": "Aller au contenu principal",
@@ -23,7 +23,9 @@
     "copyEmail": "Copier l'adresse email",
     "copyPhone": "Copier le numéro de téléphone",
     "projectPreview": "Aperçu du projet",
-    "sourceCode": "Code source de"
+    "sourceCode": "Code source de",
+    "prevProject": "Projet précédent",
+    "nextProject": "Projet suivant"
   },
   "nav": {
     "work": "Travaux",
@@ -34,26 +36,27 @@
   },
   "hero": {
     "name": "Talvin Ackbaraly",
-    "kicker": "vision par ordinateur · IA · calcul GPU",
-    "intro": "Étudiant ingénieur à l'EPITA, majeure Image. De la segmentation d'archives de la BnF au portage CUDA d'algorithmes temps réel.",
-    "status": "disponible · stage de fin d'études de 6 mois dès février 2027",
-    "ctaWork": "voir-les-projets",
-    "ctaContact": "contact",
+    "role": "Élève ingénieur à l'EPITA, majeure Image",
+    "status": "Disponible pour un stage de 6 mois dès février 2027",
+    "leadStrong": "Vision par ordinateur, IA et calcul GPU.",
+    "lead": "Je conçois des pipelines d'image complets, du prototype en Python jusqu'au portage CUDA.",
+    "ctaWork": "Voir les projets",
+    "ctaContact": "Me contacter",
     "cvBtn": "CV",
-    "cvUrl": "/assets/cv-talvin-ackbaraly-fr.pdf",
-    "terminal": {
-      "user": "talvin",
-      "host": "epita",
-      "enterHint": "entrée"
-    }
+    "cvUrl": "/assets/cv-talvin-ackbaraly-fr.pdf"
   },
   "projects": {
-    "index": "01",
     "title": "Projets sélectionnés",
     "secondaryTitle": "Autres réalisations",
-    "codeLabel": "Code",
+    "showOthers": "Afficher",
+    "hideOthers": "Masquer",
     "publicRepo": "GitHub",
-    "privateRepo": "non public",
+    "privateRepo": "Code non public",
+    "read": "Lire l'étude de cas",
+    "cursor": "Lire l'étude",
+    "sourceCode": "Code source",
+    "teamOf": "équipe de",
+    "pair": "binôme",
     "items": [
       {
         "id": "pfee-bnf",
@@ -70,6 +73,7 @@
           "YOLO"
         ],
         "period": "8 mois (en cours)",
+        "team": 4,
         "featured": true,
         "github": null
       },
@@ -88,6 +92,7 @@
           "Machine Learning"
         ],
         "period": "5 semaines",
+        "team": 2,
         "featured": true,
         "github": null
       },
@@ -106,6 +111,7 @@
           "GPU Computing"
         ],
         "period": "4 semaines",
+        "team": 4,
         "featured": true,
         "github": null
       },
@@ -124,6 +130,7 @@
           "Docker"
         ],
         "period": "1 mois",
+        "team": 4,
         "featured": true,
         "github": "https://github.com/talvinckb/Medviz"
       },
@@ -143,6 +150,7 @@
           "Matplotlib"
         ],
         "period": "3 semaines",
+        "team": 4,
         "featured": true,
         "github": "https://github.com/Axthauvin/vtk-itk-project"
       },
@@ -161,6 +169,7 @@
           "GLSL"
         ],
         "period": "1 mois",
+        "team": 2,
         "featured": true,
         "github": "https://github.com/talvinckb/OpenGL-Water-Simulation"
       },
@@ -228,7 +237,6 @@
     ]
   },
   "background": {
-    "index": "02",
     "title": "Parcours",
     "experienceTitle": "Expériences",
     "educationTitle": "Formation",
@@ -236,10 +244,12 @@
     "extras": [
       "Anglais — certifié TOEIC"
     ],
+    "now": "En cours",
     "experiences": [
       {
         "id": "freelance",
         "title": "Développeur full-stack",
+        "note": "en parallèle des études",
         "type": "En parallèle des études",
         "company": "Freelance",
         "period": "Sept. 2026 — aujourd'hui",
@@ -290,6 +300,7 @@
       },
       {
         "institution": "Université du Québec à Chicoutimi",
+        "short": "UQAC",
         "location": "Canada",
         "degree": "Échange académique — semestre S4",
         "period": "Janv. — Mai 2024",
@@ -305,7 +316,6 @@
     ]
   },
   "skills": {
-    "index": "03",
     "title": "Compétences",
     "usedIn": "Utilisé dans",
     "groups": [
@@ -439,7 +449,6 @@
     ]
   },
   "contact": {
-    "index": "04",
     "label": "Contact",
     "title": "Un stage en vision, IA ou calcul GPU ? Parlons-en.",
     "text": "Stage de fin d'études de 6 mois, à partir de février 2027.",
