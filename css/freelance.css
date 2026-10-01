@@ -2644,6 +2644,12 @@ ol {
   .contact__grid {
     grid-template-columns: 1fr 1fr;
   }
+
+  /* The form can run long: the way to reach me stays in view beside it. */
+  .contact__text {
+    position: sticky;
+    top: 120px;
+  }
 }
 
 .contact__title {
