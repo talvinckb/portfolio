@@ -24,7 +24,8 @@
 <header class="nav" id="nav">
   <nav class="nav__inner wrap" aria-label="{{ t.a11y.mainNav }}">
     <a href="{{ homeUrl }}" class="nav__logo" aria-label="{{ t.a11y.home }}">
-      {{ site.name }}<span class="nav__dot" aria-hidden="true"></span>
+      <span class="nav__mark" aria-hidden="true">{{ site.initials }}</span>
+      <span class="nav__name">{{ site.name }}</span>
     </a>
 
     <ul class="nav__links" role="list">

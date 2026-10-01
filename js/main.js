@@ -149,7 +149,10 @@ function initCursor() {
   function move() {
     x += (tx - x) * ease;
     y += (ty - y) * ease;
-    badge.style.transform = `translate(${x}px, ${y}px)`;
+    // `translate`, not `transform`: the individual property is applied
+    // after `scale`, so the badge shrinks in place instead of sliding
+    // towards the corner as its offset shrinks with it.
+    badge.style.translate = `${x}px ${y}px`;
     frame = Math.abs(tx - x) + Math.abs(ty - y) > 0.3 ? requestAnimationFrame(move) : 0;
   }
 
