@@ -1815,8 +1815,43 @@ button.skill:hover,
     gap: var(--s-3);
   }
 
+  /* One skill per line takes a whole screen on a phone: they flow as
+     pills instead, a few lines per group. */
   .skills__groups {
     grid-template-columns: minmax(0, 1fr);
+    gap: 1.75rem;
+  }
+
+  .skills__group {
+    gap: var(--s-3);
+  }
+
+  .skills__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .skill {
+    padding: 0.6em 1em;
+    border-radius: 99px;
+    background-color: var(--surface);
+    box-shadow: inset 0 0 0 1px var(--rule);
+    font-family: var(--font-sans);
+    font-size: 0.95rem;
+    line-height: 1;
+    letter-spacing: 0;
+  }
+
+  button.skill:hover,
+  .skill[aria-pressed="true"] {
+    transform: none;
+    box-shadow: inset 0 0 0 1px var(--accent);
+  }
+
+  /* Closed, the panel takes no room: on a touch screen it never opens. */
+  .skills__uses:not(.is-open) {
+    display: none;
   }
 }
 
