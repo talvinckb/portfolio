@@ -1974,33 +1974,121 @@ button.skill:hover,
   }
 }
 
-/* ═════════════════════════════════════════════════════════════
-   Case-study pages: previous styles, redesigned in the next commit
-   ═════════════════════════════════════════════════════════════ */
-
 /* ─────────────────────────────────────────────────────────────
-   7. Viewer — a framed image with a mono readout above and below
+   18. Case study — header
    ───────────────────────────────────────────────────────────── */
 
-.viewer {
-  border: 1px solid var(--rule-2);
-  background-color: var(--surface);
-  padding: var(--s-3);
+.case-head {
+  padding-block: clamp(1.5rem, 4vw, 3rem) 0;
 }
 
-.viewer__bar {
+.case-head__text {
   display: flex;
-  justify-content: space-between;
-  gap: var(--s-4);
-  padding: 0.125rem 0.125rem var(--s-3);
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--s-5);
+}
+
+.case-head__back {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-1);
+  height: 2.25rem;
+  padding: 0 0.95rem 0 0.7rem;
+  border-radius: 99px;
+  box-shadow: inset 0 0 0 1px var(--rule);
+  font-size: var(--t-sm);
+  color: var(--ink-2);
+  transition:
+    box-shadow var(--fast) var(--ease),
+    color var(--fast) var(--ease);
+}
+
+.case-head__back:hover {
+  box-shadow: inset 0 0 0 1px var(--ink);
+  color: var(--ink);
+}
+
+.case-head__eyebrow {
   font-family: var(--font-mono);
-  font-size: 0.6875rem;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--accent-text);
+}
+
+.case-head__title {
+  max-width: 20ch;
+  font-family: var(--font-display);
+  font-size: clamp(2.4rem, 1.4rem + 4vw, 5rem);
+  line-height: 0.95;
+  letter-spacing: -0.05em;
+}
+
+.case-head__tagline {
+  max-width: 46rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.15rem, 0.95rem + 0.8vw, 1.5rem);
   line-height: 1.4;
+  letter-spacing: -0.01em;
+  color: var(--ink-2);
+}
+
+.case-head .actions {
+  margin-top: var(--s-1);
+}
+
+/* Duration, team and stack as a row of small cards. */
+.facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-2);
+  align-self: stretch;
+}
+
+.facts__item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 0.8rem 1.1rem;
+  border-radius: 1rem;
+  background-color: var(--surface);
+  box-shadow: inset 0 0 0 1px var(--rule);
+}
+
+.facts__item--stack {
+  flex: 1 1 18rem;
+}
+
+.facts dt {
+  font-family: var(--font-mono);
+  font-size: var(--t-mono);
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
   color: var(--ink-3);
 }
 
-.viewer__bar:last-child {
-  padding: var(--s-3) 0.125rem 0.125rem;
+.facts dd {
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.facts__item--stack dd {
+  font-family: var(--font-mono);
+  font-size: var(--t-sm);
+  font-weight: 400;
+  color: var(--ink-2);
+}
+
+/* ─────────────────────────────────────────────────────────────
+   19. Case study — body
+   ───────────────────────────────────────────────────────────── */
+
+.viewer {
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  background-color: var(--surface);
+  box-shadow: inset 0 0 0 1px var(--rule), var(--shade);
 }
 
 .viewer__frame {
@@ -2016,96 +2104,6 @@ button.skill:hover,
   object-fit: cover;
 }
 
-/* ─────────────────────────────────────────────────────────────
-   16. Case study page
-   ───────────────────────────────────────────────────────────── */
-
-.case-head {
-  padding-block: clamp(2.5rem, 5vw, 4rem) 0;
-}
-
-.case-head__text {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: var(--s-4);
-}
-
-.case-head__back {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--s-1);
-  margin-bottom: var(--s-3);
-  font-size: var(--t-sm);
-  color: var(--ink-2);
-  transition: color var(--fast) var(--ease);
-}
-
-.case-head__back:hover {
-  color: var(--ink);
-}
-
-.case-head__eyebrow {
-  font-family: var(--font-mono);
-  font-size: var(--t-sm);
-  color: var(--accent-text);
-}
-
-.case-head__title {
-  max-width: 24ch;
-  font-size: clamp(1.875rem, 1.2rem + 2.2vw, 2.75rem);
-  line-height: 1.04;
-  letter-spacing: -0.04em;
-}
-
-.case-head__tagline {
-  max-width: 44rem;
-  font-size: var(--t-lg);
-  line-height: 1.55;
-  color: var(--ink-2);
-}
-
-.case-head .actions {
-  margin-top: var(--s-2);
-}
-
-.facts {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--s-4) var(--s-7);
-  align-self: stretch;
-  margin-top: var(--s-3);
-  padding-top: var(--s-4);
-  border-top: 1px solid var(--rule-2);
-}
-
-.facts__item {
-  display: flex;
-  flex-direction: column;
-  gap: var(--s-1);
-}
-
-.facts__item--stack {
-  flex: 1 1 18rem;
-}
-
-.facts dt {
-  font-family: var(--font-mono);
-  font-size: var(--t-mono);
-  text-transform: uppercase;
-  color: var(--ink-3);
-}
-
-.facts dd {
-  font-size: 0.9375rem;
-}
-
-.facts__item--stack dd {
-  font-family: var(--font-mono);
-  font-size: var(--t-sm);
-  color: var(--ink-2);
-}
-
 .case-cover {
   margin-bottom: var(--s-7);
 }
@@ -2114,14 +2112,10 @@ button.skill:hover,
   aspect-ratio: 16 / 9;
 }
 
-.case-cover__img {
-  object-fit: cover;
-}
-
 .case-body {
   display: grid;
   gap: var(--s-7);
-  padding-top: var(--s-8);
+  padding-top: var(--s-7);
 }
 
 /* The table of contents only exists where there is room to keep it in view. */
@@ -2133,30 +2127,32 @@ button.skill:hover,
   min-width: 0;
 }
 
-/* Cells are separated by the 1px gap showing the rule colour through. */
 .brief {
   display: grid;
-  gap: 1px;
-  margin-bottom: var(--s-7);
-  border: 1px solid var(--rule-2);
-  background-color: var(--rule-2);
+  gap: var(--s-3);
+  margin-bottom: var(--s-8);
 }
 
 .brief__cell {
   display: flex;
   flex-direction: column;
   gap: var(--s-2);
-  padding: var(--s-5);
+  padding: 1.375rem 1.5rem;
+  border-radius: var(--radius);
   background-color: var(--surface);
+  box-shadow: inset 0 0 0 1px var(--rule);
 }
 
 .brief__cell p {
-  font-size: var(--t-base);
   line-height: 1.6;
 }
 
+.brief__cell--result {
+  background-color: var(--accent-soft);
+  box-shadow: none;
+}
+
 .brief__cell--result p {
-  color: var(--ink);
   font-weight: 500;
 }
 
@@ -2164,30 +2160,48 @@ button.skill:hover,
   color: var(--accent-text);
 }
 
+/* ─── Pager ─── */
+
 .pager {
   display: grid;
+  gap: var(--s-3);
   margin-top: var(--s-9);
-  border-top: 1px solid var(--rule-2);
 }
 
 .pager__link {
   display: flex;
   flex-direction: column;
-  gap: var(--s-1);
-  padding-block: var(--s-5);
-  border-bottom: 1px solid var(--rule);
+  gap: var(--s-2);
+  padding: 1.5rem 1.75rem;
+  border-radius: var(--radius-lg);
+  background-color: var(--surface);
+  box-shadow: inset 0 0 0 1px var(--rule);
+  transition:
+    box-shadow var(--normal) var(--ease),
+    transform var(--normal) var(--ease);
+}
+
+.pager__link:hover {
+  box-shadow: inset 0 0 0 1px var(--rule), var(--shade);
+  transform: translateY(-3px);
 }
 
 .pager__link--next {
-  text-align: right;
   align-items: flex-end;
+  text-align: right;
 }
 
 .pager__title {
-  font-size: var(--t-xl);
+  font-family: var(--font-display);
+  font-size: var(--t-2xl);
   font-weight: 600;
-  letter-spacing: -0.02em;
+  line-height: 1;
+  letter-spacing: -0.04em;
   transition: color var(--fast) var(--ease);
+}
+
+.pager__link:hover .pager__title {
+  color: var(--accent-text);
 }
 
 .pager__sub {
@@ -2196,21 +2210,17 @@ button.skill:hover,
 }
 
 /* The pager closes the page: the footer follows it closely. */
-.case + .footer {
-  margin-top: var(--s-6);
-}
-
-.pager__link:hover .pager__title {
-  color: var(--accent-text);
+.case + .footer .footer__inner {
+  padding-top: var(--s-7);
 }
 
 /* ─────────────────────────────────────────────────────────────
-   17. Prose — the Markdown body of a case study
+   20. Prose — the Markdown body of a case study
    ───────────────────────────────────────────────────────────── */
 
 /* Long words (identifiers, URLs) break rather than widen the page on a phone. */
 .prose {
-  font-size: var(--t-md);
+  font-size: clamp(1.0625rem, 1rem + 0.2vw, 1.125rem);
   line-height: 1.75;
   color: var(--ink-2);
   overflow-wrap: anywhere;
@@ -2221,19 +2231,21 @@ button.skill:hover,
 }
 
 .prose h2 {
-  margin-top: var(--s-8);
-  margin-bottom: var(--s-4);
-  font-size: var(--t-2xl);
-  line-height: 1.15;
-  letter-spacing: -0.03em;
+  margin-top: var(--s-9);
+  margin-bottom: var(--s-5);
+  font-family: var(--font-display);
+  font-size: clamp(1.9rem, 1.3rem + 2.2vw, 3rem);
+  line-height: 1;
+  letter-spacing: -0.045em;
   color: var(--ink);
 }
 
 .prose h3 {
-  margin-top: var(--s-6);
+  margin-top: var(--s-7);
   margin-bottom: var(--s-3);
-  font-size: var(--t-lg);
-  letter-spacing: -0.015em;
+  font-family: var(--font-display);
+  font-size: var(--t-xl);
+  letter-spacing: -0.025em;
   color: var(--ink);
 }
 
@@ -2289,9 +2301,9 @@ button.skill:hover,
 }
 
 .prose code {
-  padding: 0.1em 0.35em;
-  border: 1px solid var(--rule);
-  background-color: var(--surface);
+  padding: 0.12em 0.4em;
+  border-radius: 0.375rem;
+  background-color: var(--surface-2);
   font-family: var(--font-mono);
   font-size: 0.85em;
   color: var(--ink);
@@ -2299,25 +2311,25 @@ button.skill:hover,
 
 .prose pre {
   margin-bottom: var(--s-5);
-  padding: var(--s-4);
+  padding: var(--s-4) var(--s-5);
   overflow-x: auto;
-  border: 1px solid var(--rule-2);
+  border-radius: var(--radius);
   background-color: var(--surface);
+  box-shadow: inset 0 0 0 1px var(--rule);
   line-height: 1.6;
 }
 
 .prose pre code {
   overflow-wrap: normal;
   padding: 0;
-  border: none;
   background: none;
   font-size: var(--t-sm);
 }
 
 .prose blockquote {
-  padding: var(--s-3) var(--s-5);
-  border-left: 2px solid var(--accent);
-  background-color: var(--surface);
+  padding: var(--s-4) var(--s-5);
+  border-radius: var(--radius);
+  background-color: var(--accent-soft);
   color: var(--ink);
 }
 
@@ -2331,8 +2343,9 @@ button.skill:hover,
   max-width: 100%;
   margin-block: var(--s-5) var(--s-6);
   overflow-x: auto;
-  border: 1px solid var(--rule-2);
+  border-radius: var(--radius);
   background-color: var(--surface);
+  box-shadow: inset 0 0 0 1px var(--rule);
 }
 
 .prose table {
@@ -2344,16 +2357,16 @@ button.skill:hover,
 
 .prose th,
 .prose td {
-  padding: 0.7rem var(--s-4);
+  padding: 0.75rem var(--s-4);
   text-align: left;
   border-bottom: 1px solid var(--rule);
 }
 
 .prose th {
-  border-bottom-color: var(--rule-2);
   font-family: var(--font-mono);
   font-size: var(--t-mono);
-  font-weight: 400;
+  font-weight: 500;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--ink-3);
   white-space: nowrap;
@@ -2386,7 +2399,8 @@ button.skill:hover,
 .prose td img {
   width: 100%;
   margin: 0;
-  border: none;
+  border-radius: 0.625rem;
+  box-shadow: none;
 }
 
 /* ─── Media ─── */
@@ -2397,8 +2411,9 @@ button.skill:hover,
   max-width: 100%;
   height: auto;
   margin: var(--s-5) auto;
-  border: 1px solid var(--rule-2);
+  border-radius: var(--radius);
   background-color: var(--surface);
+  box-shadow: inset 0 0 0 1px var(--rule);
 }
 
 .project-video-demo {
@@ -2415,10 +2430,11 @@ button.skill:hover,
 
 .prose figcaption,
 .lightbox__caption {
-  margin-top: var(--s-2);
+  margin-top: var(--s-3);
   font-family: var(--font-mono);
   font-size: var(--t-mono);
   line-height: 1.5;
+  text-align: center;
   color: var(--ink-3);
 }
 
@@ -2434,14 +2450,15 @@ button.skill:hover,
   gap: 0.3rem;
   margin-block: var(--s-6);
   padding: var(--s-3);
-  border: 1px solid var(--rule-2);
+  border-radius: var(--radius);
   background-color: var(--surface);
+  box-shadow: inset 0 0 0 1px var(--rule);
   cursor: zoom-in;
-  transition: border-color var(--normal) var(--ease);
+  transition: box-shadow var(--normal) var(--ease);
 }
 
 .pipeline-workflow:hover {
-  border-color: var(--ink-3);
+  box-shadow: inset 0 0 0 1px var(--ink-3);
 }
 
 .pipeline-step {
@@ -2451,14 +2468,14 @@ button.skill:hover,
   align-items: center;
   justify-content: center;
   min-width: 0;
-  padding: 0.55rem 0.4rem;
-  border: 1px solid var(--rule-2);
+  padding: 0.6rem 0.4rem;
+  border-radius: 0.75rem;
   background-color: var(--bg);
   text-align: center;
 }
 
 .pipeline-step--accent {
-  border-color: var(--accent);
+  background-color: var(--accent-soft);
 }
 
 .pipeline-step__num {
@@ -2506,7 +2523,7 @@ button.skill:hover,
 }
 
 /* ─────────────────────────────────────────────────────────────
-   18. Lightbox
+   21. Lightbox
    ───────────────────────────────────────────────────────────── */
 
 .lightbox {
@@ -2522,6 +2539,8 @@ button.skill:hover,
 
 .lightbox::backdrop {
   background-color: var(--overlay);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
 }
 
 .lightbox__content {
@@ -2538,16 +2557,16 @@ button.skill:hover,
   z-index: 1;
   display: grid;
   place-items: center;
-  width: 2.75rem;
-  height: 2.75rem;
-  border: 1px solid var(--rule-2);
-  background-color: var(--surface);
-  color: var(--ink);
-  transition: border-color var(--fast) var(--ease);
+  width: 2.875rem;
+  height: 2.875rem;
+  border-radius: 50%;
+  background-color: var(--ink);
+  color: var(--bg);
+  transition: transform var(--fast) var(--ease);
 }
 
 .lightbox__close:hover {
-  border-color: var(--ink);
+  transform: scale(1.06);
 }
 
 .lightbox__figure {
@@ -2563,13 +2582,12 @@ button.skill:hover,
   max-width: min(100%, 1400px);
   max-height: 80dvh;
   object-fit: contain;
-  border: 1px solid var(--rule-2);
+  border-radius: var(--radius);
   box-shadow: var(--shade);
 }
 
 .lightbox__caption {
   max-width: 64ch;
-  text-align: center;
 }
 
 .pipeline-workflow--enlarged {
@@ -2578,6 +2596,9 @@ button.skill:hover,
   box-shadow: var(--shade);
 }
 
+/* ─────────────────────────────────────────────────────────────
+   22. Case study on wider and narrower viewports
+   ───────────────────────────────────────────────────────────── */
 
 @media (min-width: 640px) {
   .brief {
@@ -2592,21 +2613,12 @@ button.skill:hover,
   .pager {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-
-  .pager__link {
-    border-bottom: none;
-  }
-
-  .pager__link + .pager__link {
-    border-left: 1px solid var(--rule-2);
-    padding-left: var(--s-5);
-  }
 }
 
 @media (min-width: 1100px) {
   /* Content on the left, aligned with the title; contents on the right. */
   .case-body {
-    grid-template-columns: minmax(0, 1fr) 14rem;
+    grid-template-columns: minmax(0, 1fr) 15rem;
     gap: var(--s-8);
   }
 
@@ -2628,21 +2640,24 @@ button.skill:hover,
 
   .toc .label {
     margin-bottom: var(--s-3);
+    padding-left: 0.85rem;
   }
 
   .toc__list {
-    border-left: 1px solid var(--rule-2);
+    display: grid;
+    gap: 2px;
   }
 
   .toc__list a {
     display: block;
-    margin-left: -1px;
-    padding: 0.4rem var(--s-4);
-    border-left: 2px solid transparent;
+    padding: 0.45rem 0.85rem;
+    border-radius: 0.75rem;
     font-size: var(--t-sm);
     line-height: 1.4;
     color: var(--ink-3);
-    transition: color var(--fast) var(--ease);
+    transition:
+      background-color var(--fast) var(--ease),
+      color var(--fast) var(--ease);
   }
 
   .toc__list a:hover {
@@ -2650,13 +2665,18 @@ button.skill:hover,
   }
 
   .toc__list a.is-active {
-    border-left-color: var(--accent);
+    background-color: var(--surface);
+    box-shadow: inset 0 0 0 1px var(--rule);
     color: var(--ink);
     font-weight: 500;
   }
 }
 
 @media (max-width: 639px) {
+  .actions .btn {
+    flex: 1 1 auto;
+  }
+
   .prose th {
     white-space: normal;
   }
@@ -2678,10 +2698,16 @@ button.skill:hover,
     justify-content: center;
     transform: rotate(90deg);
   }
+
+  .pager__link--next {
+    align-items: flex-start;
+    text-align: left;
+  }
 }
 
+
 /* ─────────────────────────────────────────────────────────────
-   Motion & print
+   23. Motion & print
    ───────────────────────────────────────────────────────────── */
 
 @media (prefers-reduced-motion: reduce) {
