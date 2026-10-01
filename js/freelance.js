@@ -201,15 +201,35 @@ function initPlayer() {
   const button = player?.querySelector(".player__play");
   if (!video || !button) return;
 
+  // Both ways in land with the video in the middle of the screen, rather
+  // than the section's top under the header. Smooth unless reduced motion
+  // (the root's scroll-behavior decides). Measured without the reveal's
+  // offset, which is still on when coming from the hero.
+  const center = () => {
+    const shift = new DOMMatrix(getComputedStyle(player).transform).m42;
+    const rect = video.getBoundingClientRect();
+    window.scrollTo({ top: window.scrollY + rect.top - shift + (rect.height - window.innerHeight) / 2 });
+  };
+
+  document.querySelectorAll('a[href="#video"]').forEach((link) => {
+    link.addEventListener("click", (event) => {
+      event.preventDefault();
+      history.pushState(null, "", "#video");
+      center();
+      button.focus({ preventScroll: true });
+    });
+  });
+
   video.controls = false;
   button.hidden = false;
   button.addEventListener("click", () => {
+    center();
     button.hidden = true;
     video.controls = true;
     video.play().catch(() => {
       // Playback refused (data saver, codec…): the native controls stay.
     });
-    video.focus();
+    video.focus({ preventScroll: true });
   });
 }
 
