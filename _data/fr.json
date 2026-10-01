@@ -34,31 +34,32 @@
   },
   "hero": {
     "name": "Talvin Ackbaraly",
-    "kicker": "vision par ordinateur · IA · calcul GPU",
-    "intro": "Étudiant ingénieur à l'EPITA, majeure Image. De la segmentation d'archives de la BnF au portage CUDA d'algorithmes temps réel.",
-    "status": "disponible · stage de fin d'études de 6 mois dès février 2027",
-    "ctaWork": "voir-les-projets",
-    "ctaContact": "contact",
+    "role": "Élève ingénieur à l'EPITA, majeure Image",
+    "status": "Disponible pour un stage de 6 mois dès février 2027",
+    "leadStrong": "Vision par ordinateur, IA et calcul GPU.",
+    "lead": "Je conçois des pipelines d'image complets, du prototype en Python jusqu'au portage CUDA.",
+    "ctaWork": "Voir les projets",
+    "ctaContact": "Me contacter",
     "cvBtn": "CV",
-    "cvUrl": "/assets/cv-talvin-ackbaraly-fr.pdf",
-    "terminal": {
-      "user": "talvin",
-      "host": "epita",
-      "enterHint": "entrée"
-    }
+    "cvUrl": "/assets/cv-talvin-ackbaraly-fr.pdf"
   },
   "projects": {
-    "index": "01",
     "title": "Projets sélectionnés",
     "secondaryTitle": "Autres réalisations",
-    "codeLabel": "Code",
     "publicRepo": "GitHub",
-    "privateRepo": "non public",
+    "privateRepo": "Code non public",
+    "stripLabel": "Les six projets en un coup d'œil",
+    "read": "Lire l'étude de cas",
+    "cursor": "Lire l'étude",
+    "sourceCode": "Code source",
+    "teamOf": "équipe de",
+    "pair": "binôme",
     "items": [
       {
         "id": "pfee-bnf",
         "name": "PFEE — BNF",
         "title": "Segmentation et classification d'illustrations patrimoniales",
+        "short": "Segmentation d'illustrations patrimoniales",
         "tagline": "Détection automatique d'illustrations dans des documents patrimoniaux numérisés, en partenariat avec la BNF.",
         "highlights": ["illustrations", "BNF"],
         "thumbnail": "/assets/projects/pfee-bnf/thumbnail-16x9.webp",
@@ -70,6 +71,7 @@
           "YOLO"
         ],
         "period": "8 mois (en cours)",
+        "team": 4,
         "featured": true,
         "github": null
       },
@@ -77,6 +79,7 @@
         "id": "alpr",
         "name": "ALPR",
         "title": "Reconnaissance automatique de plaques d'immatriculation",
+        "short": "Lecture de plaques, sans deep learning",
         "tagline": "Système ALPR complet sans Deep Learning (vision classique + machine learning), avec benchmarks rigoureux Python vs C++.",
         "highlights": ["sans Deep Learning", "Python vs C++"],
         "thumbnail": "/assets/projects/alpr/thumbnail-16x9.webp",
@@ -88,13 +91,16 @@
           "Machine Learning"
         ],
         "period": "5 semaines",
+        "team": 2,
         "featured": true,
-        "github": null
+        "github": null,
+        "focus": "72%"
       },
       {
         "id": "irgpu",
         "name": "IRGPU",
         "title": "Détection de mouvement vidéo — portage GPU",
+        "short": "Détection de mouvement, portage CUDA",
         "tagline": "Portage CPU → GPU d'un algorithme temps réel avec un gain de performance de ×24 via CUDA.",
         "highlights": ["×24", "CUDA"],
         "thumbnail": "/assets/projects/irgpu/thumbnail-16x9.webp",
@@ -106,6 +112,7 @@
           "GPU Computing"
         ],
         "period": "4 semaines",
+        "team": 4,
         "featured": true,
         "github": null
       },
@@ -113,6 +120,7 @@
         "id": "medviz",
         "name": "MedViz",
         "title": "Prédiction médicale & visualisation 3D",
+        "short": "Prédiction médicale et visualisation 3D",
         "tagline": "Pipeline complet de prédiction de la FVC à partir de scanners CT pulmonaires, avec visualisation 3D dans le navigateur.",
         "highlights": ["prédiction de la FVC", "visualisation 3D"],
         "thumbnail": "/assets/projects/medviz/thumbnail-16x9.webp",
@@ -124,13 +132,16 @@
           "Docker"
         ],
         "period": "1 mois",
+        "team": 4,
         "featured": true,
-        "github": "https://github.com/talvinckb/Medviz"
+        "github": "https://github.com/talvinckb/Medviz",
+        "focus": "76%"
       },
       {
         "id": "vtk-itk",
         "name": "VTK-ITK",
         "title": "Recalage & suivi longitudinal de tumeur cérébrale",
+        "short": "Suivi longitudinal de tumeur cérébrale",
         "tagline": "Alignement 3D d'IRM cérébrales (ITK) et segmentation tumorale avec visualisation multi-vues (VTK + PyQt6) — quantification de l'évolution d'un gliome.",
         "highlights": ["segmentation tumorale", "gliome"],
         "thumbnail": "/assets/projects/vtk-itk/thumbnail-16x9.webp",
@@ -143,6 +154,7 @@
           "Matplotlib"
         ],
         "period": "3 semaines",
+        "team": 4,
         "featured": true,
         "github": "https://github.com/Axthauvin/vtk-itk-project"
       },
@@ -150,6 +162,7 @@
         "id": "pogl",
         "name": "POGL",
         "title": "Simulation de fluide temps réel",
+        "short": "Simulation de fluide temps réel",
         "tagline": "Moteur SPH 3D temps réel, 75 000 particules à 60 FPS — physique GPU via compute shaders et rendu de surface SSFR.",
         "highlights": ["75 000 particules", "60 FPS"],
         "thumbnail": "/assets/projects/pogl/thumbnail-16x9.webp",
@@ -161,8 +174,10 @@
           "GLSL"
         ],
         "period": "1 mois",
+        "team": 2,
         "featured": true,
-        "github": "https://github.com/talvinckb/OpenGL-Water-Simulation"
+        "github": "https://github.com/talvinckb/OpenGL-Water-Simulation",
+        "focus": "66%"
       },
       {
         "id": "l-system",
@@ -228,7 +243,6 @@
     ]
   },
   "background": {
-    "index": "02",
     "title": "Parcours",
     "experienceTitle": "Expériences",
     "educationTitle": "Formation",
@@ -236,10 +250,12 @@
     "extras": [
       "Anglais — certifié TOEIC"
     ],
+    "now": "En cours",
     "experiences": [
       {
         "id": "freelance",
         "title": "Développeur full-stack",
+        "note": "en parallèle des études",
         "type": "En parallèle des études",
         "company": "Freelance",
         "period": "Sept. 2026 — aujourd'hui",
@@ -290,6 +306,7 @@
       },
       {
         "institution": "Université du Québec à Chicoutimi",
+        "short": "UQAC",
         "location": "Canada",
         "degree": "Échange académique — semestre S4",
         "period": "Janv. — Mai 2024",
@@ -305,7 +322,6 @@
     ]
   },
   "skills": {
-    "index": "03",
     "title": "Compétences",
     "usedIn": "Utilisé dans",
     "groups": [
@@ -439,7 +455,6 @@
     ]
   },
   "contact": {
-    "index": "04",
     "label": "Contact",
     "title": "Un stage en vision, IA ou calcul GPU ? Parlons-en.",
     "text": "Stage de fin d'études de 6 mois, à partir de février 2027.",

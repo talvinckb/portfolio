@@ -34,31 +34,32 @@
   },
   "hero": {
     "name": "Talvin Ackbaraly",
-    "kicker": "computer vision · AI · GPU computing",
-    "intro": "Engineering student at EPITA, Image major. From segmenting the BnF's archives to CUDA ports of real-time algorithms.",
-    "status": "available · 6-month final-year internship from February 2027",
-    "ctaWork": "see-the-work",
-    "ctaContact": "contact",
+    "role": "Engineering student at EPITA, Image major",
+    "status": "Available for a 6-month internship from February 2027",
+    "leadStrong": "Computer vision, AI and GPU computing.",
+    "lead": "I build complete image pipelines, from the Python prototype to the CUDA port.",
+    "ctaWork": "See the work",
+    "ctaContact": "Get in touch",
     "cvBtn": "CV",
-    "cvUrl": "/assets/cv-talvin-ackbaraly-en.pdf",
-    "terminal": {
-      "user": "talvin",
-      "host": "epita",
-      "enterHint": "enter"
-    }
+    "cvUrl": "/assets/cv-talvin-ackbaraly-en.pdf"
   },
   "projects": {
-    "index": "01",
     "title": "Selected projects",
     "secondaryTitle": "Other work",
-    "codeLabel": "Code",
     "publicRepo": "GitHub",
-    "privateRepo": "not public",
+    "privateRepo": "Code not public",
+    "stripLabel": "The six projects at a glance",
+    "read": "Read the case study",
+    "cursor": "Read it",
+    "sourceCode": "Source code",
+    "teamOf": "team of",
+    "pair": "pair",
     "items": [
       {
         "id": "pfee-bnf",
         "name": "PFEE — BNF",
         "title": "Segmentation & classification of heritage illustrations",
+        "short": "Segmentation of heritage illustrations",
         "tagline": "Automatic detection of illustrations in digitized heritage documents, in partnership with the BNF.",
         "highlights": ["illustrations", "BNF"],
         "thumbnail": "/assets/projects/pfee-bnf/thumbnail-16x9.webp",
@@ -70,6 +71,7 @@
           "YOLO"
         ],
         "period": "8 months (ongoing)",
+        "team": 4,
         "featured": true,
         "github": null
       },
@@ -77,6 +79,7 @@
         "id": "alpr",
         "name": "ALPR",
         "title": "Automatic license plate recognition",
+        "short": "Plate reading, without deep learning",
         "tagline": "Complete ALPR system without deep learning (classical vision + machine learning), with rigorous Python vs C++ benchmarks.",
         "highlights": ["without deep learning", "Python vs C++"],
         "thumbnail": "/assets/projects/alpr/thumbnail-16x9.webp",
@@ -88,13 +91,16 @@
           "Machine Learning"
         ],
         "period": "5 weeks",
+        "team": 2,
         "featured": true,
-        "github": null
+        "github": null,
+        "focus": "72%"
       },
       {
         "id": "irgpu",
         "name": "IRGPU",
         "title": "Real-time video motion detection — GPU port",
+        "short": "Motion detection, CUDA port",
         "tagline": "CPU → GPU port of a real-time algorithm achieving a ×24 performance gain via CUDA.",
         "highlights": ["×24", "CUDA"],
         "thumbnail": "/assets/projects/irgpu/thumbnail-16x9.webp",
@@ -106,6 +112,7 @@
           "GPU Computing"
         ],
         "period": "4 weeks",
+        "team": 4,
         "featured": true,
         "github": null
       },
@@ -113,6 +120,7 @@
         "id": "medviz",
         "name": "MedViz",
         "title": "Medical prediction & 3D visualization",
+        "short": "Medical prediction and 3D visualization",
         "tagline": "Full FVC prediction pipeline from pulmonary CT scans, with 3D visualization in the browser.",
         "highlights": ["FVC prediction", "3D visualization"],
         "thumbnail": "/assets/projects/medviz/thumbnail-16x9.webp",
@@ -124,13 +132,16 @@
           "Docker"
         ],
         "period": "1 month",
+        "team": 4,
         "featured": true,
-        "github": "https://github.com/talvinckb/Medviz"
+        "github": "https://github.com/talvinckb/Medviz",
+        "focus": "76%"
       },
       {
         "id": "vtk-itk",
         "name": "VTK-ITK",
         "title": "Brain tumor registration & longitudinal tracking",
+        "short": "Longitudinal brain tumor tracking",
         "tagline": "3D MRI alignment (ITK) with tumor segmentation and interactive multi-view visualization (VTK + PyQt6) — quantifying the evolution of a glioma.",
         "highlights": ["tumor segmentation", "glioma"],
         "thumbnail": "/assets/projects/vtk-itk/thumbnail-16x9.webp",
@@ -143,6 +154,7 @@
           "Matplotlib"
         ],
         "period": "3 weeks",
+        "team": 4,
         "featured": true,
         "github": "https://github.com/Axthauvin/vtk-itk-project"
       },
@@ -150,6 +162,7 @@
         "id": "pogl",
         "name": "POGL",
         "title": "Real-time fluid simulation",
+        "short": "Real-time fluid simulation",
         "tagline": "Real-time 3D SPH engine, 75,000 particles at 60 FPS — GPU physics via compute shaders and SSFR surface rendering.",
         "highlights": ["75,000 particles", "60 FPS"],
         "thumbnail": "/assets/projects/pogl/thumbnail-16x9.webp",
@@ -161,8 +174,10 @@
           "GLSL"
         ],
         "period": "1 month",
+        "team": 2,
         "featured": true,
-        "github": "https://github.com/talvinckb/OpenGL-Water-Simulation"
+        "github": "https://github.com/talvinckb/OpenGL-Water-Simulation",
+        "focus": "66%"
       },
       {
         "id": "l-system",
@@ -228,7 +243,6 @@
     ]
   },
   "background": {
-    "index": "02",
     "title": "Background",
     "experienceTitle": "Experience",
     "educationTitle": "Education",
@@ -236,10 +250,12 @@
     "extras": [
       "English — TOEIC certified"
     ],
+    "now": "Current",
     "experiences": [
       {
         "id": "freelance",
         "title": "Full-stack developer",
+        "note": "alongside studies",
         "type": "Alongside studies",
         "company": "Freelance",
         "period": "Sept. 2026 — present",
@@ -290,6 +306,7 @@
       },
       {
         "institution": "Université du Québec à Chicoutimi",
+        "short": "UQAC",
         "location": "Canada",
         "degree": "Academic exchange — semester 4",
         "period": "Jan. — May 2024",
@@ -305,7 +322,6 @@
     ]
   },
   "skills": {
-    "index": "03",
     "title": "Skills",
     "usedIn": "Used in",
     "groups": [
@@ -439,7 +455,6 @@
     ]
   },
   "contact": {
-    "index": "04",
     "label": "Contact",
     "title": "An internship in vision, AI or GPU computing? Let's talk.",
     "text": "6-month final-year internship, starting February 2027.",
