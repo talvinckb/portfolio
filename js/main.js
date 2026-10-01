@@ -130,8 +130,7 @@ function initStack() {
 
 function initCursor() {
   const stack = document.querySelector("[data-stack]");
-  const targets = document.querySelectorAll("[data-cursor]");
-  if (!stack || !targets.length) return;
+  if (!stack || !stack.querySelector("[data-cursor]")) return;
   if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
 
   const badge = document.createElement("div");
@@ -145,6 +144,8 @@ function initCursor() {
 
   const ease = prefersReducedMotion() ? 1 : 0.2;
   let x = 0, y = 0, tx = 0, ty = 0, frame = 0;
+  let shown = false;
+  let pointer = null; // last known position, null once it left the window
 
   function move() {
     x += (tx - x) * ease;
@@ -156,22 +157,44 @@ function initCursor() {
     frame = Math.abs(tx - x) + Math.abs(ty - y) > 0.3 ? requestAnimationFrame(move) : 0;
   }
 
-  targets.forEach((el) => {
-    el.addEventListener("pointerenter", (e) => {
-      x = tx = e.clientX;
-      y = ty = e.clientY;
-      move();
-      badge.classList.add("is-visible");
-    }, { signal });
-    el.addEventListener("pointermove", (e) => {
-      tx = e.clientX;
-      ty = e.clientY;
-      if (!frame) frame = requestAnimationFrame(move);
-    }, { signal });
-    el.addEventListener("pointerleave", () => badge.classList.remove("is-visible"), { signal });
-  });
-  // A wheel scroll moves the visual out from under a still pointer.
-  window.addEventListener("scroll", () => badge.classList.remove("is-visible"), { passive: true, signal });
+  /* One question decides everything: is the pointer over a visual right
+     now? Asked on every move, and again after a scroll, which slides the
+     visuals under a still pointer without any pointer event. */
+  function update(over) {
+    if (over && !shown) {
+      // Appears where the pointer is, rather than gliding in from afar.
+      x = tx;
+      y = ty;
+      badge.style.translate = `${x}px ${y}px`;
+    }
+    shown = over;
+    badge.classList.toggle("is-visible", over);
+    if (over && !frame) frame = requestAnimationFrame(move);
+  }
+
+  document.addEventListener("pointermove", (e) => {
+    if (e.pointerType !== "mouse") return;
+    pointer = { x: e.clientX, y: e.clientY };
+    tx = e.clientX;
+    ty = e.clientY;
+    update(Boolean(e.target.closest?.("[data-cursor]")));
+  }, { passive: true, signal });
+
+  let queued = false;
+  window.addEventListener("scroll", () => {
+    if (queued || !pointer) return;
+    queued = true;
+    requestAnimationFrame(() => {
+      queued = false;
+      const el = document.elementFromPoint(pointer.x, pointer.y);
+      update(Boolean(el?.closest("[data-cursor]")));
+    });
+  }, { passive: true, signal });
+
+  document.documentElement.addEventListener("pointerleave", () => {
+    pointer = null;
+    update(false);
+  }, { signal });
 }
 
 /* ─────────────────────────────────────────────────────────────
