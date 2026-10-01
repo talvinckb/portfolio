@@ -48,6 +48,8 @@
   "projects": {
     "title": "Selected projects",
     "secondaryTitle": "Other work",
+    "showOthers": "Show",
+    "hideOthers": "Hide",
     "publicRepo": "GitHub",
     "privateRepo": "Code not public",
     "read": "Read the case study",

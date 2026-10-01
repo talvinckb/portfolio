@@ -1012,6 +1012,7 @@ picture {
   @media (prefers-reduced-motion: no-preference) {
     .section__title,
     .others,
+    .path__tabs,
     .path__group,
     .skills {
       animation: enter linear both;
@@ -1229,15 +1230,78 @@ picture {
 /* ─── Other work ─── */
 
 .others {
-  display: grid;
-  gap: 1.25rem;
   margin-top: clamp(3.5rem, 8vw, 6.5rem);
+}
+
+/* The whole line opens it, the pill only says so. */
+.others__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-4);
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--rule);
+  list-style: none;
+  cursor: pointer;
+}
+
+.others__head::-webkit-details-marker {
+  display: none;
+}
+
+.others__count {
+  color: var(--accent-text);
+}
+
+.others__toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  padding: 0.6em 0.9em 0.6em 1em;
+  border-radius: 99px;
+  box-shadow: inset 0 0 0 1px var(--rule);
+  font-size: 0.85rem;
+  line-height: 1;
+  color: var(--ink-2);
+  transition:
+    box-shadow var(--fast) var(--ease),
+    color var(--fast) var(--ease);
+}
+
+.others__head:hover .others__toggle {
+  box-shadow: inset 0 0 0 1px var(--ink);
+  color: var(--ink);
+}
+
+.others__toggle .icon {
+  transition: transform 0.4s var(--ease-out);
+}
+
+.others[open] .others__toggle .icon {
+  transform: rotate(180deg);
+}
+
+.others[open] .others__show,
+.others:not([open]) .others__hide {
+  display: none;
 }
 
 .others__list {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  border-top: 1px solid var(--rule);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .others[open] .others__list {
+    animation: unfold 0.5s var(--ease-out);
+  }
+}
+
+@keyframes unfold {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
 }
 
 .other {
@@ -1326,6 +1390,63 @@ picture {
 
 .path__list {
   border-top: 1px solid var(--rule);
+}
+
+/* Tabbed (main.js): the titles leave the groups for one column of tabs,
+   and only the chosen group shows beside them. */
+.path.is-tabbed {
+  grid-template-columns: minmax(0, 0.34fr) minmax(0, 1fr);
+  align-items: start;
+  gap: clamp(1.5rem, 4vw, 4.5rem);
+}
+
+.path.is-tabbed .path__group {
+  grid-column: 2;
+  grid-row: 1;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.path.is-tabbed .path__aside {
+  display: none;
+}
+
+.path__tabs {
+  position: sticky;
+  top: calc(var(--nav-h) + 2.25rem);
+  display: grid;
+  justify-items: start;
+  gap: var(--s-4);
+}
+
+.path__tab {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 0.625rem;
+  color: var(--ink-3);
+  transition: color var(--fast) var(--ease);
+}
+
+.path__tab:hover {
+  color: var(--ink-2);
+}
+
+.path__tab[aria-selected="true"] {
+  color: var(--ink);
+}
+
+.path__tab .path__count {
+  padding-top: 0.15em;
+  color: inherit;
+}
+
+.path__tab[aria-selected="true"] .path__count {
+  color: var(--accent-text);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .path.is-tabbed .path__list {
+    animation: unfold 0.5s var(--ease-out);
+  }
 }
 
 .row {
@@ -1815,6 +1936,23 @@ button.skill:hover,
     gap: var(--s-3);
   }
 
+  .path.is-tabbed {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--s-5);
+  }
+
+  .path.is-tabbed .path__group {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .path__tabs {
+    position: static;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-3) var(--s-5);
+  }
+
   /* One skill per line takes a whole screen on a phone: they flow as
      pills instead, a few lines per group. */
   .skills__groups {
@@ -1908,7 +2046,29 @@ button.skill:hover,
   }
 
   .mail {
-    padding-left: 1.25rem;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    width: 100%;
+    gap: 0.75rem;
+    padding: 0.375rem 0.375rem 0.375rem 1.25rem;
+    font-size: min(1.1rem, 4.4vw);
+  }
+
+  .mail__action {
+    flex: none;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0;
+  }
+
+  .mail__label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
   }
 }
 

@@ -5,7 +5,7 @@
 {% macro contactBlock(t, site) %}
   <button class="mail" type="button" data-copy="{{ site.email }}" data-copy-kind="email" title="{{ t.a11y.copyEmail }}">
     <span class="mail__address">{{ site.email }}</span>
-    <span class="mail__action">{{ icon.copy(14) }}{{ t.contact.copy }}</span>
+    <span class="mail__action">{{ icon.copy(14) }}<span class="mail__label">{{ t.contact.copy }}</span></span>
   </button>
 
   <div class="contact__row">

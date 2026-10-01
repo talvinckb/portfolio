@@ -198,6 +198,67 @@ function initCursor() {
 }
 
 /* ─────────────────────────────────────────────────────────────
+   Background — experience or education, one at a time
+   ───────────────────────────────────────────────────────────── */
+
+/* Both groups are in the page; this reveals the tabs, hides the group not
+   chosen and lets the arrow keys move between tabs. The skills panel links
+   to experiences only, so following one brings that tab back. */
+function initPathTabs() {
+  const path = document.querySelector("[data-path]");
+  const list = path?.querySelector("[data-path-tabs]");
+  if (!list) return;
+
+  const tabs = [...list.querySelectorAll('[role="tab"]')];
+  const panels = tabs.map((tab) => document.getElementById(tab.getAttribute("aria-controls")));
+  const signal = binding();
+
+  panels.forEach((panel, i) => {
+    panel.setAttribute("role", "tabpanel");
+    panel.setAttribute("aria-labelledby", tabs[i].id);
+  });
+
+  function select(index, focus = false) {
+    tabs.forEach((tab, i) => {
+      const on = i === index;
+      tab.setAttribute("aria-selected", String(on));
+      tab.tabIndex = on ? 0 : -1;
+      panels[i].hidden = !on;
+    });
+    if (focus) tabs[index].focus();
+  }
+
+  list.addEventListener("click", (e) => {
+    const tab = e.target.closest('[role="tab"]');
+    if (tab) select(tabs.indexOf(tab));
+  }, { signal });
+
+  list.addEventListener("keydown", (e) => {
+    const current = tabs.indexOf(document.activeElement);
+    const last = tabs.length - 1;
+    const next = {
+      ArrowRight: current + 1,
+      ArrowDown: current + 1,
+      ArrowLeft: current - 1,
+      ArrowUp: current - 1,
+      Home: 0,
+      End: last,
+    }[e.key];
+    if (next === undefined || current < 0) return;
+    e.preventDefault();
+    select((next + tabs.length) % tabs.length, true);
+  }, { signal });
+
+  document.addEventListener("click", (e) => {
+    if (e.target.closest('[data-skills] a[href="#background"]')) select(0);
+  }, { signal });
+
+  list.hidden = false;
+  path.classList.add("is-tabbed");
+  select(Math.max(0, tabs.findIndex((tab) => tab.getAttribute("aria-selected") === "true")));
+}
+
+/* ─────────────────────────────────────────────────────────────
    Skills — point at a skill, see the projects that used it
    ───────────────────────────────────────────────────────────── */
 
@@ -261,5 +322,6 @@ boot(() => {
   initStack();
   initStackNav();
   initCursor();
+  initPathTabs();
   initSkills();
 });

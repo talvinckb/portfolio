@@ -48,6 +48,8 @@
   "projects": {
     "title": "Projets sélectionnés",
     "secondaryTitle": "Autres réalisations",
+    "showOthers": "Afficher",
+    "hideOthers": "Masquer",
     "publicRepo": "GitHub",
     "privateRepo": "Code non public",
     "read": "Lire l'étude de cas",
