@@ -238,35 +238,85 @@
   },
   "background": {
     "title": "Background",
-    "experienceTitle": "Experience",
-    "educationTitle": "Education",
+    "lede": "Most recent first. My studies are the main branch. Internships, the exchange, the final-year project and freelance work branch off it and merge back. In blue, what is happening now.",
+    "now": "Current",
+    "today": "Today",
     "extrasTitle": "Languages",
     "extras": [
       "English — TOEIC certified"
     ],
-    "now": "Current",
-    "experiences": [
+    "timeline": [
+      {
+        "id": "diploma",
+        "trunk": true,
+        "start": "2027-09",
+        "end": null,
+        "period": "Sept. 2027",
+        "org": "Engineering degree",
+        "role": "End of the engineering cycle at EPITA, Image major",
+        "type": "Education"
+      },
+      {
+        "id": "internship",
+        "start": "2027-02",
+        "end": "2027-08",
+        "period": "Feb. — Aug. 2027",
+        "org": "End-of-studies internship",
+        "role": "6 months in computer vision, AI or GPU computing",
+        "type": "Internship",
+        "link": {
+          "label": "Your team?",
+          "href": "#contact"
+        }
+      },
       {
         "id": "freelance",
-        "title": "Full-stack developer",
-        "note": "alongside studies",
-        "type": "Alongside studies",
-        "company": "Freelance",
+        "start": "2026-09",
+        "end": null,
         "period": "Sept. 2026 — present",
+        "org": "Freelance",
+        "role": "Full-stack developer, alongside studies",
+        "type": "Freelance",
         "description": "Design and development of custom applications for businesses, from requirements gathering to hosting. Done in my spare time: my studies and end-of-studies internship remain my priority.",
         "tags": [
           "Full-Stack",
           "Client relations",
           "Deployment",
           "Hosting"
-        ]
+        ],
+        "link": {
+          "label": "The freelance page",
+          "href": "/freelance/"
+        }
+      },
+      {
+        "id": "pfee",
+        "start": "2026-05",
+        "end": "2027-01",
+        "period": "May 2026 — Jan. 2027",
+        "org": "Final-year project with the BnF",
+        "role": "Team of 4",
+        "type": "Project",
+        "description": "Automatically finding and classifying the illustrations in digitised documents of the Bibliothèque nationale de France. I own the whole detection part: dataset preparation, training and evaluation of the YOLO model.",
+        "tags": [
+          "Deep Learning",
+          "YOLO",
+          "PyTorch",
+          "Python"
+        ],
+        "link": {
+          "label": "Read the case study",
+          "href": "/en/projects/pfee-bnf/"
+        }
       },
       {
         "id": "studiocanal",
-        "title": "Full-stack & DevOps developer",
-        "type": "Internship",
-        "company": "Studiocanal",
+        "start": "2025-09",
+        "end": "2026-01",
         "period": "Sept. 2025 — Jan. 2026",
+        "org": "Studiocanal",
+        "role": "Full-stack & DevOps developer",
+        "type": "Internship",
         "description": "Development of an internal web platform for managing movie catalog rights, contracts and distribution modules. Built full-stack features and set up CI/CD cloud infrastructure on AWS within an Agile team.",
         "tags": [
           "Full-Stack",
@@ -277,41 +327,50 @@
         ]
       },
       {
+        "id": "uqac",
+        "start": "2024-01",
+        "end": "2024-05",
+        "period": "Jan. — May 2024",
+        "org": "UQAC",
+        "role": "Academic exchange in Canada, semester 4",
+        "type": "Exchange",
+        "description": "A semester at the Université du Québec à Chicoutimi."
+      },
+      {
         "id": "hitachi",
-        "title": "IT consultant",
-        "type": "Internship",
-        "company": "Hitachi Solutions France",
+        "start": "2023-06",
+        "end": "2023-07",
         "period": "June — July 2023",
+        "org": "Hitachi Solutions France",
+        "role": "IT consultant",
+        "type": "Internship",
         "description": "Design and development of a management application prototype (suppliers, products, contracts) for enterprise client Sonepar, using Django and the Agile SAFe methodology.",
         "tags": [
           "Django",
           "Agile SAFe",
           "Prototype"
         ]
-      }
-    ],
-    "education": [
+      },
       {
-        "institution": "EPITA",
-        "location": "Paris, France",
-        "degree": "Master of Engineering — preparatory cycle, engineering cycle and Image specialization",
+        "id": "epita",
+        "trunk": true,
+        "start": "2022-09",
+        "end": "2027-08",
         "period": "2022 — 2027",
+        "org": "EPITA",
+        "role": "Master of Engineering, preparatory cycle to Image major, in Paris",
+        "type": "Education",
         "description": "Image processing and synthesis, artificial intelligence, GPU computing."
       },
       {
-        "institution": "Université du Québec à Chicoutimi",
-        "short": "UQAC",
-        "location": "Canada",
-        "degree": "Academic exchange — semester 4",
-        "period": "Jan. — May 2024",
-        "description": null
-      },
-      {
-        "institution": "Lycée Notre Dame La Riche",
-        "location": "Tours, France",
-        "degree": "High school diploma (Baccalauréat) with Honours (mention Bien) — majors in mathematics & computer science",
+        "id": "lycee",
+        "trunk": true,
+        "start": "2019-09",
+        "end": "2022-07",
         "period": "2019 — 2022",
-        "description": null
+        "org": "Lycée Notre Dame La Riche",
+        "role": "High school diploma with Honours, majors in mathematics & computer science, in Tours",
+        "type": "Education"
       }
     ]
   },

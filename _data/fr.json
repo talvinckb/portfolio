@@ -238,35 +238,85 @@
   },
   "background": {
     "title": "Parcours",
-    "experienceTitle": "Expériences",
-    "educationTitle": "Formation",
+    "lede": "Du plus récent au plus ancien. Les études forment la branche principale. Les stages, l'échange, le projet de fin d'études et le freelance s'en détachent puis la rejoignent. En bleu, ce qui est en cours.",
+    "now": "En cours",
+    "today": "Aujourd'hui",
     "extrasTitle": "Langues",
     "extras": [
       "Anglais — certifié TOEIC"
     ],
-    "now": "En cours",
-    "experiences": [
+    "timeline": [
+      {
+        "id": "diploma",
+        "trunk": true,
+        "start": "2027-09",
+        "end": null,
+        "period": "Sept. 2027",
+        "org": "Diplôme d'ingénieur",
+        "role": "Fin du cycle ingénieur à l'EPITA, majeure Image",
+        "type": "Formation"
+      },
+      {
+        "id": "internship",
+        "start": "2027-02",
+        "end": "2027-08",
+        "period": "Févr. — Août 2027",
+        "org": "Stage de fin d'études",
+        "role": "6 mois en vision par ordinateur, IA ou calcul GPU",
+        "type": "Stage",
+        "link": {
+          "label": "Votre équipe ?",
+          "href": "#contact"
+        }
+      },
       {
         "id": "freelance",
-        "title": "Développeur full-stack",
-        "note": "en parallèle des études",
-        "type": "En parallèle des études",
-        "company": "Freelance",
+        "start": "2026-09",
+        "end": null,
         "period": "Sept. 2026 — aujourd'hui",
+        "org": "Freelance",
+        "role": "Développeur full-stack, en parallèle des études",
+        "type": "Freelance",
         "description": "Conception et développement d'applications sur mesure pour des entreprises, du recueil des besoins jusqu'à l'hébergement. Activité menée sur mon temps libre, mes études et mon stage de fin d'études restant ma priorité.",
         "tags": [
           "Full-Stack",
           "Relation client",
           "Déploiement",
           "Hébergement"
-        ]
+        ],
+        "link": {
+          "label": "La page freelance",
+          "href": "/freelance/"
+        }
+      },
+      {
+        "id": "pfee",
+        "start": "2026-05",
+        "end": "2027-01",
+        "period": "Mai 2026 — Janv. 2027",
+        "org": "PFEE avec la BnF",
+        "role": "Projet de fin d'études, en équipe de 4",
+        "type": "Projet",
+        "description": "Repérer et classer automatiquement les illustrations dans les documents numérisés de la Bibliothèque nationale de France. Je m'occupe de toute la partie détection : préparation du dataset, entraînement et évaluation du modèle YOLO.",
+        "tags": [
+          "Deep Learning",
+          "YOLO",
+          "PyTorch",
+          "Python"
+        ],
+        "link": {
+          "label": "Lire l'étude de cas",
+          "href": "/projects/pfee-bnf/"
+        }
       },
       {
         "id": "studiocanal",
-        "title": "Développeur full-stack & DevOps",
-        "type": "Stage",
-        "company": "Studiocanal",
+        "start": "2025-09",
+        "end": "2026-01",
         "period": "Sept. 2025 — Janv. 2026",
+        "org": "Studiocanal",
+        "role": "Développeur full-stack & DevOps",
+        "type": "Stage",
         "description": "Développement d'une plateforme interne dédiée à la gestion des droits, contrats et modules de distribution du catalogue de films. Conception de fonctionnalités full-stack et mise en place de l'infrastructure CI/CD sur AWS au sein d'une équipe Agile.",
         "tags": [
           "Full-Stack",
@@ -277,41 +327,50 @@
         ]
       },
       {
+        "id": "uqac",
+        "start": "2024-01",
+        "end": "2024-05",
+        "period": "Janv. — Mai 2024",
+        "org": "UQAC",
+        "role": "Échange académique au Canada, semestre S4",
+        "type": "Échange",
+        "description": "Un semestre à l'Université du Québec à Chicoutimi."
+      },
+      {
         "id": "hitachi",
-        "title": "Consultant en informatique",
-        "type": "Stage",
-        "company": "Hitachi Solutions France",
+        "start": "2023-06",
+        "end": "2023-07",
         "period": "Juin — Juillet 2023",
+        "org": "Hitachi Solutions France",
+        "role": "Consultant en informatique",
+        "type": "Stage",
         "description": "Conception et développement d'un prototype d'application de gestion (fournisseurs, produits, contrats) pour le client Sonepar, avec Django et la méthodologie Agile SAFe.",
         "tags": [
           "Django",
           "Agile SAFe",
           "Prototype"
         ]
-      }
-    ],
-    "education": [
+      },
       {
-        "institution": "EPITA",
-        "location": "Paris",
-        "degree": "Diplôme d'ingénieur — cycle préparatoire, ingénieur et spécialisation Image",
+        "id": "epita",
+        "trunk": true,
+        "start": "2022-09",
+        "end": "2027-08",
         "period": "2022 — 2027",
+        "org": "EPITA",
+        "role": "Cycle préparatoire, cycle ingénieur et majeure Image, à Paris",
+        "type": "Formation",
         "description": "Traitement et synthèse d'images, intelligence artificielle, calcul GPU."
       },
       {
-        "institution": "Université du Québec à Chicoutimi",
-        "short": "UQAC",
-        "location": "Canada",
-        "degree": "Échange académique — semestre S4",
-        "period": "Janv. — Mai 2024",
-        "description": null
-      },
-      {
-        "institution": "Lycée Notre Dame La Riche",
-        "location": "Tours",
-        "degree": "Baccalauréat mention Bien — spécialités mathématiques et NSI",
+        "id": "lycee",
+        "trunk": true,
+        "start": "2019-09",
+        "end": "2022-07",
         "period": "2019 — 2022",
-        "description": null
+        "org": "Lycée Notre Dame La Riche",
+        "role": "Baccalauréat mention Bien, spécialités mathématiques et NSI, à Tours",
+        "type": "Formation"
       }
     ]
   },

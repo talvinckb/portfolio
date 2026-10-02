@@ -1012,8 +1012,7 @@ picture {
   @media (prefers-reduced-motion: no-preference) {
     .section__title,
     .others,
-    .path__tabs,
-    .path__group,
+    .path,
     .skills {
       animation: enter linear both;
       animation-timeline: view();
@@ -1351,15 +1350,10 @@ picture {
 }
 
 /* ─────────────────────────────────────────────────────────────
-   13. Background — a sticky group title, then large rows
+   13. Background — a branch graph beside compact rows
    ───────────────────────────────────────────────────────────── */
 
 .path {
-  display: grid;
-  gap: clamp(3.5rem, 8vw, 7rem);
-}
-
-.path__group {
   display: grid;
   grid-template-columns: minmax(0, 0.34fr) minmax(0, 1fr);
   align-items: start;
@@ -1370,173 +1364,181 @@ picture {
   position: sticky;
   top: calc(var(--nav-h) + 2.25rem);
   display: grid;
-  gap: 0.625rem;
+  gap: var(--s-6);
 }
 
-.path__title {
-  font-family: var(--font-display);
-  font-size: clamp(1.6rem, 1.1rem + 1.4vw, 2.4rem);
-  line-height: 1;
-  letter-spacing: -0.035em;
-}
-
-.path__count {
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
-  font-weight: 500;
-  line-height: 1;
-  color: var(--accent-text);
-}
-
-.path__list {
-  border-top: 1px solid var(--rule);
-}
-
-/* Tabbed (main.js): the titles leave the groups for one column of tabs,
-   and only the chosen group shows beside them. */
-.path.is-tabbed {
-  grid-template-columns: minmax(0, 0.34fr) minmax(0, 1fr);
-  align-items: start;
-  gap: clamp(1.5rem, 4vw, 4.5rem);
-}
-
-.path.is-tabbed .path__group {
-  grid-column: 2;
-  grid-row: 1;
-  grid-template-columns: minmax(0, 1fr);
-}
-
-.path.is-tabbed .path__aside {
-  display: none;
-}
-
-.path__tabs {
-  position: sticky;
-  top: calc(var(--nav-h) + 2.25rem);
-  display: grid;
-  justify-items: start;
-  gap: var(--s-4);
-}
-
-.path__tab {
-  display: inline-flex;
-  align-items: flex-start;
-  gap: 0.625rem;
-  color: var(--ink-3);
-  transition: color var(--fast) var(--ease);
-}
-
-.path__tab:hover {
+.path__lede {
+  max-width: 34ch;
   color: var(--ink-2);
 }
 
-.path__tab[aria-selected="true"] {
-  color: var(--ink);
+.path__extras {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--s-2) var(--s-4);
 }
 
-.path__tab .path__count {
-  padding-top: 0.15em;
-  color: inherit;
-}
-
-.path__tab[aria-selected="true"] .path__count {
-  color: var(--accent-text);
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .path.is-tabbed .path__list {
-    animation: unfold 0.5s var(--ease-out);
-  }
-}
-
-.row {
+/* The graph lives in a left gutter that main.js widens to fit its lanes;
+   the rows keep the rest. */
+.tl {
+  --tl-gutter: 2rem;
+  --tl-past: color-mix(in oklab, var(--ink-3) 55%, var(--bg));
   position: relative;
-  display: grid;
-  grid-template-columns: 7.5rem minmax(0, 1fr) auto;
-  grid-template-areas: "when main side";
-  gap: 0.875rem 2.25rem;
-  margin-inline: -1.75rem;
-  padding: 2.125rem 1.75rem;
-  border-radius: 1.625rem;
+}
+
+.tl__list {
+  border-top: 1px solid var(--rule);
+}
+
+.tl__item,
+.tl__now {
+  position: relative;
+  padding-left: var(--tl-gutter);
+}
+
+.tl__card {
+  position: relative;
+  border-radius: 1.25rem;
   transition:
     background-color 0.45s var(--ease),
     box-shadow 0.45s var(--ease);
 }
 
-.row::after {
+.tl__card::after {
   content: "";
   position: absolute;
-  right: 1.75rem;
+  right: 1.25rem;
   bottom: 0;
-  left: 1.75rem;
+  left: 1.25rem;
   height: 1px;
   background-color: var(--rule);
   transition: opacity 0.3s;
 }
 
-.row:hover {
+details.tl__card:hover,
+details.tl__card[open] {
   background-color: var(--surface);
   box-shadow: var(--shade);
 }
 
-.row:hover::after {
+details.tl__card:hover::after,
+details.tl__card[open]::after {
   opacity: 0;
 }
 
-.row__when {
+.tl__head {
+  display: grid;
+  grid-template-columns: 8.25rem minmax(0, 1fr) auto 1.75rem;
+  grid-template-areas:
+    "when org side toggle"
+    "when role side toggle";
+  align-items: baseline;
+  gap: 0.3rem 1.75rem;
+  padding: 1.375rem 1.25rem;
+  list-style: none;
+}
+
+summary.tl__head {
+  cursor: pointer;
+}
+
+summary.tl__head::-webkit-details-marker {
+  display: none;
+}
+
+.tl__when {
   grid-area: when;
   display: grid;
-  align-content: start;
-  gap: 0.25rem;
-  padding-top: 0.6em;
+  gap: 0.2rem;
   font-family: var(--font-mono);
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   line-height: 1.3;
   color: var(--ink-3);
 }
 
-.row__when span:first-child {
+.tl__when span:first-child {
   color: var(--ink);
 }
 
-.row__main {
-  grid-area: main;
-  display: grid;
-  gap: 0.75rem;
-  min-width: 0;
-}
-
-.row__org {
+.tl__org {
+  grid-area: org;
   font-family: var(--font-display);
-  font-size: clamp(2rem, 1.2rem + 2.6vw, 3.6rem);
-  line-height: 0.95;
-  letter-spacing: -0.05em;
+  font-size: clamp(1.35rem, 1rem + 1.1vw, 1.9rem);
+  line-height: 1.05;
+  letter-spacing: -0.035em;
   transition: transform 0.6s var(--ease-out);
 }
 
-.row:hover .row__org {
-  transform: translateX(8px);
+@media (hover: hover) {
+  details.tl__card:hover .tl__org {
+    transform: translateX(6px);
+  }
 }
 
-.row__role {
-  font-size: 1.08rem;
-  font-weight: 500;
-  line-height: 1.35;
+.tl__role {
+  grid-area: role;
+  color: var(--ink-2);
 }
 
-.row__desc {
+.tl__item.is-next .tl__org {
+  color: var(--ink-2);
+}
+
+.tl__side {
+  grid-area: side;
+  align-self: start;
+}
+
+.tl__toggle {
+  grid-area: toggle;
+  align-self: start;
+  display: grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px var(--rule);
+  color: var(--ink-2);
+  transition:
+    box-shadow var(--fast) var(--ease),
+    color var(--fast) var(--ease);
+}
+
+.tl__toggle .icon {
+  transition: transform 0.4s var(--ease-out);
+}
+
+summary.tl__head:hover .tl__toggle {
+  box-shadow: inset 0 0 0 1px var(--ink);
+  color: var(--ink);
+}
+
+details.tl__card[open]:not(.is-closing) .tl__toggle .icon {
+  transform: rotate(45deg);
+}
+
+/* Lined up under the title. */
+.tl__body {
+  display: grid;
+  justify-items: start;
+  gap: 0.875rem;
+  margin-top: -0.375rem;
+  padding: 0 1.25rem 1.625rem calc(1.25rem + 8.25rem + 1.75rem);
+}
+
+.tl__desc {
   max-width: 60ch;
   color: var(--ink-2);
 }
 
-.row__tags {
+.tl__tags {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
-  padding-top: 2px;
 }
 
-.row__tags li {
+.tl__tags li {
   padding: 0.6em 0.85em;
   border-radius: 99px;
   box-shadow: inset 0 0 0 1px var(--rule);
@@ -1546,9 +1548,155 @@ picture {
   color: var(--ink-2);
 }
 
-.row__side {
-  grid-area: side;
-  padding-top: 0.5em;
+@media (prefers-reduced-motion: no-preference) {
+  /* main.js animates the row's height; the text fades in behind it. */
+  details.tl__card[open] .tl__body {
+    animation: unfold 0.4s var(--ease-out);
+  }
+
+  details.tl__card.is-closing .tl__body {
+    opacity: 0;
+    transition: opacity 0.15s var(--ease);
+  }
+}
+
+/* "Today": a dashed rule across the rows, where solid turns dotted. */
+.tl__now {
+  display: flex;
+  align-items: center;
+  gap: var(--s-4);
+  padding-block: 1.375rem;
+  padding-right: 1.25rem;
+}
+
+.tl__now-label {
+  padding-left: 1.25rem;
+  font-family: var(--font-mono);
+  font-size: var(--t-mono);
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  text-transform: uppercase;
+  color: var(--accent-text);
+}
+
+.tl__now::after {
+  content: "";
+  flex: 1;
+  border-top: 1px dashed var(--rule-2);
+}
+
+/* ─── The graph (main.js) ─── */
+
+.tl__svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.tl__line {
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  transition: opacity 0.3s var(--ease);
+}
+
+.tl__line.is-past {
+  stroke: var(--tl-past);
+}
+
+.tl__line.is-live {
+  stroke: var(--accent);
+}
+
+.tl__line.is-next {
+  stroke: var(--rule-2);
+  stroke-dasharray: 0.5 6;
+}
+
+/* Each dot is ringed with the background, so lines stop short of it. */
+.tl__dot {
+  stroke: var(--bg);
+  stroke-width: 3;
+  transition: opacity 0.3s var(--ease);
+}
+
+.tl__dot.is-past {
+  fill: var(--tl-past);
+}
+
+.tl__dot.is-live,
+.tl__dot.is-now {
+  fill: var(--accent);
+}
+
+.tl__dot.is-next {
+  fill: var(--bg);
+  stroke: var(--rule-2);
+  stroke-width: 2;
+}
+
+.tl__dot.is-now {
+  stroke: var(--accent-soft);
+  stroke-width: 8;
+  paint-order: stroke;
+}
+
+/* Pointing at a row: everything else steps back. */
+.tl.is-focus .tl__svg [data-for]:not(.is-on) {
+  opacity: 0.25;
+}
+
+/* Drawn in once, oldest first, when the timeline first shows. */
+@media (prefers-reduced-motion: no-preference) {
+  .tl__line:not(.is-next) {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    transition:
+      stroke-dashoffset 0.9s var(--ease-out) var(--d, 0s),
+      opacity 0.3s var(--ease);
+  }
+
+  .tl__line.is-next,
+  .tl__dot {
+    opacity: 0;
+    transition: opacity 0.5s var(--ease) calc(var(--d, 0s) + 0.3s);
+  }
+
+  .tl.is-in .tl__line:not(.is-next) {
+    stroke-dashoffset: 0;
+  }
+
+  .tl.is-in .tl__line.is-next,
+  .tl.is-in .tl__dot {
+    opacity: 1;
+  }
+
+  /* Once drawn, the stagger goes: hovering must answer at once. */
+  .tl.is-settled .tl__line,
+  .tl.is-settled .tl__dot {
+    transition-delay: 0s;
+    transition-duration: 0.25s;
+  }
+}
+
+/* Without JavaScript: one plain line and a dot per row. */
+.tl:not(.is-drawn) .tl__list {
+  background: linear-gradient(var(--rule-2), var(--rule-2)) 0.5rem 0 / 2px 100% no-repeat;
+}
+
+.tl:not(.is-drawn) .tl__item::before {
+  content: "";
+  position: absolute;
+  top: 2rem;
+  left: calc(0.5rem - 4px);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: var(--ink-3);
 }
 
 .badge {
@@ -1587,12 +1735,10 @@ picture {
   }
 }
 
-.path__extras {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: var(--s-2) var(--s-4);
-  padding-top: 1.75rem;
+.badge--next {
+  box-shadow: none;
+  outline: 1px dashed var(--rule-2);
+  outline-offset: -1px;
 }
 
 /* ─────────────────────────────────────────────────────────────
@@ -1924,33 +2070,17 @@ button.skill:hover,
     border-top: 1px solid var(--rule);
   }
 
-  .path__group {
+  .path {
     grid-template-columns: minmax(0, 1fr);
-    gap: var(--s-3);
+    gap: var(--s-6);
   }
 
   .path__aside {
     position: static;
-    display: flex;
-    align-items: baseline;
-    gap: var(--s-3);
   }
 
-  .path.is-tabbed {
-    grid-template-columns: minmax(0, 1fr);
-    gap: var(--s-5);
-  }
-
-  .path.is-tabbed .path__group {
-    grid-column: 1;
-    grid-row: 2;
-  }
-
-  .path__tabs {
-    position: static;
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--s-3) var(--s-5);
+  .path__lede {
+    max-width: 60ch;
   }
 
   /* One skill per line takes a whole screen on a phone: they flow as
@@ -2020,29 +2150,49 @@ button.skill:hover,
     border-top: 1px solid var(--rule);
   }
 
-  .row {
-    grid-template-columns: minmax(0, 1fr) auto;
+  /* Rows fold to three short lines: dates and badge, title, role. */
+  .tl__head {
+    grid-template-columns: minmax(0, 1fr) auto auto;
     grid-template-areas:
-      "when side"
-      "main main";
-    margin-inline: -1rem;
-    padding: 1.625rem 1rem;
+      "when side toggle"
+      "org org org"
+      "role role role";
+    align-items: center;
+    gap: 0.375rem 0.625rem;
+    padding: 1.125rem 0.75rem;
   }
 
-  .row::after {
-    right: 1rem;
-    left: 1rem;
+  .tl__card::after {
+    right: 0.75rem;
+    left: 0.75rem;
   }
 
-  .row__when {
+  .tl__when {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5em;
-    padding-top: 0.5em;
   }
 
-  .row__when span + span::before {
+  .tl__when span + span::before {
     content: "— ";
+  }
+
+  .tl__org {
+    margin-top: 0.125rem;
+  }
+
+  .tl__role {
+    font-size: 0.95rem;
+    line-height: 1.45;
+  }
+
+  .tl__body {
+    margin-top: -0.25rem;
+    padding: 0 0.75rem 1.25rem;
+  }
+
+  .tl__now-label {
+    padding-left: 0.75rem;
   }
 
   .mail {
@@ -2847,7 +2997,7 @@ button.skill:hover,
   .card__inner,
   .viewer,
   .brief,
-  .row,
+  .tl__item,
   .contact {
     position: static;
     break-inside: avoid;

@@ -145,81 +145,77 @@
       </section>
 
       <!-- ─── Background ─── -->
+      {# Most recent first, drawn as a branch graph: the studies are the
+         trunk, everything else forks off it and merges back. main.js draws
+         the lines from the dates; without JavaScript the list stands alone.
+         What is past, current or planned is decided at build time. #}
+      {% set now = buildDate.slice(0, 7) %}
+      {% set timeline = t.background.timeline %}
       <section id="background" class="section wrap" aria-labelledby="background-title">
         <h2 class="section__title" id="background-title">{{ t.background.title }}</h2>
 
-        {# One group at a time: main.js reveals the tabs and hides the other
-           group. Without JavaScript both simply follow each other. #}
-        <div class="path" data-path>
-          <div class="path__tabs" role="tablist" aria-label="{{ t.background.title }}" data-path-tabs hidden>
-            {% for key, label, n in [
-              ["experience", t.background.experienceTitle, t.background.experiences | length],
-              ["education", t.background.educationTitle, t.background.education | length]
-            ] %}
-              <button class="path__tab" type="button" role="tab" id="tab-{{ key }}" aria-controls="path-{{ key }}" aria-selected="{{ loop.first }}"{% if not loop.first %} tabindex="-1"{% endif %}>
-                <span class="path__title">{{ label }}</span><span class="path__count">{{ two(n) }}</span>
-              </button>
-            {% endfor %}
+        <div class="path">
+          <div class="path__aside">
+            <p class="path__lede">{{ t.background.lede }}</p>
+            <p class="path__extras">
+              <span class="label">{{ t.background.extrasTitle }}</span>{% for item in t.background.extras %}<span>{{ item }}</span>{% endfor %}
+            </p>
           </div>
 
-          <div class="path__group" id="path-experience">
-            <div class="path__aside">
-              <h3 class="path__title">{{ t.background.experienceTitle }}</h3>
-              <p class="path__count">{{ two(t.background.experiences | length) }}</p>
-            </div>
-            <ol class="path__list" role="list">
-              {% for exp in t.background.experiences %}
-                {% set when = exp.period.split(" — ") %}
-                <li class="row">
-                  <p class="row__when"><span>{{ when[0] }}</span>{% if when[1] %}<span>{{ when[1] }}</span>{% endif %}</p>
-                  <div class="row__main">
-                    <h4 class="row__org">{{ exp.company }}</h4>
-                    <p class="row__role">{{ exp.title }}{% if exp.note %}, {{ exp.note }}{% endif %}</p>
-                    <p class="row__desc">{{ exp.description }}</p>
-                    <ul class="row__tags" role="list">
-                      {% for tag in exp.tags %}<li>{{ tag }}</li>{% endfor %}
-                    </ul>
-                  </div>
-                  <p class="row__side">
-                    {% if loop.first %}
+          <div class="tl" data-tl>
+            <ol class="tl__list" role="list">
+              {% for item in timeline %}
+                {% set prev = timeline[loop.index0 - 1] if not loop.first else null %}
+                {% if item.start <= now and (not prev or prev.start > now) %}
+                  <li class="tl__now" data-start="{{ now }}"><span class="tl__now-label" data-tl-dot>{{ t.background.today }}</span></li>
+                {% endif %}
+
+                {% if item.start > now %}{% set state = "next" %}
+                {% elif not item.end or item.end >= now %}{% set state = "live" %}
+                {% else %}{% set state = "past" %}{% endif %}
+                {% set when = item.period.split(" — ") %}
+
+                {% set head %}
+                  <span class="tl__when"><span>{{ when[0] }}</span>{% if when[1] %}<span>{{ when[1] }}</span>{% endif %}</span>
+                  <h3 class="tl__org" data-tl-dot>{{ item.org }}</h3>
+                  <span class="tl__role">{{ item.role }}</span>
+                  <span class="tl__side">
+                    {% if state == "live" %}
                       <span class="badge badge--live"><span class="badge__dot" aria-hidden="true"></span>{{ t.background.now }}</span>
                     {% else %}
-                      <span class="badge">{{ exp.type }}</span>
+                      <span class="badge{% if state == 'next' %} badge--next{% endif %}">{{ item.type }}</span>
                     {% endif %}
-                  </p>
+                  </span>
+                {% endset %}
+
+                <li class="tl__item is-{{ state }}" id="tl-{{ item.id }}" data-start="{{ item.start }}" data-end="{{ item.end or '' }}"{% if item.trunk %} data-trunk{% endif %}>
+                  {% if item.description or item.tags %}
+                    <details class="tl__card">
+                      <summary class="tl__head">
+                        {{ head | safe }}
+                        <span class="tl__toggle" aria-hidden="true">{{ icon.plus(14) }}</span>
+                      </summary>
+                      <div class="tl__body">
+                        {% if item.description %}<p class="tl__desc">{{ item.description }}</p>{% endif %}
+                        {% if item.tags %}
+                          <ul class="tl__tags" role="list">
+                            {% for tag in item.tags %}<li>{{ tag }}</li>{% endfor %}
+                          </ul>
+                        {% endif %}
+                        {% if item.link %}<a class="link" href="{{ item.link.href }}">{{ item.link.label }}{{ icon.arrowRight(13) }}</a>{% endif %}
+                      </div>
+                    </details>
+                  {% else %}
+                    <div class="tl__card">
+                      <div class="tl__head">{{ head | safe }}</div>
+                      {% if item.link %}
+                        <div class="tl__body"><a class="link" href="{{ item.link.href }}">{{ item.link.label }}{{ icon.arrowRight(13) }}</a></div>
+                      {% endif %}
+                    </div>
+                  {% endif %}
                 </li>
               {% endfor %}
             </ol>
-          </div>
-
-          <div class="path__group" id="path-education">
-            <div class="path__aside">
-              <h3 class="path__title">{{ t.background.educationTitle }}</h3>
-              <p class="path__count">{{ two(t.background.education | length) }}</p>
-            </div>
-            <div>
-              <ol class="path__list" role="list">
-                {% for edu in t.background.education %}
-                  {% set when = edu.period.split(" — ") %}
-                  <li class="row">
-                    <p class="row__when"><span>{{ when[0] }}</span>{% if when[1] %}<span>{{ when[1] }}</span>{% endif %}</p>
-                    <div class="row__main">
-                      <h4 class="row__org">{{ edu.short | default(edu.institution) }}</h4>
-                      <p class="row__role">{{ edu.degree }}</p>
-                      {% if edu.description %}
-                        <p class="row__desc">{{ edu.description }}</p>
-                      {% elif edu.short %}
-                        <p class="row__desc">{{ edu.institution }}</p>
-                      {% endif %}
-                    </div>
-                    <p class="row__side"><span class="badge">{{ edu.location }}</span></p>
-                  </li>
-                {% endfor %}
-              </ol>
-              <p class="path__extras">
-                <span class="label">{{ t.background.extrasTitle }}</span>{% for item in t.background.extras %}<span>{{ item }}</span>{% endfor %}
-              </p>
-            </div>
           </div>
         </div>
       </section>
@@ -258,7 +254,7 @@
                     <ul class="skills__links" role="list">
                       {% for uid in item.used %}
                         {% set p = t.projects.items | byId(uid) %}
-                        {% set exp = t.background.experiences | byId(uid) %}
+                        {% set exp = timeline | byId(uid) %}
                         <li style="--i: {{ loop.index0 }}">
                           {% if p and p.featured %}
                             <a href="#p-{{ p.id }}">{{ p.name }}</a>
@@ -267,7 +263,7 @@
                           {% elif p %}
                             <span>{{ p.name }}</span>
                           {% elif exp %}
-                            <a href="#background">{{ exp.company }}</a>
+                            <a href="#tl-{{ exp.id }}">{{ exp.org }}</a>
                           {% endif %}
                         </li>
                       {% endfor %}
