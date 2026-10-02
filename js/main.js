@@ -76,6 +76,25 @@ function initStack() {
   window.addEventListener("scroll", onScroll, { passive: true, signal });
   window.addEventListener("resize", onScroll, { passive: true, signal });
   paint();
+
+  // A link to a card (from the skills) can't rely on the browser: below the
+  // stack every card is stuck in the same spot, so it would always land on
+  // the last one. Scroll to where the card itself comes to rest instead.
+  document.addEventListener("click", (e) => {
+    const a = e.target.closest('a[href^="#p-"]');
+    const card = a && document.getElementById(a.hash.slice(1));
+    if (!card || getComputedStyle(card).position !== "sticky") return;
+    if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    e.preventDefault();
+    card.style.position = "static";
+    const rest = card.getBoundingClientRect().top + window.scrollY;
+    card.style.position = "";
+    window.scrollTo({
+      top: rest - parseFloat(getComputedStyle(card).top),
+      behavior: prefersReducedMotion() ? "auto" : "smooth",
+    });
+    history.pushState(history.state, "", a.hash);
+  }, { signal });
 }
 
 /* ─────────────────────────────────────────────────────────────
