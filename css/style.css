@@ -572,6 +572,44 @@ picture {
   outline-color: var(--fl-violet);
 }
 
+/* Now and then a glint crosses the yellow, behind the text: enough to
+   catch the eye, never a constant blink. */
+@media (prefers-reduced-motion: no-preference) {
+  .nav__freelance {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .nav__freelance::after {
+    content: "";
+    position: absolute;
+    inset: 0 auto 0 0;
+    z-index: -1;
+    width: 55%;
+    background: linear-gradient(
+      105deg,
+      transparent 15%,
+      rgb(255 255 255 / 0.85) 50%,
+      transparent 85%
+    );
+    translate: -110% 0;
+    animation: glint 5.5s cubic-bezier(0.45, 0, 0.3, 1) 1.2s infinite;
+    pointer-events: none;
+  }
+}
+
+@keyframes glint {
+  0% {
+    translate: -110% 0;
+  }
+
+  16%,
+  100% {
+    translate: 210% 0;
+  }
+}
+
 .nav__lang,
 .nav__theme {
   display: grid;
