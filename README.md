@@ -121,7 +121,7 @@ suit la préférence système.
 |---|---|---|
 | Hero — rôle, disponibilité, nom, accroche, actions | — | `hero` |
 | Projets sélectionnés + autres réalisations | `#work` | `projects` |
-| Parcours — expériences, formation | `#background` | `background` |
+| Parcours — graphe en branches, du plus récent au plus ancien | `#background` | `background` |
 | Compétences — chaque compétence mène aux projets qui l'utilisent | `#skills` | `skills` |
 | Contact | `#contact` | `contact` |
 
@@ -143,11 +143,31 @@ recouverte par la suivante (`--p`, de 0 à 1) et le CSS la fait reculer et
 s'estomper. Un badge « Lire l'étude » suit le pointeur sur les visuels
 (souris uniquement). La variante claire ou sombre du visuel suit le thème.
 
+### Le parcours
+
+`background.timeline` liste tout le parcours, **du plus récent au plus
+ancien** (l'ordre du fichier est celui de la page). Chaque entrée a un
+`start` et un `end` au format `AAAA-MM` (`end: null` = toujours en cours),
+un `period` affiché tel quel, `org`, `role`, `type` (la pastille), et en
+option `description`, `tags` et `link`. Une entrée avec `description` ou
+`tags` se déplie au clic.
+
+- `trunk: true` place l'entrée sur la branche principale (les études) ;
+  toute autre entrée est une branche qui part du tronc sous sa ligne et le
+  rejoint au-dessus de la première ligne qui ne commence pas après sa fin.
+- Passé, en cours et à venir se décident **au build** d'après la date du
+  jour (`buildDate`), qui place aussi la ligne « Aujourd'hui » : après ce
+  repère, les traits passent en pointillés. Un nouveau déploiement suffit à
+  le faire avancer.
+- `main.js` dessine le graphe en SVG à partir des dates et des positions
+  mesurées, et attribue les couloirs lui-même (les branches courtes près du
+  tronc). Sans JavaScript, la liste reste lisible avec un simple trait.
+
 ### Compétences → projets
 
 Chaque compétence de `skills.groups[].items` porte la liste `used` des `id`
 où elle a servi : un projet (`projects.items[].id`) ou une expérience
-(`background.experiences[].id`). Un projet avec étude de cas renvoie vers
+(`background.timeline[].id`). Un projet avec étude de cas renvoie vers
 elle, un projet public vers GitHub. Une compétence dont `used` est vide
 s'affiche sans être cliquable — mieux vaut ça qu'un lien inventé. Survoler
 une compétence ouvre la liste de ses projets ; sur écran tactile, la liste
