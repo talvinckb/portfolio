@@ -39,6 +39,105 @@ function initHeroOnce() {
 }
 
 /* ─────────────────────────────────────────────────────────────
+   Hero — the lens: under the pointer the name keeps only its contours
+   ───────────────────────────────────────────────────────────── */
+
+/* The outline copy of the name is masked to a circle (CSS). This moves the
+   circle after the mouse, opens it while the mouse is over the name, and
+   passes it once across the name after the entrance, so that touch screens
+   see it as well. */
+function initHeroLens() {
+  const name = document.querySelector("[data-lens]");
+  if (!name || prefersReducedMotion()) return;
+
+  const signal = binding();
+  const em = () => parseFloat(getComputedStyle(name).fontSize);
+  let x = 0, y = 0, tx = 0, ty = 0, frame = 0;
+  let open = false;
+  let sweep = 0; // the entrance pass, while it runs
+
+  function glide() {
+    x += (tx - x) * 0.2;
+    y += (ty - y) * 0.2;
+    name.style.setProperty("--lens-x", `${x.toFixed(1)}px`);
+    name.style.setProperty("--lens-y", `${y.toFixed(1)}px`);
+    frame = Math.abs(tx - x) + Math.abs(ty - y) > 0.3 ? requestAnimationFrame(glide) : 0;
+  }
+
+  function aim(nx, ny, jump) {
+    tx = nx;
+    ty = ny;
+    if (jump) {
+      x = nx;
+      y = ny;
+    }
+    if (!frame) frame = requestAnimationFrame(glide);
+  }
+
+  function setRadius(r) {
+    open = r > 0;
+    if (open) name.classList.add("is-lensing");
+    name.style.setProperty("--lens-r", `${r}px`);
+  }
+
+  // The masks cost a repaint per frame: they go once the circle has closed.
+  name.addEventListener("transitionend", (e) => {
+    if (e.propertyName === "--lens-r" && !open) name.classList.remove("is-lensing");
+  }, { signal });
+
+  document.addEventListener("pointermove", (e) => {
+    if (e.pointerType !== "mouse" || sweep) return;
+    const box = name.getBoundingClientRect();
+    const px = e.clientX - box.left;
+    const py = e.clientY - box.top;
+    const over = px >= 0 && py >= 0 && px <= box.width && py <= box.height;
+    if (over && !open) {
+      aim(px, py, true);
+      setRadius(em() * 0.42);
+    } else if (over) {
+      aim(px, py, false);
+    } else if (open) {
+      setRadius(0);
+    }
+  }, { passive: true, signal });
+
+  document.documentElement.addEventListener("pointerleave", () => {
+    if (open && !sweep) setRadius(0);
+  }, { signal });
+
+  // The entrance pass: once per visit, after the letters have risen, left
+  // to right between the two lines.
+  if (document.documentElement.classList.contains("hero-played")) return;
+  const start = setTimeout(() => {
+    const box = name.getBoundingClientRect();
+    if (open || box.bottom < 0 || box.top > window.innerHeight) return;
+    const r = em() * 0.55;
+    const t0 = performance.now();
+    const duration = 2100;
+    aim(-r, box.height / 2, true);
+    setRadius(r);
+    const step = (now) => {
+      const k = Math.min(1, (now - t0) / duration);
+      const eased = k < 0.5 ? 2 * k * k : 1 - (-2 * k + 2) ** 2 / 2;
+      aim(-r + eased * (box.width + 2 * r), box.height / 2, true);
+      if (k < 1) {
+        sweep = requestAnimationFrame(step);
+      } else {
+        sweep = 0;
+        setRadius(0);
+      }
+    };
+    sweep = requestAnimationFrame(step);
+  }, 1500);
+
+  onTeardown(() => {
+    clearTimeout(start);
+    cancelAnimationFrame(sweep);
+    cancelAnimationFrame(frame);
+  });
+}
+
+/* ─────────────────────────────────────────────────────────────
    Work — the card being covered shrinks back
    ───────────────────────────────────────────────────────────── */
 
@@ -86,15 +185,108 @@ function initStack() {
     if (!card || getComputedStyle(card).position !== "sticky") return;
     if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
     e.preventDefault();
+    bringCard(card);
+    history.pushState(history.state, "", a.hash);
+  }, { signal });
+
+  // Previous and next card: the arrows around a card's index.
+  document.addEventListener("click", (e) => {
+    const btn = e.target.closest(".card__step");
+    if (!btn) return;
+    const target = cards[cards.indexOf(btn.closest(".card")) + Number(btn.dataset.step)];
+    if (target) bringCard(target);
+  }, { signal });
+}
+
+/* ─────────────────────────────────────────────────────────────
+   ← and → walk the page, one stop at a time
+   ───────────────────────────────────────────────────────────── */
+
+/* The stops, in order: the hero, each card where it comes to rest, the
+   other work, then the background, the skills and the contact. The keys
+   go to the first stop below the page's position, or the last one above.
+   In the carousel, the cards are one stop and the keys slide the row
+   first, card by card, before leaving it. */
+function initPageSteps() {
+  const stack = document.querySelector("[data-stack]");
+  const cards = [...(stack?.querySelectorAll(".card") ?? [])];
+  const signal = binding();
+  const TOLERANCE = 8;
+  let aimed = null; // where the last key sent the page, while it gets there
+
+  const padding = () => parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
+  const top = (el) => el.getBoundingClientRect().top + window.scrollY;
+  const carousel = () => stack && getComputedStyle(stack).overflowX === "auto";
+
+  function cardStop(card) {
+    if (getComputedStyle(card).position !== "sticky") return top(card) - padding();
+    card.style.position = "static";
+    const rest = top(card);
+    card.style.position = "";
+    return rest - parseFloat(getComputedStyle(card).top);
+  }
+
+  function stops() {
+    const el = document.scrollingElement || document.documentElement;
+    const max = el.scrollHeight - el.clientHeight;
+    const list = [0];
+    if (carousel()) list.push(top(stack) - padding());
+    else cards.forEach((card) => list.push(cardStop(card)));
+    for (const sel of [".others", "#background", "#skills", "#contact"]) {
+      const node = document.querySelector(sel);
+      if (node) list.push(top(node) - padding());
+    }
+    return [...new Set(list.map((y) => Math.round(Math.min(Math.max(0, y), max))))].sort((a, b) => a - b);
+  }
+
+  // In the carousel: move the row by one card if it can still go that way.
+  function slideRow(dir) {
+    if (!carousel()) return false;
+    const r = stack.getBoundingClientRect();
+    if (r.bottom < window.innerHeight * 0.3 || r.top > window.innerHeight * 0.7) return false;
+    const max = stack.scrollWidth - stack.clientWidth;
+    if ((dir > 0 && stack.scrollLeft >= max - 2) || (dir < 0 && stack.scrollLeft <= 2)) return false;
+    const gap = parseFloat(getComputedStyle(stack).columnGap) || 0;
+    stack.scrollBy({ left: dir * (cards[0].offsetWidth + gap), behavior: prefersReducedMotion() ? "auto" : "smooth" });
+    return true;
+  }
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
+    if (e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
+    if (e.target.closest?.("input, textarea, select, [contenteditable], [data-matrix], .others__list")) return;
+    if (document.body.classList.contains("has-menu-open")) return;
+    const dir = e.key === "ArrowLeft" ? -1 : 1;
+    e.preventDefault();
+    if (slideRow(dir)) return;
+
+    // A key pressed again mid-scroll counts from where the page is going.
+    const from = aimed && performance.now() - aimed.at < 900 ? aimed.y : window.scrollY;
+    const list = stops();
+    const target = dir > 0
+      ? list.find((y) => y > from + TOLERANCE)
+      : list.findLast((y) => y < from - TOLERANCE);
+    if (target === undefined) return;
+    aimed = { y: target, at: performance.now() };
+    window.scrollTo({ top: target, behavior: prefersReducedMotion() ? "auto" : "smooth" });
+  }, { signal });
+}
+
+/* Brings a card to the front. Stuck in the stack, a card sits where every
+   other one sits: scroll to where it comes to rest instead. In the carousel,
+   slide the row to it; anywhere else, scroll to its top. */
+function bringCard(card) {
+  const behavior = prefersReducedMotion() ? "auto" : "smooth";
+  if (getComputedStyle(card).position === "sticky") {
     card.style.position = "static";
     const rest = card.getBoundingClientRect().top + window.scrollY;
     card.style.position = "";
-    window.scrollTo({
-      top: rest - parseFloat(getComputedStyle(card).top),
-      behavior: prefersReducedMotion() ? "auto" : "smooth",
-    });
-    history.pushState(history.state, "", a.hash);
-  }, { signal });
+    window.scrollTo({ top: rest - parseFloat(getComputedStyle(card).top), behavior });
+  } else if (getComputedStyle(card.parentElement).overflowX === "auto") {
+    card.scrollIntoView({ behavior, block: "nearest", inline: "start" });
+  } else {
+    card.scrollIntoView({ behavior, block: "start" });
+  }
 }
 
 /* ─────────────────────────────────────────────────────────────
@@ -454,69 +646,85 @@ function initTimeline() {
 }
 
 /* ─────────────────────────────────────────────────────────────
-   Skills — point at a skill, see the projects that used it
+   Skills — the matrix lights the row and the column pointed at
    ───────────────────────────────────────────────────────────── */
 
-/* Every skill's list of projects is already in the page, one hidden block
-   each; this only chooses which block shows. The last one chosen stays,
-   so the pointer can travel down to its links. Without JavaScript the
-   skills stay a plain list and the panel stays hidden. */
-function initSkills() {
-  const root = document.querySelector("[data-skills]");
-  if (!root) return;
-
-  const skills = [...root.querySelectorAll("button[data-skill]")];
-  const groups = root.querySelector(".skills__groups");
-  const panel = root.querySelector(".skills__uses");
-  const blocks = [...root.querySelectorAll("[data-uses]")];
-  if (!skills.length || !panel) return;
-
-  // Touch screens get a plain list: the panel would open far below the
-  // tapped skill, so nothing is clickable there.
-  if (matchMedia("(hover: none) and (pointer: coarse)").matches) {
-    skills.forEach((skill) => {
-      const label = document.createElement("span");
-      label.className = `${skill.className} skill--static`;
-      label.textContent = skill.textContent;
-      skill.replaceWith(label);
-    });
-    return;
-  }
+/* A row lights up in CSS alone; a column needs its cells gathered. The
+   column headers are links, so the keyboard lights a column on focus. */
+function initMatrix() {
+  const table = document.querySelector("[data-matrix] table");
+  if (!table) return;
 
   const signal = binding();
-
-  function select(id) {
-    panel.classList.toggle("is-open", Boolean(id));
-    skills.forEach((skill) =>
-      skill.setAttribute("aria-pressed", String(skill.dataset.skill === id)),
-    );
-    blocks.forEach((block) => {
-      block.hidden = block.dataset.uses !== id;
-    });
-  }
-
-  skills.forEach((skill) => {
-    skill.addEventListener("pointerenter", () => select(skill.dataset.skill), { signal });
-    skill.addEventListener("focus", () => select(skill.dataset.skill), { signal });
-    skill.addEventListener("click", () => select(skill.dataset.skill), { signal });
+  const columns = new Map();
+  table.querySelectorAll("[data-col]").forEach((cell) => {
+    const key = cell.dataset.col;
+    if (!columns.has(key)) columns.set(key, []);
+    columns.get(key).push(cell);
   });
 
-  // The other skills step back while one is pointed at.
-  groups.addEventListener("pointerover", (e) => {
-    groups.classList.toggle("is-dim", Boolean(e.target.closest("button[data-skill]")));
-  }, { signal });
-  groups.addEventListener("pointerleave", () => groups.classList.remove("is-dim"), { signal });
+  let row = null;
+  let col = null;
 
-  select(null);
+  function point(nextRow, nextCol) {
+    if (nextRow !== row) {
+      row?.classList.remove("is-row");
+      row = nextRow;
+      row?.classList.add("is-row");
+    }
+    if (nextCol !== col) {
+      columns.get(col)?.forEach((cell) => cell.classList.remove("is-col"));
+      col = nextCol;
+      columns.get(col)?.forEach((cell) => cell.classList.add("is-col"));
+    }
+    table.classList.toggle("is-pointing", Boolean(row || col));
+  }
+
+  table.addEventListener("pointerover", (e) => {
+    const cell = e.target.closest("td, th");
+    if (!cell) return;
+    point(cell.closest(".matrix__row"), cell.dataset.col ?? null);
+  }, { signal });
+  table.addEventListener("pointerleave", () => point(null, null), { signal });
+  table.addEventListener("focusin", (e) => {
+    point(null, e.target.closest("[data-col]")?.dataset.col ?? null);
+  }, { signal });
+  table.addEventListener("focusout", () => point(null, null), { signal });
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Skills on a phone — a tap lists the works a skill served in
+   ───────────────────────────────────────────────────────────── */
+
+/* One list open at a time; tapping its pill again closes it. */
+function initSkillset() {
+  const root = document.querySelector("[data-skillset]");
+  if (!root) return;
+  const signal = binding();
+  const pills = [...root.querySelectorAll(".skillset__pill")];
+
+  root.addEventListener("click", (e) => {
+    const pill = e.target.closest(".skillset__pill");
+    if (!pill) return;
+    const open = pill.getAttribute("aria-expanded") !== "true";
+    pills.forEach((other) => {
+      const on = open && other === pill;
+      other.setAttribute("aria-expanded", String(on));
+      document.getElementById(other.getAttribute("aria-controls")).hidden = !on;
+    });
+  }, { signal });
 }
 
 boot(() => {
   initChrome();
+  initHeroLens();
   initHeroOnce();
   initNavScrollSpy();
   initStack();
+  initPageSteps();
   initStackNav();
   initCursor();
   initTimeline();
-  initSkills();
+  initMatrix();
+  initSkillset();
 });

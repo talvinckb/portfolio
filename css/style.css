@@ -161,6 +161,9 @@ ol[role="list"] {
   --accent-soft: rgb(29 74 255 / 0.09);
   --overlay: rgb(242 243 245 / 0.94);
   --shade: 0 40px 80px -40px rgb(13 14 17 / 0.28);
+  /* The backdrop baked into the project thumbnails, behind the cover. */
+  --thumb-top: #fefefe;
+  --thumb-bottom: #f0eeed;
 }
 
 /* ─── Dark ─── */
@@ -180,6 +183,8 @@ ol[role="list"] {
   --accent-soft: rgb(138 162 255 / 0.13);
   --overlay: rgb(8 9 12 / 0.92);
   --shade: 0 40px 80px -40px rgb(0 0 0 / 0.8);
+  --thumb-top: #0a0c17;
+  --thumb-bottom: #121a2e;
 }
 
 /* Without JavaScript the inline script never sets data-theme:
@@ -201,7 +206,9 @@ ol[role="list"] {
     --accent-soft: rgb(138 162 255 / 0.13);
     --overlay: rgb(8 9 12 / 0.92);
     --shade: 0 40px 80px -40px rgb(0 0 0 / 0.8);
-  }
+    --thumb-top: #0a0c17;
+    --thumb-bottom: #121a2e;
+    }
 }
 
 /* ─────────────────────────────────────────────────────────────
@@ -286,6 +293,10 @@ p {
   line-height: 1.4;
   text-transform: uppercase;
   color: var(--ink-3);
+}
+
+.nowrap {
+  white-space: nowrap;
 }
 
 .visually-hidden {
@@ -527,26 +538,39 @@ picture {
   gap: var(--s-2);
 }
 
-/* A piece of /freelance in the header: its yellow, its violet, its
-   typeface and its offset shadow. The door to the other side. */
+/* The door to /freelance. Quiet at rest, with a dot in that page's
+   colours; pointed at, it takes them all: yellow, violet, offset shadow. */
 .nav__freelance {
   display: inline-flex;
   align-items: center;
-  gap: 0.45em;
+  gap: 0.5em;
   height: 2.5rem;
   margin-right: var(--s-2);
-  padding-inline: 1.05rem;
+  padding-inline: 0.9rem 1.05rem;
   border-radius: 99px;
-  background-color: var(--fl-yellow);
-  color: var(--fl-violet-deep);
+  box-shadow: inset 0 0 0 1px var(--rule);
+  color: var(--ink-2);
   font-family: "Bricolage Grotesque", var(--font-sans);
   font-size: 0.92rem;
   font-weight: 700;
   letter-spacing: -0.01em;
   white-space: nowrap;
-  box-shadow: 3px 3px 0 var(--fl-violet);
   transition:
-    transform var(--fast) var(--ease),
+    background-color var(--fast) var(--ease),
+    box-shadow var(--fast) var(--ease),
+    color var(--fast) var(--ease),
+    transform var(--fast) var(--ease);
+}
+
+.nav__freelance-dot {
+  flex: none;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background-color: var(--fl-yellow);
+  box-shadow: 1.5px 1.5px 0 var(--fl-violet);
+  transition:
+    background-color var(--fast) var(--ease),
     box-shadow var(--fast) var(--ease);
 }
 
@@ -554,9 +578,18 @@ picture {
   transition: transform var(--normal) var(--ease);
 }
 
-.nav__freelance:hover {
-  transform: translate(-2px, -2px);
-  box-shadow: 5px 5px 0 var(--fl-violet);
+.nav__freelance:hover,
+.nav__freelance:focus-visible {
+  background-color: var(--fl-yellow);
+  box-shadow: 3px 3px 0 var(--fl-violet);
+  color: var(--fl-violet-deep);
+  transform: translate(-1px, -1px);
+}
+
+.nav__freelance:hover .nav__freelance-dot,
+.nav__freelance:focus-visible .nav__freelance-dot {
+  background-color: var(--fl-violet-deep);
+  box-shadow: none;
 }
 
 .nav__freelance:hover .icon {
@@ -570,44 +603,6 @@ picture {
 
 .nav__freelance:focus-visible {
   outline-color: var(--fl-violet);
-}
-
-/* Now and then a glint crosses the yellow, behind the text: enough to
-   catch the eye, never a constant blink. */
-@media (prefers-reduced-motion: no-preference) {
-  .nav__freelance {
-    position: relative;
-    overflow: hidden;
-    isolation: isolate;
-  }
-
-  .nav__freelance::after {
-    content: "";
-    position: absolute;
-    inset: 0 auto 0 0;
-    z-index: -1;
-    width: 55%;
-    background: linear-gradient(
-      105deg,
-      transparent 15%,
-      rgb(255 255 255 / 0.85) 50%,
-      transparent 85%
-    );
-    translate: -110% 0;
-    animation: glint 5.5s cubic-bezier(0.45, 0, 0.3, 1) 1.2s infinite;
-    pointer-events: none;
-  }
-}
-
-@keyframes glint {
-  0% {
-    translate: -110% 0;
-  }
-
-  16%,
-  100% {
-    translate: 210% 0;
-  }
 }
 
 .nav__lang,
@@ -745,6 +740,14 @@ picture {
   padding-block: var(--s-6) var(--s-7);
   font-size: var(--t-sm);
   color: var(--ink-3);
+}
+
+/* Where the back-to-top button no longer fits in the margin, the footer
+   ends higher, so the button rests below its last line, not on it. */
+@media (max-width: 1339px) {
+  .footer__inner {
+    padding-bottom: calc(var(--s-7) + 2.5rem);
+  }
 }
 
 .footer__links {
@@ -933,14 +936,65 @@ picture {
   }
 }
 
-/* Sized so "Ackbaraly" spans the column at every width. */
+/* Long on wide screens, short where the long one would wrap in its pill. */
+.status__short {
+  display: none;
+}
+
+@media (max-width: 559px) {
+  .status__long {
+    display: none;
+  }
+
+  .status__short {
+    display: inline;
+  }
+}
+
+/* The name spans the column at every width: the ink of "Ackbaraly" is
+   4.39em wide at this tracking, its "A" starting 0.005em in. Measure again
+   if the name, the face or the tracking changes. The right
+   margin lets the "y" overhang its last advance without being clipped. */
+.hero {
+  grid-template-columns: minmax(0, 1fr);
+  container-type: inline-size;
+}
+
 .hero__name {
-  margin-left: -0.04em;
+  position: relative;
+  display: grid;
+  margin: 0 -0.05em 0 -0.005em;
   font-family: var(--font-display);
-  font-size: clamp(3.4rem, 19.2vw, 16.8rem);
+  font-size: clamp(3.4rem, 20.5vw, 17rem);
   font-weight: 700;
   line-height: 0.86;
   letter-spacing: -0.06em;
+}
+
+@supports (width: 1cqi) {
+  .hero__name {
+    font-size: calc(100cqi / 4.39);
+  }
+}
+
+/* The solid name and its outline share one cell. The heading takes the
+   name's type from its wrapper, not the defaults of every h1. */
+.hero__solid,
+.hero__lens {
+  grid-area: 1 / 1;
+}
+
+.hero__solid {
+  font: inherit;
+  letter-spacing: inherit;
+}
+
+/* The descender of the "y" hangs below the boxes; the lens masks clip to
+   them, so both layers reach down far enough to keep it whole. */
+.hero__solid,
+.hero__lens {
+  padding-bottom: 0.25em;
+  margin-bottom: -0.25em;
 }
 
 .hero__line {
@@ -951,16 +1005,60 @@ picture {
   margin-bottom: -0.08em;
 }
 
+/* Inline rather than inline-block: an inline box keeps its kerning with
+   the next letter. Inline boxes take no transform, so the rise moves `top`. */
 .hero__ch {
-  display: inline-block;
+  position: relative;
+}
+
+.hero__solid .hero__ch {
   animation: rise 1s var(--ease-out) both;
   animation-delay: calc(var(--i) * 38ms + 80ms);
 }
 
 @keyframes rise {
   from {
-    transform: translateY(108%) rotate(4deg);
+    top: 1em;
   }
+}
+
+/* ─── The lens ───
+   Under the pointer the letters lose their fill and keep their contours,
+   on a fine grid of points, as an edge detector would draw them. main.js
+   moves --lens-x / --lens-y and opens --lens-r; nothing shows until then. */
+@property --lens-r {
+  syntax: "<length>";
+  inherits: true;
+  initial-value: 0px;
+}
+
+.hero__name {
+  --lens-x: 50%;
+  --lens-y: 50%;
+  transition: --lens-r 0.5s var(--ease-out);
+}
+
+.hero__lens {
+  visibility: hidden;
+  background: radial-gradient(circle, var(--accent) 0.7px, transparent 1px) 0 0 / 6px 6px;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-stroke: max(1px, 0.007em) var(--accent);
+  pointer-events: none;
+  user-select: none;
+}
+
+/* A crisp edge, like a lens: a feathered one smears the solid letters. */
+.hero__name.is-lensing .hero__lens {
+  visibility: visible;
+  -webkit-mask-image: radial-gradient(circle var(--lens-r) at var(--lens-x) var(--lens-y), #000 calc(100% - 1px), transparent);
+  mask-image: radial-gradient(circle var(--lens-r) at var(--lens-x) var(--lens-y), #000 calc(100% - 1px), transparent);
+}
+
+.hero__name.is-lensing .hero__solid {
+  -webkit-mask-image: radial-gradient(circle var(--lens-r) at var(--lens-x) var(--lens-y), transparent calc(100% - 1px), #000);
+  mask-image: radial-gradient(circle var(--lens-r) at var(--lens-x) var(--lens-y), transparent calc(100% - 1px), #000);
 }
 
 .hero__row {
@@ -1114,8 +1212,8 @@ picture {
 .card__meta {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
-  gap: var(--s-3);
+  align-items: center;
+  gap: 0.375rem 1.5rem;
   font-family: var(--font-mono);
   font-size: 0.8rem;
   line-height: 1.3;
@@ -1125,6 +1223,46 @@ picture {
 .card__meta b {
   font-weight: 500;
   color: var(--accent-text);
+}
+
+/* Previous and next card, around the index (main.js, with ← and →).
+   Wide screens only: the carousel has its own arrows. */
+.card__index {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.card__step {
+  display: grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px var(--rule);
+  color: var(--ink-2);
+  transition:
+    background-color var(--fast) var(--ease),
+    box-shadow var(--fast) var(--ease),
+    color var(--fast) var(--ease),
+    opacity var(--fast) var(--ease);
+}
+
+.card__step:hover:not(:disabled) {
+  background-color: var(--ink);
+  box-shadow: none;
+  color: var(--bg);
+}
+
+.card__step:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+@media (max-width: 959px) {
+  .card__step {
+    display: none;
+  }
 }
 
 .card__name {
@@ -1176,11 +1314,6 @@ picture {
   padding-top: var(--s-1);
 }
 
-.card__private {
-  font-size: 0.875rem;
-  color: var(--ink-3);
-}
-
 .card__media {
   position: relative;
   display: block;
@@ -1190,14 +1323,14 @@ picture {
   background-color: var(--bg);
 }
 
-.card__media img {
+.card__media picture img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   transition: transform 1.1s var(--ease-out);
 }
 
-.card__media:hover img {
+.card__media:hover picture img {
   transform: scale(1.035);
 }
 
@@ -1270,75 +1403,19 @@ picture {
   margin-top: clamp(3.5rem, 8vw, 6.5rem);
 }
 
-/* The whole line opens it, the pill only says so. */
 .others__head {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--s-4);
   padding-bottom: 1.25rem;
   border-bottom: 1px solid var(--rule);
-  list-style: none;
-  cursor: pointer;
-}
-
-.others__head::-webkit-details-marker {
-  display: none;
 }
 
 .others__count {
   color: var(--accent-text);
 }
 
-.others__toggle {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5em;
-  padding: 0.6em 0.9em 0.6em 1em;
-  border-radius: 99px;
-  box-shadow: inset 0 0 0 1px var(--rule);
-  font-size: 0.85rem;
-  line-height: 1;
-  color: var(--ink-2);
-  transition:
-    box-shadow var(--fast) var(--ease),
-    color var(--fast) var(--ease);
-}
-
-.others__head:hover .others__toggle {
-  box-shadow: inset 0 0 0 1px var(--ink);
-  color: var(--ink);
-}
-
-.others__toggle .icon {
-  transition: transform 0.4s var(--ease-out);
-}
-
-.others[open] .others__toggle .icon {
-  transform: rotate(180deg);
-}
-
-.others[open] .others__show,
-.others:not([open]) .others__hide {
-  display: none;
-}
-
 .others__list {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .others[open] .others__list {
-    animation: unfold 0.5s var(--ease-out);
-  }
-}
-
-@keyframes unfold {
-  from {
-    opacity: 0;
-    transform: translateY(-8px);
-  }
 }
 
 .other {
@@ -1382,16 +1459,12 @@ picture {
   font-size: 0.875rem;
 }
 
-.other__private {
-  font-size: 0.875rem;
-  color: var(--ink-3);
-}
-
 /* ─────────────────────────────────────────────────────────────
    13. Background — a branch graph beside compact rows
    ───────────────────────────────────────────────────────────── */
 
 .path {
+  --tl-past: color-mix(in oklab, var(--ink-3) 55%, var(--bg));
   display: grid;
   grid-template-columns: minmax(0, 0.34fr) minmax(0, 1fr);
   align-items: start;
@@ -1411,17 +1484,14 @@ picture {
 }
 
 .path__extras {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: var(--s-2) var(--s-4);
+  display: grid;
+  gap: var(--s-2);
 }
 
 /* The graph lives in a left gutter that main.js widens to fit its lanes;
    the rows keep the rest. */
 .tl {
   --tl-gutter: 2rem;
-  --tl-past: color-mix(in oklab, var(--ink-3) 55%, var(--bg));
   position: relative;
 }
 
@@ -1783,97 +1853,246 @@ details.tl__card[open]:not(.is-closing) .tl__toggle .icon {
    14. Skills
    ───────────────────────────────────────────────────────────── */
 
-.skills__groups {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: clamp(1.5rem, 4vw, 3.5rem);
+/* A matrix: skills down the side, the work they served in across the
+   top, a dot where they meet. Empty cells keep a pinpoint, so the grid
+   reads even where nothing was used. */
+.matrix {
+  /* Room to scroll from edge to edge on a phone (see below). */
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
 }
 
-.skills__group {
-  display: grid;
-  align-content: start;
-  gap: var(--s-4);
+.matrix::-webkit-scrollbar {
+  display: none;
 }
 
-.skills__list {
-  display: grid;
-  gap: 2px;
+/* Pulled left by the rows' inner padding, so the skill names line up
+   with the section title while a lit row keeps some room around them. */
+.matrix__table {
+  width: calc(100% + 0.75rem);
+  margin-left: -0.75rem;
+  border-collapse: separate;
+  border-spacing: 0;
 }
 
-.skill {
+.matrix__corner {
+  width: 30%;
+}
+
+/* Column names read upwards, from the grid. */
+.matrix__col {
+  padding: 0 0 0.875rem;
+  vertical-align: bottom;
+  font-weight: 400;
+  text-align: center;
+}
+
+.matrix__name {
   display: inline-block;
+  writing-mode: vertical-rl;
+  rotate: 180deg;
+  font-size: var(--t-sm);
+  line-height: 1;
+  white-space: nowrap;
+  color: var(--ink-2);
+  transition: color var(--fast) var(--ease);
+}
+
+a.matrix__name:hover,
+.matrix__col.is-col .matrix__name {
+  color: var(--accent-text);
+}
+
+.matrix__group th {
+  padding: var(--s-6) 0 var(--s-2) 0.75rem;
+  text-align: left;
+}
+
+.matrix__table tbody:first-of-type .matrix__group th {
+  padding-top: var(--s-2);
+}
+
+/* Sticks to the left edge while a phone scrolls the grid sideways. */
+.matrix__group .label {
+  position: sticky;
+  left: 0;
+}
+
+.matrix__skill {
+  padding: 0.3rem var(--s-4) 0.3rem 0.75rem;
   font-family: var(--font-display);
-  font-size: clamp(1.25rem, 1rem + 0.8vw, 1.75rem);
+  font-size: clamp(1rem, 0.9rem + 0.45vw, 1.25rem);
   font-weight: 500;
   line-height: 1.25;
-  letter-spacing: -0.025em;
+  letter-spacing: -0.02em;
   text-align: left;
+  white-space: nowrap;
   color: var(--ink);
+}
+
+.matrix__table td {
+  height: 2.25rem;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.matrix__skill,
+.matrix__table td {
+  transition: background-color var(--fast) var(--ease);
+}
+
+.matrix__table tbody td:empty::before {
+  content: "";
+  display: inline-block;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background-color: var(--rule-2);
+  vertical-align: middle;
+}
+
+.matrix__dot {
+  display: inline-block;
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 50%;
+  background-color: var(--accent);
+  vertical-align: middle;
   transition:
-    color var(--normal) var(--ease),
-    opacity var(--normal) var(--ease),
-    transform 0.4s var(--ease-out);
+    opacity var(--fast) var(--ease),
+    scale var(--normal) var(--ease-out);
 }
 
-button.skill:hover,
-.skill[aria-pressed="true"] {
-  color: var(--accent-text);
-  transform: translateX(6px);
+/* A hairline opens each group of columns: selected work, other work, the
+   path. */
+.matrix__table .opens {
+  box-shadow: inset 1px 0 var(--rule);
 }
 
-.skills__groups.is-dim .skill:not([aria-pressed="true"]) {
-  opacity: 0.35;
-}
-
-.skills__uses {
-  min-height: 4rem;
-  margin-top: clamp(1.75rem, 4vw, 3rem);
-  padding: 1rem 1.25rem;
-  border-radius: 1rem;
+/* Pointing: the row and the column light up, the other dots step back. */
+.matrix__row:hover > *,
+.matrix__row.is-row > *,
+.matrix__table td.is-col {
   background-color: var(--surface);
-  box-shadow: inset 0 0 0 1px var(--rule);
-  opacity: 0;
-  transform: translateY(8px);
-  transition:
-    opacity 0.35s,
-    transform 0.5s var(--ease-out);
 }
 
-.skills__uses.is-open {
+.matrix__row:hover > :first-child,
+.matrix__row.is-row > :first-child {
+  border-radius: 0.75rem 0 0 0.75rem;
+}
+
+.matrix__row:hover > :last-child,
+.matrix__row.is-row > :last-child {
+  border-radius: 0 0.75rem 0.75rem 0;
+}
+
+.matrix__table.is-pointing .matrix__dot {
+  opacity: 0.3;
+}
+
+.matrix__table.is-pointing .is-row .matrix__dot,
+.matrix__table.is-pointing .is-col .matrix__dot {
   opacity: 1;
-  transform: none;
 }
 
-.skills__use {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.625rem;
+.matrix__table.is-pointing .is-row .is-col .matrix__dot {
+  scale: 1.3;
 }
 
-.skills__name {
-  margin-right: 0.375rem;
-  font-weight: 600;
+/* The phone's version: pills, each with its count; a tap opens the list
+   of works under its group. Hidden wherever the matrix fits. */
+.skillset {
+  display: none;
+  gap: var(--s-6);
 }
 
-.skills__name span {
-  font-weight: 400;
-  color: var(--ink-3);
+.skillset__group {
+  display: grid;
+  gap: var(--s-3);
 }
 
-.skills__links {
+.skillset__pills {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
 }
 
-.skills__links li {
-  animation: fade-up 0.45s var(--ease-out) both;
-  animation-delay: calc(var(--i) * 50ms);
+.skillset__pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55em;
+  padding: 0.6em 0.75em 0.6em 1em;
+  border-radius: 99px;
+  background-color: var(--surface);
+  box-shadow: inset 0 0 0 1px var(--rule);
+  font-size: 0.95rem;
+  line-height: 1;
+  color: var(--ink);
+  transition:
+    background-color var(--fast) var(--ease),
+    color var(--fast) var(--ease);
 }
 
-.skills__links a,
-.skills__links span {
+.skillset__count {
+  display: grid;
+  place-items: center;
+  min-width: 1.35rem;
+  height: 1.35rem;
+  padding-inline: 0.3rem;
+  border-radius: 99px;
+  background-color: var(--accent-soft);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--accent-text);
+}
+
+.skillset__pill[aria-expanded="true"] {
+  background-color: var(--ink);
+  box-shadow: none;
+  color: var(--bg);
+}
+
+.skillset__pill[aria-expanded="true"] .skillset__count {
+  background-color: var(--accent);
+  color: var(--on-accent);
+}
+
+.skillset__uses {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.625rem;
+  padding: 0.875rem 1rem;
+  border-radius: 1rem;
+  background-color: var(--surface);
+  box-shadow: inset 0 0 0 1px var(--rule);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .skillset__uses:not([hidden]) {
+    animation: unfold 0.35s var(--ease-out);
+  }
+}
+
+.skillset__lead {
+  font-size: var(--t-sm);
+  font-weight: 600;
+}
+
+.skillset__lead span {
+  font-weight: 400;
+  color: var(--ink-3);
+}
+
+.skillset__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.skillset__links a,
+.skillset__links span {
   display: inline-flex;
   align-items: center;
   gap: 0.3em;
@@ -1886,14 +2105,14 @@ button.skill:hover,
   color: var(--accent-text);
 }
 
-.skills__links a:hover {
-  background-color: var(--accent);
-  color: var(--on-accent);
-}
+@media (max-width: 719px) {
+  .matrix {
+    display: none;
+  }
 
-/* Without JavaScript, or on touch screens, the skills are a plain list. */
-.skills__uses:not(.is-open) {
-  pointer-events: none;
+  .skillset {
+    display: grid;
+  }
 }
 
 /* ─────────────────────────────────────────────────────────────
@@ -2028,17 +2247,25 @@ button.skill:hover,
 
 .contact__freelance {
   justify-self: start;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5em;
-  padding-bottom: 2px;
-  border-bottom: 1px solid rgb(255 255 255 / 0.4);
   color: rgb(255 255 255 / 0.85);
+  text-decoration: underline;
+  text-decoration-color: rgb(255 255 255 / 0.4);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.3em;
+  transition:
+    color var(--fast) var(--ease),
+    text-decoration-color var(--fast) var(--ease);
+}
+
+.contact__freelance .icon {
+  display: inline-block;
+  margin-left: 0.4em;
+  vertical-align: -0.1em;
 }
 
 .contact__freelance:hover {
-  border-color: #fff;
   color: #fff;
+  text-decoration-color: #fff;
 }
 
 /* ─────────────────────────────────────────────────────────────
@@ -2121,43 +2348,38 @@ button.skill:hover,
     max-width: 60ch;
   }
 
-  /* One skill per line takes a whole screen on a phone: they flow as
-     pills instead, a few lines per group. */
-  .skills__groups {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 1.75rem;
+  /* The matrix scrolls sideways from edge to edge, the skill names
+     staying in place on the left. */
+  .matrix {
+    margin-inline: calc(var(--gutter) * -1);
+    padding-right: var(--gutter);
   }
 
-  .skills__group {
-    gap: var(--s-3);
+  .matrix__table {
+    width: auto;
+    min-width: 100%;
+    margin-left: 0;
   }
 
-  .skills__list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
+  .matrix__corner,
+  .matrix__skill {
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    padding-left: var(--gutter);
+    background-color: var(--bg);
   }
 
-  .skill {
-    padding: 0.6em 1em;
-    border-radius: 99px;
-    background-color: var(--surface);
-    box-shadow: inset 0 0 0 1px var(--rule);
-    font-family: var(--font-sans);
-    font-size: 0.95rem;
-    line-height: 1;
-    letter-spacing: 0;
+  .matrix__group th {
+    padding-left: var(--gutter);
   }
 
-  button.skill:hover,
-  .skill[aria-pressed="true"] {
-    transform: none;
-    box-shadow: inset 0 0 0 1px var(--accent);
+  .matrix__group .label {
+    left: var(--gutter);
   }
 
-  /* Closed, the panel takes no room: on a touch screen it never opens. */
-  .skills__uses:not(.is-open) {
-    display: none;
+  .matrix__table td {
+    min-width: 2.75rem;
   }
 }
 
@@ -2174,18 +2396,36 @@ button.skill:hover,
     grid-template-columns: minmax(0, 1fr);
   }
 
+  /* The other work turns into a row to scroll sideways, the next one
+     peeking in, rather than four entries stacked down the page. */
   .others__list {
-    grid-template-columns: minmax(0, 1fr);
+    display: flex;
+    margin-inline: calc(var(--gutter) * -1);
+    padding-inline: var(--gutter);
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--gutter);
+    scrollbar-width: none;
   }
 
-  .other,
-  .other + .other {
-    padding: 1.25rem 0;
-    border-left: 0;
+  .others__list::-webkit-scrollbar {
+    display: none;
+  }
+
+  .other {
+    flex: 0 0 min(80%, 17rem);
+    padding: 1.25rem 1.25rem 0.5rem 0;
+    scroll-snap-align: start;
   }
 
   .other + .other {
-    border-top: 1px solid var(--rule);
+    padding-left: 1.25rem;
+    border-left: 1px solid var(--rule);
+  }
+
+  .other:nth-child(n + 3) {
+    border-top: 0;
   }
 
   /* Rows fold to three short lines: dates and badge, title, role. */
@@ -2213,6 +2453,21 @@ button.skill:hover,
 
   .tl__when span + span::before {
     content: "— ";
+  }
+
+  /* "Current" shrinks to its dot, the blue line already saying it: the
+     dates keep their one line. */
+  .badge--live {
+    padding: 0.6em;
+  }
+
+  .badge--live .badge__text {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
   }
 
   .tl__org {
@@ -2273,6 +2528,54 @@ button.skill:hover,
   flex-direction: column;
   align-items: flex-start;
   gap: var(--s-5);
+}
+
+.case-head__top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-3);
+  align-self: stretch;
+}
+
+/* Previous and next project, round the ends, with the place in the list. */
+.switcher {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 3px;
+  border-radius: 99px;
+  box-shadow: inset 0 0 0 1px var(--rule);
+}
+
+.switcher__btn {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  color: var(--ink-2);
+  transition:
+    background-color var(--fast) var(--ease),
+    color var(--fast) var(--ease);
+}
+
+.switcher__btn:hover {
+  background-color: var(--ink);
+  color: var(--bg);
+}
+
+.switcher__count {
+  padding-inline: 0.4rem;
+  font-family: var(--font-mono);
+  font-size: var(--t-mono);
+  color: var(--ink-3);
+}
+
+.switcher__count b {
+  font-weight: 500;
+  color: var(--accent-text);
 }
 
 .case-head__back {
@@ -2370,21 +2673,21 @@ button.skill:hover,
    18. Case study — body
    ───────────────────────────────────────────────────────────── */
 
+/* The cover is the thumbnail itself: its backdrop is the frame, so the
+   viewer adds no card around it. */
 .viewer {
   overflow: hidden;
   border-radius: var(--radius-lg);
-  background-color: var(--surface);
-  box-shadow: inset 0 0 0 1px var(--rule), var(--shade);
 }
 
 .viewer__frame {
   position: relative;
   overflow: hidden;
-  background-color: var(--surface-2);
+  border-radius: inherit;
+  background: linear-gradient(var(--thumb-top), var(--thumb-bottom));
 }
 
-.viewer__frame img,
-.viewer__frame video {
+.viewer__frame picture img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -2792,6 +3095,277 @@ button.skill:hover,
   color: var(--ink-3);
 }
 
+/* ─── Bar chart ───
+   One measure on one baseline: bars grow from the left, each value at its
+   tip, the row's other figures on hover or focus (the table that follows
+   the chart holds them all). --max ends the scale, --goal draws a line
+   through every row, --v is the row's value. */
+.bars {
+  --label-w: 14.5rem;
+  --bar: 18px;
+  --row-gap: 0.625rem;
+  margin-block: var(--s-6);
+  padding: var(--s-5) var(--s-5) var(--s-4);
+  border-radius: var(--radius);
+  background-color: var(--surface);
+  box-shadow: inset 0 0 0 1px var(--rule);
+}
+
+.prose .bars__title {
+  margin-bottom: var(--s-4);
+  font-family: var(--font-display);
+  font-size: var(--t-lg);
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.bars__axis,
+.bars__row {
+  display: grid;
+  grid-template-columns: var(--label-w) minmax(0, 1fr);
+  align-items: center;
+  column-gap: var(--s-4);
+}
+
+.bars__axis {
+  margin-bottom: 0.375rem;
+}
+
+.bars__axis .bars__track {
+  grid-column: 2;
+}
+
+.bars__goal {
+  margin-left: calc(var(--goal) / var(--max) * 100%);
+  padding: 0 0 0.25rem 0.5rem;
+  border-left: 1px solid var(--rule-2);
+  font-family: var(--font-mono);
+  font-size: var(--t-mono);
+  line-height: 1.2;
+  color: var(--ink-3);
+  white-space: nowrap;
+}
+
+.prose .bars__rows {
+  display: grid;
+  gap: var(--row-gap);
+  margin: 0;
+  padding: 0;
+}
+
+.prose .bars__row {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  border-radius: 6px;
+  outline-offset: 4px;
+  transition: opacity var(--normal) var(--ease);
+}
+
+.bars__label {
+  font-size: var(--t-sm);
+  line-height: 1.3;
+  color: var(--ink-2);
+}
+
+.bars__track {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: var(--bar);
+}
+
+/* The goal line runs on through the gaps between rows. */
+.bars__rows .bars__track::before {
+  content: "";
+  position: absolute;
+  top: calc(var(--row-gap) / -2);
+  bottom: calc(var(--row-gap) / -2);
+  left: calc(var(--goal) / var(--max) * 100%);
+  width: 1px;
+  background-color: var(--rule-2);
+}
+
+.bars__bar {
+  flex: none;
+  width: calc(var(--v) / var(--max) * 100%);
+  height: var(--bar);
+  border-radius: 0 4px 4px 0;
+  background-color: var(--accent);
+  transform-origin: left center;
+  transition: transform 0.9s var(--ease-out) calc(var(--i) * 90ms);
+}
+
+/* The CPU reference stays grey: the bars that follow are the GPU. */
+.bars__row.is-base .bars__bar {
+  background-color: var(--ink-3);
+}
+
+/* Painted over the goal line, with a halo of the chart's surface, where a
+   short bar puts its value across it. */
+.bars__value {
+  position: relative;
+  z-index: 1;
+  flex: none;
+  margin-left: -0.25rem;
+  padding-inline: 0.25rem;
+  border-radius: 4px;
+  background-color: var(--surface);
+  font-size: var(--t-sm);
+  font-weight: 600;
+  white-space: nowrap;
+  color: var(--ink);
+  transition: opacity 0.4s var(--ease) calc(var(--i) * 90ms + 0.45s);
+}
+
+.bars__more {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: min(calc(var(--v) / var(--max) * 100%), calc(100% - 13.5rem));
+  z-index: 1;
+  padding: 0.4rem 0.65rem;
+  border-radius: 8px;
+  background-color: var(--ink);
+  color: var(--bg);
+  font-family: var(--font-mono);
+  font-size: var(--t-mono);
+  line-height: 1.2;
+  white-space: nowrap;
+  opacity: 0;
+  translate: 0 4px;
+  pointer-events: none;
+  transition:
+    opacity var(--fast) var(--ease),
+    translate var(--fast) var(--ease);
+}
+
+.bars__row:hover .bars__more,
+.bars__row:focus-visible .bars__more {
+  opacity: 1;
+  translate: 0 0;
+}
+
+.bars__rows:hover .bars__row:not(:hover) {
+  opacity: 0.4;
+}
+
+/* Grown once the chart comes into view (project.js). */
+@media (prefers-reduced-motion: no-preference) {
+  .bars.is-armed:not(.is-in) .bars__bar {
+    transform: scaleX(0);
+  }
+
+  .bars.is-armed:not(.is-in) .bars__value {
+    opacity: 0;
+  }
+}
+
+/* ─── Step-by-step viewer ───
+   Without JavaScript the steps lie in a grid; with it, one at a time,
+   chosen with the buttons below, and passing on by themselves until the
+   reader takes over (project.js). */
+.stepper {
+  margin-block: var(--s-6);
+}
+
+.prose .stepper__frames {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--s-5) var(--s-3);
+  margin: 0;
+  padding: 0;
+}
+
+.prose .stepper__frame {
+  margin: 0;
+  padding: 0;
+}
+
+.prose .stepper__frame img {
+  width: 100%;
+  margin: 0;
+}
+
+.prose .stepper__text {
+  margin: var(--s-3) 0 0;
+  font-size: var(--t-sm);
+  line-height: 1.5;
+  color: var(--ink-2);
+}
+
+.stepper__num {
+  margin-right: 0.3em;
+  font-family: var(--font-mono);
+  font-size: var(--t-mono);
+  color: var(--accent-text);
+}
+
+.stepper.is-ready .stepper__frames {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.stepper.is-ready .stepper__frame {
+  grid-area: 1 / 1;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.45s var(--ease),
+    visibility 0.45s;
+}
+
+.stepper.is-ready .stepper__frame.is-on {
+  opacity: 1;
+  visibility: visible;
+}
+
+.stepper__nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: var(--s-4);
+}
+
+.stepper__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  padding: 0.6em 0.95em;
+  border-radius: 99px;
+  box-shadow: inset 0 0 0 1px var(--rule-2);
+  font-size: var(--t-sm);
+  line-height: 1;
+  color: var(--ink-2);
+  transition:
+    background-color var(--fast) var(--ease),
+    box-shadow var(--fast) var(--ease),
+    color var(--fast) var(--ease);
+}
+
+.stepper__btn span {
+  font-family: var(--font-mono);
+  font-size: var(--t-mono);
+  color: var(--accent-text);
+}
+
+.stepper__btn:hover {
+  box-shadow: inset 0 0 0 1px var(--ink);
+  color: var(--ink);
+}
+
+.stepper__btn[aria-pressed="true"] {
+  background-color: var(--ink);
+  box-shadow: none;
+  color: var(--bg);
+}
+
+.stepper__btn[aria-pressed="true"] span {
+  color: inherit;
+  opacity: 0.6;
+}
+
 /* ─── KaTeX ─── */
 
 .katex-display {
@@ -2961,6 +3535,27 @@ button.skill:hover,
 @media (max-width: 639px) {
   .actions .btn {
     flex: 1 1 auto;
+  }
+
+  .bars {
+    --row-gap: 0.875rem;
+    padding: var(--s-4);
+  }
+
+  .bars__axis,
+  .bars__row {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 0.3rem;
+  }
+
+  .bars__axis .bars__track {
+    grid-column: 1;
+  }
+
+  /* The labels sit between the bars now: the goal line marks each bar. */
+  .bars__rows .bars__track::before {
+    top: 0;
+    bottom: 0;
   }
 
   .prose th {

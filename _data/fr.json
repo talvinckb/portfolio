@@ -38,6 +38,7 @@
     "name": "Talvin Ackbaraly",
     "role": "Élève ingénieur à l'EPITA, majeure Image",
     "status": "Disponible pour un stage de 6 mois dès février 2027",
+    "statusShort": "Stage de 6 mois dès février 2027",
     "leadStrong": "Vision par ordinateur, IA et calcul GPU.",
     "lead": "Je conçois des pipelines d'image complets, du prototype en Python jusqu'au portage CUDA.",
     "ctaWork": "Voir les projets",
@@ -48,10 +49,7 @@
   "projects": {
     "title": "Projets sélectionnés",
     "secondaryTitle": "Autres réalisations",
-    "showOthers": "Afficher",
-    "hideOthers": "Masquer",
     "publicRepo": "GitHub",
-    "privateRepo": "Code non public",
     "read": "Lire l'étude de cas",
     "cursor": "Lire l'étude",
     "sourceCode": "Code source",
@@ -60,10 +58,10 @@
     "items": [
       {
         "id": "pfee-bnf",
-        "name": "PFEE — BNF",
+        "name": "PFEE — BnF",
         "title": "Segmentation et classification d'illustrations patrimoniales",
-        "tagline": "Détection automatique d'illustrations dans des documents patrimoniaux numérisés, en partenariat avec la BNF.",
-        "highlights": ["illustrations", "BNF"],
+        "tagline": "Détection automatique d'illustrations dans des documents patrimoniaux numérisés, en partenariat avec la BnF.",
+        "highlights": ["illustrations", "BnF"],
         "thumbnail": "/assets/projects/pfee-bnf/thumbnail-16x9.webp",
         "thumbnailLight": "/assets/projects/pfee-bnf/thumbnail-16x9-light.webp",
         "stack": [
@@ -99,7 +97,7 @@
       {
         "id": "irgpu",
         "name": "IRGPU",
-        "title": "Détection de mouvement vidéo — portage GPU",
+        "title": "Détection de mouvement vidéo — portage GPU",
         "tagline": "Portage CPU → GPU d'un algorithme temps réel avec un gain de performance de ×24 via CUDA.",
         "highlights": ["×24", "CUDA"],
         "thumbnail": "/assets/projects/irgpu/thumbnail-16x9.webp",
@@ -118,7 +116,7 @@
       {
         "id": "medviz",
         "name": "MedViz",
-        "title": "Prédiction médicale & visualisation 3D",
+        "title": "Prédiction médicale & visualisation 3D",
         "tagline": "Pipeline complet de prédiction de la FVC à partir de scanners CT pulmonaires, avec visualisation 3D dans le navigateur.",
         "highlights": ["prédiction de la FVC", "visualisation 3D"],
         "thumbnail": "/assets/projects/medviz/thumbnail-16x9.webp",
@@ -137,7 +135,7 @@
       {
         "id": "vtk-itk",
         "name": "VTK-ITK",
-        "title": "Recalage & suivi longitudinal de tumeur cérébrale",
+        "title": "Recalage & suivi longitudinal de tumeur cérébrale",
         "tagline": "Alignement 3D d'IRM cérébrales (ITK) et segmentation tumorale avec visualisation multi-vues (VTK + PyQt6) — quantification de l'évolution d'un gliome.",
         "highlights": ["segmentation tumorale", "gliome"],
         "thumbnail": "/assets/projects/vtk-itk/thumbnail-16x9.webp",
@@ -238,12 +236,13 @@
   },
   "background": {
     "title": "Parcours",
-    "lede": "Du plus récent au plus ancien. Les études forment la branche principale. Les stages, l'échange, le projet de fin d'études et le freelance s'en détachent puis la rejoignent. En bleu, ce qui est en cours.",
+    "lede": "Cinq ans à l'EPITA, de la prépa à la majeure Image, avec un semestre au Québec, deux stages en entreprise et un projet de fin d'études avec la BnF. Prochaine étape : six mois de stage en vision, IA ou calcul GPU.",
     "now": "En cours",
     "today": "Aujourd'hui",
     "extrasTitle": "Langues",
     "extras": [
-      "Anglais — certifié TOEIC"
+      "Français, langue maternelle",
+      "Anglais professionnel, TOEIC 845"
     ],
     "timeline": [
       {
@@ -260,7 +259,7 @@
         "id": "internship",
         "start": "2027-02",
         "end": "2027-08",
-        "period": "Févr. — Août 2027",
+        "period": "Févr. 2027 — Août 2027",
         "org": "Stage de fin d'études",
         "role": "6 mois en vision par ordinateur, IA ou calcul GPU",
         "type": "Stage",
@@ -330,7 +329,7 @@
         "id": "uqac",
         "start": "2024-01",
         "end": "2024-05",
-        "period": "Janv. — Mai 2024",
+        "period": "Janv. 2024 — Mai 2024",
         "org": "UQAC",
         "role": "Échange académique au Canada, semestre S4",
         "type": "Échange",
@@ -340,7 +339,7 @@
         "id": "hitachi",
         "start": "2023-06",
         "end": "2023-07",
-        "period": "Juin — Juillet 2023",
+        "period": "Juin 2023 — Juil. 2023",
         "org": "Hitachi Solutions France",
         "role": "Consultant en informatique",
         "type": "Stage",
@@ -376,7 +375,8 @@
   },
   "skills": {
     "title": "Compétences",
-    "usedIn": "Utilisé dans",
+    "caption": "Compétences, et les projets ou expériences où elles ont servi",
+    "used": "Utilisé",
     "groups": [
       {
         "category": "Vision & IA",
@@ -385,6 +385,8 @@
             "name": "Traitement d'image",
             "used": [
               "pfee-bnf",
+              "alpr",
+              "irgpu",
               "medviz",
               "ocr-sudoku"
             ]
@@ -392,7 +394,8 @@
           {
             "name": "Deep Learning",
             "used": [
-              "pfee-bnf"
+              "pfee-bnf",
+              "ocr-sudoku"
             ]
           },
           {
@@ -475,6 +478,7 @@
             "used": [
               "pfee-bnf",
               "alpr",
+              "medviz",
               "vtk-itk"
             ]
           },
@@ -505,7 +509,8 @@
           }
         ]
       }
-    ]
+    ],
+    "usedIn": "Utilisé dans"
   },
   "contact": {
     "label": "Contact",
@@ -537,7 +542,9 @@
     "result": "Résultat",
     "role": "Mon rôle",
     "prev": "Projet précédent",
-    "next": "Projet suivant"
+    "next": "Projet suivant",
+    "switcher": "Changer de projet",
+    "keys": "Flèches ← → du clavier"
   },
   "footer": {
     "built": "Eleventy, CSS natif, sans framework"

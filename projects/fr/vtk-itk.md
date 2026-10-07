@@ -1,8 +1,8 @@
 ---
 id: vtk-itk
 name: "VTK-ITK"
-title: "Recalage & Suivi Longitudinal de Tumeur Cérébrale"
-tagline: "Pipeline complet d'alignement 3D d'IRMs cérébraux (ITK) et de segmentation tumorale avec visualisation interactive multi-vues (VTK + PyQt6) — quantification de l'évolution volumétrique d'un gliome."
+title: "Recalage & suivi longitudinal de tumeur cérébrale"
+tagline: "Alignement 3D de deux IRM cérébrales avec ITK, segmentation de la tumeur et visualisation multi-vues avec VTK et PyQt6, pour mesurer l'évolution du volume d'un gliome."
 thumbnail: "/assets/projects/vtk-itk/thumbnail-16x9.webp"
 thumbnailLight: "/assets/projects/vtk-itk/thumbnail-16x9-light.webp"
 stack: ["Python", "ITK", "VTK", "PyQt6", "Matplotlib"]
@@ -13,130 +13,121 @@ demo: null
 report: null
 brief:
   problem: "Quantifier l'évolution d'un gliome entre deux IRM d'un même patient, acquises à plusieurs mois d'intervalle."
-  approach: "Recalage 3D avec ITK, segmentation Multi-Otsu et region growing, visualisation 2D/3D avec VTK et PyQt6."
-  result: "Volume tumoral mesuré avant et après recalage, avec superposition interactive des deux acquisitions."
+  approach: "Recalage 3D avec ITK, segmentation par multi-Otsu et croissance de région, visualisation 2D et 3D avec VTK et PyQt6."
+  result: "Le volume de la tumeur passe de 4,72 à 7,64 cm³ entre les deux examens (+61,8 %), avec les deux acquisitions superposées dans une vue interactive."
 ---
 
-## Contexte & Objectifs
+## Comparer deux IRM d'un même patient
 
-Le suivi longitudinal des **gliomes et glioblastomes cérébraux** repose sur la comparaison temporelle de scanners IRM réalisés à plusieurs mois d'intervalle. Ce projet fournit un pipeline complet de traitement et de visualisation 3D permettant :
+Le suivi d'un gliome ou d'un glioblastome repose sur la comparaison d'IRM acquises à plusieurs mois d'intervalle. D'une séance à l'autre, la tête du patient n'est pas dans la même position : il faut aligner les deux volumes avant de comparer les tumeurs.
 
-- **D'aligner géométriquement (recalage 3D)** deux volumes IRM d'un même patient pour compenser les variations de position de la tête entre deux séances.
-- **D'isoler et segmenter la masse tumorale** avant et après recalage, sur les deux acquisitions.
-- **De calculer l'évolution volumétrique précise** de la tumeur (en $\text{mm}^3$ et $\text{cm}^3$) pour quantifier une régression ou une progression.
-- **De visualiser en 2D et 3D** la superposition exacte des structures anatomiques et tumorales.
+Nous avons construit une application qui :
 
-Le projet exploite deux acquisitions IRM 3D au format **NRRD** :
-`case6_gre1.nrrd` (scan initial — image fixe) et `case6_gre2.nrrd` (scan de suivi — image mobile à recaler).
+1. aligne les deux volumes IRM en 3D (recalage) pour compenser les différences de position de la tête entre les séances ;
+2. isole et segmente la tumeur sur les deux acquisitions, avant et après recalage ;
+3. calcule son volume en mm³ et en cm³ pour mesurer une progression ou une régression ;
+4. affiche en 2D et en 3D la superposition des structures anatomiques et des deux tumeurs.
 
----
+Les données sont deux acquisitions IRM 3D au format NRRD : `case6_gre1.nrrd` (examen initial, l'image fixe) et `case6_gre2.nrrd` (examen de suivi, l'image mobile à recaler). Sur ce cas, le volume de la tumeur augmente de **61,8 %** entre les deux examens.
 
-## Interface Graphique (PyQt6 + VTK)
+## L'application PyQt6 et VTK
 
-L'application est construite sous **PyQt6** avec un thème sombre médical _Deep Slate_. Elle est structurée en deux écrans principaux.
+L'interface est écrite avec PyQt6, dans un thème sombre (_Deep Slate_), et compte deux écrans principaux.
 
-### Tableau de Bord de Résultats
+### Tableau de bord et volumes mesurés
 
-Une fois les algorithmes exécutés en arrière-plan via des `QThread`, le tableau de bord principal s'affiche :
+Une fois les calculs terminés (ils tournent en arrière-plan dans des `QThread`), le tableau de bord principal s'affiche :
 
-![Tableau de bord — Visualisation 3D et coupes 2D synchronisées](/assets/projects/vtk-itk/dashboard.webp)
+![Tableau de bord : vue 3D et coupes 2D synchronisées](/assets/projects/vtk-itk/dashboard.webp)
 
-Ce tableau de bord combine :
+Il réunit trois zones :
 
-- **Un viewport VTK 3D** (gauche) : rendu surfacique des deux tumeurs superposées avec la boîte crânienne volumique en semi-transparent.
-- **Trois vues de coupes 2D** (droite) : vues Sagittale (X), Coronale (Y) et Axiale (Z) avec sliders interactifs synchronisés, permettant de naviguer dans les tranches de l'IRM.
-- **Un panneau analytique** (sidebar) : scores de convergence de la métrique pre/post-recalage, graphique Matplotlib d'optimisation, et volumétries tumorales calculées.
+- à gauche, une vue 3D VTK : les deux tumeurs superposées, rendues en surface, dans la boîte crânienne affichée en volume semi-transparent ;
+- à droite, trois coupes 2D (sagittale X, coronale Y, axiale Z) avec des curseurs synchronisés pour parcourir les tranches de l'IRM ;
+- dans la barre latérale, les scores de la métrique avant et après recalage, la courbe d'optimisation tracée avec Matplotlib et les volumes calculés.
 
-| Donnée                     | Valeur       |
-| :------------------------- | :----------- |
-| Volume Tumeur 1 (initiale) | **4,72 cm³** |
-| Volume Tumeur 2 (suivi)    | **7,64 cm³** |
-| Évolution volumétrique     | **+61.8%**   |
+| Donnée                                 | Valeur      |
+| :------------------------------------- | :---------- |
+| Volume de la tumeur 1 (examen initial) | 4,72 cm³    |
+| Volume de la tumeur 2 (suivi)          | 7,64 cm³    |
+| Évolution du volume                    | **+61,8 %** |
 
----
+## Recalage 3D avec ITK
 
-## Recalage d'Images Médicales 3D (ITK)
+Le recalage cherche une transformation spatiale $\mathcal{T}: \mathbf{x} \mapsto \mathbf{x}'$ qui aligne l'image mobile $M(\mathbf{x})$ sur l'image fixe $F(\mathbf{x})$.
 
-Le recalage cherche une transformation spatiale $\mathcal{T}: \mathbf{x} \mapsto \mathbf{x}'$ alignant l'image mobile $M(\mathbf{x})$ sur l'image fixe $F(\mathbf{x})$.
+### Trois transformations
 
-### Transformations Implémentées
+Nous avons implémenté trois types de transformations :
 
-Trois types de transformations ont été développées :
+| Transformation                           | Degrés de liberté | Usage                                        |
+| :--------------------------------------- | :---------------: | :------------------------------------------- |
+| Rigide (`VersorRigid3DTransform`)        |         6         | Déplacements de la tête entre les séances    |
+| Affine (`AffineTransform`)               |        12         | Déformations globales liées à l'acquisition  |
+| B-spline (grille de points de contrôle)  |         N         | Déformations locales des tissus              |
 
-| Transformation                        | Degrés de Liberté | Usage                               |
-| :------------------------------------ | :---------------: | :---------------------------------- |
-| **Rigide** (`VersorRigid3DTransform`) |       6 DOF       | Déplacements de tête entre séances  |
-| **Affine** (`AffineTransform`)        |      12 DOF       | Déformations globales d'acquisition |
-| **B-Spline** (grille de contrôle)     |       N DOF       | Déformations locales tissulaires    |
+### Réglages de l'optimiseur
 
-### Stratégies d'Optimisation Avancées
+Le pipeline ITK combine plusieurs réglages :
 
-Le pipeline ITK embarque plusieurs mécanismes pour garantir la robustesse du recalage :
-
-- **Initialisation par moments géométriques** (`CenteredTransformInitializer`) : aligne les centres de masse avant l'optimisation.
-- **Métrique d'Information Mutuelle de Mattes** (`MattesMutualInformationImageToImageMetricv4`) avec 50 bins :
+- une initialisation par moments géométriques (`CenteredTransformInitializer`), qui aligne les centres de masse avant l'optimisation ;
+- la métrique d'information mutuelle de Mattes (`MattesMutualInformationImageToImageMetricv4`), avec un histogramme de 50 classes :
   $$\text{MI}(F, M) = \sum_{f} \sum_{m} p(f,m) \log \left( \frac{p(f,m)}{p(f)\,p(m)} \right)$$
-- **Pyramide multi-résolution à 3 niveaux** (facteurs `[4, 2, 1]`, sigmas gaussiens `[2, 1, 0]`) pour éviter les minima locaux.
-- **Échantillonnage aléatoire à 10%** des voxels par itération — gain ×5 en vitesse sans perte de précision.
-- **Estimation automatique d'échelle** (`RegistrationParameterScalesFromPhysicalShift`) pour équilibrer rotations (radians) et translations (millimètres).
+- une pyramide multi-résolution à 3 niveaux (facteurs `[4, 2, 1]`, sigmas gaussiens `[2, 1, 0]`) pour éviter les minima locaux ;
+- un échantillonnage aléatoire de 10 % des voxels à chaque itération, **5 fois plus rapide** sans perte de précision ;
+- une estimation automatique des échelles (`RegistrationParameterScalesFromPhysicalShift`), qui équilibre rotations (en radians) et translations (en millimètres).
 
-### Graphique de Convergence de l'Optimiseur
+### Convergence de l'optimiseur
 
-L'évolution de la métrique au fil des itérations illustre la minimisation progressive lors du recalage :
+La courbe de la métrique au fil des itérations montre sa minimisation pendant le recalage :
 
 ![Historique de convergence de l'optimiseur ITK](/assets/projects/vtk-itk/convergence.webp)
 
----
+## Segmentation et volume de la tumeur
 
-## Segmentation Tumorale & Volumétrie 3D
+### Segmentation automatique (multi-Otsu et solidité)
 
-### Segmentation Automatique (Multi-Otsu + Solidité Morphologique)
+La segmentation automatique se fait en trois étapes :
 
-Le pipeline automatique s'enchaîne en trois étapes :
+1. Un seuillage multi-Otsu (`OtsuMultipleThresholdsImageFilter`) découpe l'histogramme des niveaux de gris en 4 classes pour isoler les hyperintensités du cœur de la tumeur.
+2. Une ouverture morphologique (`BinaryMorphologicalOpeningImageFilter`), avec un élément structurant rectangulaire 2D, retire le bruit et détache les petites structures vasculaires.
+3. Les composantes connexes sont étiquetées (`ConnectedComponentImageFilter`). Pour chaque composante de plus de 500 voxels, nous calculons sa solidité :
 
-1. **Seuillage Multi-Otsu** (`OtsuMultipleThresholdsImageFilter`) — découpe l'histogramme des niveaux de gris en 4 classes pour isoler les hyper-intensités du noyau tumoral.
-2. **Ouverture Morphologique** (`BinaryMorphologicalOpeningImageFilter`) — élimine le bruit et détache les petites structures vasculaires via un élément structurant rectangulaire 2D.
-3. **Composantes Connexes & Critère de Solidité** — labélise les régions (`ConnectedComponentImageFilter`). Pour chaque composante de plus de 500 voxels, sa **solidité** est évaluée :
+$$\text{Solidité} = \frac{\text{Nombre de voxels de la composante}}{\text{Volume de la boîte englobante 3D}}$$
 
-$$\text{Solidité} = \frac{\text{Nombre de voxels de la composante}}{\text{Volume de la Bounding Box 3D}}$$
+La composante la plus solide est retenue comme tumeur.
 
-La région à la solidité géométrique maximale est sélectionnée comme tumeur.
+### Segmentation semi-automatique par croissance de région
 
-### Segmentation Semi-Automatique (Region Growing)
-
-L'algorithme `ConfidenceConnectedImageFilter` s'étend depuis un point germe au cœur de la tumeur vers les voxels voisins dont l'intensité s'inscrit dans :
+Le filtre `ConfidenceConnectedImageFilter` part d'un point germe placé au cœur de la tumeur et s'étend aux voxels voisins dont l'intensité reste dans l'intervalle :
 
 $$\left[ \mu - c \cdot \sigma, \; \mu + c \cdot \sigma \right]$$
 
-où $\mu$ et $\sigma$ sont la moyenne et l'écart-type de la région courante ($c = 2.3$).
+où $\mu$ et $\sigma$ sont la moyenne et l'écart-type de la région courante, avec $c = 2{,}3$.
 
-### Calcul du Volume Physico-Médical
+### Calcul du volume en cm³
 
-Le volume physique est calculé à partir du spacing ITK $(s_x, s_y, s_z)$ :
+Le volume se déduit du nombre de voxels et de l'espacement des voxels donné par ITK, $(s_x, s_y, s_z)$ :
 
 $$V_{\text{tumeur}} \; (\text{mm}^3) = N_{\text{voxels}} \times (s_x \times s_y \times s_z)$$
 $$V_{\text{tumeur}} \; (\text{cm}^3) = \frac{V_{\text{tumeur}} \; (\text{mm}^3)}{1000}$$
 
----
+## Rendu 2D et 3D avec VTK
 
-## Visualisation 3D Interactive (VTK)
+L'affichage passe par les bindings Python de VTK et `QVTKRenderWindowInteractor` :
 
-La couche de visualisation s'appuie sur le binding Python de **VTK** et `QVTKRenderWindowInteractor` :
+- Le rendu surfacique (`vtkDiscreteMarchingCubes`) extrait les isosurfaces des masques binaires : tumeur 1 en rouge (`#EF4444`), tumeur 2 en bleu (`#3B82F6`), avec une opacité de 0,95.
+- Un rendu volumique (`vtkSmartVolumeMapper`) affiche en fond la boîte crânienne et le tissu cérébral, presque transparents (opacité maximale de 0,08), via `vtkColorTransferFunction`.
+- En 2D, `vtkImageBlend` superpose en temps réel l'IRM en niveaux de gris et les masques colorés semi-transparents produits par `vtkImageMapToColors`.
 
-- **Rendu surfacique 3D** (`vtkDiscreteMarchingCubes`) — extrait les isosurfaces 3D des masques binaires. Tumeur 1 en **rouge** `#EF4444`, Tumeur 2 en **bleu** `#3B82F6`, avec opacité 0.95.
-- **Rendu volumique anatomique de fond** (`vtkSmartVolumeMapper`) — boîte crânienne et tissu cérébral affichés en arrière-plan semi-transparent (opacité max 0.08) via `vtkColorTransferFunction`.
-- **Fusion d'images 2D multi-calques** (`vtkImageBlend`) — blend en temps réel de l'IRM en niveaux de gris avec les masques colorés semi-transparents via `vtkImageMapToColors`.
+![Rendu surfacique 3D de la tumeur cérébrale, superposé au volume](/assets/projects/vtk-itk/render-3d.webp)
 
-![Rendu surfacique 3D et superposition volumétrique de la tumeur cérébrale](/assets/projects/vtk-itk/render-3d.webp)
+## Observations, limites et perspectives
 
----
+L'analyse visuelle de ce cas fait ressortir trois points :
 
-## Discussion & Perspectives
+- Une cavité et une cicatrice visibles indiquent une résection chirurgicale antérieure.
+- La tumeur récidive en bordure de la zone réséquée, au lieu de croître comme une sphère isolée.
+- Contrairement au scanner, dont les valeurs sont calibrées en unités Hounsfield, les intensités IRM des fichiers NRRD sont relatives et non calibrées : impossible de pré-filtrer directement les tissus par densité.
 
-L'analyse visuelle révèle plusieurs éléments cliniques importants sur ce cas :
-
-- **Traces de résection chirurgicale** : une cavité et une cicatrice visibles indiquent une intervention antérieure.
-- **Récidive tumorale périphérique** : la tumeur prolifère en bordure de la zone réséquée, et non comme une sphère isolée.
-- **Limitation NRRD vs. HU** : contrairement aux données CT en unités Hounsfield, les valeurs IRM du format NRRD sont des intensités relatives non calibrées, rendant impossible le pré-filtrage direct par densité tissulaire.
-
-**Perspectives** : intégration de modèles de deep learning 3D (nnU-Net) pour surmonter les variations de contraste IRM, et extension à la gestion des tumeurs multifocales.
+Pour aller plus loin : intégrer un modèle de deep learning 3D (nnU-Net) pour mieux résister aux variations de contraste entre IRM, et gérer les tumeurs multifocales.

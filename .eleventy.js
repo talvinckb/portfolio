@@ -134,11 +134,21 @@ module.exports = function (eleventyConfig) {
     ),
   );
 
-  /** The featured projects before and after `id`, for the case-study pager. */
+  /** The featured projects before and after `id`: `prev` / `next` for the
+      pager at the foot of a case study, `before` / `after` going round the
+      ends for the arrows at its head, with its place in the list. */
   eleventyConfig.addFilter("neighbours", (items, id) => {
     const featured = items.filter((p) => p.featured);
     const i = featured.findIndex((p) => p.id === id);
-    return { prev: featured[i - 1] || null, next: featured[i + 1] || null };
+    const n = featured.length;
+    return {
+      prev: featured[i - 1] || null,
+      next: featured[i + 1] || null,
+      before: featured[(i - 1 + n) % n],
+      after: featured[(i + 1) % n],
+      index: i + 1,
+      count: n,
+    };
   });
 
   /** `/css/style.css` → `/css/style.css?v=<content hash>`: a changed file gets
@@ -179,6 +189,29 @@ module.exports = function (eleventyConfig) {
       .replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`)
       .replace(/\*([^*]+)\*/g, "<em>$1</em>"),
   );
+
+  /** Columns of the skills matrix: every project or experience a skill was
+      used in, in the page's order (selected work, other work, then the
+      path), each with where its header leads. */
+  eleventyConfig.addFilter("skillColumns", (t) => {
+    const used = new Set(
+      t.skills.groups.flatMap((group) => group.items.flatMap((skill) => skill.used)),
+    );
+    const work = t.projects.items.filter((p) => used.has(p.id));
+    const columns = [
+      ...work
+        .filter((p) => p.featured)
+        .map((p) => ({ id: p.id, name: p.name, href: `#p-${p.id}`, group: "work" })),
+      ...work
+        .filter((p) => !p.featured)
+        .map((p) => ({ id: p.id, name: p.name, href: p.github, external: true, group: "other" })),
+      ...t.background.timeline
+        .filter((item) => used.has(item.id))
+        .map((item) => ({ id: item.id, name: item.org, href: `#tl-${item.id}`, group: "path" })),
+    ];
+    // A thin rule opens each group of columns.
+    return columns.map((col, i) => ({ ...col, opens: i > 0 && col.group !== columns[i - 1].group }));
+  });
 
   /** First entry of `items` whose id is `id`, or null. */
   eleventyConfig.addFilter("byId", (items, id) =>

@@ -38,6 +38,7 @@
     "name": "Talvin Ackbaraly",
     "role": "Engineering student at EPITA, Image major",
     "status": "Available for a 6-month internship from February 2027",
+    "statusShort": "6-month internship from Feb. 2027",
     "leadStrong": "Computer vision, AI and GPU computing.",
     "lead": "I build complete image pipelines, from the Python prototype to the CUDA port.",
     "ctaWork": "See the work",
@@ -48,10 +49,7 @@
   "projects": {
     "title": "Selected projects",
     "secondaryTitle": "Other work",
-    "showOthers": "Show",
-    "hideOthers": "Hide",
     "publicRepo": "GitHub",
-    "privateRepo": "Code not public",
     "read": "Read the case study",
     "cursor": "Read it",
     "sourceCode": "Source code",
@@ -60,10 +58,10 @@
     "items": [
       {
         "id": "pfee-bnf",
-        "name": "PFEE — BNF",
-        "title": "Segmentation & classification of heritage illustrations",
-        "tagline": "Automatic detection of illustrations in digitized heritage documents, in partnership with the BNF.",
-        "highlights": ["illustrations", "BNF"],
+        "name": "PFEE — BnF",
+        "title": "Segmentation & classification of heritage illustrations",
+        "tagline": "Automatic detection of illustrations in digitized heritage documents, in partnership with the BnF.",
+        "highlights": ["illustrations", "BnF"],
         "thumbnail": "/assets/projects/pfee-bnf/thumbnail-16x9.webp",
         "thumbnailLight": "/assets/projects/pfee-bnf/thumbnail-16x9-light.webp",
         "stack": [
@@ -99,7 +97,7 @@
       {
         "id": "irgpu",
         "name": "IRGPU",
-        "title": "Real-time video motion detection — GPU port",
+        "title": "Real-time video motion detection — GPU port",
         "tagline": "CPU → GPU port of a real-time algorithm achieving a ×24 performance gain via CUDA.",
         "highlights": ["×24", "CUDA"],
         "thumbnail": "/assets/projects/irgpu/thumbnail-16x9.webp",
@@ -118,7 +116,7 @@
       {
         "id": "medviz",
         "name": "MedViz",
-        "title": "Medical prediction & 3D visualization",
+        "title": "Medical prediction & 3D visualization",
         "tagline": "Full FVC prediction pipeline from pulmonary CT scans, with 3D visualization in the browser.",
         "highlights": ["FVC prediction", "3D visualization"],
         "thumbnail": "/assets/projects/medviz/thumbnail-16x9.webp",
@@ -137,7 +135,7 @@
       {
         "id": "vtk-itk",
         "name": "VTK-ITK",
-        "title": "Brain tumor registration & longitudinal tracking",
+        "title": "Brain tumor registration & longitudinal tracking",
         "tagline": "3D MRI alignment (ITK) with tumor segmentation and interactive multi-view visualization (VTK + PyQt6) — quantifying the evolution of a glioma.",
         "highlights": ["tumor segmentation", "glioma"],
         "thumbnail": "/assets/projects/vtk-itk/thumbnail-16x9.webp",
@@ -238,12 +236,13 @@
   },
   "background": {
     "title": "Background",
-    "lede": "Most recent first. My studies are the main branch. Internships, the exchange, the final-year project and freelance work branch off it and merge back. In blue, what is happening now.",
+    "lede": "Five years at EPITA, from the preparatory cycle to the Image major, with a semester in Québec, two internships and a final-year project with the BnF. Next: a six-month internship in vision, AI or GPU computing.",
     "now": "Current",
     "today": "Today",
     "extrasTitle": "Languages",
     "extras": [
-      "English — TOEIC certified"
+      "French, native",
+      "English, professional (TOEIC 845)"
     ],
     "timeline": [
       {
@@ -260,7 +259,7 @@
         "id": "internship",
         "start": "2027-02",
         "end": "2027-08",
-        "period": "Feb. — Aug. 2027",
+        "period": "Feb. 2027 — Aug. 2027",
         "org": "End-of-studies internship",
         "role": "6 months in computer vision, AI or GPU computing",
         "type": "Internship",
@@ -330,7 +329,7 @@
         "id": "uqac",
         "start": "2024-01",
         "end": "2024-05",
-        "period": "Jan. — May 2024",
+        "period": "Jan. 2024 — May 2024",
         "org": "UQAC",
         "role": "Academic exchange in Canada, semester 4",
         "type": "Exchange",
@@ -340,7 +339,7 @@
         "id": "hitachi",
         "start": "2023-06",
         "end": "2023-07",
-        "period": "June — July 2023",
+        "period": "June 2023 — July 2023",
         "org": "Hitachi Solutions France",
         "role": "IT consultant",
         "type": "Internship",
@@ -376,7 +375,8 @@
   },
   "skills": {
     "title": "Skills",
-    "usedIn": "Used in",
+    "caption": "Skills, and the projects or experience they were used in",
+    "used": "Used",
     "groups": [
       {
         "category": "Vision & AI",
@@ -385,6 +385,8 @@
             "name": "Image processing",
             "used": [
               "pfee-bnf",
+              "alpr",
+              "irgpu",
               "medviz",
               "ocr-sudoku"
             ]
@@ -392,7 +394,8 @@
           {
             "name": "Deep Learning",
             "used": [
-              "pfee-bnf"
+              "pfee-bnf",
+              "ocr-sudoku"
             ]
           },
           {
@@ -475,6 +478,7 @@
             "used": [
               "pfee-bnf",
               "alpr",
+              "medviz",
               "vtk-itk"
             ]
           },
@@ -505,7 +509,8 @@
           }
         ]
       }
-    ]
+    ],
+    "usedIn": "Used in"
   },
   "contact": {
     "label": "Contact",
@@ -537,7 +542,9 @@
     "result": "Result",
     "role": "My role",
     "prev": "Previous project",
-    "next": "Next project"
+    "next": "Next project",
+    "switcher": "Switch project",
+    "keys": "Arrow keys ← →"
   },
   "footer": {
     "built": "Eleventy, plain CSS, no framework"
