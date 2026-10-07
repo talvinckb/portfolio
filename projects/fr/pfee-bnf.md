@@ -22,8 +22,8 @@ report: null
 brief:
   problem: "Le catalogage des illustrations numérisées par la BnF sur Gallica reste en grande partie manuel."
   approach: "Détection des illustrations sur la page (YOLO26l), découpe, puis classification de chaque illustration (ConvNeXt)."
-  result: "Détecteur à 0,947 d'AP50 sur la validation, et un premier pipeline détection → classification qui tourne de bout en bout ; rendu final fin janvier 2027."
-  role: "Toute la partie détection : préparation du dataset, entraînement et évaluation du modèle YOLO."
+  result: "Détecteur à 0,956 d'AP50 et 0,856 de précision à 95 % de rappel, aussi bon sur les ouvrages jamais vus à l'entraînement ; le pipeline détection → classification tourne de bout en bout. Rendu final fin janvier 2027."
+  role: "Toute la partie détection (dataset, entraînement, évaluation, comparaison YOLO / Florence-2), et la ligne de commande commune qui enchaîne détection et classification."
 ---
 
 ## Contexte & Objectifs
@@ -66,13 +66,13 @@ Le pipeline enchaîne deux modèles spécialisés plutôt qu'un seul modèle à 
 2. **Découpe** — chaque boîte est extraite de la page en une image indépendante.
 3. **Classification** — ConvNeXt prédit la catégorie de chaque découpe.
 
-La sortie est une page annotée et un fichier JSON par vue : coordonnées des boîtes, score de détection et classe prédite.
+La sortie est une page annotée par vue et un fichier `predictions.jsonl`, une ligne par page : coordonnées des boîtes, score de détection, classe prédite et sa confiance. Chaque modèle s'entraîne et s'évalue dans son propre module ; le pipeline ne fait qu'enchaîner les deux modèles entraînés, derrière une seule ligne de commande.
 
 ---
 
 ## Détection des Illustrations (YOLO)
 
-C'est mon périmètre dans l'équipe. Le modèle retenu pour ce premier entraînement complet est **YOLO26l** (Ultralytics), pré-entraîné sur COCO puis fine-tuné sur le corpus BnF en **une seule classe**, `Illustration`.
+C'est mon périmètre dans l'équipe. Le modèle retenu est **YOLO26l** (Ultralytics), pré-entraîné sur COCO puis fine-tuné sur le corpus BnF en **une seule classe**, `Illustration`.
 
 ### Préparation du dataset
 
@@ -88,28 +88,31 @@ La livraison BnF est laissée intacte ; un script en dérive une copie propre :
 | :------------ | :------------------------------------ |
 | Modèle        | YOLO26l, pré-entraîné COCO            |
 | Résolution    | 800 px                                |
-| Epochs        | 50 (meilleure : 48)                   |
+| Epochs        | 50 (meilleure : 50)                   |
 | Batch         | 6 — le plafond d'une RTX 4070 Laptop  |
 | Optimiseur    | AdamW, lr 0,002                       |
 | Augmentations | `mosaic` et `fliplr` **désactivées**  |
-| Durée         | 2 h 45                                |
+| Durée         | 2 h 35                                |
 
 Les deux augmentations désactivées sont un choix délibéré : le retournement horizontal renverse le texte des pages, et la mosaïque fabrique des mises en page qui n'existent pas dans le corpus. Le plateau est atteint vers l'epoch 30 ; seul le mAP50-95 (la finesse du détourage) progresse encore au-delà.
 
 ### Résultats
 
-Sur le split de validation, au seuil de confiance 0,25 :
+Sur le split de validation :
 
-| Métrique                           | Valeur                | Ce qu'elle mesure                                             |
-| :--------------------------------- | :-------------------- | :------------------------------------------------------------ |
-| **P@R90**                          | **0,915**             | Précision quand le modèle retrouve au moins 90 % des illustrations |
-| **AP50**                           | **0,947**             | Capacité globale de détection (IoU ≥ 0,50)                    |
-| mAP50-95                           | 0,852                 | Précision du détourage, sur IoU 0,50 à 0,95                   |
-| Précision / rappel / F1            | 0,882 / 0,922 / 0,902 | Fiabilité / exhaustivité / équilibre au seuil retenu          |
-| IoU moyenne                        | 0,939                 | Recouvrement des boîtes correctement détectées                |
-| Fausses détections sur pages vides | 26 / 89 (29 %)        | Pages sans illustration où le modèle en voit une quand même   |
+| Métrique                           | Valeur                | Ce qu'elle mesure                                                  |
+| :--------------------------------- | :-------------------- | :----------------------------------------------------------------- |
+| **P@R95**                          | **0,856**             | Précision quand le modèle retrouve au moins 95 % des illustrations |
+| P@R90                              | 0,943                 | La même, à 90 % de rappel                                          |
+| **AP50**                           | **0,956**             | Capacité globale de détection (IoU ≥ 0,50)                         |
+| mAP50-95                           | 0,872                 | Précision du détourage, sur IoU 0,50 à 0,95                        |
+| Précision / rappel / F1 (seuil 0,25) | 0,888 / 0,939 / 0,913 | Fiabilité / exhaustivité / équilibre                             |
+| IoU moyenne                        | 0,939                 | Recouvrement des boîtes correctement détectées                     |
+| Fausses détections sur pages vides | 26 / 89 (29 %)        | Pages sans illustration où le modèle en voit une quand même        |
 
-La **P@R90** est la métrique principale : rater une illustration coûte plus cher qu'en proposer une en trop, qu'un humain peut écarter. On fixe donc le rappel à 90 % et on regarde la précision obtenue.
+La **P@R95** est la métrique principale : effacer une boîte en trop coûte moins cher à un humain que d'en tracer une oubliée. On fixe donc le rappel à 95 % et on regarde la précision obtenue. L'évaluation en déduit aussi le **seuil de confiance à utiliser** — ici 0,167, celui qui atteint 95 % de rappel avec la meilleure précision — que la prédiction et le pipeline reprennent par défaut.
+
+Les métriques sont recalculées par notre propre code plutôt que lues dans les courbes d'Ultralytics, et l'AP est vérifiée contre `pycocotools` dans les tests.
 
 ![Prédictions YOLO26l sur un lot de validation — photos, plans, gravures, vues stéréoscopiques et une page vide correctement ignorée](/assets/projects/pfee-bnf/yolo-val-predictions.webp)
 
@@ -117,37 +120,52 @@ La **P@R90** est la métrique principale : rater une illustration coûte plus ch
 
 Les métriques globales cachent des écarts nets. Découpées **par taille d'illustration** :
 
-| Taille (part de la page) | AP50      | mAP50-95 | P@R90                |
+| Taille (part de la page) | AP50      | mAP50-95 | P@R95                |
 | :----------------------- | --------: | -------: | :------------------- |
-| Minuscule (< 1 %)        | **0,587** | 0,389    | rappel max. 0,87     |
-| Petite (1–10 %)          | 0,949     | 0,832    | 0,899                |
-| Moyenne (10–50 %)        | 0,933     | 0,824    | 0,859                |
-| Grande (> 50 %)          | 0,982     | 0,940    | 0,979                |
+| Minuscule (< 1 %)        | **0,652** | 0,420    | rappel max. 0,92     |
+| Petite (1–10 %)          | 0,960     | 0,854    | 0,794                |
+| Moyenne (10–50 %)        | 0,938     | 0,845    | 0,780                |
+| Grande (> 50 %)          | 0,993     | 0,952    | 0,983                |
 
 Et **par type de document** :
 
-| Type                         | AP50  | P@R90 |
-| :--------------------------- | ----: | ----: |
-| Photographie                 | 0,990 | 1,000 |
-| Ornement typographique       | 0,980 | 0,981 |
-| Pellicule photo              | 0,974 | 0,953 |
-| Bande dessinée               | 0,952 | 0,935 |
-| Croquis multiples d'un objet | 0,878 | 0,605 |
-| Stéréoscopie                 | 0,865 | 0,828 |
+| Type                         | AP50  | P@R90 | P@R95 |
+| :--------------------------- | ----: | ----: | ----: |
+| Photographie                 | 0,999 | 1,000 | 1,000 |
+| Pellicule photo              | 0,983 | 0,971 | 0,952 |
+| Ornement typographique       | 0,984 | 0,929 | 0,871 |
+| Bande dessinée               | 0,955 | 0,939 | 0,859 |
+| Plan                         | 0,922 | 0,819 | 0,660 |
+| Croquis multiples d'un objet | 0,913 | 0,730 | 0,536 |
+| Stéréoscopie                 | 0,903 | 0,960 | 0,410 |
 
 Trois enseignements guident la suite :
 
-1. **Les très petites illustrations sont le point faible.** Leur AP50 tombe à 0,587, et le rappel y plafonne à 0,87 quel que soit le seuil : les 90 % visés sont hors de portée. C'est le chantier prioritaire.
-2. **Les pages vides déclenchent encore trop de fausses détections.** 29 % d'entre elles reçoivent une boîte, contre 62 % après 2 epochs : l'entraînement a divisé ce taux par deux, mais c'est le chiffre qu'un bibliothécaire remarquera en premier.
+1. **Les très petites illustrations sont le point faible.** Leur AP50 tombe à 0,652, et le rappel y plafonne à 0,92 quel que soit le seuil : les 95 % visés sont hors de portée, et atteindre 90 % ne laisse que 13 % de précision. C'est le chantier prioritaire.
+2. **Les pages vides déclenchent encore trop de fausses détections.** 29 % d'entre elles reçoivent une boîte au seuil 0,25, et 36 % au seuil qui vise 95 % de rappel : c'est le chiffre qu'un bibliothécaire remarquera en premier.
 3. **Les pages à plusieurs petits objets voisins et semblables** (croquis multiples, vues stéréoscopiques) sont les plus difficiles — le modèle hésite entre une boîte commune et une boîte par objet, ce qui recoupe le premier point.
 
-Ces chiffres restent **optimistes** : la validation fournie partage 146 ouvrages avec le train, soit 18 % de ses vues. Deux pages d'un même ouvrage se ressemblant beaucoup, un split de test découpé par ouvrage est prévu pour mesurer la généralisation réelle.
+Restait un doute sur la généralisation : le split de validation fourni est découpé par vue, et 222 de ses 1 207 vues appartiennent à un ouvrage déjà présent dans le train. Deux pages d'un même ouvrage se ressemblant beaucoup, l'évaluation rapporte aussi les métriques sur les seuls **ouvrages absents du train** : P@R90 de 0,945 contre 0,943 sur toute la validation. Pas d'effet mesurable, le modèle ne profite pas de cette fuite.
+
+### Comparaison avec Florence-2
+
+Pour vérifier que YOLO est le bon choix, l'équipe a aussi entraîné **Florence-2-base** (Microsoft), un modèle vision-langage qui génère ses boîtes sous forme de texte, sur le même dataset et avec la même évaluation. Son encodeur visuel est gelé, seul le reste du modèle est fine-tuné.
+
+| Métrique                           | YOLO26l   | Florence-2-base |
+| :--------------------------------- | --------: | --------------: |
+| AP50                               | **0,956** | 0,461           |
+| Rappel maximal                     | **≥ 0,95**| 0,73            |
+| P@R95                              | **0,856** | non atteint     |
+| IoU moyenne                        | 0,939     | **0,959**       |
+| Fausses détections sur pages vides | 29 %      | **1 %**         |
+
+Florence-2 détoure très proprement les grandes illustrations (AP50 de 0,953 au-delà de la moitié de la page) et ne se trompe presque jamais sur une page vide, mais il passe à côté de la plupart des petites : rappel de 0,27 sous 1 % de la page, 0,55 entre 1 et 10 %. Sa perte de validation est au plus bas dès la première epoch, puis remonte : le modèle surapprend tout de suite. YOLO reste le détecteur du pipeline.
 
 ---
 
 ## Classification (ConvNeXt)
 
-La classification est portée par un autre membre de l'équipe. Un **ConvNeXt-Tiny** pré-entraîné sur ImageNet est fine-tuné sur le premier axe de la grille, la **technique** (photographie, estampe…), choisi pour sa capacité à extraire des caractéristiques visuelles sur des styles graphiques très variés. Les axes _Forme/Fonction_ et _Genre_ suivront sur la même base.
+La classification est portée par un autre membre de l'équipe. Un **ConvNeXt-Tiny** pré-entraîné sur ImageNet est fine-tuné sur le premier axe de la grille, la **technique** — 5 classes : dessin, estampe, impression, peinture, photographie —, choisi pour sa capacité à extraire des caractéristiques visuelles sur des styles graphiques très variés. Les classes étant très déséquilibrées, la perte pondère chaque classe selon sa fréquence. Les axes _Genre_ (16 classes) et _Forme/Fonction_ (21 classes) s'entraînent de la même façon, à partir de leurs propres fichiers.
 
 ---
 
@@ -165,8 +183,9 @@ Sur la planche de droite, le détecteur sépare bien les quatre gravures au lieu
 
 ## État d'Avancement
 
-Le projet est en cours — le rendu final est prévu pour **fin janvier 2027**. Le détecteur et un premier classifieur sont entraînés, et le pipeline complet fonctionne. Les prochaines étapes :
+Le projet est en cours — le rendu final est prévu pour **fin janvier 2027**. Le détecteur et un premier classifieur sont entraînés, et le pipeline complet fonctionne derrière une ligne de commande unique, avec des tests et une intégration continue (lint `ruff`). Les prochaines étapes :
 
-- **Détection** : un split de test par ouvrage, puis un travail ciblé sur les petites illustrations et les fausses détections sur pages vides ;
+- **Détection** : un travail ciblé sur les petites illustrations et les fausses détections sur pages vides ;
 - **Orientation** : détecter et corriger les illustrations numérisées de travers (0° / 90° / 180° / 270°) ;
-- **Classification** : étendre le classifieur aux axes _Forme/Fonction_ et _Genre_.
+- **Classification** : brancher les axes _Forme/Fonction_ et _Genre_ dans le pipeline, qui ne prend aujourd'hui qu'un classifieur ;
+- **Évaluation de bout en bout** : aucun jeu de données n'annote à la fois les boîtes et les classes des mêmes pages, chaque modèle n'est donc évalué que séparément.
