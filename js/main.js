@@ -189,24 +189,86 @@ function initStack() {
     history.pushState(history.state, "", a.hash);
   }, { signal });
 
-  // Previous and next: the arrows around a card's index, and ← → while
-  // the work is on screen. They act on the card in front.
+  // Previous and next card: the arrows around a card's index.
   document.addEventListener("click", (e) => {
     const btn = e.target.closest(".card__step");
     if (!btn) return;
     const target = cards[cards.indexOf(btn.closest(".card")) + Number(btn.dataset.step)];
     if (target) bringCard(target);
   }, { signal });
+}
+
+/* ─────────────────────────────────────────────────────────────
+   ← and → walk the page, one stop at a time
+   ───────────────────────────────────────────────────────────── */
+
+/* The stops, in order: the hero, each card where it comes to rest, the
+   other work, then the background, the skills and the contact. The keys
+   go to the first stop below the page's position, or the last one above.
+   In the carousel, the cards are one stop and the keys slide the row
+   first, card by card, before leaving it. */
+function initPageSteps() {
+  const stack = document.querySelector("[data-stack]");
+  const cards = [...(stack?.querySelectorAll(".card") ?? [])];
+  const signal = binding();
+  const TOLERANCE = 8;
+  let aimed = null; // where the last key sent the page, while it gets there
+
+  const padding = () => parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
+  const top = (el) => el.getBoundingClientRect().top + window.scrollY;
+  const carousel = () => stack && getComputedStyle(stack).overflowX === "auto";
+
+  function cardStop(card) {
+    if (getComputedStyle(card).position !== "sticky") return top(card) - padding();
+    card.style.position = "static";
+    const rest = top(card);
+    card.style.position = "";
+    return rest - parseFloat(getComputedStyle(card).top);
+  }
+
+  function stops() {
+    const el = document.scrollingElement || document.documentElement;
+    const max = el.scrollHeight - el.clientHeight;
+    const list = [0];
+    if (carousel()) list.push(top(stack) - padding());
+    else cards.forEach((card) => list.push(cardStop(card)));
+    for (const sel of [".others", "#background", "#skills", "#contact"]) {
+      const node = document.querySelector(sel);
+      if (node) list.push(top(node) - padding());
+    }
+    return [...new Set(list.map((y) => Math.round(Math.min(Math.max(0, y), max))))].sort((a, b) => a - b);
+  }
+
+  // In the carousel: move the row by one card if it can still go that way.
+  function slideRow(dir) {
+    if (!carousel()) return false;
+    const r = stack.getBoundingClientRect();
+    if (r.bottom < window.innerHeight * 0.3 || r.top > window.innerHeight * 0.7) return false;
+    const max = stack.scrollWidth - stack.clientWidth;
+    if ((dir > 0 && stack.scrollLeft >= max - 2) || (dir < 0 && stack.scrollLeft <= 2)) return false;
+    const gap = parseFloat(getComputedStyle(stack).columnGap) || 0;
+    stack.scrollBy({ left: dir * (cards[0].offsetWidth + gap), behavior: prefersReducedMotion() ? "auto" : "smooth" });
+    return true;
+  }
 
   document.addEventListener("keydown", (e) => {
     if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
     if (e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
-    if (e.target.closest?.("input, textarea, select, [contenteditable], [data-matrix]")) return;
-    const front = frontCard(cards);
-    const target = front && cards[cards.indexOf(front) + (e.key === "ArrowLeft" ? -1 : 1)];
-    if (!target) return;
+    if (e.target.closest?.("input, textarea, select, [contenteditable], [data-matrix], .others__list")) return;
+    if (document.body.classList.contains("has-menu-open")) return;
+    const dir = e.key === "ArrowLeft" ? -1 : 1;
     e.preventDefault();
-    bringCard(target);
+    if (slideRow(dir)) return;
+
+    // A key pressed again mid-scroll counts from where the page is going.
+    const from = aimed && performance.now() - aimed.at < 900 ? aimed.y : window.scrollY;
+    const list = stops();
+    const target = dir > 0
+      ? list.find((y) => y > from + TOLERANCE)
+      : list.findLast((y) => y < from - TOLERANCE);
+    if (target === undefined) return;
+    aimed = { y: target, at: performance.now() };
+    window.scrollTo({ top: target, behavior: prefersReducedMotion() ? "auto" : "smooth" });
   }, { signal });
 }
 
@@ -225,26 +287,6 @@ function bringCard(card) {
   } else {
     card.scrollIntoView({ behavior, block: "start" });
   }
-}
-
-/* The card the most in view, counting only what the next card leaves
-   uncovered in the stack and what shows inside the carousel's row. */
-function frontCard(cards) {
-  const row = cards[0].parentElement.getBoundingClientRect();
-  let front = null;
-  let best = 0.3;
-  for (const card of cards) {
-    const r = card.getBoundingClientRect();
-    const w = Math.min(r.right, row.right, window.innerWidth) - Math.max(r.left, row.left, 0);
-    const h = Math.min(r.bottom, window.innerHeight) - Math.max(r.top, 0);
-    const covered = parseFloat(card.style.getPropertyValue("--p")) || 0;
-    const seen = w > 0 && h > 0 ? ((w * h) / (r.width * r.height)) * (1 - covered) : 0;
-    if (seen > best) {
-      front = card;
-      best = seen;
-    }
-  }
-  return front;
 }
 
 /* ─────────────────────────────────────────────────────────────
@@ -679,6 +721,7 @@ boot(() => {
   initHeroOnce();
   initNavScrollSpy();
   initStack();
+  initPageSteps();
   initStackNav();
   initCursor();
   initTimeline();

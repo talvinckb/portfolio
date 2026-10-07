@@ -167,9 +167,14 @@ s'estomper. Un badge « Lire l'étude » suit le pointeur sur les visuels
 (souris uniquement). La variante claire ou sombre du visuel suit le thème.
 
 Sur grand écran, deux flèches entourent l'index de chaque carte (« ‹ 03 / 06
-› ») pour passer à la carte précédente ou suivante ; les touches ← et →
-font de même tant qu'une carte est à l'écran. Sur téléphone, le carrousel
-garde ses propres flèches, à côté du titre.
+› ») pour passer à la carte précédente ou suivante. Sur téléphone, le
+carrousel garde ses propres flèches, à côté du titre.
+
+**Au clavier**, ← et → parcourent toute la page, une étape à la fois :
+hero, chaque carte là où elle se pose, autres réalisations, parcours,
+compétences, contact (`initPageSteps`). Dans le carrousel, les touches font
+d'abord défiler les cartes. Elles se taisent dans un champ, dans la matrice
+des compétences ou quand le menu est ouvert.
 
 Les « autres réalisations » restent toujours visibles : en colonnes sur
 grand écran, en rangée à faire défiler sur téléphone.
