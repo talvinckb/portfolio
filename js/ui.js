@@ -343,15 +343,27 @@ export function initMobileMenu() {
    Back to top
    ───────────────────────────────────────────────────────────── */
 
+/* It floats over the corner of the page, where it would cover whatever is
+   read there: it shows on the way back up, when it is wanted, and stays
+   once the end of the page is near, where reading is over. Going on
+   downwards anywhere else, it steps aside. */
 export function initBackToTop() {
   const btn = document.getElementById("back-to-top");
   if (!btn) return;
 
-  const onScroll = () =>
-    btn.classList.toggle("is-visible", window.scrollY > 400);
+  let last = window.scrollY;
+
+  const onScroll = () => {
+    const el = document.scrollingElement || document.documentElement;
+    const y = window.scrollY;
+    const delta = y - last;
+    const end = y + el.clientHeight >= el.scrollHeight - el.clientHeight * 0.6;
+    if (y > 400 && !end && Math.abs(delta) < 12) return; // a jitter, not a direction
+    last = y;
+    btn.classList.toggle("is-visible", y > 400 && (end || delta < 0));
+  };
 
   window.addEventListener("scroll", onScroll, { passive: true, signal: bus.signal });
-  onScroll();
 
   btn.addEventListener("click", () => {
     window.scrollTo({ top: 0, behavior: scrollBehavior() });

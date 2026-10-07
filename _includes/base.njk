@@ -19,6 +19,21 @@
 {# Two-digit index: 1 → "01". #}
 {% macro two(n) %}{{ "0" if n < 10 }}{{ n }}{% endmacro %}
 
+{# The name is set like a logotype, its letters tight enough to touch.
+   They stay inline, so the font's own kerning still applies between them.
+   Each letter rises on its own; the second line starts while the first is
+   still moving. #}
+{% macro nameLines(name) -%}
+  {%- for word in name.split(" ") -%}
+    {%- set line = loop.index0 -%}
+    <span class="hero__line">
+      {%- for ch in word.split("") -%}
+        <span class="hero__ch" style="--i: {{ loop.index0 + line * 4 }}">{{ ch }}</span>
+      {%- endfor -%}
+    </span>
+  {%- endfor -%}
+{%- endmacro %}
+
 <!DOCTYPE html>
 <html lang="{{ lang }}">
   <head>
@@ -34,18 +49,24 @@
       <section class="hero wrap" aria-labelledby="hero-name">
         <div class="hero__meta">
           <p>{{ t.hero.role }}</p>
-          <p class="status"><span class="status__dot" aria-hidden="true"></span>{{ t.hero.status }}</p>
+          <p class="status">
+            <span class="status__dot" aria-hidden="true"></span>
+            <span class="status__long">{{ t.hero.status }}</span>
+            <span class="status__short">{{ t.hero.statusShort }}</span>
+          </p>
         </div>
 
-        {# Each letter rises on its own; the second line starts while the
-           first is still moving. Screen readers get the plain name. #}
-        <h1 class="hero__name" id="hero-name">
-          <span class="visually-hidden">{{ t.hero.name }}</span>
-          {% for word in t.hero.name.split(" ") %}
-            {% set line = loop.index0 %}
-            <span class="hero__line" aria-hidden="true">{% for ch in word.split("") %}<span class="hero__ch" style="--i: {{ loop.index0 + line * 4 }}">{{ ch }}</span>{% endfor %}</span>
-          {% endfor %}
-        </h1>
+        {# Screen readers get the plain name. The copy beside the heading is
+           the lens: the same letters in outline, shown only under the
+           pointer, as an edge detector would see them (main.js). It stays
+           out of the h1, which holds the name once. #}
+        <div class="hero__name" data-lens>
+          <h1 class="hero__solid" id="hero-name">
+            <span class="visually-hidden">{{ t.hero.name }}</span>
+            <span aria-hidden="true">{{ nameLines(t.hero.name) }}</span>
+          </h1>
+          <span class="hero__lens" aria-hidden="true">{{ nameLines(t.hero.name) }}</span>
+        </div>
 
         <div class="hero__row">
           <p class="hero__lead"><strong>{{ t.hero.leadStrong }}</strong> {{ t.hero.lead }}</p>
@@ -76,7 +97,11 @@
               <div class="card__inner">
                 <div class="card__text">
                   <p class="card__meta">
-                    <span><b>{{ two(loop.index) }}</b> / {{ two(count) }}</span>
+                    <span class="card__index">
+                      <button class="card__step" type="button" data-step="-1" aria-label="{{ t.a11y.prevProject }}" title="{{ t.a11y.prevProject }} (←)"{% if loop.first %} disabled{% endif %}>{{ icon.chevronLeft(14) }}</button>
+                      <span><b>{{ two(loop.index) }}</b> / {{ two(count) }}</span>
+                      <button class="card__step" type="button" data-step="1" aria-label="{{ t.a11y.nextProject }}" title="{{ t.a11y.nextProject }} (→)"{% if loop.last %} disabled{% endif %}>{{ icon.chevronRight(14) }}</button>
+                    </span>
                     <span>{{ p.period }} · {{ t.projects.pair if p.team == 2 else t.projects.teamOf + " " + p.team }}</span>
                   </p>
                   <p class="card__name">{{ p.name }}</p>
@@ -89,8 +114,6 @@
                     <a class="btn btn--ink" href="{{ projectUrl }}">{{ t.projects.read }}{{ icon.arrowRight(16, "icon icon--right") }}</a>
                     {% if p.github %}
                       <a class="link" href="{{ p.github }}" target="_blank" rel="noopener noreferrer">{{ t.projects.sourceCode }}{{ icon.arrowUpRight(13) }}</a>
-                    {% else %}
-                      <span class="card__private">{{ t.projects.privateRepo }}</span>
                     {% endif %}
                   </div>
                 </div>
@@ -116,16 +139,10 @@
           {% endfor %}
         </div>
 
-        {# Folded by default: the selection above is what matters. #}
-        <details class="others">
-          <summary class="others__head">
-            <h3 class="label">{{ t.projects.secondaryTitle }}<span class="others__count">{{ two(others | length) }}</span></h3>
-            <span class="others__toggle">
-              <span class="others__show">{{ t.projects.showOthers }}</span>
-              <span class="others__hide">{{ t.projects.hideOthers }}</span>
-              {{ icon.chevronDown(14) }}
-            </span>
-          </summary>
+        {# The rest of the work, smaller: in columns on a wide screen, in a
+           row to scroll sideways on a phone. #}
+        <div class="others">
+          <h3 class="others__head label">{{ t.projects.secondaryTitle }}<span class="others__count">{{ two(others | length) }}</span></h3>
           <ul class="others__list" role="list">
             {% for p in others %}
               <li class="other">
@@ -135,13 +152,11 @@
                 <p class="other__stack">{{ p.stack | join(" · ") }}</p>
                 {% if p.github %}
                   <a class="link" href="{{ p.github }}" target="_blank" rel="noopener noreferrer">{{ t.projects.publicRepo }}{{ icon.arrowUpRight(13) }}</a>
-                {% else %}
-                  <span class="other__private">{{ t.projects.privateRepo }}</span>
                 {% endif %}
               </li>
             {% endfor %}
           </ul>
-        </details>
+        </div>
       </section>
 
       <!-- ─── Background ─── -->
@@ -157,9 +172,13 @@
         <div class="path">
           <div class="path__aside">
             <p class="path__lede">{{ t.background.lede }}</p>
-            <p class="path__extras">
-              <span class="label">{{ t.background.extrasTitle }}</span>{% for item in t.background.extras %}<span>{{ item }}</span>{% endfor %}
-            </p>
+
+            <div class="path__extras">
+              <p class="label">{{ t.background.extrasTitle }}</p>
+              <ul role="list">
+                {% for item in t.background.extras %}<li>{{ item }}</li>{% endfor %}
+              </ul>
+            </div>
           </div>
 
           <div class="tl" data-tl>
@@ -181,7 +200,7 @@
                   <span class="tl__role">{{ item.role }}</span>
                   <span class="tl__side">
                     {% if state == "live" %}
-                      <span class="badge badge--live"><span class="badge__dot" aria-hidden="true"></span>{{ t.background.now }}</span>
+                      <span class="badge badge--live"><span class="badge__dot" aria-hidden="true"></span><span class="badge__text">{{ t.background.now }}</span></span>
                     {% else %}
                       <span class="badge{% if state == 'next' %} badge--next{% endif %}">{{ item.type }}</span>
                     {% endif %}
@@ -221,58 +240,89 @@
       </section>
 
       <!-- ─── Skills ─── -->
+      {# Every skill against the work it served in: a dot where it was used.
+         Pointing at a cell lights its row and its column (main.js); each
+         column header leads to its project or to its line in the path. On a
+         phone the matrix scrolls sideways under its sticky skill names. #}
+      {% set columns = t | skillColumns %}
       <section id="skills" class="section wrap" aria-labelledby="skills-title">
         <h2 class="section__title" id="skills-title">{{ t.skills.title }}</h2>
 
-        <div class="skills" data-skills>
-          <div class="skills__groups">
+        <div class="skills matrix" data-matrix>
+          <table class="matrix__table">
+            <caption class="visually-hidden">{{ t.skills.caption }}</caption>
+            <thead>
+              <tr>
+                <td class="matrix__corner"></td>
+                {% for col in columns %}
+                  <th class="matrix__col{% if col.opens %} opens{% endif %}" scope="col" data-col="{{ loop.index0 }}">
+                    {% if col.href %}
+                      <a class="matrix__name" href="{{ col.href }}"{% if col.external %} target="_blank" rel="noopener noreferrer"{% endif %}>{{ col.name }}</a>
+                    {% else %}
+                      <span class="matrix__name">{{ col.name }}</span>
+                    {% endif %}
+                  </th>
+                {% endfor %}
+              </tr>
+            </thead>
             {% for group in t.skills.groups %}
-              <div class="skills__group">
-                <h3 class="label">{{ group.category }}</h3>
-                <ul class="skills__list" role="list">
-                  {% for item in group.items %}
-                    <li>
-                      {% if item.used | length %}
-                        <button class="skill" type="button" aria-pressed="false" aria-controls="skills-uses" data-skill="{{ item.name | slugify }}">{{ item.name }}</button>
+              <tbody>
+                <tr class="matrix__group">
+                  <th scope="rowgroup" colspan="{{ columns | length + 1 }}"><span class="label">{{ group.category }}</span></th>
+                </tr>
+                {% for item in group.items %}
+                  <tr class="matrix__row">
+                    <th class="matrix__skill" scope="row">{{ item.name }}</th>
+                    {% for col in columns %}
+                      {% if col.id in item.used %}
+                        <td class="is-used{% if col.opens %} opens{% endif %}" data-col="{{ loop.index0 }}"><span class="matrix__dot" aria-hidden="true"></span><span class="visually-hidden">{{ t.skills.used }}</span></td>
                       {% else %}
-                        <span class="skill skill--static">{{ item.name }}</span>
+                        <td{% if col.opens %} class="opens"{% endif %} data-col="{{ loop.index0 }}"></td>
                       {% endif %}
-                    </li>
-                  {% endfor %}
-                </ul>
-              </div>
+                    {% endfor %}
+                  </tr>
+                {% endfor %}
+              </tbody>
             {% endfor %}
-          </div>
+          </table>
+        </div>
 
-          {# One prerendered list per skill; the script shows the chosen one. #}
-          <div class="skills__uses" id="skills-uses" aria-live="polite">
-            {% for group in t.skills.groups %}
+        {# On a phone the matrix could only scroll sideways: the skills turn
+           into pills, each with the number of works it served in, and a tap
+           lists those works under the group (main.js). #}
+        <div class="skills skillset" data-skillset>
+          {% for group in t.skills.groups %}
+            {% set g = loop.index0 %}
+            <div class="skillset__group">
+              <h3 class="label">{{ group.category }}</h3>
+              <ul class="skillset__pills" role="list">
+                {% for item in group.items %}
+                  <li>
+                    <button class="skillset__pill" type="button" aria-expanded="false" aria-controls="uses-{{ g }}-{{ loop.index0 }}">
+                      {{ item.name }}<span class="skillset__count" aria-hidden="true">{{ item.used | length }}</span>
+                    </button>
+                  </li>
+                {% endfor %}
+              </ul>
               {% for item in group.items %}
-                {% if item.used | length %}
-                  <div class="skills__use" data-uses="{{ item.name | slugify }}" hidden>
-                    <p class="skills__name">{{ item.name }}<span> · {{ t.skills.usedIn }}</span></p>
-                    <ul class="skills__links" role="list">
-                      {% for uid in item.used %}
-                        {% set p = t.projects.items | byId(uid) %}
-                        {% set exp = timeline | byId(uid) %}
-                        <li style="--i: {{ loop.index0 }}">
-                          {% if p and p.featured %}
-                            <a href="#p-{{ p.id }}">{{ p.name }}</a>
-                          {% elif p and p.github %}
-                            <a href="{{ p.github }}" target="_blank" rel="noopener noreferrer">{{ p.name }}{{ icon.arrowUpRight(12) }}</a>
-                          {% elif p %}
-                            <span>{{ p.name }}</span>
-                          {% elif exp %}
-                            <a href="#tl-{{ exp.id }}">{{ exp.org }}</a>
-                          {% endif %}
-                        </li>
-                      {% endfor %}
-                    </ul>
-                  </div>
-                {% endif %}
+                <div class="skillset__uses" id="uses-{{ g }}-{{ loop.index0 }}" hidden>
+                  <p class="skillset__lead">{{ item.name }}<span> · {{ t.skills.usedIn }}</span></p>
+                  <ul class="skillset__links" role="list">
+                    {% for uid in item.used %}
+                      {% set col = columns | byId(uid) %}
+                      <li style="--i: {{ loop.index0 }}">
+                        {% if col.href %}
+                          <a href="{{ col.href }}"{% if col.external %} target="_blank" rel="noopener noreferrer"{% endif %}>{{ col.name }}{% if col.external %}{{ icon.arrowUpRight(12) }}{% endif %}</a>
+                        {% else %}
+                          <span>{{ col.name }}</span>
+                        {% endif %}
+                      </li>
+                    {% endfor %}
+                  </ul>
+                </div>
               {% endfor %}
-            {% endfor %}
-          </div>
+            </div>
+          {% endfor %}
         </div>
       </section>
 
@@ -283,7 +333,9 @@
           <h2 class="contact__title" id="contact-title">{{ t.contact.title }}</h2>
           <p class="contact__lede">{{ t.contact.text }}</p>
           {{ contact.contactBlock(t, site) }}
-          <a class="contact__freelance" href="/freelance/">{{ t.contact.freelance }}{{ icon.arrowRight(14) }}</a>
+          {# The arrow is glued to the last word, so a wrapped line never leaves it alone. #}
+          {% set words = t.contact.freelance.split(" ") %}
+          <a class="contact__freelance" href="/freelance/">{{ words.slice(0, -1).join(" ") }} <span class="nowrap">{{ words | last }}{{ icon.arrowRight(14) }}</span></a>
         </div>
       </section>
     </main>

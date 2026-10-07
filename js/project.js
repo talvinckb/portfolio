@@ -3,10 +3,16 @@
  * ────────────────────────────────────
  * FR and EN are separate static documents; the language switch swaps one
  * for the other (see ui.js). This file only adds page-local behaviour: image
- * lightbox, scrollable tables and math rendering.
+ * lightbox, charts and step viewers, scrollable tables and math rendering.
  */
 
-import { boot, initChrome, initNavScrollSpy, onTeardown } from "./ui.js";
+import {
+  boot,
+  initChrome,
+  initNavScrollSpy,
+  onTeardown,
+  prefersReducedMotion,
+} from "./ui.js";
 
 const lang = () => (document.documentElement.lang === "en" ? "en" : "fr");
 
@@ -24,7 +30,7 @@ const strings = () =>
 
 function initLightbox() {
   const zoomables = document.querySelectorAll(
-    ".prose img, .case-cover__img, .pipeline-workflow",
+    ".prose img:not(.stepper img), .case-cover__img, .pipeline-workflow",
   );
   if (!zoomables.length) return;
 
@@ -167,6 +173,113 @@ function initTocSpy() {
 }
 
 /* ─────────────────────────────────────────────────────────────
+   Bar charts — the bars grow once, when the chart comes into view
+   ───────────────────────────────────────────────────────────── */
+
+function initBars() {
+  const charts = document.querySelectorAll("[data-bars]");
+  if (!charts.length) return;
+
+  const seen = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add("is-in");
+      seen.unobserve(entry.target);
+    });
+  }, { threshold: 0.35 });
+
+  charts.forEach((chart) => {
+    chart.classList.add("is-armed");
+    seen.observe(chart);
+  });
+  onTeardown(() => seen.disconnect());
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Step viewers — one step at a time
+   ───────────────────────────────────────────────────────────── */
+
+/* The steps pass on by themselves while the viewer is in view, until the
+   reader picks one: from then on it is theirs. */
+function initSteppers() {
+  document.querySelectorAll("[data-stepper]").forEach((root) => {
+    const frames = [...root.querySelectorAll(".stepper__frame")];
+    const nav = root.querySelector(".stepper__nav");
+    const buttons = nav ? [...nav.querySelectorAll("button")] : [];
+    if (!frames.length || frames.length !== buttons.length) return;
+
+    const controller = new AbortController();
+    let current = 0;
+    let timer = 0;
+    let auto = !prefersReducedMotion();
+    let inView = false;
+
+    const show = (index) => {
+      current = index;
+      frames.forEach((frame, i) => frame.classList.toggle("is-on", i === index));
+      buttons.forEach((btn, i) => btn.setAttribute("aria-pressed", String(i === index)));
+    };
+
+    const tick = () => {
+      clearTimeout(timer);
+      if (!auto || !inView || document.hidden) return;
+      timer = setTimeout(() => {
+        show((current + 1) % frames.length);
+        tick();
+      }, 2400);
+    };
+
+    buttons.forEach((btn, i) => {
+      btn.addEventListener("click", () => {
+        auto = false;
+        clearTimeout(timer);
+        show(i);
+      }, { signal: controller.signal });
+    });
+
+    const seen = new IntersectionObserver(([entry]) => {
+      inView = entry.isIntersecting;
+      tick();
+    }, { threshold: 0.6 });
+    seen.observe(root);
+    document.addEventListener("visibilitychange", tick, { signal: controller.signal });
+
+    root.classList.add("is-ready");
+    nav.hidden = false;
+    show(0);
+
+    onTeardown(() => {
+      clearTimeout(timer);
+      seen.disconnect();
+      controller.abort();
+    });
+  });
+}
+
+/* ─────────────────────────────────────────────────────────────
+   ← and → go to the project before or after
+   ───────────────────────────────────────────────────────────── */
+
+/* The arrows follow the switcher's links, unless the key belongs to
+   something else: a field, an open lightbox, a table or formula that
+   scrolls sideways, or a modifier (the browser's own history keys). */
+function initProjectKeys() {
+  const controller = new AbortController();
+  document.addEventListener("keydown", (e) => {
+    if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
+    if (e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
+    const t = e.target;
+    if (t.closest?.("input, textarea, select, [contenteditable], .table-wrapper, .katex-display, .stepper__nav, video")) return;
+    if (document.querySelector("dialog[open]")) return;
+    const link = document.querySelector(`[data-switch="${e.key === "ArrowLeft" ? "prev" : "next"}"]`);
+    if (!link) return;
+    e.preventDefault();
+    link.click();
+  }, { signal: controller.signal });
+  onTeardown(() => controller.abort());
+}
+
+/* ─────────────────────────────────────────────────────────────
    KaTeX
    ───────────────────────────────────────────────────────────── */
 
@@ -190,6 +303,9 @@ boot(() => {
   initNavScrollSpy();
   initTableWrappers();
   initLightbox();
+  initBars();
+  initSteppers();
+  initProjectKeys();
   initTocSpy();
   renderMath(); // no-op until KaTeX has landed; re-runs after a language swap
 });

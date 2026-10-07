@@ -34,9 +34,11 @@ compilation et servies en HTML statique.
   actions de contact sont des partials Nunjucks partagés entre la page
   d'accueil et les pages projet.
 - **Trois moments de mouvement, pas plus.** Le nom qui se lève à
-  l'arrivée, les cartes qui s'empilent au scroll, et
-  les sections qui montent en entrant dans l'écran. Le reste ne bouge
-  qu'au survol. Tout disparaît sous `prefers-reduced-motion`.
+  l'arrivée, avec la lentille qui le traverse une fois ; les cartes qui
+  s'empilent au scroll ; les sections qui montent en entrant dans
+  l'écran. Le reste ne bouge qu'au survol, ou dans une étude de cas
+  (graphiques, étapes). Les vignettes des projets, elles, restent fixes.
+  Tout disparaît sous `prefers-reduced-motion`.
 
 ## Direction artistique
 
@@ -67,9 +69,12 @@ latin, poids variables). Funnel Display et Funnel Sans sont préchargées.
 - **Les surfaces portent la hiérarchie** : `--surface` (blanc) pour ce qui
   se détache du fond, un filet `--rule` en `box-shadow: inset` pour le
   contour, `--shade` pour ce qui flotte (cartes, ligne survolée).
-- **Le bouton Freelance est la seule exception** : jaune, violet, Bricolage
-  et ombre décalée, les couleurs de `/freelance` (`--fl-*`), pour annoncer
-  qu'on change d'univers.
+- **Le bouton Freelance est la seule exception**, et elle reste discrète :
+  au repos, une pastille neutre en Bricolage avec un point jaune et violet ;
+  au survol, il prend toutes les couleurs de `/freelance` (`--fl-*`, ombre
+  décalée) pour annoncer qu'on change d'univers. Le site sert d'abord à
+  trouver un stage : la porte vers le freelance ne doit pas attirer l'œil
+  avant le reste.
 - **Aucun projet n'est mis en avant** plus qu'un autre : les cartes les
   montrent tous de la même façon.
 - **La mono est réservée aux données** et métadonnées, jamais à un
@@ -78,7 +83,8 @@ latin, poids variables). Funnel Display et Funnel Sans sont préchargées.
 Les couleurs sont des tokens redéfinis sous `:root[data-theme="dark"]` —
 `--bg`, `--surface`, `--surface-2`, `--ink`, `--ink-2`, `--ink-3`, `--rule`,
 `--rule-2`, `--accent`, `--on-accent`, `--accent-text`, `--accent-soft`,
-`--overlay`, `--shade`. **Aucune couleur en dur dans une règle**, sinon un
+`--overlay`, `--shade`, et `--thumb-top` / `--thumb-bottom`, le fond cuit
+dans les vignettes, que reprend le cadre de la couverture. **Aucune couleur en dur dans une règle**, sinon un
 thème décroche. Le clair est l'aspect par défaut ; sans JavaScript, le site
 suit la préférence système.
 
@@ -108,8 +114,8 @@ suit la préférence système.
 ├── css/style.css          # Design system complet
 ├── js/
 │   ├── ui.js              # Comportements partagés (thème, menu, toasts…)
-│   ├── main.js            # Page d'accueil (cartes, compétences)
-│   └── project.js         # Pages projet (sommaire, lightbox, tableaux, KaTeX)
+│   ├── main.js            # Page d'accueil (hero, cartes, parcours, compétences)
+│   └── project.js         # Pages projet (sommaire, lightbox, graphiques, KaTeX…)
 ├── scripts/fetch-cv.js    # Récupère les CV PDF depuis les releases GitHub
 ├── sitemap.njk            # Sitemap généré à partir de la collection projets
 └── .eleventy.js
@@ -122,7 +128,7 @@ suit la préférence système.
 | Hero — rôle, disponibilité, nom, accroche, actions | — | `hero` |
 | Projets sélectionnés + autres réalisations | `#work` | `projects` |
 | Parcours — graphe en branches, du plus récent au plus ancien | `#background` | `background` |
-| Compétences — chaque compétence mène aux projets qui l'utilisent | `#skills` | `skills` |
+| Compétences — une matrice compétences × projets | `#skills` | `skills` |
 | Contact | `#contact` | `contact` |
 
 Les ancres sont volontairement en anglais des deux côtés : les deux locales
@@ -130,10 +136,27 @@ partagent le même gabarit, donc les mêmes `id`.
 
 ### Le hero
 
-Le nom (`h1`) occupe toute la largeur et se lève lettre par lettre ; les
-lettres sont `aria-hidden` et le nom complet reste lisible par les lecteurs
-d'écran. L'animation ne se joue qu'une fois : un changement de langue
-reconstruit le hero sans la rejouer (`html.hero-played`).
+Le nom (`h1`) occupe exactement la largeur de la colonne et se lève
+lettre par lettre ; les lettres sont `aria-hidden` et le nom complet reste
+lisible par les lecteurs d'écran. L'animation ne se joue qu'une fois : un
+changement de langue reconstruit le hero sans la rejouer
+(`html.hero-played`).
+
+Le nom est traité comme un logotype, aux lettres serrées jusqu'à se
+toucher (`-0.06em`) :
+
+- **Les lettres restent `inline`.** Une boîte `inline-block` par lettre
+  casse le crénage de la police (« Ta », « Ac »…) ; en `inline`, il
+  s'applique, et la montée anime `top` plutôt qu'un `transform`.
+- **La taille vient de la colonne** : `calc(100cqi / 4.39)`, 4,39 em étant
+  la largeur de l'encre de « Ackbaraly ». À remesurer si le nom, la police
+  ou l'approche changent.
+
+**La lentille.** Une seconde copie du nom, en contours sur une trame de
+points, apparaît dans un cercle sous la souris, comme un détecteur de bords
+verrait les lettres (`initHeroLens`, masques CSS). Elle traverse le nom une
+fois après l'entrée, pour les écrans tactiles aussi. Rien de tout cela sous
+`prefers-reduced-motion`.
 
 ### Les cartes de projets
 
@@ -143,6 +166,25 @@ recouverte par la suivante (`--p`, de 0 à 1) et le CSS la fait reculer et
 s'estomper. Un badge « Lire l'étude » suit le pointeur sur les visuels
 (souris uniquement). La variante claire ou sombre du visuel suit le thème.
 
+Sur grand écran, deux flèches entourent l'index de chaque carte (« ‹ 03 / 06
+› ») pour passer à la carte précédente ou suivante ; les touches ← et →
+font de même tant qu'une carte est à l'écran. Sur téléphone, le carrousel
+garde ses propres flèches, à côté du titre.
+
+Les « autres réalisations » restent toujours visibles : en colonnes sur
+grand écran, en rangée à faire défiler sur téléphone.
+
+### Les études de cas
+
+**La couverture** est la vignette du projet, fixe, sans cadre de plus :
+son propre fond lui sert de cadre.
+
+**Changer de projet.** En tête de page, deux flèches mènent au projet
+précédent ou suivant, en bouclant aux extrémités, avec la place du projet
+dans la liste (filtre `neighbours`). Les touches ← et → du clavier font
+de même, sauf dans un champ, un tableau ou une formule qui défile, les
+boutons d'un visualiseur d'étapes ou une image agrandie.
+
 ### Le parcours
 
 `background.timeline` liste tout le parcours, **du plus récent au plus
@@ -151,6 +193,10 @@ ancien** (l'ordre du fichier est celui de la page). Chaque entrée a un
 un `period` affiché tel quel, `org`, `role`, `type` (la pastille), et en
 option `description`, `tags` et `link`. Une entrée avec `description` ou
 `tags` se déplie au clic.
+
+Le `period` porte l'année aux deux bouts (« Janv. 2024 — Mai 2024 ») :
+sur grand écran, chaque bout a sa ligne. Le chapeau (`background.lede`)
+parle du parcours lui-même, pas de la façon de lire le graphe.
 
 - `trunk: true` place l'entrée sur la branche principale (les études) ;
   toute autre entrée est une branche qui part du tronc sous sa ligne et le
@@ -167,11 +213,19 @@ option `description`, `tags` et `link`. Une entrée avec `description` ou
 
 Chaque compétence de `skills.groups[].items` porte la liste `used` des `id`
 où elle a servi : un projet (`projects.items[].id`) ou une expérience
-(`background.timeline[].id`). Un projet avec étude de cas renvoie vers
-elle, un projet public vers GitHub. Une compétence dont `used` est vide
-s'affiche sans être cliquable — mieux vaut ça qu'un lien inventé. Survoler
-une compétence ouvre la liste de ses projets ; sur écran tactile, la liste
-reste une simple énumération.
+(`background.timeline[].id`). La section les montre en matrice : les
+compétences en lignes, les projets et expériences en colonnes, un point là
+où ils se croisent. Les colonnes se déduisent des `used` (filtre
+`skillColumns`) : projets sélectionnés, autres réalisations, puis
+parcours, chaque groupe ouvert par un filet. L'en-tête d'une colonne mène
+à la carte du projet, à son dépôt public ou à sa ligne du parcours.
+
+Survoler une case allume sa ligne et sa colonne (`initMatrix`). Sur
+téléphone (moins de 720 px), la matrice laisse la place à des pastilles
+groupées, chacune avec le nombre de projets où la compétence a servi ;
+un appui les liste sous le groupe (`initSkillset`). Un `used` doit
+refléter ce que l'étude de cas montre : mieux vaut un point de moins
+qu'un point inventé.
 
 ## Développement
 
@@ -247,9 +301,35 @@ Ces fichiers sont ignorés par Git et régénérés à chaque build.
    ```
 
    Chaque titre `##` de l'étude de cas reçoit un `id` au build et devient
-   une entrée du sommaire latéral.
+   une entrée du sommaire latéral. Les versions FR et EN gardent les mêmes
+   titres (`#` à `####`), dans le même ordre : le changement de langue
+   s'en sert pour garder la position de lecture.
+
+   Le `title` est celui de la carte, au caractère près.
 
 3. Le sitemap se met à jour tout seul.
+
+### Écrire une étude de cas
+
+- **Titres en casse de phrase**, comme en français : une majuscule au
+  premier mot et aux noms propres seulement, « et » plutôt que « & ».
+  Des titres propres au projet, pas un gabarit répété.
+- **Cinq passages en gras au plus**, pour les chiffres qu'un lecteur
+  pressé doit voir. Aucune liste à intitulés en gras, aucun emoji.
+- **« Je » pour ce que j'ai fait, « nous » pour l'équipe**, sans rien
+  attribuer que le projet ne montre.
+- **Virgule décimale en français** pour les mesures (5,29 FPS).
+
+Deux composants s'écrivent en HTML dans le Markdown, sans ligne vide
+à l'intérieur :
+
+- **Graphique en barres** (`<figure class="bars" data-bars>`, voir
+  `projects/fr/irgpu.md`) : une mesure, `--max` pour l'échelle, `--goal`
+  pour une ligne de seuil, `--v` par ligne. Le tableau qui suit en donne
+  les valeurs exactes.
+- **Visualiseur d'étapes** (`<figure class="stepper" data-stepper>`, voir
+  `projects/fr/alpr.md`) : une étape à la fois, avec ses boutons ; une
+  grille simple sans JavaScript.
 
 ## Conventions médias
 

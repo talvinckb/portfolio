@@ -54,9 +54,18 @@
     <main id="main" class="case">
       <header class="case-head wrap">
         <div class="case-head__text">
-          <a href="{{ anchorBase }}#work" class="case-head__back">
-            {{ icon.chevronLeft(14) }}{{ t.project.back }}
-          </a>
+          {# Back to the work, and the arrows to the project before or after,
+             going round the ends; the keyboard's ← and → follow them. #}
+          <div class="case-head__top">
+            <a href="{{ anchorBase }}#work" class="case-head__back">
+              {{ icon.chevronLeft(14) }}{{ t.project.back }}
+            </a>
+            <nav class="switcher" aria-label="{{ t.project.switcher }}" title="{{ t.project.keys }}">
+              <a class="switcher__btn" href="{{ t.urlPrefix }}projects/{{ pager.before.id }}/" data-switch="prev" aria-label="{{ t.project.prev }}, {{ pager.before.name }}">{{ icon.chevronLeft(16) }}</a>
+              <span class="switcher__count" aria-hidden="true"><b>{{ "0" if pager.index < 10 }}{{ pager.index }}</b> / {{ "0" if pager.count < 10 }}{{ pager.count }}</span>
+              <a class="switcher__btn" href="{{ t.urlPrefix }}projects/{{ pager.after.id }}/" data-switch="next" aria-label="{{ t.project.next }}, {{ pager.after.name }}">{{ icon.chevronRight(16) }}</a>
+            </nav>
+          </div>
           <p class="case-head__eyebrow">{{ t.project.eyebrow }} · {{ name }}</p>
           <h1 class="case-head__title">{{ title }}</h1>
           <p class="case-head__tagline">{{ tagline }}</p>
