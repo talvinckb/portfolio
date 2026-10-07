@@ -2,7 +2,7 @@
 id: pogl
 name: "POGL"
 title: "Simulation de fluide temps réel"
-tagline: "Moteur de simulation SPH 3D temps réel avec 75 000+ particules à 60 FPS — physique GPU complète via Compute Shaders et rendu de surface par Screen-Space Fluid Rendering."
+tagline: "Moteur SPH 3D temps réel : plus de 75 000 particules à 60 FPS, une physique en compute shaders et un rendu de surface en espace écran (SSFR)."
 thumbnail: "/assets/projects/pogl/thumbnail-16x9.webp"
 thumbnailLight: "/assets/projects/pogl/thumbnail-16x9-light.webp"
 stack: ["C++20", "OpenGL 4.6", "GLSL", "Compute Shaders", "CMake", "Dear ImGui"]
@@ -13,54 +13,50 @@ demo: null
 report: null
 brief:
   problem: "Simuler et rendre un fluide 3D crédible en temps réel."
-  approach: "Physique SPH entièrement sur GPU en compute shaders (hachage spatial, tri bitonique), rendu de surface SSFR multi-passes."
+  approach: "Physique SPH entièrement sur GPU en compute shaders (hachage spatial, tri bitonique), rendu de surface SSFR en cinq passes."
   result: "Plus de 75 000 particules à 60 FPS, sans aucun transfert CPU ↔ GPU pendant la simulation."
 ---
 
-## Contexte & Objectifs
+## Un moteur de fluide 3D temps réel
 
-Ce projet est un moteur de **simulation de fluide 3D en temps réel** développé en **C++20** et **OpenGL 4.6 Core Profile**, réalisé dans le cadre du cours de Programmation Orientée Objet et OpenGL (POGL) à l'EPITA.
+Nous avons développé ce moteur en binôme, en C++20 et OpenGL 4.6 (core profile), pour le cours de programmation orientée objet et OpenGL (POGL) de l'EPITA. Il simule et affiche **plus de 75 000 particules à 60 FPS**.
 
-L'objectif était de concevoir un système capable d'exécuter en parallèle deux piliers techniques de l'informatique graphique moderne :
+Notre objectif était de faire tourner ensemble deux briques de l'informatique graphique :
 
-- **Simulation physique particulaire GPU** via la méthode _Smoothed Particle Hydrodynamics_ (SPH), entièrement calculée par des **Compute Shaders**, accélérée par un **Hachage Spatial 3D** et un **Tri Bitonic GPU** en $O(N \log^2 N)$.
-- **Rendu de surface fluide en espace écran** (SSFR — _Screen-Space Fluid Rendering_), un pipeline multi-passes transformant un nuage de particules discrètes en une surface continue d'eau réaliste, incorporant filtrage bilatéral, réfraction (Loi de Beer-Lambert) et réflexions de Fresnel.
+- la physique, par la méthode SPH (_smoothed particle hydrodynamics_), calculée entièrement en compute shaders et accélérée par un hachage spatial 3D et un tri bitonique sur GPU en $O(N \log^2 N)$ ;
+- le rendu de surface en espace écran (SSFR, _screen-space fluid rendering_), un pipeline en plusieurs passes qui transforme le nuage de particules en une surface d'eau continue, avec filtrage bilatéral, réfraction atténuée selon la loi de Beer-Lambert et réflexions de Fresnel.
 
----
+## Toutes les données restent en VRAM
 
-## Architecture : Data-Oriented Design GPU
+Le moteur suit une conception orientée données (_data-oriented design_) : toutes les données des particules résident en VRAM, dans des _shader storage buffer objects_ (SSBO) au format `std430`. Ce choix évite tout transfert PCIe superflu entre le CPU et le GPU à chaque frame.
 
-La conception du moteur repose sur le paradigme **Data-Oriented Design (DOD)** : toutes les données des particules résident en **VRAM** sous forme de _Shader Storage Buffer Objects_ (SSBOs) en `std430`, annulant tout transfert PCIe superflu entre le CPU et le GPU à chaque frame.
+Deux boucles distinctes s'enchaînent à chaque frame :
 
-Le pipeline suit deux boucles distinctes qui s'enchaînent chaque frame :
+| Phase          | Responsabilité                                | Outil             |
+| :------------- | :-------------------------------------------- | :---------------- |
+| CPU            | Gestion des entrées, paramètres (SimSettings) | C++20, Dear ImGui |
+| GPU (physique) | 7 passes de compute shaders                   | GLSL 4.60         |
+| GPU (rendu)    | 5 passes de shaders graphiques (SSFR)         | GLSL 4.60         |
 
-| Phase              | Responsabilité                                | Outil             |
-| :----------------- | :-------------------------------------------- | :---------------- |
-| **CPU**            | Gestion des entrées, paramètres (SimSettings) | C++20, Dear ImGui |
-| **GPU — Physique** | 7 passes Compute Shaders                      | GLSL 4.60         |
-| **GPU — Rendu**    | 5 passes Graphics Shaders (SSFR)              | GLSL 4.60         |
+Les huit SSBO alloués en VRAM contiennent les positions, les vitesses, les densités, le hachage spatial et les buffers de rendu. Ils ne repassent jamais par le CPU : **aucun transfert CPU ↔ GPU pendant la simulation**.
 
-Les 8 SSBOs alloués en VRAM maintiennent positions, vitesses, densités, hachage spatial et buffers de rendu — sans jamais repasser par le CPU durant la simulation.
+## Physique SPH en compute shaders
 
----
+La méthode SPH est une formulation lagrangienne des équations de Navier-Stokes : le fluide est un ensemble de particules dont la densité, la pression et la viscosité sont estimées par interpolation pondérée sur leurs voisines, à l'aide de noyaux de lissage.
 
-## Simulation Physique SPH sur GPU
-
-La méthode **SPH** est une formulation _lagrangienne_ des équations de Navier-Stokes : le fluide est représenté par des particules discrètes dont les propriétés (densité, pression, viscosité) sont estimées par interpolation pondérée sur leurs voisines via des **noyaux de lissage**.
-
-### Densité & Pression
+### Densité et pression
 
 La densité locale $\rho_i$ d'une particule est la somme des contributions de ses voisines $j$ dans un rayon $h$ :
 
 $$\rho_i = \sum_{j} W_{\text{spiky2}}(\|\mathbf{r}_i - \mathbf{r}_j\|, h)$$
 
-Une densité secondaire à très courte portée $\rho_{\text{near}, i}$ (noyau _Spiky Power 3_) repousse fortement les particules trop proches, évitant leur regroupement excessif. La pression découle directement de l'écart à la densité cible $\rho_0$ :
+Une seconde densité à très courte portée, $\rho_{\text{near}, i}$ (noyau _Spiky Power 3_), repousse fortement les particules trop proches et évite qu'elles s'agglutinent. La pression découle de l'écart à la densité cible $\rho_0$ :
 
 $$P_i = k \cdot (\rho_i - \rho_0), \qquad P_{\text{near}, i} = k_{\text{near}} \cdot \rho_{\text{near}, i}$$
 
-### Forces & Intégration
+### Forces et intégration
 
-Les forces de pression et de viscosité sont appliquées de manière **symétrique** (3ème loi de Newton) :
+Les forces de pression et de viscosité sont appliquées de façon symétrique (troisième loi de Newton) :
 
 $$\mathbf{F}_{\text{pression}, i} = -\sum_{j} \frac{P_i + P_j}{2 \rho_j} \nabla W_{\text{spiky2}}(\|\mathbf{r}_{ij}\|, h) \cdot \hat{\mathbf{r}}_{ij}$$
 
@@ -68,38 +64,32 @@ $$\mathbf{F}_{\text{viscosité}, i} = \mu \sum_{j} (\mathbf{v}_j - \mathbf{v}_i)
 
 ![Cartes de densité SPH et comportement des noyaux de lissage](/assets/projects/pogl/density.webp)
 
----
+### Recherche de voisins : hachage spatial et tri bitonique
 
-### Accélération par Hachage Spatial & Tri Bitonic GPU
+Naïve, la recherche de voisins coûte $O(N^2)$, rédhibitoire pour 75 000 particules. Nous avons donc découpé le domaine 3D en une grille régulière (cellules de taille $h$), ce qui ramène la recherche à $O(1)$. Elle tient en trois passes de calcul :
 
-Sans optimisation, la recherche de voisins est en $O(N^2)$, rédhibitoire pour 75 000 particules. Le domaine 3D est subdivisé en une grille régulière (cellules de taille $h$) pour ramener la recherche à $O(1)$.
-
-**Pipeline d'accélération (3 passes Compute)** :
-
-1. **Hachage Spatial** : Chaque particule calcule un hash de sa cellule 3D $\lfloor \mathbf{P}/h \rfloor$ par une fonction de dispersion à coefficients premiers.
-2. **Tri Bitonic GPU** : Les paires `(particuleIndex, cellKey)` sont triées en parallèle sur GPU en $O(\log^2 N)$ étapes — aucun transfert CPU requis.
-3. **Table des Indices de Début** : Une passe rapide identifie le premier indice de chaque cellule dans le tableau trié. Chaque particule n'explore alors que ses **27 cellules 3D adjacentes**.
+1. Chaque particule calcule le hash de sa cellule 3D $\lfloor \mathbf{P}/h \rfloor$ avec une fonction de dispersion à coefficients premiers.
+2. Un tri bitonique trie en parallèle les paires `(particuleIndex, cellKey)` sur le GPU, en $O(\log^2 N)$ étapes et sans aucun transfert vers le CPU.
+3. Une dernière passe repère le premier indice de chaque cellule dans le tableau trié. Chaque particule n'explore alors que 27 cellules : la sienne et ses 26 voisines.
 
 <video preload="none" poster="/assets/projects/pogl/fluid_2d_to_3d_transformation-poster.webp" controls src="/assets/projects/pogl/fluid_2d_to_3d_transformation.mp4" loop muted playsinline class="project-video-demo" title="Évolution et transition du solveur SPH du domaine 2D au volume 3D"></video>
 
----
+## Rendu de surface en espace écran (SSFR)
 
-## Pipeline de Rendu : Screen-Space Fluid Rendering (SSFR)
-
-Rendre les particules comme de simples sphères donne un rendu discontinu. Le **Screen-Space Fluid Rendering** transforme ce nuage de points en une surface liquide continue et réaliste en **5 passes de shaders** successives.
+Affichées comme de simples sphères, les particules donnent un rendu discontinu. Le _screen-space fluid rendering_ transforme ce nuage de points en une surface liquide continue, en **cinq passes de shaders** successives.
 
 <div class="pipeline-workflow" title="Cliquer pour agrandir le schéma du workflow">
   <div class="pipeline-step">
     <span class="pipeline-step__num">01</span>
-    <span class="pipeline-step__title">Depth Map</span>
-    <span class="pipeline-step__sub">Point Sprites (R32F)</span>
+    <span class="pipeline-step__title">Profondeur</span>
+    <span class="pipeline-step__sub">Point sprites (R32F)</span>
   </div>
   <div class="pipeline-arrow">
     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
   </div>
   <div class="pipeline-step">
     <span class="pipeline-step__num">02</span>
-    <span class="pipeline-step__title">Bilateral Blur</span>
+    <span class="pipeline-step__title">Flou bilatéral</span>
     <span class="pipeline-step__sub">Lissage des profils</span>
   </div>
   <div class="pipeline-arrow">
@@ -107,7 +97,7 @@ Rendre les particules comme de simples sphères donne un rendu discontinu. Le **
   </div>
   <div class="pipeline-step">
     <span class="pipeline-step__num">03</span>
-    <span class="pipeline-step__title">Normal Map</span>
+    <span class="pipeline-step__title">Normales</span>
     <span class="pipeline-step__sub">Reconstruction 3D</span>
   </div>
   <div class="pipeline-arrow">
@@ -115,7 +105,7 @@ Rendre les particules comme de simples sphères donne un rendu discontinu. Le **
   </div>
   <div class="pipeline-step">
     <span class="pipeline-step__num">04</span>
-    <span class="pipeline-step__title">Thickness Map</span>
+    <span class="pipeline-step__title">Épaisseur</span>
     <span class="pipeline-step__sub">Beer-Lambert</span>
   </div>
   <div class="pipeline-arrow">
@@ -123,72 +113,65 @@ Rendre les particules comme de simples sphères donne un rendu discontinu. Le **
   </div>
   <div class="pipeline-step pipeline-step--accent">
     <span class="pipeline-step__num">05</span>
-    <span class="pipeline-step__title">Composite</span>
-    <span class="pipeline-step__sub">Fresnel + Réfraction</span>
+    <span class="pipeline-step__title">Composition</span>
+    <span class="pipeline-step__sub">Fresnel et réfraction</span>
   </div>
 </div>
 
-### Passe 1 — Carte de Profondeur Initiale
+### Passe 1 : carte de profondeur
 
-Chaque particule est émise comme un _Point Sprite_, projetée en sphère 3D dans `fluid_depth.frag`. Les fragments hors du rayon sont rejetés et la profondeur exacte $z_{\text{eye}}$ est stockée dans une texture `GL_R32F`.
+Chaque particule est émise comme un _point sprite_, puis projetée en sphère 3D dans `fluid_depth.frag` : les fragments hors du rayon sont rejetés et la profondeur exacte $z_{\text{eye}}$ est écrite dans une texture `GL_R32F`.
 
 ![Passe 1 : carte de profondeur brute des sphères individuelles](/assets/projects/pogl/base_depth.webp)
 
-### Passe 2 — Filtrage Bilatéral Adaptatif
+### Passe 2 : filtrage bilatéral
 
-Un **filtre bilatéral séparable** (deux passes H/V) lisse la carte de profondeur sans flouter les contours. Les échantillons sont pondérés à la fois par leur distance spatiale et leur écart de profondeur :
+Un filtre bilatéral séparable, en deux passes (horizontale et verticale), lisse la carte de profondeur sans flouter les contours. Chaque échantillon est pondéré à la fois par sa distance et par son écart de profondeur :
 
 $$W(i, j) = \exp\!\left(-\frac{\|\mathbf{x}_i - \mathbf{x}_j\|^2}{2 \sigma_s^2}\right) \cdot \exp\!\left(-\frac{|z_i - z_j|^2}{2 \sigma_r^2}\right)$$
 
 ![Passe 2 : carte de profondeur lissée, surface continue](/assets/projects/pogl/smoothed_depth.webp)
 
-### Passe 3 — Reconstruction des Normales en Espace Écran
+### Passe 3 : normales en espace écran
 
-À partir de la profondeur lissée $z(u, v)$, la position 3D $\mathbf{P}(u, v)$ est reconstruite par pixel. Le champ de normales est déduit par produit vectoriel des dérivées partielles :
+La profondeur lissée $z(u, v)$ permet de reconstruire la position 3D $\mathbf{P}(u, v)$ de chaque pixel. Les normales s'obtiennent par le produit vectoriel des dérivées partielles :
 
 $$\mathbf{N} = \text{normalize}\!\left( \frac{\partial \mathbf{P}}{\partial x} \times \frac{\partial \mathbf{P}}{\partial y} \right)$$
 
-![Passe 3 : champ de normales 3D reconstruit en espace écran](/assets/projects/pogl/smoothed_normal.webp)
+![Passe 3 : champ de normales reconstruit en espace écran](/assets/projects/pogl/smoothed_normal.webp)
 
-### Passe 4 — Épaisseur & Absorption Optique (Beer-Lambert)
+### Passe 4 : épaisseur et absorption (Beer-Lambert)
 
-L'épaisseur du volume d'eau traversé est accumulée par **blending additif** (`GL_ONE, GL_ONE`). L'atténuation chromatique suit la loi de Beer-Lambert :
+L'épaisseur d'eau traversée est accumulée par blending additif (`GL_ONE, GL_ONE`). L'atténuation de la couleur suit la loi de Beer-Lambert :
 
 $$I_{\text{réfracté}} = I_{\text{scène}} \cdot \exp\!\left(-\text{épaisseur} \cdot \alpha \cdot (1 - \mathbf{C}_{\text{eau}})\right)$$
 
 ![Passe 4 : carte d'épaisseur de la masse d'eau](/assets/projects/pogl/thickness_map.webp)
 
-### Passe 5 — Composition Finale : Réfraction & Réflexions de Fresnel
+### Passe 5 : réfraction et réflexions de Fresnel
 
-La passe finale combine tous les buffers :
+La dernière passe combine tous les buffers :
 
-- **Réfraction** : Décalage UV proportionnel à la normale de surface ($\text{UV}_{\text{réfracté}} = \text{UV} + \mathbf{N}_{xy} \cdot s_{\text{réfraction}}$).
-- **Réflexions de Fresnel (Schlick)** : $F(\theta) = R_0 + (1 - R_0)(1 - \cos\theta)^p$ — l'eau devient miroir à angle rasant.
-- **Ciel procédural & brillance spéculaire** : Mélange selon le coefficient de Fresnel entre réfraction absorbée et réflexion du ciel/soleil.
+- la réfraction décale les UV proportionnellement à la normale de surface ($\text{UV}_{\text{réfracté}} = \text{UV} + \mathbf{N}_{xy} \cdot s_{\text{réfraction}}$) ;
+- les réflexions de Fresnel suivent l'approximation de Schlick, $F(\theta) = R_0 + (1 - R_0)(1 - \cos\theta)^p$ : l'eau devient un miroir aux angles rasants ;
+- le coefficient de Fresnel dose le mélange entre la réfraction atténuée et le reflet d'un ciel procédural et du soleil, avec sa brillance spéculaire.
 
-|                       Passe 5 : Réflexion & Réfraction Globales                        |                        Passe 5 : Réflexions Spéculaires du Soleil                        |
-| :------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------: |
-| ![Passe 5 : Réflexion et réfraction de Fresnel](/assets/projects/pogl/reflection.webp) | ![Passe 5 : Réflexions spéculaires du soleil](/assets/projects/pogl/sun_reflection.webp) |
+|                    Passe 5 : réflexion et réfraction                     |                  Passe 5 : reflets spéculaires du soleil                   |
+| :----------------------------------------------------------------------: | :------------------------------------------------------------------------: |
+| ![Passe 5 : réflexion et réfraction de Fresnel](/assets/projects/pogl/reflection.webp) | ![Passe 5 : reflets spéculaires du soleil](/assets/projects/pogl/sun_reflection.webp) |
 
----
+## Réglages en direct avec Dear ImGui
 
-## Interface & Contrôles Interactifs
+Une interface Dear ImGui permet de régler les paramètres pendant l'exécution : nombre de particules, gravité $g$, rigidité $k$, viscosité $\mu$, couleur de l'eau, absorption, puissance de Fresnel et rayon du flou bilatéral.
 
-L'application intègre **Dear ImGui** pour permettre un ajustement dynamique de tous les paramètres en cours d'exécution : nombre de particules, gravité $g$, rigidité $k$, viscosité $\mu$, couleur de l'eau, absorption, puissance de Fresnel et rayon de flou bilatéral.
+La caméra est orbitale (clic gauche et glisser), avec zoom à la molette.
 
-La caméra est **orbitale** (clic gauche + glisser) avec zoom à la molette.
+## Détails d'implémentation GPU
 
----
+- Les groupes de travail comptent 256 threads, une taille choisie pour bien occuper les GPU NVIDIA (warps) comme AMD (wavefronts).
+- Des barrières mémoire explicites (`GL_SHADER_STORAGE_BARRIER_BIT`) garantissent la cohérence des données entre les passes de physique et de rendu.
+- Les FBO suivent les redimensionnements de la fenêtre sans réallocation inutile.
 
-## Optimisations GPU
-
-- **Workgroup de 256 threads** par groupe Compute, optimisé pour l'occupation des SM NVIDIA (Warps) et AMD (Wavefronts).
-- **Barrières mémoire explicites** (`GL_SHADER_STORAGE_BARRIER_BIT`) garantissant la cohérence des données entre les passes de physique et les passes de rendu.
-- **FBOs redimensionnables** s'adaptant dynamiquement aux redimensionnements fenêtre sans réallocation inutile.
-- Zéro transfert CPU ↔ GPU pendant la boucle de simulation : toute la physique est calculée et consommée entièrement en VRAM.
-
----
-
-### Démonstration de la Simulation en Temps Réel
+## Démonstration en temps réel
 
 <video preload="none" poster="/assets/projects/pogl/fluid_simulation_demo-poster.webp" controls src="/assets/projects/pogl/fluid_simulation_demo.mp4" loop muted playsinline class="project-video-demo" title="Démonstration de la simulation de fluide SPH 3D temps réel"></video>
