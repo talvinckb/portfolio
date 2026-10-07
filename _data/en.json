@@ -297,7 +297,7 @@
         "org": "Final-year project with the BnF",
         "role": "Team of 4",
         "type": "Project",
-        "description": "Automatically finding and classifying the illustrations in digitised documents of the Bibliothèque nationale de France. I own the whole detection part: dataset preparation, training and evaluation of the YOLO model.",
+        "description": "Automatically finding and classifying the illustrations in digitised documents of the Bibliothèque nationale de France. I own the whole detection part — dataset, training and evaluation of the YOLO model, benchmarked against Florence-2 — and the pipeline's shared command line.",
         "tags": [
           "Deep Learning",
           "YOLO",

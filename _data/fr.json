@@ -297,7 +297,7 @@
         "org": "PFEE avec la BnF",
         "role": "Projet de fin d'études, en équipe de 4",
         "type": "Projet",
-        "description": "Repérer et classer automatiquement les illustrations dans les documents numérisés de la Bibliothèque nationale de France. Je m'occupe de toute la partie détection : préparation du dataset, entraînement et évaluation du modèle YOLO.",
+        "description": "Repérer et classer automatiquement les illustrations dans les documents numérisés de la Bibliothèque nationale de France. Je m'occupe de toute la partie détection — dataset, entraînement et évaluation du modèle YOLO, comparé à Florence-2 — et de la ligne de commande commune du pipeline.",
         "tags": [
           "Deep Learning",
           "YOLO",
