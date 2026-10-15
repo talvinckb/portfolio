@@ -71,7 +71,7 @@
   </ul>
 
   <div class="mobile-menu__footer">
-    <a href="mailto:{{ site.email }}">{{ site.email }}</a>
+    <a href="{{ t.urlPrefix }}#contact" data-mail="{{ site.email | mailKey }}">Email</a>
     <a href="{{ t.hero.cvUrl }}" target="_blank" rel="noopener noreferrer">{{ t.contact.cvBtn }}</a>
     <a href="{{ site.linkedin }}" target="_blank" rel="noopener noreferrer">LinkedIn</a>
     <a href="{{ site.github }}" target="_blank" rel="noopener noreferrer">GitHub</a>

@@ -364,6 +364,41 @@ function initBrief() {
   });
 }
 
+/* ─── Email: the address ships encoded (the `mailKey` filter) and is only
+   decoded on click. A link writes to it, the card's button copies it. ─── */
+
+const decodeMail = (key) => [...atob(key)].reverse().join("");
+
+function initMail() {
+  document.querySelectorAll("a[data-mail]").forEach((link) => {
+    link.addEventListener("click", (e) => {
+      e.preventDefault();
+      window.location.href = `mailto:${decodeMail(link.dataset.mail)}`;
+    });
+  });
+
+  document.querySelectorAll("button[data-mail]").forEach((btn) => {
+    const label = btn.querySelector(".channel__copy-label");
+    const idle = label.textContent;
+    let timer = null;
+
+    btn.addEventListener("click", async () => {
+      clearTimeout(timer);
+      try {
+        await navigator.clipboard.writeText(decodeMail(btn.dataset.mail));
+        btn.classList.add("is-copied");
+        label.textContent = btn.dataset.copied;
+      } catch {
+        label.textContent = btn.dataset.error;
+      }
+      timer = setTimeout(() => {
+        btn.classList.remove("is-copied");
+        label.textContent = idle;
+      }, 1800);
+    });
+  });
+}
+
 initSwap();
 initTilt();
 initReveal();
@@ -373,3 +408,4 @@ initChrome();
 initPlayer();
 initPickers();
 initBrief();
+initMail();

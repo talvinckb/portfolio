@@ -2688,12 +2688,13 @@ ol {
   margin-top: 14px;
 }
 
-/* One card per way to reach me: the whole card is the link. */
+/* The email card: the card writes to me, the pill at its end copies the
+   address, which never shows on the page. */
 .channel {
   display: flex;
   align-items: center;
-  gap: 14px;
-  padding: 14px 20px 14px 14px;
+  gap: 10px;
+  padding: 14px;
   border-radius: var(--r);
   background-color: var(--ink);
   color: var(--paper);
@@ -2703,15 +2704,24 @@ ol {
     box-shadow 250ms var(--ease);
 }
 
-.channel:hover {
+.channel:has(.channel__link:hover) {
   transform: translate(-2px, -2px);
   box-shadow: 7px 7px 0 var(--v);
 }
 
-.channel:active {
+.channel:has(.channel__link:active) {
   transform: translate(5px, 5px);
   box-shadow: 0 0 0 var(--v);
   transition-duration: 80ms;
+}
+
+.channel__link {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+  border-radius: 12px;
 }
 
 .channel__icon {
@@ -2745,16 +2755,71 @@ ol {
   overflow-wrap: break-word;
 }
 
-.channel > .icon {
-  color: var(--mute);
+.channel__copy {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border: 1.5px solid var(--line-2);
+  border-radius: 99px;
+  background-color: transparent;
+  color: var(--paper);
+  font-size: 0.9rem;
+  font-weight: 600;
   transition:
-    transform 250ms var(--ease),
+    border-color 250ms var(--ease),
+    background-color 250ms var(--ease),
     color 250ms var(--ease);
 }
 
-.channel:hover > .icon {
+.channel__copy:hover {
+  border-color: var(--y);
   color: var(--y);
-  transform: translate(2px, -2px);
+}
+
+.channel__copy-icon,
+.channel__copy-done {
+  display: inline-flex;
+}
+
+.channel__copy-done {
+  display: none;
+}
+
+/* Copying needs the script. */
+.no-js .channel__copy {
+  display: none;
+}
+
+.channel__copy.is-copied {
+  border-color: var(--y);
+  background-color: var(--y);
+  color: var(--ink);
+}
+
+.channel__copy.is-copied .channel__copy-icon {
+  display: none;
+}
+
+.channel__copy.is-copied .channel__copy-done {
+  display: inline-flex;
+}
+
+/* Narrow cards: the pill keeps only its icon. */
+@media (max-width: 380px) {
+  .channel__copy {
+    padding: 10px;
+  }
+
+  .channel__copy-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
 }
 
 /* The brief form, and the outcomes that take its place in the same card */

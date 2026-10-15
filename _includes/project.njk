@@ -199,7 +199,7 @@
               <span class="pager__sub">{{ pager.next.title }}</span>
             </a>
           {% else %}
-            <a href="mailto:{{ site.email }}" class="pager__link pager__link--next">
+            <a href="{{ t.urlPrefix }}#contact" data-mail="{{ site.email | mailKey }}" class="pager__link pager__link--next">
               <span class="label">{{ t.contact.label }}{{ icon.arrowRight(12) }}</span>
               <span class="pager__title">{{ t.project.contactCta }}</span>
             </a>

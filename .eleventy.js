@@ -151,6 +151,13 @@ module.exports = function (eleventyConfig) {
     };
   });
 
+  /** An email address as it ships in the HTML: reversed, then base64, so no
+      address (nor any "@") is there for harvesters to find. The scripts
+      decode it on click only (`data-mail`). */
+  eleventyConfig.addFilter("mailKey", (address) =>
+    Buffer.from([...address].reverse().join("")).toString("base64"),
+  );
+
   /** `/css/style.css` → `/css/style.css?v=<content hash>`: a changed file gets
       a new URL, so no browser keeps the old one next to the new HTML. */
   eleventyConfig.addFilter("versioned", (url) => {

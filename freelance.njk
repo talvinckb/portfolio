@@ -258,19 +258,19 @@ eleventyExcludeFromCollections: true
 
       <p class="contact__direct">{{ f.contact.direct }}</p>
       <ul class="reach" role="list">
-        <li>
-          <a class="channel" href="mailto:{{ f.email }}">
+        {# The card writes, its end copies. The address is only in the page
+           encoded (`mailKey`), decoded on click. #}
+        {% set ch = f.contact.channels %}
+        <li class="channel">
+          <a class="channel__link" href="#contact" data-mail="{{ f.email | mailKey }}">
             <span class="channel__icon" aria-hidden="true">{{ icon.mail(22) }}</span>
-            <span class="channel__text"><span>{{ f.contact.channels.emailLabel }}</span><strong>{{ f.email }}</strong></span>
-            {{ icon.arrowUpRight(18) }}
+            <span class="channel__text"><span>{{ ch.emailLabel }}</span><strong>{{ ch.emailCta }}</strong></span>
           </a>
-        </li>
-        <li>
-          <a class="channel" href="tel:{{ site.phone }}">
-            <span class="channel__icon" aria-hidden="true">{{ icon.phone(22) }}</span>
-            <span class="channel__text"><span>{{ f.contact.channels.phoneLabel }}</span><strong>{{ site.phoneDisplay }}</strong></span>
-            {{ icon.arrowUpRight(18) }}
-          </a>
+          <button class="channel__copy" type="button" data-mail="{{ f.email | mailKey }}" title="{{ ch.copyTitle }}"
+            data-copied="{{ ch.copied }}" data-error="{{ ch.copyError }}">
+            <span class="channel__copy-icon">{{ icon.copy(16) }}</span><span class="channel__copy-done">{{ icon.check(16) }}</span>
+            <span class="channel__copy-label" aria-live="polite">{{ ch.copy }}</span>
+          </button>
         </li>
       </ul>
     </div>
@@ -340,7 +340,7 @@ eleventyExcludeFromCollections: true
 
         <button class="btn btn--y btn--lg brief__submit" type="submit" data-sending="{{ form.sending }}"><span>{{ form.submit }}</span>{{ icon.arrowRight(20) }}</button>
         <p class="brief__alert" id="brief-alert" role="alert" hidden
-          data-send="{{ form.errorSend }}" data-rate="{{ form.errorRate }}"><span></span> <a href="mailto:{{ f.email }}">{{ f.email }}</a></p>
+          data-send="{{ form.errorSend }}" data-rate="{{ form.errorRate }}"><span></span> <a href="#contact" data-mail="{{ f.email | mailKey }}">{{ f.contact.channels.byEmail }}</a>.</p>
         <p class="brief__note">{{ form.note }}</p>
       </form>
 
@@ -355,7 +355,7 @@ eleventyExcludeFromCollections: true
       <div class="brief-done brief-done--fail" id="oups" tabindex="-1">
         <h3 class="brief-done__title">{{ form.failTitle }}</h3>
         <p class="brief-done__text">{{ form.failText }}</p>
-        <a class="btn btn--y" href="mailto:{{ f.email }}">{{ icon.mail(18) }}{{ f.email }}</a>
+        <a class="btn btn--y" href="#contact" data-mail="{{ f.email | mailKey }}">{{ icon.mail(18) }}{{ f.contact.channels.writeEmail }}</a>
       </div>
     </div>
   </div>

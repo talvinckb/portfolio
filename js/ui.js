@@ -530,7 +530,7 @@ export function showToast(message) {
 
   const toast = document.createElement("div");
   toast.className = "toast";
-  // textContent for the message: it can contain user data (email, phone).
+  // textContent for the message, never markup.
   toast.innerHTML = CHECK_ICON;
   const span = document.createElement("span");
   span.textContent = message;
@@ -547,13 +547,16 @@ export function showToast(message) {
 }
 
 /* ─────────────────────────────────────────────────────────────
-   Copy-to-clipboard
+   Email: the address ships encoded (the `mailKey` filter) and is
+   only decoded on click. A link writes to it, a button copies it.
    ───────────────────────────────────────────────────────────── */
 
-export function initCopyButtons() {
+const decodeMail = (key) => [...atob(key)].reverse().join("");
+
+export function initMailLinks() {
   const messages = {
-    fr: { email: "Email copié", phone: "Numéro copié", error: "Copie impossible" },
-    en: { email: "Email copied", phone: "Phone number copied", error: "Copy failed" },
+    fr: { copied: "Adresse email copiée", error: "Copie impossible" },
+    en: { copied: "Email address copied", error: "Copy failed" },
   };
   const lang = document.documentElement.lang === "en" ? "en" : "fr";
   const t = messages[lang];
@@ -561,18 +564,21 @@ export function initCopyButtons() {
   document.addEventListener(
     "click",
     async (e) => {
-      const btn = e.target.closest("[data-copy]");
-      if (!btn) return;
+      const el = e.target.closest("[data-mail]");
+      if (!el) return;
 
       e.preventDefault();
-      const value = btn.dataset.copy;
-      if (!value) return;
+      const address = decodeMail(el.dataset.mail);
+      if (el.tagName === "A") {
+        window.location.href = `mailto:${address}`;
+        return;
+      }
 
       try {
-        await navigator.clipboard.writeText(value);
-        showToast(`${t[btn.dataset.copyKind] || t.email} : ${value}`);
-        btn.classList.add("is-copied");
-        setTimeout(() => btn.classList.remove("is-copied"), 1200);
+        await navigator.clipboard.writeText(address);
+        showToast(t.copied);
+        el.classList.add("is-copied");
+        setTimeout(() => el.classList.remove("is-copied"), 1200);
       } catch (err) {
         showToast(t.error);
       }
@@ -592,6 +598,6 @@ export function initChrome() {
   initBackToTop();
   initLogo();
   initScrollProgress();
-  initCopyButtons();
+  initMailLinks();
   initNavElevation();
 }
