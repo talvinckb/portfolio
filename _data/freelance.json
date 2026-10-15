@@ -236,7 +236,7 @@
       },
       {
         "q": "Comment se passe le devis ?",
-        "a": "On échange sur votre projet, par téléphone, en visio ou par message. Je vous envoie ensuite un devis écrit : ce qui est inclus, le prix et le calendrier. Rien ne démarre sans votre accord."
+        "a": "On échange sur votre projet, en visio ou par message. Je vous envoie ensuite un devis écrit : ce qui est inclus, le prix et le calendrier. Rien ne démarre sans votre accord."
       },
       {
         "q": "Combien de temps faut-il ?",
@@ -293,19 +293,25 @@
       "note": "Vous recevez une copie de votre message par e-mail.",
       "sending": "Envoi…",
       "errorEmail": "Indiquez une adresse e-mail valide pour que je puisse vous répondre.",
-      "errorSend": "L'envoi n'a pas abouti. Réessayez, ou écrivez-moi directement :",
-      "errorRate": "Beaucoup de messages en peu de temps : réessayez dans quelques minutes, ou écrivez-moi directement :",
+      "errorSend": "L'envoi n'a pas abouti. Réessayez, ou écrivez-moi directement",
+      "errorRate": "Beaucoup de messages en peu de temps : réessayez dans quelques minutes, ou écrivez-moi directement",
       "doneTitle": "Message envoyé !",
       "doneText": "Merci, votre demande est bien arrivée. Une copie vient de partir dans votre boîte mail, et je reviens vers vous personnellement.",
       "doneAgain": "Envoyer une autre demande",
       "failTitle": "L'envoi n'a pas abouti",
-      "failText": "Désolé, votre message n'est pas parti. Écrivez-moi directement :",
+      "failText": "Désolé, votre message n'est pas parti. Écrivez-moi directement par e-mail.",
       "honeypot": "Ne pas remplir ce champ"
     },
     "direct": "Ou directement :",
     "channels": {
       "emailLabel": "Par e-mail",
-      "phoneLabel": "Par téléphone"
+      "emailCta": "Écrivez-moi",
+      "byEmail": "par e-mail",
+      "writeEmail": "Écrire un e-mail",
+      "copy": "Copier",
+      "copied": "Copié",
+      "copyTitle": "Copier l'adresse e-mail",
+      "copyError": "Copie impossible"
     }
   },
   "footer": {

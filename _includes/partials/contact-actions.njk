@@ -1,12 +1,16 @@
 {# Contact affordances of the home page's blue block. #}
 {% import "partials/icons.njk" as icon %}
 
-{# Email first, as one button that copies it; then every other channel. #}
+{# Email first: the pill writes to me, its end copies the address; then
+   every other channel. The address is only in the page encoded
+   (`mailKey`), decoded on click. #}
 {% macro contactBlock(t, site) %}
-  <button class="mail" type="button" data-copy="{{ site.email }}" data-copy-kind="email" title="{{ t.a11y.copyEmail }}">
-    <span class="mail__address">{{ site.email }}</span>
-    <span class="mail__action">{{ icon.copy(14) }}<span class="mail__label">{{ t.contact.copy }}</span></span>
-  </button>
+  <div class="mail">
+    <a class="mail__link" href="{{ t.urlPrefix }}#contact" data-mail="{{ site.email | mailKey }}">{{ icon.mail(22) }}<span>{{ t.contact.emailCta }}</span></a>
+    <button class="mail__action" type="button" data-mail="{{ site.email | mailKey }}" title="{{ t.a11y.copyEmail }}">
+      {{ icon.copy(14) }}<span class="mail__label">{{ t.contact.copy }}</span>
+    </button>
+  </div>
 
   <div class="contact__row">
     <a class="btn btn--on-block" href="{{ site.linkedin }}" target="_blank" rel="noopener noreferrer">
@@ -18,8 +22,5 @@
     <a class="btn btn--block-solid" href="{{ t.hero.cvUrl }}" target="_blank" rel="noopener noreferrer">
       {{ t.contact.cvBtn }}{{ icon.download(14) }}
     </a>
-    <button class="contact__phone" type="button" data-copy="{{ site.phone }}" data-copy-kind="phone" title="{{ t.a11y.copyPhone }}">
-      <span class="visually-hidden">{{ t.contact.phoneLabel }} : </span>{{ site.phoneDisplay }}{{ icon.copy(13) }}
-    </button>
   </div>
 {% endmacro %}
