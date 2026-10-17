@@ -23,11 +23,14 @@
     // rendu, la mauvaise image aurait déjà été peinte.
     if (theme === system) return;
 
+    // Chaque écriture fait rechoisir l'image : une source déjà corrigée n'est
+    // plus touchée, sinon chaque nœud analysé la réécrirait.
     function retarget() {
       var sources = document.querySelectorAll("source[data-theme-source]");
       for (var i = 0; i < sources.length; i++) {
-        sources[i].media =
+        var media =
           sources[i].getAttribute("data-theme-source") === theme ? "all" : "not all";
+        if (sources[i].media !== media) sources[i].media = media;
       }
     }
 

@@ -39,10 +39,15 @@ const scrollBehavior = () => (prefersReducedMotion() ? "auto" : "smooth");
 /* Thumbnails with a dedicated light variant are <picture> elements whose
    source carries the system-preference media query, so the right file is
    already chosen when the document is parsed. Once a theme is applied here the
-   choice is explicit, and that media query must stop having a say. */
+   choice is explicit, and that media query must stop having a say.
+   A source is only rewritten when it picks the wrong file: any write makes
+   the <img> choose again, and Safari leaves a lazy image that is already
+   loading blank (a reload that lands on the cards). */
 function syncThemedImages(theme) {
   document.querySelectorAll("source[data-theme-source]").forEach((source) => {
-    source.media = source.dataset.themeSource === theme ? "all" : "not all";
+    const wanted = source.dataset.themeSource === theme;
+    if (window.matchMedia(source.media || "all").matches === wanted) return;
+    source.media = wanted ? "all" : "not all";
   });
 }
 
@@ -76,11 +81,14 @@ export function initTheme() {
     /* storage blocked — treat as no explicit choice */
   }
 
-  // Until then, follow the system live rather than only on reload.
+  // Until then, follow the system live rather than only on reload. After it,
+  // a thumbnail can still carry the system query (left alone while it agreed
+  // with the choice), so the images are held to the chosen theme.
   if (window.matchMedia) {
     const media = window.matchMedia("(prefers-color-scheme: dark)");
     const follow = (e) => {
       if (!chosen) apply(e.matches ? "dark" : "light");
+      else syncThemedImages(document.documentElement.getAttribute("data-theme"));
     };
     if (media.addEventListener)
       media.addEventListener("change", follow, { signal: bus.signal });
