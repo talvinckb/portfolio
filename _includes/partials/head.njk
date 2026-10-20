@@ -11,9 +11,9 @@
 <title>{{ pageTitle }}</title>
 <meta name="description" content="{{ pageDescription }}"/>
 <meta name="author" content="{{ site.name }}"/>
-<meta name="color-scheme" content="light dark"/>
-<meta name="theme-color" content="{{ site.themeColor.dark }}" media="(prefers-color-scheme: dark)"/>
-<meta name="theme-color" content="{{ site.themeColor.light }}" media="(prefers-color-scheme: light)"/>
+<meta name="color-scheme" content="dark light"/>
+{# Dark first, whatever the system says: the browser chrome matches. #}
+<meta name="theme-color" content="{{ site.themeColor.dark }}"/>
 
 <link rel="canonical" href="{{ pageUrl }}"/>
 {# Only the French pages are indexed: a search for the name or a project would

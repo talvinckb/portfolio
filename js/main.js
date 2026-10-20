@@ -22,390 +22,62 @@ function binding() {
   return controller.signal;
 }
 
-/* ─────────────────────────────────────────────────────────────
-   Hero — the name rises once per visit
-   ───────────────────────────────────────────────────────────── */
-
-/* The letters animate in CSS. A language swap rebuilds the hero, which
-   would replay it: once played, html.hero-played switches it off. */
-function initHeroOnce() {
-  const root = document.documentElement;
-  if (root.classList.contains("hero-played")) return;
-  const id = setTimeout(() => root.classList.add("hero-played"), 1600);
-  onTeardown(() => {
-    clearTimeout(id);
-    root.classList.add("hero-played");
-  });
-}
 
 /* ─────────────────────────────────────────────────────────────
-   Hero — the lens: under the pointer the name keeps only its contours
+   GitHub graph — the latest weeks first, a count on each day
    ───────────────────────────────────────────────────────────── */
 
-/* The outline copy of the name is masked to a circle (CSS). This moves the
-   circle after the mouse, opens it while the mouse is over the name, and
-   passes it once across the name after the entrance, so that touch screens
-   see it as well. */
-function initHeroLens() {
-  const name = document.querySelector("[data-lens]");
-  if (!name || prefersReducedMotion()) return;
+/* Where the graph is wider than the column (a phone), it scrolls, and the
+   recent weeks are the ones worth seeing first. Pointing at a day, or
+   tapping it, shows its count above it. */
+function initContrib() {
+  const scroller = document.querySelector("[data-contrib]");
+  if (!scroller) return;
+  scroller.scrollLeft = scroller.scrollWidth;
 
+  const fig = scroller.parentElement;
+  const tip = fig.querySelector(".contrib__tip");
   const signal = binding();
-  const em = () => parseFloat(getComputedStyle(name).fontSize);
-  let x = 0, y = 0, tx = 0, ty = 0, frame = 0;
-  let open = false;
-  let sweep = 0; // the entrance pass, while it runs
 
-  function glide() {
-    x += (tx - x) * 0.2;
-    y += (ty - y) * 0.2;
-    name.style.setProperty("--lens-x", `${x.toFixed(1)}px`);
-    name.style.setProperty("--lens-y", `${y.toFixed(1)}px`);
-    frame = Math.abs(tx - x) + Math.abs(ty - y) > 0.3 ? requestAnimationFrame(glide) : 0;
-  }
-
-  function aim(nx, ny, jump) {
-    tx = nx;
-    ty = ny;
-    if (jump) {
-      x = nx;
-      y = ny;
-    }
-    if (!frame) frame = requestAnimationFrame(glide);
-  }
-
-  function setRadius(r) {
-    open = r > 0;
-    if (open) name.classList.add("is-lensing");
-    name.style.setProperty("--lens-r", `${r}px`);
-  }
-
-  // The masks cost a repaint per frame: they go once the circle has closed.
-  name.addEventListener("transitionend", (e) => {
-    if (e.propertyName === "--lens-r" && !open) name.classList.remove("is-lensing");
-  }, { signal });
-
-  document.addEventListener("pointermove", (e) => {
-    if (e.pointerType !== "mouse" || sweep) return;
-    const box = name.getBoundingClientRect();
-    const px = e.clientX - box.left;
-    const py = e.clientY - box.top;
-    const over = px >= 0 && py >= 0 && px <= box.width && py <= box.height;
-    if (over && !open) {
-      aim(px, py, true);
-      setRadius(em() * 0.42);
-    } else if (over) {
-      aim(px, py, false);
-    } else if (open) {
-      setRadius(0);
-    }
-  }, { passive: true, signal });
-
-  document.documentElement.addEventListener("pointerleave", () => {
-    if (open && !sweep) setRadius(0);
-  }, { signal });
-
-  // The entrance pass: once per visit, after the letters have risen, left
-  // to right between the two lines.
-  if (document.documentElement.classList.contains("hero-played")) return;
-  const start = setTimeout(() => {
-    const box = name.getBoundingClientRect();
-    if (open || box.bottom < 0 || box.top > window.innerHeight) return;
-    const r = em() * 0.55;
-    const t0 = performance.now();
-    const duration = 2100;
-    aim(-r, box.height / 2, true);
-    setRadius(r);
-    const step = (now) => {
-      const k = Math.min(1, (now - t0) / duration);
-      const eased = k < 0.5 ? 2 * k * k : 1 - (-2 * k + 2) ** 2 / 2;
-      aim(-r + eased * (box.width + 2 * r), box.height / 2, true);
-      if (k < 1) {
-        sweep = requestAnimationFrame(step);
-      } else {
-        sweep = 0;
-        setRadius(0);
-      }
-    };
-    sweep = requestAnimationFrame(step);
-  }, 1500);
-
-  onTeardown(() => {
-    clearTimeout(start);
-    cancelAnimationFrame(sweep);
-    cancelAnimationFrame(frame);
-  });
-}
-
-/* ─────────────────────────────────────────────────────────────
-   Work — the card being covered shrinks back
-   ───────────────────────────────────────────────────────────── */
-
-/* The cards are sticky (CSS); this only measures how much of each one the
-   next card covers, as --p from 0 to 1, which the CSS turns into scale and
-   fade. Six cards: measuring them per frame is cheap. */
-function initStack() {
-  const cards = [...document.querySelectorAll("[data-stack] .card")];
-  if (cards.length < 2) return;
-
-  const signal = binding();
-  const sticky = window.matchMedia("(min-width: 960px) and (min-height: 620px)");
-  let queued = false;
-
-  function paint() {
-    queued = false;
-    const on = sticky.matches && !prefersReducedMotion();
-    for (let i = 0; i < cards.length - 1; i++) {
-      let p = 0;
-      if (on) {
-        const a = cards[i].getBoundingClientRect();
-        const b = cards[i + 1].getBoundingClientRect();
-        p = Math.max(0, Math.min(1, (a.bottom - b.top) / a.height));
-      }
-      cards[i].style.setProperty("--p", p.toFixed(3));
-    }
-  }
-
-  const onScroll = () => {
-    if (queued) return;
-    queued = true;
-    requestAnimationFrame(paint);
+  const show = (day) => {
+    const box = day.getBoundingClientRect();
+    const frame = fig.getBoundingClientRect();
+    tip.textContent = day.dataset.tip;
+    tip.hidden = false;
+    // Kept inside the figure near its edges; the arrow still points at
+    // the day, wherever the bubble had to move.
+    // It may reach a little into the block's padding, and the arrow stays
+    // clear of its rounded corners.
+    const half = tip.offsetWidth / 2;
+    const cell = box.left + box.width / 2 - frame.left;
+    const x = Math.min(frame.width + 12 - half, Math.max(half - 12, cell));
+    const arrow = Math.max(10 - half, Math.min(half - 10, cell - x));
+    tip.style.left = `${x}px`;
+    tip.style.top = `${box.top - frame.top}px`;
+    tip.style.setProperty("--arrow", `${arrow}px`);
   };
 
-  window.addEventListener("scroll", onScroll, { passive: true, signal });
-  window.addEventListener("resize", onScroll, { passive: true, signal });
-  paint();
-
-  // A link to a card (from the skills) can't rely on the browser: below the
-  // stack every card is stuck in the same spot, so it would always land on
-  // the last one. Scroll to where the card itself comes to rest instead.
-  document.addEventListener("click", (e) => {
-    const a = e.target.closest('a[href^="#p-"]');
-    const card = a && document.getElementById(a.hash.slice(1));
-    if (!card || getComputedStyle(card).position !== "sticky") return;
-    if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
-    e.preventDefault();
-    bringCard(card);
-    history.pushState(history.state, "", a.hash);
-  }, { signal });
-
-  // Previous and next card: the arrows around a card's index.
-  document.addEventListener("click", (e) => {
-    const btn = e.target.closest(".card__step");
-    if (!btn) return;
-    const target = cards[cards.indexOf(btn.closest(".card")) + Number(btn.dataset.step)];
-    if (target) bringCard(target);
-  }, { signal });
-}
-
-/* ─────────────────────────────────────────────────────────────
-   ← and → walk the page, one stop at a time
-   ───────────────────────────────────────────────────────────── */
-
-/* The stops, in order: the hero, each card where it comes to rest, the
-   other work, then the background, the skills and the contact. The keys
-   go to the first stop below the page's position, or the last one above.
-   In the carousel, the cards are one stop and the keys slide the row
-   first, card by card, before leaving it. */
-function initPageSteps() {
-  const stack = document.querySelector("[data-stack]");
-  const cards = [...(stack?.querySelectorAll(".card") ?? [])];
-  const signal = binding();
-  const TOLERANCE = 8;
-  let aimed = null; // where the last key sent the page, while it gets there
-
-  const padding = () => parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
-  const top = (el) => el.getBoundingClientRect().top + window.scrollY;
-  const carousel = () => stack && getComputedStyle(stack).overflowX === "auto";
-
-  function cardStop(card) {
-    if (getComputedStyle(card).position !== "sticky") return top(card) - padding();
-    card.style.position = "static";
-    const rest = top(card);
-    card.style.position = "";
-    return rest - parseFloat(getComputedStyle(card).top);
-  }
-
-  function stops() {
-    const el = document.scrollingElement || document.documentElement;
-    const max = el.scrollHeight - el.clientHeight;
-    const list = [0];
-    if (carousel()) list.push(top(stack) - padding());
-    else cards.forEach((card) => list.push(cardStop(card)));
-    for (const sel of [".others", "#background", "#skills", "#contact"]) {
-      const node = document.querySelector(sel);
-      if (node) list.push(top(node) - padding());
-    }
-    return [...new Set(list.map((y) => Math.round(Math.min(Math.max(0, y), max))))].sort((a, b) => a - b);
-  }
-
-  // In the carousel: move the row by one card if it can still go that way.
-  function slideRow(dir) {
-    if (!carousel()) return false;
-    const r = stack.getBoundingClientRect();
-    if (r.bottom < window.innerHeight * 0.3 || r.top > window.innerHeight * 0.7) return false;
-    const max = stack.scrollWidth - stack.clientWidth;
-    if ((dir > 0 && stack.scrollLeft >= max - 2) || (dir < 0 && stack.scrollLeft <= 2)) return false;
-    const gap = parseFloat(getComputedStyle(stack).columnGap) || 0;
-    stack.scrollBy({ left: dir * (cards[0].offsetWidth + gap), behavior: prefersReducedMotion() ? "auto" : "smooth" });
-    return true;
-  }
-
-  document.addEventListener("keydown", (e) => {
-    if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
-    if (e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
-    if (e.target.closest?.("input, textarea, select, [contenteditable], [data-matrix], .others__list")) return;
-    if (document.body.classList.contains("has-menu-open")) return;
-    const dir = e.key === "ArrowLeft" ? -1 : 1;
-    e.preventDefault();
-    if (slideRow(dir)) return;
-
-    // A key pressed again mid-scroll counts from where the page is going.
-    const from = aimed && performance.now() - aimed.at < 900 ? aimed.y : window.scrollY;
-    const list = stops();
-    const target = dir > 0
-      ? list.find((y) => y > from + TOLERANCE)
-      : list.findLast((y) => y < from - TOLERANCE);
-    if (target === undefined) return;
-    aimed = { y: target, at: performance.now() };
-    window.scrollTo({ top: target, behavior: prefersReducedMotion() ? "auto" : "smooth" });
-  }, { signal });
-}
-
-/* Brings a card to the front. Stuck in the stack, a card sits where every
-   other one sits: scroll to where it comes to rest instead. In the carousel,
-   slide the row to it; anywhere else, scroll to its top. */
-function bringCard(card) {
-  const behavior = prefersReducedMotion() ? "auto" : "smooth";
-  if (getComputedStyle(card).position === "sticky") {
-    card.style.position = "static";
-    const rest = card.getBoundingClientRect().top + window.scrollY;
-    card.style.position = "";
-    window.scrollTo({ top: rest - parseFloat(getComputedStyle(card).top), behavior });
-  } else if (getComputedStyle(card.parentElement).overflowX === "auto") {
-    card.scrollIntoView({ behavior, block: "nearest", inline: "start" });
-  } else {
-    card.scrollIntoView({ behavior, block: "start" });
-  }
-}
-
-/* ─────────────────────────────────────────────────────────────
-   Work — arrows for the carousel on small screens
-   ───────────────────────────────────────────────────────────── */
-
-/* Below 960px the cards scroll sideways (CSS). The arrows only show when
-   the row actually overflows, move it by one card, and grey out at
-   either end. Swiping and the trackpad keep working as usual. */
-function initStackNav() {
-  const stack = document.querySelector("[data-stack]");
-  const nav = document.querySelector("[data-stack-nav]");
-  if (!stack || !nav) return;
-
-  const [prev, next] = nav.querySelectorAll("button");
-  const signal = binding();
-  let queued = false;
-
-  function paint() {
-    queued = false;
-    const max = stack.scrollWidth - stack.clientWidth;
-    nav.hidden = max <= 2;
-    prev.disabled = stack.scrollLeft <= 2;
-    next.disabled = stack.scrollLeft >= max - 2;
-  }
-
-  const schedule = () => {
-    if (queued) return;
-    queued = true;
-    requestAnimationFrame(paint);
+  // Only a day the pointer rests on gets its bubble: sweeping across the
+  // graph shows nothing.
+  let timer = 0;
+  let current = null;
+  const hide = () => {
+    clearTimeout(timer);
+    current = null;
+    tip.hidden = true;
   };
+  onTeardown(() => clearTimeout(timer));
 
-  nav.addEventListener("click", (e) => {
-    const btn = e.target.closest("button[data-dir]");
-    if (!btn) return;
-    const card = stack.querySelector(".card");
-    const gap = parseFloat(getComputedStyle(stack).columnGap) || 0;
-    stack.scrollBy({
-      left: Number(btn.dataset.dir) * (card.offsetWidth + gap),
-      behavior: prefersReducedMotion() ? "auto" : "smooth",
-    });
+  scroller.addEventListener("pointerover", (e) => {
+    const day = e.target.closest(".contrib__day");
+    if (day === current) return;
+    hide();
+    if (!day) return;
+    current = day;
+    timer = setTimeout(() => show(day), 350);
   }, { signal });
-
-  stack.addEventListener("scroll", schedule, { passive: true, signal });
-  window.addEventListener("resize", schedule, { passive: true, signal });
-  paint();
-}
-
-/* ─────────────────────────────────────────────────────────────
-   Work — a badge follows the pointer over the visuals
-   ───────────────────────────────────────────────────────────── */
-
-function initCursor() {
-  const stack = document.querySelector("[data-stack]");
-  if (!stack || !stack.querySelector("[data-cursor]")) return;
-  if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
-
-  const badge = document.createElement("div");
-  badge.className = "cursor";
-  badge.setAttribute("aria-hidden", "true");
-  badge.textContent = stack.dataset.cursorLabel || "";
-  document.body.appendChild(badge);
-
-  const signal = binding();
-  onTeardown(() => badge.remove());
-
-  const ease = prefersReducedMotion() ? 1 : 0.2;
-  let x = 0, y = 0, tx = 0, ty = 0, frame = 0;
-  let shown = false;
-  let pointer = null; // last known position, null once it left the window
-
-  function move() {
-    x += (tx - x) * ease;
-    y += (ty - y) * ease;
-    // `translate`, not `transform`: the individual property is applied
-    // after `scale`, so the badge shrinks in place instead of sliding
-    // towards the corner as its offset shrinks with it.
-    badge.style.translate = `${x}px ${y}px`;
-    frame = Math.abs(tx - x) + Math.abs(ty - y) > 0.3 ? requestAnimationFrame(move) : 0;
-  }
-
-  /* One question decides everything: is the pointer over a visual right
-     now? Asked on every move, and again after a scroll, which slides the
-     visuals under a still pointer without any pointer event. */
-  function update(over) {
-    if (over && !shown) {
-      // Appears where the pointer is, rather than gliding in from afar.
-      x = tx;
-      y = ty;
-      badge.style.translate = `${x}px ${y}px`;
-    }
-    shown = over;
-    badge.classList.toggle("is-visible", over);
-    if (over && !frame) frame = requestAnimationFrame(move);
-  }
-
-  document.addEventListener("pointermove", (e) => {
-    if (e.pointerType !== "mouse") return;
-    pointer = { x: e.clientX, y: e.clientY };
-    tx = e.clientX;
-    ty = e.clientY;
-    update(Boolean(e.target.closest?.("[data-cursor]")));
-  }, { passive: true, signal });
-
-  let queued = false;
-  window.addEventListener("scroll", () => {
-    if (queued || !pointer) return;
-    queued = true;
-    requestAnimationFrame(() => {
-      queued = false;
-      const el = document.elementFromPoint(pointer.x, pointer.y);
-      update(Boolean(el?.closest("[data-cursor]")));
-    });
-  }, { passive: true, signal });
-
-  document.documentElement.addEventListener("pointerleave", () => {
-    pointer = null;
-    update(false);
-  }, { signal });
+  scroller.addEventListener("pointerleave", hide, { signal });
+  scroller.addEventListener("scroll", hide, { passive: true, signal });
 }
 
 /* ─────────────────────────────────────────────────────────────
@@ -717,13 +389,8 @@ function initSkillset() {
 
 boot(() => {
   initChrome();
-  initHeroLens();
-  initHeroOnce();
   initNavScrollSpy();
-  initStack();
-  initPageSteps();
-  initStackNav();
-  initCursor();
+  initContrib();
   initTimeline();
   initMatrix();
   initSkillset();

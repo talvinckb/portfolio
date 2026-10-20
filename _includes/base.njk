@@ -19,20 +19,13 @@
 {# Two-digit index: 1 → "01". #}
 {% macro two(n) %}{{ "0" if n < 10 }}{{ n }}{% endmacro %}
 
-{# The name is set like a logotype, its letters tight enough to touch.
-   They stay inline, so the font's own kerning still applies between them.
-   Each letter rises on its own; the second line starts while the first is
-   still moving. #}
-{% macro nameLines(name) -%}
-  {%- for word in name.split(" ") -%}
-    {%- set line = loop.index0 -%}
-    <span class="hero__line">
-      {%- for ch in word.split("") -%}
-        <span class="hero__ch" style="--i: {{ loop.index0 + line * 4 }}">{{ ch }}</span>
-      {%- endfor -%}
-    </span>
-  {%- endfor -%}
+{# The icon of an overview line, by name. #}
+{% macro overviewIcon(name) -%}
+  {%- if name == "school" %}{{ icon.school(15) }}{% elif name == "rocket" %}{{ icon.rocket(15) }}{% elif name == "briefcase" %}{{ icon.briefcase(15) }}{% elif name == "mapPin" %}{{ icon.mapPin(15) }}{% elif name == "globe" %}{{ icon.globe(15) }}{% endif -%}
 {%- endmacro %}
+
+{# The team line of a project: alone, as a pair, or a team of n. #}
+{% macro teamLine(p) %}{% if p.team == 1 %}{{ t.projects.solo }}{% elif p.team == 2 %}{{ t.projects.pair }}{% else %}{{ t.projects.teamOf }} {{ p.team }}{% endif %}{% endmacro %}
 
 <!DOCTYPE html>
 <html lang="{{ lang }}">
@@ -41,123 +34,187 @@
     {% include "partials/head.njk" %}
   </head>
 
-  <body>
+  <body class="page-home">
     {% include "partials/nav.njk" %}
 
-    <main id="main">
-      <!-- ─── Hero ─── -->
-      <section class="hero wrap" aria-labelledby="hero-name">
-        <div class="hero__meta">
-          <p>{{ t.hero.role }}</p>
-          <p class="status">
-            <span class="status__dot" aria-hidden="true"></span>
-            <span class="status__long">{{ t.hero.status }}</span>
-            <span class="status__short">{{ t.hero.statusShort }}</span>
-          </p>
+    {# One column between two rails that run the height of the page; every
+       block opens with a rule across the whole width, crossed where it meets
+       the rails. #}
+    <main id="main" class="page">
+      <!-- ─── Profile ─── -->
+      <section class="block profile" aria-labelledby="profile-name">
+        <div class="profile__avatar">
+          <img src="{{ '/assets/avatar.webp' | versioned }}" alt="{{ t.profile.photoAlt }}" width="320" height="320" fetchpriority="high" decoding="async"/>
         </div>
-
-        {# Screen readers get the plain name. The copy beside the heading is
-           the lens: the same letters in outline, shown only under the
-           pointer, as an edge detector would see them (main.js). It stays
-           out of the h1, which holds the name once. #}
-        <div class="hero__name" data-lens>
-          <h1 class="hero__solid" id="hero-name">
-            <span class="visually-hidden">{{ t.hero.name }}</span>
-            <span aria-hidden="true">{{ nameLines(t.hero.name) }}</span>
-          </h1>
-          <span class="hero__lens" aria-hidden="true">{{ nameLines(t.hero.name) }}</span>
-        </div>
-
-        <div class="hero__row">
-          <p class="hero__lead"><strong>{{ t.hero.leadStrong }}</strong> {{ t.hero.lead }}</p>
-          <div class="actions">
-            <a href="#work" class="btn btn--accent">{{ t.hero.ctaWork }}{{ icon.arrowDown(16, "icon icon--down") }}</a>
-            <a href="#contact" class="btn btn--line">{{ t.hero.ctaContact }}</a>
-          </div>
+        {# A record card: the name on its own ruled line, the tagline under it. #}
+        <div class="profile__id">
+          <h1 class="profile__name" id="profile-name">{{ t.hero.name }}</h1>
+          <p class="profile__tagline">{{ t.profile.tagline }}</p>
         </div>
       </section>
 
-      <!-- ─── Work ─── -->
-      <section id="work" class="section wrap" aria-labelledby="work-title">
-        <div class="section__head">
-          <h2 class="section__title" id="work-title">{{ t.projects.title }}<sup class="section__count">{{ two(count) }}</sup></h2>
-          {# Only on small screens, where the cards become a carousel. #}
-          <div class="stack-nav" data-stack-nav hidden>
-            <button class="stack-nav__btn" type="button" data-dir="-1" aria-label="{{ t.a11y.prevProject }}" aria-controls="stack">{{ icon.chevronLeft(18) }}</button>
-            <button class="stack-nav__btn" type="button" data-dir="1" aria-label="{{ t.a11y.nextProject }}" aria-controls="stack">{{ icon.chevronRight(18) }}</button>
-          </div>
-        </div>
+      <!-- ─── Links ─── -->
+      <nav class="block links" aria-label="{{ t.profile.linksTitle }}">
+        <ul class="links__grid" role="list">
+          <li>
+            <a class="links__cell" href="{{ site.github }}" target="_blank" rel="noopener noreferrer">
+              <span class="links__icon">{{ icon.github(18) }}</span>
+              <span class="links__text"><span class="links__label">GitHub</span><span class="links__handle">@{{ contributions.user if contributions else "talvinckb" }}</span></span>
+              {{ icon.arrowUpRight(14, "icon links__arrow") }}
+            </a>
+          </li>
+          <li>
+            <a class="links__cell" href="{{ site.linkedin }}" target="_blank" rel="noopener noreferrer">
+              <span class="links__icon">{{ icon.linkedin(18) }}</span>
+              <span class="links__text"><span class="links__label">LinkedIn</span><span class="links__handle">talvin-ackbaraly</span></span>
+              {{ icon.arrowUpRight(14, "icon links__arrow") }}
+            </a>
+          </li>
+          <li>
+            <a class="links__cell" href="{{ t.hero.cvUrl }}" target="_blank" rel="noopener noreferrer">
+              <span class="links__icon">{{ icon.download(18) }}</span>
+              <span class="links__text"><span class="links__label">{{ t.hero.cvBtn }}</span><span class="links__handle">PDF</span></span>
+              {{ icon.arrowUpRight(14, "icon links__arrow") }}
+            </a>
+          </li>
+          <li>
+            <a class="links__cell" href="/freelance/">
+              <span class="links__icon"><span class="freelance-dot" aria-hidden="true"></span></span>
+              <span class="links__text"><span class="links__label">{{ t.nav.freelance }}</span><span class="links__handle">/freelance</span></span>
+              {{ icon.arrowRight(14, "icon links__arrow") }}
+            </a>
+          </li>
+        </ul>
+      </nav>
 
-        {# Cards stack as the page scrolls on large screens, main.js shrinking
-           the one being covered; on small screens they scroll sideways. #}
-        <div class="stack" id="stack" data-stack data-cursor-label="{{ t.projects.cursor }}">
+      <!-- ─── Overview ─── -->
+      <section class="block overview" aria-labelledby="overview-title">
+        <h2 class="visually-hidden" id="overview-title">{{ t.profile.overviewTitle }}</h2>
+        <ul class="overview__list" role="list">
+          {% for item in t.profile.overview %}
+            <li class="overview__item">
+              <span class="overview__icon">{{ overviewIcon(item.icon) }}</span>
+              <span>{{ item.text }}{% if item.link %} <a class="overview__link" href="{{ item.link.href }}"{% if "://" in item.link.href %} target="_blank" rel="noopener noreferrer"{% endif %}>{{ item.link.label }}</a>{% endif %}</span>
+            </li>
+          {% endfor %}
+        </ul>
+      </section>
+
+      <!-- ─── GitHub contributions ─── -->
+      {% if contributions %}
+        {% set pitch = 14 %}
+        {% set gridW = contributions.weeks | length * pitch - 3 %}
+        <section class="block contrib" aria-labelledby="contrib-title">
+          <h2 class="visually-hidden" id="contrib-title">{{ t.contrib.title }}</h2>
+          <figure class="contrib__fig">
+            <div class="contrib__scroll" data-contrib>
+              <svg class="contrib__svg" viewBox="0 0 {{ gridW }} {{ 7 * pitch + 15 }}" width="{{ gridW }}" height="{{ 7 * pitch + 15 }}" role="img" aria-label="{{ contributions.total | num(lang) }} {{ t.contrib.caption }} {{ contributions.from | longDate(lang) }} {{ t.contrib.to }} {{ contributions.to | longDate(lang) }}">
+                {% for m in contributions.months %}
+                  <text class="contrib__month" x="{{ m.week * pitch }}" y="9">{{ m.month | monthName(lang) }}</text>
+                {% endfor %}
+                {% for week in contributions.weeks %}
+                  {% set x = loop.index0 * pitch %}
+                  {% for d in range(0, 7) %}
+                    {% set day = week[d] %}
+                    {% if day %}
+                      <rect class="contrib__day lv-{{ day.level }}" x="{{ x }}" y="{{ 15 + d * pitch }}" width="11" height="11" rx="2.5" data-tip="{% if day.count == 0 %}{{ t.contrib.empty }} {{ day.date | shortDate(lang) }}{% else %}{{ day.count }} {{ t.contrib.one if day.count == 1 else t.contrib.many }} {{ day.date | shortDate(lang) }}{% endif %}"></rect>
+                    {% endif %}
+                  {% endfor %}
+                {% endfor %}
+              </svg>
+            </div>
+            <p class="contrib__tip" role="tooltip" hidden></p>
+            <figcaption class="contrib__caption">
+              <p><a href="{{ contributions.url }}" target="_blank" rel="noopener noreferrer">{{ contributions.total | num(lang) }} {{ t.contrib.caption }} {{ contributions.from | longDate(lang) }} {{ t.contrib.to }} {{ contributions.to | longDate(lang) }}</a>. {{ t.contrib.source }}</p>
+              <p class="contrib__legend" aria-hidden="true">
+                {{ t.contrib.less }}
+                {% for lv in range(0, 5) %}<span class="contrib__key lv-{{ lv }}"></span>{% endfor %}
+                {{ t.contrib.more }}
+              </p>
+            </figcaption>
+          </figure>
+        </section>
+      {% endif %}
+
+      <!-- ─── About ─── -->
+      <section class="block about" aria-labelledby="about-title">
+        <h2 class="section__title" id="about-title">{{ t.about.title }}</h2>
+        <div class="about__text">
+          {% for p in t.about.paragraphs %}<p>{{ p }}</p>{% endfor %}
+        </div>
+      </section>
+
+      <div class="sep" aria-hidden="true"></div>
+
+      <!-- ─── Work ─── -->
+      <section id="work" class="block work" aria-labelledby="work-title">
+        <h2 class="section__title" id="work-title">{{ t.projects.title }}<sup class="section__count">{{ two(count) }}</sup></h2>
+
+        {# One link per card to its case study, stretched over the card; the
+           site and source links sit above it. On a phone the cards scroll
+           sideways rather than stacking down the page. #}
+        <ul class="projects" role="list">
           {% for p in featured %}
             {% set projectUrl = t.urlPrefix + "projects/" + p.id + "/" %}
-            <article class="card" id="p-{{ p.id }}" style="--i: {{ loop.index0 }}" aria-labelledby="card-{{ p.id }}">
-              <div class="card__inner">
-                <div class="card__text">
-                  <p class="card__meta">
-                    <span class="card__index">
-                      <button class="card__step" type="button" data-step="-1" aria-label="{{ t.a11y.prevProject }}" title="{{ t.a11y.prevProject }} (←)"{% if loop.first %} disabled{% endif %}>{{ icon.chevronLeft(14) }}</button>
-                      <span><b>{{ two(loop.index) }}</b> / {{ two(count) }}</span>
-                      <button class="card__step" type="button" data-step="1" aria-label="{{ t.a11y.nextProject }}" title="{{ t.a11y.nextProject }} (→)"{% if loop.last %} disabled{% endif %}>{{ icon.chevronRight(14) }}</button>
-                    </span>
-                    <span>{{ p.period }} · {{ t.projects.pair if p.team == 2 else t.projects.teamOf + " " + p.team }}</span>
-                  </p>
-                  <p class="card__name">{{ p.name }}</p>
-                  <h3 class="card__title" id="card-{{ p.id }}">{{ p.title }}</h3>
-                  <p class="card__tagline">{{ p.tagline | highlight(p.highlights) | safe }}</p>
-                  <ul class="tags" role="list">
-                    {% for s in p.stack %}<li>{{ s }}</li>{% endfor %}
-                  </ul>
-                  <div class="card__links">
-                    <a class="btn btn--ink" href="{{ projectUrl }}">{{ t.projects.read }}{{ icon.arrowRight(16, "icon icon--right") }}</a>
-                    {% if p.github %}
-                      <a class="link" href="{{ p.github }}" target="_blank" rel="noopener noreferrer">{{ t.projects.sourceCode }}{{ icon.arrowUpRight(13) }}</a>
-                    {% endif %}
-                  </div>
-                </div>
-
-                {# The visual repeats the case-study link for the pointer only. #}
-                <a class="card__media" href="{{ projectUrl }}" tabindex="-1" aria-hidden="true" data-cursor>
-                  {# The light variant is chosen at parse time: swapping it in JS
-                     after the first paint would make the visual flash. #}
-                  <picture>
-                    <source
-                      data-theme-source="light"
-                      media="(prefers-color-scheme: light)"
-                      srcset="{{ (p.thumbnailLight | default(p.thumbnail)) | versioned }}"/>
-                    <img
-                      src="{{ p.thumbnail | versioned }}"
-                      alt=""
-                      width="1600" height="900"
-                      loading="lazy" decoding="async"/>
-                  </picture>
-                </a>
+            <li class="project" id="p-{{ p.id }}">
+              <div class="project__media" aria-hidden="true">
+                {# The light variant is chosen at parse time: swapping it in JS
+                   after the first paint would make the visual flash. #}
+                <picture>
+                  <source
+                    data-theme-source="light"
+                    media="(prefers-color-scheme: light)"
+                    srcset="{{ (p.thumbnailLight | default(p.thumbnail)) | versioned }}"/>
+                  <img src="{{ p.thumbnail | versioned }}" alt="" width="1600" height="900" loading="lazy" decoding="async"/>
+                </picture>
               </div>
-            </article>
+              <div class="project__body">
+                <p class="project__meta"><span class="project__index">{{ two(loop.index) }}</span><span>{{ p.period }} · {{ teamLine(p) }}</span></p>
+                <h3 class="project__title">
+                  <a class="project__link" href="{{ projectUrl }}"><span class="project__name">{{ p.name }}</span>{{ p.title }}</a>
+                </h3>
+                <p class="project__tagline">{{ p.tagline | highlight(p.highlights) | safe }}</p>
+                <ul class="tags" role="list">
+                  {% for s in p.stack %}<li>{{ s }}</li>{% endfor %}
+                </ul>
+                {% if p.site or p.github %}
+                  <p class="project__links">
+                    {% if p.site %}<a href="{{ p.site }}" target="_blank" rel="noopener noreferrer">{{ p.site | replace("https://", "") }}{{ icon.arrowUpRight(12) }}</a>{% endif %}
+                    {% if p.github %}<a href="{{ p.github }}" target="_blank" rel="noopener noreferrer">{{ icon.github(13) }}{{ t.projects.sourceCode }}</a>{% endif %}
+                  </p>
+                {% endif %}
+              </div>
+              <span class="project__go" aria-hidden="true">{{ icon.arrowUpRight(16) }}</span>
+            </li>
           {% endfor %}
-        </div>
+        </ul>
 
-        {# The rest of the work, smaller: in columns on a wide screen, in a
-           row to scroll sideways on a phone. #}
-        <div class="others">
-          <h3 class="others__head label">{{ t.projects.secondaryTitle }}<span class="others__count">{{ two(others | length) }}</span></h3>
+        {# The other work stays folded until asked for. #}
+        <details class="others">
+          <summary class="others__toggle">
+            <span class="label">{{ t.projects.secondaryTitle }}<span class="others__count">{{ two(others | length) }}</span></span>
+            <span class="others__chevron" aria-hidden="true">{{ icon.chevronDown(14) }}</span>
+          </summary>
           <ul class="others__list" role="list">
             {% for p in others %}
               <li class="other">
-                <h4 class="other__name">{{ p.name }}</h4>
-                <p class="other__tagline">{{ p.tagline }}</p>
-                {% if p.repoNote %}<p class="other__note">{{ p.repoNote }}</p>{% endif %}
-                <p class="other__stack">{{ p.stack | join(" · ") }}</p>
+                <span class="other__icon" aria-hidden="true">{{ icon.code(15) }}</span>
+                <div class="other__body">
+                  <h4 class="other__name">{{ p.name }}<span class="other__period">{{ p.period }}</span></h4>
+                  <p class="other__tagline">{{ p.tagline }}</p>
+                  {% if p.repoNote %}<p class="other__note">{{ p.repoNote }}</p>{% endif %}
+                  <p class="other__stack">{{ p.stack | join(" · ") }}</p>
+                </div>
                 {% if p.github %}
-                  <a class="link" href="{{ p.github }}" target="_blank" rel="noopener noreferrer">{{ t.projects.publicRepo }}{{ icon.arrowUpRight(13) }}</a>
+                  <a class="other__repo" href="{{ p.github }}" target="_blank" rel="noopener noreferrer" aria-label="{{ t.a11y.sourceCode }} {{ p.name }}" title="{{ t.projects.publicRepo }}">{{ icon.github(16) }}</a>
                 {% endif %}
               </li>
             {% endfor %}
           </ul>
-        </div>
+        </details>
       </section>
+
+      <div class="sep" aria-hidden="true"></div>
 
       <!-- ─── Background ─── -->
       {# Most recent first, drawn as a branch graph: the studies are the
@@ -166,86 +223,75 @@
          What is past, current or planned is decided at build time. #}
       {% set now = buildDate.slice(0, 7) %}
       {% set timeline = t.background.timeline %}
-      <section id="background" class="section wrap" aria-labelledby="background-title">
+      <section id="background" class="block path" aria-labelledby="background-title">
         <h2 class="section__title" id="background-title">{{ t.background.title }}</h2>
+        <p class="section__lede">{{ t.background.lede }}</p>
 
-        <div class="path">
-          <div class="path__aside">
-            <p class="path__lede">{{ t.background.lede }}</p>
+        <div class="tl" data-tl>
+          <ol class="tl__list" role="list">
+            {% for item in timeline %}
+              {% set prev = timeline[loop.index0 - 1] if not loop.first else null %}
+              {% if item.start <= now and (not prev or prev.start > now) %}
+                <li class="tl__now" data-start="{{ now }}"><span class="tl__now-label" data-tl-dot>{{ t.background.today }}</span></li>
+              {% endif %}
 
-            <div class="path__extras">
-              <p class="label">{{ t.background.extrasTitle }}</p>
-              <ul role="list">
-                {% for item in t.background.extras %}<li>{{ item }}</li>{% endfor %}
-              </ul>
-            </div>
-          </div>
+              {% if item.start > now %}{% set state = "next" %}
+              {% elif not item.end or item.end >= now %}{% set state = "live" %}
+              {% else %}{% set state = "past" %}{% endif %}
+              {% set when = item.period.split(" — ") %}
 
-          <div class="tl" data-tl>
-            <ol class="tl__list" role="list">
-              {% for item in timeline %}
-                {% set prev = timeline[loop.index0 - 1] if not loop.first else null %}
-                {% if item.start <= now and (not prev or prev.start > now) %}
-                  <li class="tl__now" data-start="{{ now }}"><span class="tl__now-label" data-tl-dot>{{ t.background.today }}</span></li>
-                {% endif %}
-
-                {% if item.start > now %}{% set state = "next" %}
-                {% elif not item.end or item.end >= now %}{% set state = "live" %}
-                {% else %}{% set state = "past" %}{% endif %}
-                {% set when = item.period.split(" — ") %}
-
-                {% set head %}
-                  <span class="tl__when"><span>{{ when[0] }}</span>{% if when[1] %}<span>{{ when[1] }}</span>{% endif %}</span>
-                  <h3 class="tl__org" data-tl-dot>{{ item.org }}</h3>
-                  <span class="tl__role">{{ item.role }}</span>
-                  <span class="tl__side">
-                    {% if state == "live" %}
-                      <span class="badge badge--live"><span class="badge__dot" aria-hidden="true"></span><span class="badge__text">{{ t.background.now }}</span></span>
-                    {% else %}
-                      <span class="badge{% if state == 'next' %} badge--next{% endif %}">{{ item.type }}</span>
-                    {% endif %}
-                  </span>
-                {% endset %}
-
-                <li class="tl__item is-{{ state }}" id="tl-{{ item.id }}" data-start="{{ item.start }}" data-end="{{ item.end or '' }}"{% if item.trunk %} data-trunk{% endif %}>
-                  {% if item.description or item.tags %}
-                    <details class="tl__card">
-                      <summary class="tl__head">
-                        {{ head | safe }}
-                        <span class="tl__toggle" aria-hidden="true">{{ icon.plus(14) }}</span>
-                      </summary>
-                      <div class="tl__body">
-                        {% if item.description %}<p class="tl__desc">{{ item.description }}</p>{% endif %}
-                        {% if item.tags %}
-                          <ul class="tl__tags" role="list">
-                            {% for tag in item.tags %}<li>{{ tag }}</li>{% endfor %}
-                          </ul>
-                        {% endif %}
-                        {% if item.link %}<a class="link" href="{{ item.link.href }}">{{ item.link.label }}{{ icon.arrowRight(13) }}</a>{% endif %}
-                      </div>
-                    </details>
+              {% set head %}
+                <span class="tl__when"><span>{{ when[0] }}</span>{% if when[1] %}<span>{{ when[1] }}</span>{% endif %}</span>
+                <h3 class="tl__org" data-tl-dot>{{ item.org }}</h3>
+                <span class="tl__role">{{ item.role }}</span>
+                <span class="tl__side">
+                  {% if state == "live" %}
+                    <span class="badge badge--live"><span class="badge__dot" aria-hidden="true"></span><span class="badge__text">{{ t.background.now }}</span></span>
                   {% else %}
-                    <div class="tl__card">
-                      <div class="tl__head">{{ head | safe }}</div>
-                      {% if item.link %}
-                        <div class="tl__body"><a class="link" href="{{ item.link.href }}">{{ item.link.label }}{{ icon.arrowRight(13) }}</a></div>
-                      {% endif %}
-                    </div>
+                    <span class="badge{% if state == 'next' %} badge--next{% endif %}">{{ item.type }}</span>
                   {% endif %}
-                </li>
-              {% endfor %}
-            </ol>
-          </div>
+                </span>
+              {% endset %}
+
+              <li class="tl__item is-{{ state }}" id="tl-{{ item.id }}" data-start="{{ item.start }}" data-end="{{ item.end or '' }}"{% if item.trunk %} data-trunk{% endif %}>
+                {% if item.description or item.tags %}
+                  <details class="tl__card">
+                    <summary class="tl__head">
+                      {{ head | safe }}
+                      <span class="tl__toggle" aria-hidden="true">{{ icon.plus(13) }}</span>
+                    </summary>
+                    <div class="tl__body">
+                      {% if item.description %}<p class="tl__desc">{{ item.description }}</p>{% endif %}
+                      {% if item.tags %}
+                        <ul class="tags" role="list">
+                          {% for tag in item.tags %}<li>{{ tag }}</li>{% endfor %}
+                        </ul>
+                      {% endif %}
+                      {% if item.link %}<a class="link" href="{{ item.link.href }}">{{ item.link.label }}{{ icon.arrowRight(13) }}</a>{% endif %}
+                    </div>
+                  </details>
+                {% else %}
+                  <div class="tl__card">
+                    <div class="tl__head">{{ head | safe }}</div>
+                    {% if item.link %}
+                      <div class="tl__body"><a class="link" href="{{ item.link.href }}">{{ item.link.label }}{{ icon.arrowRight(13) }}</a></div>
+                    {% endif %}
+                  </div>
+                {% endif %}
+              </li>
+            {% endfor %}
+          </ol>
         </div>
       </section>
+
+      <div class="sep" aria-hidden="true"></div>
 
       <!-- ─── Skills ─── -->
       {# Every skill against the work it served in: a dot where it was used.
          Pointing at a cell lights its row and its column (main.js); each
-         column header leads to its project or to its line in the path. On a
-         phone the matrix scrolls sideways under its sticky skill names. #}
+         column header leads to its project or to its line in the path. #}
       {% set columns = t | skillColumns %}
-      <section id="skills" class="section wrap" aria-labelledby="skills-title">
+      <section id="skills" class="block" aria-labelledby="skills-title">
         <h2 class="section__title" id="skills-title">{{ t.skills.title }}</h2>
 
         <div class="skills matrix" data-matrix>
@@ -310,7 +356,7 @@
                   <ul class="skillset__links" role="list">
                     {% for uid in item.used %}
                       {% set col = columns | byId(uid) %}
-                      <li style="--i: {{ loop.index0 }}">
+                      <li>
                         {% if col.href %}
                           <a href="{{ col.href }}"{% if col.external %} target="_blank" rel="noopener noreferrer"{% endif %}>{{ col.name }}{% if col.external %}{{ icon.arrowUpRight(12) }}{% endif %}</a>
                         {% else %}
@@ -326,17 +372,22 @@
         </div>
       </section>
 
+      <div class="sep" aria-hidden="true"></div>
+
       <!-- ─── Contact ─── -->
-      <section id="contact" class="contact" aria-labelledby="contact-title">
-        <div class="contact__inner wrap">
+      <section id="contact" class="block contact" aria-labelledby="contact-title">
+        <div class="contact__head">
           <p class="label">{{ t.contact.label }}</p>
           <h2 class="contact__title" id="contact-title">{{ t.contact.title }}</h2>
           <p class="contact__lede">{{ t.contact.text }}</p>
-          {{ contact.contactBlock(t, site) }}
-          {# The arrow is glued to the last word, so a wrapped line never leaves it alone. #}
-          {% set words = t.contact.freelance.split(" ") %}
-          <a class="contact__freelance" href="/freelance/">{{ words.slice(0, -1).join(" ") }} <span class="nowrap">{{ words | last }}{{ icon.arrowRight(14) }}</span></a>
         </div>
+        {{ contact.contactBlock(t, site) }}
+        {# The arrow is glued to the last word, so a wrapped line never leaves it alone. #}
+        {% set words = t.contact.freelance.split(" ") %}
+        <p class="contact__foot">
+          <span class="freelance-dot" aria-hidden="true"></span>
+          <a class="contact__freelance" href="/freelance/">{{ words.slice(0, -1).join(" ") }} <span class="nowrap">{{ words | last }}{{ icon.arrowRight(13) }}</span></a>
+        </p>
       </section>
     </main>
 

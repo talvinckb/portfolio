@@ -55,37 +55,9 @@ export function initTheme() {
     syncThemedImages(theme);
   };
 
-  const systemTheme = () =>
-    window.matchMedia &&
-    window.matchMedia("(prefers-color-scheme: dark)").matches
-      ? "dark"
-      : "light";
-
-  // The inline script in <head> already resolved the theme before paint;
-  // the fallback only matters if it never ran, and must not contradict the
-  // CSS media query that covers that same case.
-  apply(document.documentElement.getAttribute("data-theme") || systemTheme());
-
-  // A click is an explicit choice; it outranks the system preference from
-  // then on. Tracked in memory too, since private mode can refuse to store it.
-  let chosen = false;
-  try {
-    const v = localStorage.getItem("theme");
-    chosen = v === "light" || v === "dark";
-  } catch (e) {
-    /* storage blocked — treat as no explicit choice */
-  }
-
-  // Until then, follow the system live rather than only on reload.
-  if (window.matchMedia) {
-    const media = window.matchMedia("(prefers-color-scheme: dark)");
-    const follow = (e) => {
-      if (!chosen) apply(e.matches ? "dark" : "light");
-    };
-    if (media.addEventListener)
-      media.addEventListener("change", follow, { signal: bus.signal });
-    else if (media.addListener) media.addListener(follow);
-  }
+  // The inline script in <head> already resolved the theme before paint:
+  // dark unless light was chosen. The fallback only matters if it never ran.
+  apply(document.documentElement.getAttribute("data-theme") || "dark");
 
   if (!toggle) return;
 
@@ -94,7 +66,6 @@ export function initTheme() {
       document.documentElement.getAttribute("data-theme") === "dark"
         ? "light"
         : "dark";
-    chosen = true;
     // A short cross-fade between the two themes where the browser can do it;
     // an instant switch otherwise, and whenever motion is reduced.
     if (document.startViewTransition && !prefersReducedMotion()) {
@@ -343,27 +314,18 @@ export function initMobileMenu() {
    Back to top
    ───────────────────────────────────────────────────────────── */
 
-/* It floats over the corner of the page, where it would cover whatever is
-   read there: it shows on the way back up, when it is wanted, and stays
-   once the end of the page is near, where reading is over. Going on
-   downwards anywhere else, it steps aside. */
+/* It floats in the corner of the page from the moment the first screen has
+   gone by, so the way back up is always at hand. */
 export function initBackToTop() {
   const btn = document.getElementById("back-to-top");
   if (!btn) return;
 
-  let last = window.scrollY;
-
   const onScroll = () => {
-    const el = document.scrollingElement || document.documentElement;
-    const y = window.scrollY;
-    const delta = y - last;
-    const end = y + el.clientHeight >= el.scrollHeight - el.clientHeight * 0.6;
-    if (y > 400 && !end && Math.abs(delta) < 12) return; // a jitter, not a direction
-    last = y;
-    btn.classList.toggle("is-visible", y > 400 && (end || delta < 0));
+    btn.classList.toggle("is-visible", window.scrollY > window.innerHeight * 0.8);
   };
 
   window.addEventListener("scroll", onScroll, { passive: true, signal: bus.signal });
+  onScroll();
 
   btn.addEventListener("click", () => {
     window.scrollTo({ top: 0, behavior: scrollBehavior() });
@@ -428,11 +390,16 @@ export function initScrollProgress() {
    Nav elevation + scroll spy
    ───────────────────────────────────────────────────────────── */
 
-/* The header sits flat on the hero and frosts over once the page moves. */
+/* The page has moved. On the home page, that is once the name in the
+   profile has gone under the header, which then shows it beside the mark. */
 export function initNavElevation() {
   const nav = document.getElementById("nav");
   if (!nav) return;
-  const paint = () => nav.classList.toggle("is-scrolled", window.scrollY > 8);
+  const name = document.querySelector(".profile__name");
+  const paint = () => {
+    const past = name ? name.getBoundingClientRect().bottom < nav.offsetHeight : window.scrollY > 8;
+    nav.classList.toggle("is-scrolled", past);
+  };
   window.addEventListener("scroll", paint, { passive: true, signal: bus.signal });
   paint();
 }

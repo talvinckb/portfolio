@@ -33,60 +33,55 @@ compilation et servies en HTML statique.
 - **Le balisage n'existe qu'une fois.** Navigation, pied de page, icônes et
   actions de contact sont des partials Nunjucks partagés entre la page
   d'accueil et les pages projet.
-- **Trois moments de mouvement, pas plus.** Le nom qui se lève à
-  l'arrivée, avec la lentille qui le traverse une fois ; les cartes qui
-  s'empilent au scroll ; les sections qui montent en entrant dans
-  l'écran. Le reste ne bouge qu'au survol, ou dans une étude de cas
-  (graphiques, étapes). Les vignettes des projets, elles, restent fixes.
-  Tout disparaît sous `prefers-reduced-motion`.
+- **Peu de mouvement, et toujours au service d'une idée.** L'arbre du
+  parcours se dessine en entrant dans l'écran ; le reste ne bouge qu'au
+  survol, au dépliage, ou dans une étude de cas (graphiques, étapes). Tout
+  s'arrête sous `prefers-reduced-motion`.
 
 ## Direction artistique
 
-**« Galerie claire ».** Un site clair et calme où les visuels des projets
-apportent toute la couleur : une typographie très grande, un seul accent
-bleu outremer, des surfaces blanches arrondies. Volontairement à l'opposé de
-la page `/freelance` (sombre, jaune et violet, ombres décalées).
+**« Plan technique ».** Un portfolio classique dans sa structure (profil,
+liens, projets, parcours, compétences, contact), dessiné comme une planche :
+une seule colonne de 48 rem entre deux filets verticaux qui courent sur
+toute la hauteur, des filets horizontaux sur toute la largeur à chaque
+bloc, une petite croix là où ils se croisent, et une bande hachurée entre
+les grandes sections. Sombre par défaut, le clair reste un choix (bouton
+de la nav, mémorisé). La page `/freelance` garde son propre univers.
 
 | Rôle | Police | Usage |
 |---|---|---|
-| Titres | Funnel Display, 300–800 | nom, titres de section et de carte, accroches |
+| Titres | Funnel Display, 300–800 | nom, titres de section et de carte |
 | Texte | Funnel Sans, 300–800 | paragraphes, boutons, navigation |
-| Données | Geist Mono, 400–500 | périodes, stacks, index, libellés |
-| Bouton Freelance | Bricolage Grotesque | uniquement ce bouton, qui reprend /freelance |
+| Données | Geist Mono, 400–500 | périodes, stacks, index, légendes |
 
-Les quatre polices sont auto-hébergées dans `assets/fonts/` (sous-ensemble
+Les trois polices sont auto-hébergées dans `assets/fonts/` (sous-ensemble
 latin, poids variables). Funnel Display et Funnel Sans sont préchargées.
 
 ### Règles
 
-- **Un seul accent.** `--accent` sert à l'action principale, aux mots clés
-  des cartes, aux index et à l'état sélectionné. Le texte courant reste en
-  `--ink` / `--ink-2`. Le bleu plein n'apparaît en aplat qu'une fois : le
-  bloc contact (`--block`), identique dans les deux thèmes.
-- **Arrondis partout**, sur trois rayons : pastilles (`99px`) pour les
-  boutons et étiquettes, `--radius` pour les images et cartes moyennes,
-  `--radius-lg` pour les grandes cartes.
-- **Les surfaces portent la hiérarchie** : `--surface` (blanc) pour ce qui
-  se détache du fond, un filet `--rule` en `box-shadow: inset` pour le
-  contour, `--shade` pour ce qui flotte (cartes, ligne survolée).
-- **Le bouton Freelance est la seule exception**, et elle reste discrète :
-  au repos, une pastille neutre en Bricolage avec un point jaune et violet ;
-  au survol, il prend toutes les couleurs de `/freelance` (`--fl-*`, ombre
-  décalée) pour annoncer qu'on change d'univers. Le site sert d'abord à
-  trouver un stage : la porte vers le freelance ne doit pas attirer l'œil
-  avant le reste.
-- **Aucun projet n'est mis en avant** plus qu'un autre : les cartes les
-  montrent tous de la même façon.
+- **Tout s'aligne sur la colonne.** Un nouveau bloc est un `.block` (filet
+  et croix compris) ; une séparation forte, une `.sep`. Rien ne sort des
+  rails, sauf le sommaire des études de cas, dans la marge de droite.
+- **Les grilles sont tracées par leurs filets** : cellules sur un fond
+  `--rule` avec `gap: 1px` (liens, projets, faits, en bref, pager), plutôt
+  que des cartes flottantes.
+- **Un seul accent, jamais en aplat.** `--accent` sert aux index, aux mots
+  clés des cartes, à l'état en cours, au graphe GitHub et à l'icône de
+  l'email du contact.
+- **Le freelance reste discret** : absent de la nav, il n'apparaît que dans
+  la rangée de liens et sous le contact, marqué du point jaune et violet de
+  `/freelance` (`.freelance-dot`). Le site sert d'abord à trouver un stage.
+- **Aucun projet n'est mis en avant** plus qu'un autre dans la grille.
 - **La mono est réservée aux données** et métadonnées, jamais à un
   paragraphe.
 
-Les couleurs sont des tokens redéfinis sous `:root[data-theme="dark"]` —
-`--bg`, `--surface`, `--surface-2`, `--ink`, `--ink-2`, `--ink-3`, `--rule`,
-`--rule-2`, `--accent`, `--on-accent`, `--accent-text`, `--accent-soft`,
-`--overlay`, `--shade`, et `--thumb-top` / `--thumb-bottom`, le fond cuit
-dans les vignettes, que reprend le cadre de la couverture. **Aucune couleur en dur dans une règle**, sinon un
-thème décroche. Le clair est l'aspect par défaut ; sans JavaScript, le site
-suit la préférence système.
+Les couleurs sont des tokens : le sombre est défini sur `:root`, le clair
+sous `:root[data-theme="light"]` — `--bg`, `--surface`, `--surface-2`,
+`--ink`, `--ink-2`, `--ink-3`, `--rule`, `--rule-2`, `--cross`, `--accent`,
+`--on-accent`, `--accent-text`, `--accent-soft`, `--overlay`, `--shade`,
+`--thumb-top` / `--thumb-bottom` (le fond cuit dans les vignettes) et
+`--heat-0` à `--heat-4` (le graphe GitHub). **Aucune couleur en dur dans
+une règle**, sinon un thème décroche. Sans JavaScript, le site reste sombre.
 
 ## Arborescence
 
@@ -96,6 +91,7 @@ suit la préférence système.
 │   ├── site.json          # Coordonnées, URLs, image OG, couleurs de thème
 │   ├── fr.json            # Contenu FR (méta, a11y, hero, projets, parcours…)
 │   ├── en.json            # Contenu EN — mêmes clés que fr.json
+│   ├── contributions.js   # Graphe GitHub, lu au build (null si indisponible)
 │   ├── buildYear.js       # Année du pied de page, résolue au build
 │   └── buildDate.js       # <lastmod> du sitemap, résolu au build
 ├── _includes/
@@ -114,7 +110,7 @@ suit la préférence système.
 ├── css/style.css          # Design system complet
 ├── js/
 │   ├── ui.js              # Comportements partagés (thème, menu, toasts…)
-│   ├── main.js            # Page d'accueil (hero, cartes, parcours, compétences)
+│   ├── main.js            # Page d'accueil (couverture, graphe, parcours, compétences)
 │   └── project.js         # Pages projet (sommaire, lightbox, graphiques, KaTeX…)
 ├── scripts/fetch-cv.js    # Récupère les CV PDF depuis les releases GitHub
 ├── sitemap.njk            # Sitemap généré à partir de la collection projets
@@ -125,7 +121,11 @@ suit la préférence système.
 
 | Section | Ancre | Source |
 |---|---|---|
-| Hero — rôle, disponibilité, nom, accroche, actions | — | `hero` |
+| Profil — photo, nom, accroche, disponibilité | — | `hero`, `profile` |
+| Liens — GitHub, LinkedIn, CV, Freelance | — | `site`, `hero.cvUrl` |
+| En bref — formation, Teaso, lieu, langues, email | — | `profile.overview` |
+| Contributions GitHub | — | `_data/contributions.js` |
+| À propos | — | `about` |
 | Projets sélectionnés + autres réalisations | `#work` | `projects` |
 | Parcours — graphe en branches, du plus récent au plus ancien | `#background` | `background` |
 | Compétences — une matrice compétences × projets | `#skills` | `skills` |
@@ -134,50 +134,39 @@ suit la préférence système.
 Les ancres sont volontairement en anglais des deux côtés : les deux locales
 partagent le même gabarit, donc les mêmes `id`.
 
-### Le hero
+### Le profil
 
-Le nom (`h1`) occupe exactement la largeur de la colonne et se lève
-lettre par lettre ; les lettres sont `aria-hidden` et le nom complet reste
-lisible par les lecteurs d'écran. L'animation ne se joue qu'une fois : un
-changement de langue reconstruit le hero sans la rejouer
-(`html.hero-played`).
+Une fiche : la photo, puis le nom sur sa propre ligne, souligné d'un filet,
+et dessous l'accroche à côté de la disponibilité. Pas de bannière : la
+page s'ouvre directement sur la personne.
 
-Le nom est traité comme un logotype, aux lettres serrées jusqu'à se
-toucher (`-0.06em`) :
+### Le graphe GitHub
 
-- **Les lettres restent `inline`.** Une boîte `inline-block` par lettre
-  casse le crénage de la police (« Ta », « Ac »…) ; en `inline`, il
-  s'applique, et la montée anime `top` plutôt qu'un `transform`.
-- **La taille vient de la colonne** : `calc(100cqi / 4.39)`, 4,39 em étant
-  la largeur de l'encre de « Ackbaraly ». À remesurer si le nom, la police
-  ou l'approche changent.
-
-**La lentille.** Une seconde copie du nom, en contours sur une trame de
-points, apparaît dans un cercle sous la souris, comme un détecteur de bords
-verrait les lettres (`initHeroLens`, masques CSS). Elle traverse le nom une
-fois après l'entrée, pour les écrans tactiles aussi. Rien de tout cela sous
-`prefers-reduced-motion`.
+`_data/contributions.js` lit au build le calendrier public du profil
+GitHub (`site.github`), sans jeton. Si GitHub ne répond pas en 8 s, la
+donnée vaut `null` et la section disparaît : le build ne dépend jamais de
+GitHub. Pointer une case, ou la toucher, affiche le nombre de
+contributions du jour au-dessus d'elle (`data-tip`, `main.js`). Sur
+téléphone, le graphe défile et s'ouvre sur les semaines les plus récentes. Les contributions des dépôts privés n'y figurent que si
+l'option « Private contributions » est activée sur le profil.
 
 ### Les cartes de projets
 
-Sur un écran assez grand (960 × 620 px et plus), les cartes sont `sticky`
-et s'empilent sous le header ; `main.js` mesure la part de chaque carte
-recouverte par la suivante (`--p`, de 0 à 1) et le CSS la fait reculer et
-s'estomper. Un badge « Lire l'étude » suit le pointeur sur les visuels
-(souris uniquement). La variante claire ou sombre du visuel suit le thème.
+Une grille de deux colonnes tracée par ses filets ; une carte seule sur sa
+ligne prend toute la largeur. Chaque carte n'a qu'un lien vers l'étude de
+cas, étendu à toute la carte ; les liens vers le site ou le dépôt passent
+au-dessus. La variante claire ou sombre du visuel suit le thème. Sur
+téléphone, les cartes défilent de côté.
 
-Sur grand écran, deux flèches entourent l'index de chaque carte (« ‹ 03 / 06
-› ») pour passer à la carte précédente ou suivante. Sur téléphone, le
-carrousel garde ses propres flèches, à côté du titre.
+Les autres réalisations sont repliées par défaut (`<details>`) ; dépliées,
+elles forment une liste, ou une rangée à faire défiler sur téléphone.
 
-**Au clavier**, ← et → parcourent toute la page, une étape à la fois :
-hero, chaque carte là où elle se pose, autres réalisations, parcours,
-compétences, contact (`initPageSteps`). Dans le carrousel, les touches font
-d'abord défiler les cartes. Elles se taisent dans un champ, dans la matrice
-des compétences ou quand le menu est ouvert.
+### Le contact
 
-Les « autres réalisations » restent toujours visibles : en colonnes sur
-grand écran, en rangée à faire défiler sur téléphone.
+Un grand titre sur une trame de points qui s'efface, puis les canaux en
+grille à filets : l'email sur toute la largeur, avec sa case « Copier »,
+puis LinkedIn, GitHub et le CV. L'adresse n'est jamais écrite dans la page
+(`mailKey`).
 
 ### Les études de cas
 
@@ -197,7 +186,9 @@ ancien** (l'ordre du fichier est celui de la page). Chaque entrée a un
 `start` et un `end` au format `AAAA-MM` (`end: null` = toujours en cours),
 un `period` affiché tel quel, `org`, `role`, `type` (la pastille), et en
 option `description`, `tags` et `link`. Une entrée avec `description` ou
-`tags` se déplie au clic.
+`tags` se déplie au clic. Son `id` ne doit reprendre aucun `id` de projet :
+la matrice des compétences les mélange (la ligne de Teaso s'appelle
+`founder`).
 
 Le `period` porte l'année aux deux bouts (« Janv. 2024 — Mai 2024 ») :
 sur grand écran, chaque bout a sa ligne. Le chapeau (`background.lede`)
@@ -260,9 +251,10 @@ Ces fichiers sont ignorés par Git et régénérés à chaque build.
      "thumbnailLight": "/assets/projects/mon-projet/thumbnail-16x9-light.webp",
      "stack": ["C++", "CUDA"],
      "period": "4 semaines",
-     "team": 4,               // 2 s'affiche « binôme »
+     "team": 4,               // 1 s'affiche « seul », 2 « binôme »
      "featured": true,        // true = carte + page dédiée
      "github": null,          // URL du dépôt, ou null
+     "site": null,            // URL d'un produit en ligne (lien sur la carte)
      "repoNote": null         // réserve sur ce que le dépôt public contient
    }
    ```
@@ -296,6 +288,7 @@ Ces fichiers sont ignorés par Git et régénérés à chaque build.
    team: 4
    github: null
    demo: null
+   liveSite: false            # true : le bouton de demo s'appelle « Voir le site »
    report: null
    brief:                     # le bloc « En bref » en tête de page
      problem: "Le problème, en une phrase."
