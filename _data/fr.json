@@ -6,7 +6,7 @@
   "altLabel": "EN",
   "meta": {
     "title": "Talvin Ackbaraly — Vision par ordinateur, IA & calcul GPU",
-    "description": "Étudiant ingénieur à l'EPITA, spécialisé en vision par ordinateur, IA et calcul GPU. Je recherche un stage de fin d'études à partir de février 2027.",
+    "description": "Étudiant ingénieur à l'EPITA, spécialisé en vision par ordinateur, IA et calcul GPU, et fondateur de Teaso. Je recherche un stage de fin d'études à partir de février 2027.",
     "jobTitle": "Ingénieur vision par ordinateur & calcul GPU",
     "ogImage": "/assets/og-image.png",
     "ogImageAlt": "Talvin Ackbaraly — vision par ordinateur, IA et calcul GPU. Élève ingénieur à l'EPITA, disponible pour un stage de 6 mois dès février 2027."
@@ -36,25 +36,86 @@
   "hero": {
     "name": "Talvin Ackbaraly",
     "role": "Élève ingénieur à l'EPITA, majeure Image",
-    "status": "Disponible pour un stage de 6 mois dès février 2027",
-    "statusShort": "Stage de 6 mois dès février 2027",
-    "leadStrong": "Vision par ordinateur, IA et calcul GPU.",
-    "lead": "Je conçois des pipelines d'image complets, du prototype en Python jusqu'au portage CUDA.",
-    "ctaWork": "Voir les projets",
-    "ctaContact": "Me contacter",
     "cvBtn": "CV",
     "cvUrl": "/assets/cv-talvin-ackbaraly-fr.pdf"
+  },
+  "profile": {
+    "photoAlt": "Talvin Ackbaraly",
+    "tagline": "Vision par ordinateur, IA et calcul GPU.",
+    "linksTitle": "Liens",
+    "overviewTitle": "En bref",
+    "overview": [
+      {
+        "icon": "school",
+        "text": "Élève ingénieur à l'EPITA, majeure Image"
+      },
+      {
+        "icon": "rocket",
+        "text": "Fondateur de",
+        "link": {
+          "label": "Teaso",
+          "href": "https://teaso.app"
+        }
+      },
+      {
+        "icon": "mapPin",
+        "text": "Paris, France"
+      },
+      {
+        "icon": "globe",
+        "text": "Français, anglais professionnel (TOEIC 845)"
+      }
+    ]
+  },
+  "about": {
+    "title": "À propos",
+    "paragraphs": [
+      "Élève ingénieur en dernière année à l'EPITA, majeure Image. Je conçois des pipelines d'image complets, du prototype en Python jusqu'au portage CUDA : détection d'illustrations avec la BnF, lecture de plaques sans deep learning, détection de mouvement 24 fois plus rapide sur GPU.",
+      "En parallèle, j'ai lancé Teaso, un SaaS qui tire une vidéo promo de l'adresse d'un produit, et je développe des applications sur mesure en freelance.",
+      "Je cherche un stage de fin d'études de six mois en vision par ordinateur, IA ou calcul GPU, à partir de février 2027."
+    ]
+  },
+  "contrib": {
+    "title": "Contributions GitHub",
+    "caption": "contributions du",
+    "to": "au",
+    "source": "Source : GitHub.",
+    "less": "Moins",
+    "more": "Plus",
+    "one": "contribution le",
+    "many": "contributions le",
+    "empty": "Aucune contribution le"
   },
   "projects": {
     "title": "Projets sélectionnés",
     "secondaryTitle": "Autres réalisations",
     "publicRepo": "GitHub",
-    "read": "Lire l'étude de cas",
-    "cursor": "Lire l'étude",
     "sourceCode": "Code source",
     "teamOf": "équipe de",
     "pair": "binôme",
+    "solo": "seul",
     "items": [
+      {
+        "id": "teaso",
+        "name": "Teaso",
+        "title": "Vidéos promo de SaaS générées depuis une URL",
+        "tagline": "Un SaaS que j'ai conçu, lancé et que je fais tourner seul : il lit un site, en extrait la marque et en tire une vidéo de motion design rendue sur AWS Lambda.",
+        "highlights": ["seul", "en extrait la marque"],
+        "thumbnail": "/assets/projects/teaso/thumbnail-16x9.webp",
+        "thumbnailLight": "/assets/projects/teaso/thumbnail-16x9-light.webp",
+        "stack": [
+          "TypeScript",
+          "Next.js",
+          "Remotion",
+          "API Claude",
+          "AWS"
+        ],
+        "period": "Depuis oct. 2026",
+        "team": 1,
+        "featured": true,
+        "github": null,
+        "site": "https://teaso.app"
+      },
       {
         "id": "pfee-bnf",
         "name": "PFEE — BnF",
@@ -235,14 +296,9 @@
   },
   "background": {
     "title": "Parcours",
-    "lede": "Cinq ans à l'EPITA, de la prépa à la majeure Image, avec un semestre au Québec, deux stages en entreprise et un projet de fin d'études avec la BnF. Prochaine étape : six mois de stage en vision, IA ou calcul GPU.",
+    "lede": "Cinq ans à l'EPITA, de la prépa à la majeure Image, avec un semestre au Québec, deux stages en entreprise, un projet de fin d'études avec la BnF et Teaso, un SaaS lancé seul. Prochaine étape : six mois de stage en vision, IA ou calcul GPU.",
     "now": "En cours",
     "today": "Aujourd'hui",
-    "extrasTitle": "Langues",
-    "extras": [
-      "Français, langue maternelle",
-      "Anglais professionnel, TOEIC 845"
-    ],
     "timeline": [
       {
         "id": "diploma",
@@ -265,6 +321,27 @@
         "link": {
           "label": "Votre équipe ?",
           "href": "#contact"
+        }
+      },
+      {
+        "id": "founder",
+        "start": "2026-10",
+        "end": null,
+        "period": "Oct. 2026 — aujourd'hui",
+        "org": "Teaso",
+        "role": "Fondateur, un SaaS de vidéos promo lancé seul",
+        "type": "Entreprise",
+        "description": "Un SaaS qui transforme l'adresse d'un produit en vidéo promo pour X et LinkedIn. Je l'ai conçu, développé et mis en ligne seul en deux semaines : lecture des sites, génération des textes, rendu vidéo, infrastructure, paiement et site. En micro-entreprise, en parallèle des études.",
+        "tags": [
+          "Produit",
+          "TypeScript",
+          "LLM",
+          "AWS",
+          "Stripe"
+        ],
+        "link": {
+          "label": "Lire l'étude de cas",
+          "href": "/projects/teaso/"
         }
       },
       {
@@ -387,7 +464,8 @@
               "alpr",
               "irgpu",
               "medviz",
-              "ocr-sudoku"
+              "ocr-sudoku",
+              "teaso"
             ]
           },
           {
@@ -420,6 +498,12 @@
             "used": [
               "medviz"
             ]
+          },
+          {
+            "name": "LLM, API Claude",
+            "used": [
+              "teaso"
+            ]
           }
         ]
       },
@@ -448,7 +532,8 @@
           {
             "name": "GLSL",
             "used": [
-              "pogl"
+              "pogl",
+              "l-system"
             ]
           },
           {
@@ -482,6 +567,12 @@
             ]
           },
           {
+            "name": "TypeScript",
+            "used": [
+              "teaso"
+            ]
+          },
+          {
             "name": "Java",
             "used": [
               "tinyx"
@@ -491,19 +582,42 @@
             "name": "React/Next.js",
             "used": [
               "medviz",
-              "tinyx"
+              "tinyx",
+              "teaso"
             ]
           },
           {
             "name": "Docker",
             "used": [
-              "medviz"
+              "medviz",
+              "teaso",
+              "tinyx",
+              "studiocanal"
             ]
           },
           {
-            "name": "CI/CD, AWS",
+            "name": "PostgreSQL",
             "used": [
+              "teaso",
               "studiocanal"
+            ]
+          },
+          {
+            "name": "CI/CD",
+            "used": [
+              "studiocanal",
+              "teaso",
+              "pfee-bnf",
+              "alpr",
+              "medviz",
+              "tinyx"
+            ]
+          },
+          {
+            "name": "AWS",
+            "used": [
+              "studiocanal",
+              "teaso"
             ]
           }
         ]
@@ -529,9 +643,11 @@
     "team": "personnes",
     "duration": "Durée",
     "teamLabel": "Équipe",
+    "solo": "Seul",
     "stackLabel": "Stack",
     "sourceCode": "Code source",
     "demo": "Démo",
+    "site": "Voir le site",
     "report": "Rapport PDF",
     "contactCta": "Discuter de ce projet",
     "toc": "Sommaire",
@@ -544,8 +660,5 @@
     "next": "Projet suivant",
     "switcher": "Changer de projet",
     "keys": "Flèches ← → du clavier"
-  },
-  "footer": {
-    "built": "Eleventy, CSS natif, sans framework"
   }
 }

@@ -51,9 +51,8 @@
   <body>
     {% include "partials/nav.njk" %}
 
-    <main id="main" class="case">
-      <header class="case-head wrap">
-        <div class="case-head__text">
+    <main id="main" class="page case">
+      <header class="block case-head">
           {# Back to the work, and the arrows to the project before or after,
              going round the ends; the keyboard's ← and → follow them. #}
           <div class="case-head__top">
@@ -81,7 +80,7 @@
             {% if team %}
               <div class="facts__item">
                 <dt>{{ t.project.teamLabel }}</dt>
-                <dd>{{ team }} {{ t.project.team }}</dd>
+                <dd>{{ t.project.solo if team == 1 else team + " " + t.project.team }}</dd>
               </div>
             {% endif %}
             {% if stack %}
@@ -96,7 +95,7 @@
             <div class="actions">
               {% if demo %}
                 <a href="{{ demo }}" target="_blank" rel="noopener noreferrer" class="btn btn--accent">
-                  {{ icon.externalLink(15) }}<span>{{ t.project.demo }}</span>
+                  {{ icon.externalLink(15) }}<span>{{ t.project.site if liveSite else t.project.demo }}</span>
                 </a>
               {% endif %}
               {% if github %}
@@ -111,10 +110,9 @@
               {% endif %}
             </div>
           {% endif %}
-        </div>
       </header>
 
-      <div class="case-body wrap">
+      <div class="block case-body">
         {% if sections | length %}
           <nav class="toc" aria-label="{{ t.project.toc }}">
             <p class="label">{{ t.project.toc }}</p>
@@ -177,8 +175,7 @@
         </div>
       </div>
 
-      <div class="wrap">
-        <nav class="pager" aria-label="{{ t.nav.work }}">
+      <nav class="block pager" aria-label="{{ t.nav.work }}">
           {% if pager.prev %}
             <a href="{{ t.urlPrefix }}projects/{{ pager.prev.id }}/" class="pager__link" rel="prev">
               <span class="label">{{ icon.chevronLeft(12) }}{{ t.project.prev }}</span>
@@ -204,8 +201,7 @@
               <span class="pager__title">{{ t.project.contactCta }}</span>
             </a>
           {% endif %}
-        </nav>
-      </div>
+      </nav>
     </main>
 
     {% include "partials/footer.njk" %}

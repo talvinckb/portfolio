@@ -137,6 +137,26 @@ module.exports = function (eleventyConfig) {
   /** The featured projects before and after `id`: `prev` / `next` for the
       pager at the foot of a case study, `before` / `after` going round the
       ends for the arrows at its head, with its place in the list. */
+  /** A date of the GitHub graph in the page's language: "19 oct. 2025". */
+  const dateFormats = new Map();
+  const formatter = (lang, options) => {
+    const key = lang + JSON.stringify(options);
+    if (!dateFormats.has(key)) {
+      dateFormats.set(key, new Intl.DateTimeFormat(lang === "fr" ? "fr-FR" : "en-GB", { timeZone: "UTC", ...options }));
+    }
+    return dateFormats.get(key);
+  };
+  eleventyConfig.addFilter("longDate", (iso, lang) =>
+    formatter(lang, { day: "numeric", month: "short", year: "numeric" }).format(new Date(`${iso}T00:00:00Z`)),
+  );
+  eleventyConfig.addFilter("shortDate", (iso, lang) =>
+    formatter(lang, { day: "numeric", month: "short" }).format(new Date(`${iso}T00:00:00Z`)),
+  );
+  eleventyConfig.addFilter("num", (n, lang) => new Intl.NumberFormat(lang === "fr" ? "fr-FR" : "en-GB").format(n));
+  eleventyConfig.addFilter("monthName", (month, lang) =>
+    formatter(lang, { month: "short" }).format(new Date(Date.UTC(2000, month, 1))),
+  );
+
   eleventyConfig.addFilter("neighbours", (items, id) => {
     const featured = items.filter((p) => p.featured);
     const i = featured.findIndex((p) => p.id === id);

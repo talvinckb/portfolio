@@ -13,7 +13,8 @@
       if (window.matchMedia("(prefers-color-scheme: dark)").matches) system = "dark";
     } catch (e) {}
 
-    var theme = stored === "light" || stored === "dark" ? stored : system;
+    // Dark first: the light theme is a choice, kept once made.
+    var theme = stored === "light" || stored === "dark" ? stored : "dark";
 
     document.documentElement.setAttribute("data-theme", theme);
 

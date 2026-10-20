@@ -6,7 +6,7 @@
   "altLabel": "FR",
   "meta": {
     "title": "Talvin Ackbaraly — Computer Vision, AI & GPU Computing",
-    "description": "EPITA engineering student specialising in computer vision, AI and GPU computing. I'm looking for a final-year internship starting February 2027.",
+    "description": "EPITA engineering student specialising in computer vision, AI and GPU computing, and founder of Teaso. I'm looking for a final-year internship starting February 2027.",
     "jobTitle": "Computer Vision & GPU Computing Engineer",
     "ogImage": "/assets/og-image-en.png",
     "ogImageAlt": "Talvin Ackbaraly — computer vision, AI and GPU computing. Engineering student at EPITA, available for a 6-month internship from February 2027."
@@ -36,25 +36,86 @@
   "hero": {
     "name": "Talvin Ackbaraly",
     "role": "Engineering student at EPITA, Image major",
-    "status": "Available for a 6-month internship from February 2027",
-    "statusShort": "6-month internship from Feb. 2027",
-    "leadStrong": "Computer vision, AI and GPU computing.",
-    "lead": "I build complete image pipelines, from the Python prototype to the CUDA port.",
-    "ctaWork": "See the work",
-    "ctaContact": "Get in touch",
     "cvBtn": "CV",
     "cvUrl": "/assets/cv-talvin-ackbaraly-en.pdf"
+  },
+  "profile": {
+    "photoAlt": "Talvin Ackbaraly",
+    "tagline": "Computer vision, AI and GPU computing.",
+    "linksTitle": "Links",
+    "overviewTitle": "Overview",
+    "overview": [
+      {
+        "icon": "school",
+        "text": "Engineering student at EPITA, Image major"
+      },
+      {
+        "icon": "rocket",
+        "text": "Founder of",
+        "link": {
+          "label": "Teaso",
+          "href": "https://teaso.app"
+        }
+      },
+      {
+        "icon": "mapPin",
+        "text": "Paris, France"
+      },
+      {
+        "icon": "globe",
+        "text": "French, professional English (TOEIC 845)"
+      }
+    ]
+  },
+  "about": {
+    "title": "About",
+    "paragraphs": [
+      "Final-year engineering student at EPITA, Image major. I build complete image pipelines, from the Python prototype to the CUDA port: illustration detection with the BnF, licence plate reading without deep learning, motion detection 24 times faster on GPU.",
+      "Alongside, I launched Teaso, a SaaS that turns a product's address into a promo video, and I build custom applications as a freelancer.",
+      "I'm looking for a six-month final-year internship in computer vision, AI or GPU computing, starting February 2027."
+    ]
+  },
+  "contrib": {
+    "title": "GitHub contributions",
+    "caption": "contributions from",
+    "to": "to",
+    "source": "Source: GitHub.",
+    "less": "Less",
+    "more": "More",
+    "one": "contribution on",
+    "many": "contributions on",
+    "empty": "No contributions on"
   },
   "projects": {
     "title": "Selected projects",
     "secondaryTitle": "Other work",
     "publicRepo": "GitHub",
-    "read": "Read the case study",
-    "cursor": "Read it",
     "sourceCode": "Source code",
     "teamOf": "team of",
     "pair": "pair",
+    "solo": "solo",
     "items": [
+      {
+        "id": "teaso",
+        "name": "Teaso",
+        "title": "SaaS promo videos generated from a URL",
+        "tagline": "A SaaS I designed, launched and run on my own: it reads a site, pulls out the brand and turns it into a motion design video rendered on AWS Lambda.",
+        "highlights": ["on my own", "pulls out the brand"],
+        "thumbnail": "/assets/projects/teaso/thumbnail-16x9.webp",
+        "thumbnailLight": "/assets/projects/teaso/thumbnail-16x9-light.webp",
+        "stack": [
+          "TypeScript",
+          "Next.js",
+          "Remotion",
+          "Claude API",
+          "AWS"
+        ],
+        "period": "Since Oct. 2026",
+        "team": 1,
+        "featured": true,
+        "github": null,
+        "site": "https://teaso.app"
+      },
       {
         "id": "pfee-bnf",
         "name": "PFEE — BnF",
@@ -235,14 +296,9 @@
   },
   "background": {
     "title": "Background",
-    "lede": "Five years at EPITA, from the preparatory cycle to the Image major, with a semester in Québec, two internships and a final-year project with the BnF. Next: a six-month internship in vision, AI or GPU computing.",
+    "lede": "Five years at EPITA, from the preparatory cycle to the Image major, with a semester in Québec, two internships, a final-year project with the BnF and Teaso, a SaaS I launched on my own. Next: a six-month internship in vision, AI or GPU computing.",
     "now": "Current",
     "today": "Today",
-    "extrasTitle": "Languages",
-    "extras": [
-      "French, native",
-      "English, professional (TOEIC 845)"
-    ],
     "timeline": [
       {
         "id": "diploma",
@@ -265,6 +321,27 @@
         "link": {
           "label": "Your team?",
           "href": "#contact"
+        }
+      },
+      {
+        "id": "founder",
+        "start": "2026-10",
+        "end": null,
+        "period": "Oct. 2026 — present",
+        "org": "Teaso",
+        "role": "Founder of a promo video SaaS, built solo",
+        "type": "Company",
+        "description": "A SaaS that turns a product's address into a promo video for X and LinkedIn. I designed, built and shipped it on my own in two weeks: reading sites, writing the copy, video rendering, infrastructure, payments and website. Run as a sole proprietorship, alongside my studies.",
+        "tags": [
+          "Product",
+          "TypeScript",
+          "LLM",
+          "AWS",
+          "Stripe"
+        ],
+        "link": {
+          "label": "Read the case study",
+          "href": "/en/projects/teaso/"
         }
       },
       {
@@ -387,7 +464,8 @@
               "alpr",
               "irgpu",
               "medviz",
-              "ocr-sudoku"
+              "ocr-sudoku",
+              "teaso"
             ]
           },
           {
@@ -420,6 +498,12 @@
             "used": [
               "medviz"
             ]
+          },
+          {
+            "name": "LLM, Claude API",
+            "used": [
+              "teaso"
+            ]
           }
         ]
       },
@@ -448,7 +532,8 @@
           {
             "name": "GLSL",
             "used": [
-              "pogl"
+              "pogl",
+              "l-system"
             ]
           },
           {
@@ -482,6 +567,12 @@
             ]
           },
           {
+            "name": "TypeScript",
+            "used": [
+              "teaso"
+            ]
+          },
+          {
             "name": "Java",
             "used": [
               "tinyx"
@@ -491,19 +582,42 @@
             "name": "React/Next.js",
             "used": [
               "medviz",
-              "tinyx"
+              "tinyx",
+              "teaso"
             ]
           },
           {
             "name": "Docker",
             "used": [
-              "medviz"
+              "medviz",
+              "teaso",
+              "tinyx",
+              "studiocanal"
             ]
           },
           {
-            "name": "CI/CD, AWS",
+            "name": "PostgreSQL",
             "used": [
+              "teaso",
               "studiocanal"
+            ]
+          },
+          {
+            "name": "CI/CD",
+            "used": [
+              "studiocanal",
+              "teaso",
+              "pfee-bnf",
+              "alpr",
+              "medviz",
+              "tinyx"
+            ]
+          },
+          {
+            "name": "AWS",
+            "used": [
+              "studiocanal",
+              "teaso"
             ]
           }
         ]
@@ -529,9 +643,11 @@
     "team": "people",
     "duration": "Duration",
     "teamLabel": "Team",
+    "solo": "Solo",
     "stackLabel": "Stack",
     "sourceCode": "Source code",
     "demo": "Demo",
+    "site": "Visit the site",
     "report": "PDF report",
     "contactCta": "Discuss this project",
     "toc": "Contents",
@@ -544,8 +660,5 @@
     "next": "Next project",
     "switcher": "Switch project",
     "keys": "Arrow keys ← →"
-  },
-  "footer": {
-    "built": "Eleventy, plain CSS, no framework"
   }
 }

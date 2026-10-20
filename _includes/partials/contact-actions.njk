@@ -1,26 +1,41 @@
-{# Contact affordances of the home page's blue block. #}
+{# Contact affordances of the home page's last block. #}
 {% import "partials/icons.njk" as icon %}
 
-{# Email first: the pill writes to me, its end copies the address; then
-   every other channel. The address is only in the page encoded
-   (`mailKey`), decoded on click. #}
+{# A ruled grid: email first and across the whole width, its end copying
+   the address; then every other channel, one cell each. The address is
+   only in the page encoded (`mailKey`), decoded on click. #}
 {% macro contactBlock(t, site) %}
-  <div class="mail">
-    <a class="mail__link" href="{{ t.urlPrefix }}#contact" data-mail="{{ site.email | mailKey }}">{{ icon.mail(22) }}<span>{{ t.contact.emailCta }}</span></a>
-    <button class="mail__action" type="button" data-mail="{{ site.email | mailKey }}" title="{{ t.a11y.copyEmail }}">
-      {{ icon.copy(14) }}<span class="mail__label">{{ t.contact.copy }}</span>
-    </button>
-  </div>
-
-  <div class="contact__row">
-    <a class="btn btn--on-block" href="{{ site.linkedin }}" target="_blank" rel="noopener noreferrer">
-      {{ t.contact.linkedinBtn }}{{ icon.arrowUpRight(14) }}
-    </a>
-    <a class="btn btn--on-block" href="{{ site.github }}" target="_blank" rel="noopener noreferrer">
-      {{ t.contact.githubBtn }}{{ icon.arrowUpRight(14) }}
-    </a>
-    <a class="btn btn--block-solid" href="{{ t.hero.cvUrl }}" target="_blank" rel="noopener noreferrer">
-      {{ t.contact.cvBtn }}{{ icon.download(14) }}
-    </a>
-  </div>
+  <ul class="reach" role="list">
+    <li class="reach__mail">
+      <a class="reach__cell reach__cell--mail" href="{{ t.urlPrefix }}#contact" data-mail="{{ site.email | mailKey }}">
+        <span class="reach__icon">{{ icon.mail(18) }}</span>
+        <span class="reach__label">{{ t.contact.emailCta }}</span>
+        {{ icon.arrowRight(16, "icon reach__arrow") }}
+      </a>
+      <button class="reach__copy" type="button" data-mail="{{ site.email | mailKey }}" title="{{ t.a11y.copyEmail }}">
+        {{ icon.copy(14) }}<span>{{ t.contact.copy }}</span>
+      </button>
+    </li>
+    <li>
+      <a class="reach__cell" href="{{ site.linkedin }}" target="_blank" rel="noopener noreferrer">
+        <span class="reach__icon">{{ icon.linkedin(16) }}</span>
+        <span class="reach__label">{{ t.contact.linkedinBtn }}</span>
+        {{ icon.arrowUpRight(14, "icon reach__arrow") }}
+      </a>
+    </li>
+    <li>
+      <a class="reach__cell" href="{{ site.github }}" target="_blank" rel="noopener noreferrer">
+        <span class="reach__icon">{{ icon.github(16) }}</span>
+        <span class="reach__label">{{ t.contact.githubBtn }}</span>
+        {{ icon.arrowUpRight(14, "icon reach__arrow") }}
+      </a>
+    </li>
+    <li>
+      <a class="reach__cell" href="{{ t.hero.cvUrl }}" target="_blank" rel="noopener noreferrer">
+        <span class="reach__icon">{{ icon.download(16) }}</span>
+        <span class="reach__label">{{ t.contact.cvBtn }}</span>
+        {{ icon.arrowUpRight(14, "icon reach__arrow") }}
+      </a>
+    </li>
+  </ul>
 {% endmacro %}
