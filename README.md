@@ -354,7 +354,15 @@ Deux composants s'écrivent en HTML dans le Markdown, sans ligne vide
   ```
 
 - **Image Open Graph** : `assets/og-image.png` (FR) et `og-image-en.png`
-  (EN), 1200×630.
+  (EN), 1200×630. La planche du site (rails, filets, croix, bande
+  hachurée) autour du nom ; à droite, le portrait en trame de points de
+  sa lumière, l'arrière-plan gris de la photo retiré. Source :
+  `scripts/og/og.html` (textes en bas du fichier) et `photo-src.jpg`.
+  Pour les refaire (rendu au double, puis réduit) :
+
+  ```bash
+  cd scripts/og && for pair in fr:og-image en:og-image-en; do L=${pair%%:*}; N=${pair#*:}; google-chrome-stable --headless=new --use-angle=swiftshader --enable-unsafe-swiftshader --allow-file-access-from-files --hide-scrollbars --force-device-scale-factor=2 --window-size=1200,630 --virtual-time-budget=20000 --screenshot=$PWD/$L.png "file://$PWD/og.html?lang=$L" && magick $L.png -resize 1200x630 -strip ../../assets/$N.png && rm $L.png; done
+  ```
 
 ## Page freelance
 

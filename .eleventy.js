@@ -26,6 +26,8 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy({ "assets/favicon.ico": "favicon.ico" });
 
   eleventyConfig.ignores.add("README.md");
+  // The share-image generator is a tool, not a page of the site.
+  eleventyConfig.ignores.add("scripts/**");
 
   // ─── Markdown configuration ───
   const md = markdownIt({
