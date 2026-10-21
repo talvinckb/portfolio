@@ -356,7 +356,11 @@ Deux composants s'écrivent en HTML dans le Markdown, sans ligne vide
 - **Image Open Graph** : `assets/og-image.png` (FR) et `og-image-en.png`
   (EN), 1200×630. La planche du site (rails, filets, croix, bande
   hachurée) autour du nom ; à droite, le portrait en trame de points de
-  sa lumière, l'arrière-plan gris de la photo retiré. Source :
+  sa lumière, l'arrière-plan gris de la photo retiré. LinkedIn montre
+  l'aperçu à environ 40 % et le recompresse en JPEG : filets de 2 px,
+  textes de 20 px au moins et trame de 7 px, sans quoi les textes
+  s'effacent et la trame part en moiré. Pour juger, réduire à 520 px de
+  large en JPEG qualité 70. Source :
   `scripts/og/og.html` (textes en bas du fichier) et `photo-src.jpg`.
   Pour les refaire (rendu au double, puis réduit) :
 

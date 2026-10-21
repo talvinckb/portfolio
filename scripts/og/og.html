@@ -15,49 +15,51 @@
 
   :root {
     --bg: #09090b; --surface: #111114; --ink: #f4f4f5; --ink-2: #a8a8b3; --ink-3: #75757f;
-    --rule: #26262c; --cross: #5a5a66; --accent: #8aa2ff;
-    /* The plate: rails at x = 64 and 1136, rules at y = 64 and 566, and
-       the portrait column from x = 708. */
-    --l: 64px; --r: 1136px; --t: 64px; --b: 566px; --split: 708px;
+    --rule: #2c2c34; --cross: #6a6a76; --accent: #8aa2ff;
+    /* The plate: rails at x = 56 and 1144, rules at y = 76 and 560, and
+       the portrait column from x = 684. Everything is drawn to survive a
+       preview at about 40 % of this size: 2 px rules, large type, a coarse
+       screen. */
+    --l: 56px; --r: 1144px; --t: 76px; --b: 560px; --split: 684px;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html, body { width: 1200px; height: 630px; overflow: hidden; background: var(--bg); color: var(--ink); }
 
   .line { position: absolute; background: var(--rule); }
-  .v { top: 0; bottom: 0; width: 1px; }
-  .h { left: 0; right: 0; height: 1px; }
-  .cross { position: absolute; width: 13px; height: 13px; transform: translate(-6px, -6px); }
+  .v { top: 0; bottom: 0; width: 2px; margin-left: -1px; }
+  .h { left: 0; right: 0; height: 2px; margin-top: -1px; }
+  .cross { position: absolute; width: 18px; height: 18px; transform: translate(-9px, -9px); }
   .cross::before, .cross::after { content: ""; position: absolute; background: var(--cross); }
-  .cross::before { left: 6px; top: 0; width: 1px; height: 13px; }
-  .cross::after { top: 6px; left: 0; height: 1px; width: 13px; }
+  .cross::before { left: 8px; top: 0; width: 2px; height: 18px; }
+  .cross::after { top: 8px; left: 0; height: 2px; width: 18px; }
 
   /* The hatched band under the plate, as between the site's sections. */
   .hatch { position: absolute; left: var(--l); right: calc(1200px - var(--r)); top: calc(var(--b) + 1px); bottom: 0;
-    background: repeating-linear-gradient(-45deg, var(--rule) 0 1px, transparent 1px 10px); }
+    background: repeating-linear-gradient(-45deg, var(--rule) 0 2px, transparent 2px 16px); }
 
   .top { position: absolute; left: calc(var(--l) + 28px); right: calc(1200px - var(--r) + 28px); top: 0; height: var(--t);
     display: flex; align-items: center; justify-content: space-between;
-    font-family: "Geist Mono"; font-size: 15px; color: var(--ink-3); letter-spacing: .01em; }
-  .brand { display: flex; align-items: center; gap: 12px; color: var(--ink-2); }
-  .mark { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 8px; background: var(--ink); color: var(--bg);
-    font-family: "Funnel Display"; font-weight: 700; font-size: 12.5px; letter-spacing: -.03em; }
+    font-family: "Geist Mono"; font-size: 21px; color: var(--ink-2); letter-spacing: 0; }
+  .brand { display: flex; align-items: center; gap: 14px; color: var(--ink); }
+  .mark { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 10px; background: var(--ink); color: var(--bg);
+    font-family: "Funnel Display"; font-weight: 700; font-size: 17px; letter-spacing: -.03em; }
 
-  .text { position: absolute; left: calc(var(--l) + 48px); width: calc(var(--split) - var(--l) - 88px); top: calc(var(--t) + 58px); }
-  .kicker { font-family: "Geist Mono"; font-size: 15px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
-  h1 { margin-top: 22px; font-family: "Funnel Display"; font-weight: 650; font-size: 104px; line-height: .9; letter-spacing: -.055em; }
-  .lede { margin-top: 26px; font-family: "Funnel Sans"; font-size: 23px; line-height: 1.4; color: var(--ink-2); max-width: 520px; }
+  .text { position: absolute; left: calc(var(--l) + 44px); width: calc(var(--split) - var(--l) - 72px); top: calc(var(--t) + 34px); }
+  .kicker { font-family: "Geist Mono"; font-size: 21px; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; color: var(--accent); }
+  h1 { margin-top: 20px; font-family: "Funnel Display"; font-weight: 680; font-size: 112px; line-height: .9; letter-spacing: -.055em; }
+  .lede { margin-top: 24px; font-family: "Funnel Sans"; font-size: 29px; font-weight: 450; line-height: 1.3; color: var(--ink-2); }
   .lede b { font-weight: 600; color: var(--ink); }
 
   /* A ruled row of cells along the bottom rule of the plate. */
-  .cells { position: absolute; left: var(--l); width: calc(var(--split) - var(--l)); top: calc(var(--b) - 76px); height: 76px;
-    display: grid; grid-template-columns: 1.25fr 1fr; border-top: 1px solid var(--rule); }
-  .cell { display: flex; align-items: center; gap: 14px; padding: 0 28px; font-family: "Funnel Sans"; font-size: 19px; font-weight: 550; }
-  .cell + .cell { border-left: 1px solid var(--rule); }
-  .dot { width: 10px; height: 10px; border-radius: 50%; background: #1fbf75; box-shadow: 0 0 0 5px rgb(31 191 117 / .16); }
-  .icon { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 9px; background: var(--surface); box-shadow: inset 0 0 0 1px #34343c; color: var(--ink-2); }
-  .icon svg { width: 17px; height: 17px; }
+  .cells { position: absolute; left: var(--l); width: calc(var(--split) - var(--l)); top: calc(var(--b) - 96px); height: 96px;
+    display: grid; grid-template-columns: auto 1fr; border-top: 2px solid var(--rule); }
+  .cell { display: flex; align-items: center; gap: 14px; padding: 0 22px 0 44px; font-family: "Funnel Sans"; font-size: 23px; font-weight: 600; letter-spacing: -.01em; white-space: nowrap; }
+  .cell + .cell { border-left: 2px solid var(--rule); padding-left: 24px; }
+  .dot { width: 14px; height: 14px; border-radius: 50%; background: #1fbf75; box-shadow: 0 0 0 6px rgb(31 191 117 / .18); }
+  .icon { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 11px; background: var(--surface); box-shadow: inset 0 0 0 2px #3a3a44; color: var(--ink); }
+  .icon svg { width: 22px; height: 22px; }
 
-  canvas { position: absolute; left: calc(var(--split) + 1px); top: calc(var(--t) + 1px); width: calc(var(--r) - var(--split) - 1px); height: calc(var(--b) - var(--t) - 1px); }
+  canvas { position: absolute; left: calc(var(--split) + 1px); top: calc(var(--t) + 1px); width: calc(var(--r) - var(--split) - 2px); height: calc(var(--b) - var(--t) - 2px); }
 </style>
 </head>
 <body>
@@ -95,8 +97,8 @@
 <script>
 const L = new URLSearchParams(location.search).get("lang") || "fr";
 const copy = {
-  fr: { where: "EPITA · Paris", kicker: "Vision · IA · Calcul GPU", lede: "Élève ingénieur à l'EPITA, majeure Image. Des pipelines d'image <b>du prototype au GPU</b>.", status: "Stage de 6 mois · février 2027", teaso: "Fondateur de Teaso" },
-  en: { where: "EPITA · Paris", kicker: "Vision · AI · GPU computing", lede: "Engineering student at EPITA, Image major. Image pipelines <b>from prototype to GPU</b>.", status: "6-month internship · Feb. 2027", teaso: "Founder of Teaso" },
+  fr: { where: "EPITA · Paris", kicker: "Vision · IA · Calcul GPU", lede: "Élève ingénieur à l'EPITA,<br><b>majeure Image</b>.", status: "Stage dès février 2027", teaso: "Fondateur de Teaso" },
+  en: { where: "EPITA · Paris", kicker: "Vision · AI · GPU computing", lede: "Engineering student at EPITA,<br><b>Image major</b>.", status: "Internship from Feb. 2027", teaso: "Founder of Teaso" },
 }[L];
 document.documentElement.lang = L;
 for (const k of ["where", "kicker", "status", "teaso"]) document.getElementById(k).textContent = copy[k];
@@ -112,11 +114,11 @@ ctx.scale(dpr, dpr);
 const img = new Image();
 img.src = "photo-src.jpg";
 img.onload = () => {
-  const S = 5;                      // pitch of the screen, CSS px
+  const S = 7;                      // pitch of the screen, CSS px: coarse enough to survive a small preview
   const cols = Math.ceil(W / S), rows = Math.ceil(H / S);
 
   // The photo cropped to the column: head and shoulders.
-  const crop = { x: 0.14, y: 0.03, w: 0.72 };          // fractions of the photo
+  const crop = { x: 0.13, y: 0.025, w: 0.74 };         // fractions of the photo
   crop.h = crop.w * (H / W) * (img.width / img.height);
   const read = (w, h, blur) => {
     const c = document.createElement("canvas");
@@ -153,7 +155,7 @@ img.onload = () => {
     const t = Math.min(1, Math.max(0, (lum[i] - 0.06) / 0.62));
     const r = S * 0.5 * Math.sqrt(Math.pow(t, 0.85) * soft[i]);
     if (r > 0.35) { dots.moveTo(cx + r, cy); dots.arc(cx, cy, r, 0, Math.PI * 2); }
-    else if (soft[i] < 0.05) { faint.moveTo(cx + 0.55, cy); faint.arc(cx, cy, 0.55, 0, Math.PI * 2); }
+    else if (soft[i] < 0.05) { faint.moveTo(cx + 0.9, cy); faint.arc(cx, cy, 0.9, 0, Math.PI * 2); }
   }
   ctx.fillStyle = "#2a2a31"; ctx.fill(faint);
   ctx.fillStyle = "#e9e9ee"; ctx.fill(dots);
