@@ -46,7 +46,7 @@ une seule colonne de 48 rem entre deux filets verticaux qui courent sur
 toute la hauteur, des filets horizontaux sur toute la largeur à chaque
 bloc, une petite croix là où ils se croisent, et une bande hachurée entre
 les grandes sections. Sombre par défaut, le clair reste un choix (bouton
-de la nav, mémorisé). La page `/freelance` garde son propre univers.
+de la nav, mémorisé).
 
 | Rôle | Police | Usage |
 |---|---|---|
@@ -68,9 +68,6 @@ latin, poids variables). Funnel Display et Funnel Sans sont préchargées.
 - **Un seul accent, jamais en aplat.** `--accent` sert aux index, aux mots
   clés des cartes, à l'état en cours, au graphe GitHub et à l'icône de
   l'email du contact.
-- **Le freelance reste discret** : absent de la nav, il n'apparaît que dans
-  la rangée de liens et sous le contact, marqué du point jaune et violet de
-  `/freelance` (`.freelance-dot`). Le site sert d'abord à trouver un stage.
 - **Aucun projet n'est mis en avant** plus qu'un autre dans la grille.
 - **La mono est réservée aux données** et métadonnées, jamais à un
   paragraphe.
@@ -122,7 +119,7 @@ une règle**, sinon un thème décroche. Sans JavaScript, le site reste sombre.
 | Section | Ancre | Source |
 |---|---|---|
 | Profil — photo, nom, accroche, disponibilité | — | `hero`, `profile` |
-| Liens — GitHub, LinkedIn, CV, Freelance | — | `site`, `hero.cvUrl` |
+| Liens — GitHub, LinkedIn, CV | — | `site`, `hero.cvUrl` |
 | En bref — formation, Teaso, lieu, langues, email | — | `profile.overview` |
 | Contributions GitHub | — | `_data/contributions.js` |
 | À propos | — | `about` |
@@ -367,40 +364,6 @@ Deux composants s'écrivent en HTML dans le Markdown, sans ligne vide
   ```bash
   cd scripts/og && for pair in fr:og-image en:og-image-en; do L=${pair%%:*}; N=${pair#*:}; google-chrome-stable --headless=new --use-angle=swiftshader --enable-unsafe-swiftshader --allow-file-access-from-files --hide-scrollbars --force-device-scale-factor=2 --window-size=1200,630 --virtual-time-budget=20000 --screenshot=$PWD/$L.png "file://$PWD/og.html?lang=$L" && magick $L.png -resize 1200x630 -strip ../../assets/$N.png && rm $L.png; done
   ```
-
-## Page freelance
-
-`/freelance/` s'adresse aux clients, pas aux recruteurs : elle a son propre
-layout (`_includes/freelance.njk`), sa feuille de style et son script, et
-reprend l'identité de la vidéo de présentation freelance. Tous ses textes
-sont dans `_data/freelance.json`, y compris son adresse pro
-(`email`, `contact@talvin-ackbaraly.com`) : le portfolio garde `site.email`.
-
-Ses polices (Bricolage Grotesque, Inter) sont hébergées dans `assets/fonts/`
-(sous-ensemble latin de Google Fonts) et préchargées, pour que l'animation
-du hero ne démarre pas avec la police de secours. Elles sont servies avec un
-cache `immutable` : pour changer une police, changer aussi son nom de fichier.
-
-### Formulaire de contact
-
-Le formulaire est envoyé à la fonction Vercel `api/contact.js`, qui envoie
-deux e-mails via [Resend](https://resend.com) : la demande (vers
-`CONTACT_TO`, avec le client en « répondre à ») et un accusé de réception
-au client. Sans JavaScript, le formulaire est posté normalement et la
-fonction redirige vers `#merci` ou `#oups`.
-
-Anti-spam : champ piège invisible, envoi trop rapide ignoré, limite par IP,
-refus des requêtes venant d'un autre site.
-
-| Variable (Vercel) | Rôle |
-|---|---|
-| `RESEND_API_KEY` | **obligatoire** — clé API Resend |
-| `CONTACT_TO` | adresse qui reçoit les demandes (défaut : `freelance.email`) |
-| `CONTACT_FROM` | expéditeur (défaut : `freelance.email`, au nom de `site.name`) |
-
-L'expéditeur doit appartenir à un domaine vérifié dans Resend
-(enregistrements DNS chez OVH). En local, `npm run dev` ne sert pas
-`/api` : utiliser `vercel dev` pour tester l'envoi.
 
 ## Accessibilité & SEO
 
