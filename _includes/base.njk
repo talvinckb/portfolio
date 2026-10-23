@@ -77,13 +77,6 @@
               {{ icon.arrowUpRight(14, "icon links__arrow") }}
             </a>
           </li>
-          <li>
-            <a class="links__cell" href="/freelance/">
-              <span class="links__icon"><span class="freelance-dot" aria-hidden="true"></span></span>
-              <span class="links__text"><span class="links__label">{{ t.nav.freelance }}</span><span class="links__handle">/freelance</span></span>
-              {{ icon.arrowRight(14, "icon links__arrow") }}
-            </a>
-          </li>
         </ul>
       </nav>
 
@@ -382,12 +375,6 @@
           <p class="contact__lede">{{ t.contact.text }}</p>
         </div>
         {{ contact.contactBlock(t, site) }}
-        {# The arrow is glued to the last word, so a wrapped line never leaves it alone. #}
-        {% set words = t.contact.freelance.split(" ") %}
-        <p class="contact__foot">
-          <span class="freelance-dot" aria-hidden="true"></span>
-          <a class="contact__freelance" href="/freelance/">{{ words.slice(0, -1).join(" ") }} <span class="nowrap">{{ words | last }}{{ icon.arrowRight(13) }}</span></a>
-        </p>
       </section>
     </main>
 

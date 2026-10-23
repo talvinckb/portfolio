@@ -30,8 +30,7 @@
     "work": "Work",
     "background": "Background",
     "skills": "Skills",
-    "contact": "Contact",
-    "freelance": "Freelance"
+    "contact": "Contact"
   },
   "hero": {
     "name": "Talvin Ackbaraly",
@@ -71,7 +70,7 @@
     "title": "About",
     "paragraphs": [
       "Final-year engineering student at EPITA, Image major. I build complete image pipelines, from the Python prototype to the CUDA port: illustration detection with the BnF, licence plate reading without deep learning, motion detection 24 times faster on GPU.",
-      "Alongside, I launched Teaso, a SaaS that turns a product's address into a promo video, and I build custom applications as a freelancer.",
+      "Alongside, I launched Teaso, a SaaS that turns a product's address into a promo video.",
       "I'm looking for a six-month final-year internship in computer vision, AI or GPU computing, starting February 2027."
     ]
   },
@@ -345,26 +344,6 @@
         }
       },
       {
-        "id": "freelance",
-        "start": "2026-09",
-        "end": null,
-        "period": "Sept. 2026 — present",
-        "org": "Freelance",
-        "role": "Full-stack developer, alongside studies",
-        "type": "Freelance",
-        "description": "Design and development of custom applications for businesses, from requirements gathering to hosting. Done in my spare time: my studies and end-of-studies internship remain my priority.",
-        "tags": [
-          "Full-Stack",
-          "Client relations",
-          "Deployment",
-          "Hosting"
-        ],
-        "link": {
-          "label": "The freelance page",
-          "href": "/freelance/"
-        }
-      },
-      {
         "id": "pfee",
         "start": "2026-05",
         "end": "2027-01",
@@ -629,7 +608,6 @@
     "label": "Contact",
     "title": "An internship in vision, AI or GPU computing? Let's talk.",
     "text": "6-month final-year internship, starting February 2027.",
-    "freelance": "A website or app project? See my freelance offer (in French)",
     "emailCta": "Send me an email",
     "copy": "Copy",
     "linkedinBtn": "LinkedIn",

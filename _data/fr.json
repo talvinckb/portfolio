@@ -30,8 +30,7 @@
     "work": "Travaux",
     "background": "Parcours",
     "skills": "Compétences",
-    "contact": "Contact",
-    "freelance": "Freelance"
+    "contact": "Contact"
   },
   "hero": {
     "name": "Talvin Ackbaraly",
@@ -71,7 +70,7 @@
     "title": "À propos",
     "paragraphs": [
       "Élève ingénieur en dernière année à l'EPITA, majeure Image. Je conçois des pipelines d'image complets, du prototype en Python jusqu'au portage CUDA : détection d'illustrations avec la BnF, lecture de plaques sans deep learning, détection de mouvement 24 fois plus rapide sur GPU.",
-      "En parallèle, j'ai lancé Teaso, un SaaS qui tire une vidéo promo de l'adresse d'un produit, et je développe des applications sur mesure en freelance.",
+      "En parallèle, j'ai lancé Teaso, un SaaS qui tire une vidéo promo de l'adresse d'un produit.",
       "Je cherche un stage de fin d'études de six mois en vision par ordinateur, IA ou calcul GPU, à partir de février 2027."
     ]
   },
@@ -345,26 +344,6 @@
         }
       },
       {
-        "id": "freelance",
-        "start": "2026-09",
-        "end": null,
-        "period": "Sept. 2026 — aujourd'hui",
-        "org": "Freelance",
-        "role": "Développeur full-stack, en parallèle des études",
-        "type": "Freelance",
-        "description": "Conception et développement d'applications sur mesure pour des entreprises, du recueil des besoins jusqu'à l'hébergement. Activité menée sur mon temps libre, mes études et mon stage de fin d'études restant ma priorité.",
-        "tags": [
-          "Full-Stack",
-          "Relation client",
-          "Déploiement",
-          "Hébergement"
-        ],
-        "link": {
-          "label": "La page freelance",
-          "href": "/freelance/"
-        }
-      },
-      {
         "id": "pfee",
         "start": "2026-05",
         "end": "2027-01",
@@ -629,7 +608,6 @@
     "label": "Contact",
     "title": "Un stage en vision, IA ou calcul GPU ? Parlons-en.",
     "text": "Stage de fin d'études de 6 mois, à partir de février 2027.",
-    "freelance": "Un projet de site ou d'application ? Découvrez mon offre freelance",
     "emailCta": "M'envoyer un email",
     "copy": "Copier",
     "linkedinBtn": "LinkedIn",

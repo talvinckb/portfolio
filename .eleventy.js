@@ -211,14 +211,6 @@ module.exports = function (eleventyConfig) {
     return out + escape(text.slice(pos));
   });
 
-  /** Escaped `text` with each `*word*` turned into `<em>word</em>`, the
-      convention the freelance video uses for its highlighted words. */
-  eleventyConfig.addFilter("emphasis", (text) =>
-    String(text)
-      .replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`)
-      .replace(/\*([^*]+)\*/g, "<em>$1</em>"),
-  );
-
   /** Columns of the skills matrix: every project or experience a skill was
       used in, in the page's order (selected work, other work, then the
       path), each with where its header leads. */

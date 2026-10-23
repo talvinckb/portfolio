@@ -122,12 +122,6 @@ ol[role="list"] {
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --fast: 160ms;
   --normal: 280ms;
-
-  /* The freelance page's own colours, the same in both themes. */
-  --fl-yellow: #ffdd33;
-  --fl-violet: #6c4bff;
-  --fl-violet-deep: #4a2fd6;
-
 }
 
 /* ─── Dark (default look) ─── */
@@ -644,16 +638,6 @@ picture {
   gap: 6px;
 }
 
-/* The mark of /freelance: a yellow dot with a violet offset shadow. */
-.freelance-dot {
-  flex: none;
-  width: 0.5rem;
-  height: 0.5rem;
-  border-radius: 50%;
-  background-color: var(--fl-yellow);
-  box-shadow: 1.5px 1.5px 0 var(--fl-violet);
-}
-
 .nav__lang,
 .nav__theme {
   display: grid;
@@ -968,7 +952,7 @@ picture {
 }
 
 /* ─────────────────────────────────────────────────────────────
-   10. Links — four cells on one ruled row
+   10. Links — three cells on one ruled row
    ───────────────────────────────────────────────────────────── */
 
 .links {
@@ -977,7 +961,7 @@ picture {
 
 .links__grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1px;
   background-color: var(--rule);
 }
@@ -2361,36 +2345,6 @@ a.matrix__name:hover,
   color: var(--accent-text);
 }
 
-.contact__foot {
-  display: flex;
-  align-items: center;
-  gap: 0.65rem;
-  padding: var(--s-5) var(--pad) var(--s-6);
-  font-size: 0.88rem;
-  color: var(--ink-2);
-}
-
-.contact__freelance {
-  text-decoration: underline;
-  text-decoration-color: var(--rule-2);
-  text-decoration-thickness: 1px;
-  text-underline-offset: 0.3em;
-  transition:
-    color var(--fast) var(--ease),
-    text-decoration-color var(--fast) var(--ease);
-}
-
-.contact__freelance .icon {
-  display: inline-block;
-  margin-left: 0.35em;
-  vertical-align: -0.1em;
-}
-
-.contact__freelance:hover {
-  color: var(--ink);
-  text-decoration-color: currentColor;
-}
-
 @media (max-width: 479px) {
   .reach__cell:not(.reach__cell--mail) {
     flex-direction: column;
@@ -2414,8 +2368,23 @@ a.matrix__name:hover,
    ───────────────────────────────────────────────────────────── */
 
 @media (max-width: 639px) {
-  .links__grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  /* Still one row of three: the icon goes above the text, the arrow to
+     the corner. */
+  .links__cell {
+    position: relative;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.6rem;
+  }
+
+  .links__text {
+    width: 100%;
+  }
+
+  .links__arrow {
+    position: absolute;
+    top: 0.85rem;
+    right: var(--s-4);
   }
 
   .overview__list {
